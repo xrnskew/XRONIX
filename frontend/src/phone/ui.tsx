@@ -1,22 +1,38 @@
-import { createContext, type ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
 
 // true в рабочей версии на компьютере (/app): там диалоги в боковой панели, а экраны шире телефона
 export const Wide = createContext(false)
 
-// delay: порядковый номер для каскадного появления карточек при открытии экрана
-export const Card = ({ children, className = '', id, delay }: { children: ReactNode; className?: string; id?: string; delay?: number }) => (
-  <div id={id} className={`card-ring rounded-[22px] bg-surface p-4 ${delay === undefined ? '' : 'rise'} ${className}`} style={delay === undefined ? undefined : { animationDelay: `${delay * 70}ms` }}>{children}</div>
+// delay: порядковый номер для каскадного появления карточек при открытии экрана.
+// span: ширина карточки в сетке рабочей версии (из 12 колонок), tall: карточка на две строки сетки. В телефоне не влияют.
+export const Card = ({ children, className = '', id, delay, span, tall }: { children: ReactNode; className?: string; id?: string; delay?: number; span?: 5 | 6 | 7 | 12; tall?: boolean }) => (
+  <div id={id} data-span={span} data-tall={tall || undefined} className={`card-ring rounded-[22px] bg-surface p-4 ${delay === undefined ? '' : 'rise'} ${className}`} style={delay === undefined ? undefined : { animationDelay: `${delay * 70}ms` }}>{children}</div>
 )
 
-export const Screen = ({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) => (
-  <div className="flex h-full flex-col">
-    <div className="px-5 pb-3 pt-2">
-      <h1 className="text-[26px] font-bold leading-tight tracking-tight">{title}</h1>
-      {sub && <p className="mt-0.5 text-[14px] text-muted">{sub}</p>}
+export const Screen = ({ title, sub, children }: { title: string; sub?: ReactNode; children: ReactNode }) => {
+  const wide = useContext(Wide)
+  if (wide)
+    return (
+      <div className="flex h-full flex-col">
+        <div data-phone-scroll className="thin-scroll relative flex-1 overflow-y-auto px-8 pb-12 pt-8">
+          <div className="mb-6">
+            <h1 className="font-display text-[30px] font-semibold leading-tight tracking-tight">{title}</h1>
+            {sub && <p className="mt-1.5 text-[15px] text-muted">{sub}</p>}
+          </div>
+          <div className="wide-grid">{children}</div>
+        </div>
+      </div>
+    )
+  return (
+    <div className="flex h-full flex-col">
+      <div className="px-5 pb-3 pt-2">
+        <h1 className="text-[26px] font-bold leading-tight tracking-tight">{title}</h1>
+        {sub && <p className="mt-0.5 text-[14px] text-muted">{sub}</p>}
+      </div>
+      <div data-phone-scroll className="no-scrollbar relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-8">{children}</div>
     </div>
-    <div data-phone-scroll className="no-scrollbar relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-8">{children}</div>
-  </div>
-)
+  )
+}
 
 export const SectionTitle = ({ children }: { children: ReactNode }) => (
   <h2 className="mb-3 text-[17px] font-semibold tracking-tight">{children}</h2>

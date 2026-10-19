@@ -101,3 +101,22 @@ input[type="range"] { height: 4px; }
 @keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
 .ping { animation: ping 1.6s cubic-bezier(0, 0, .2, 1) infinite; }
 @media (prefers-reduced-motion: reduce) { .ping { animation: none; } }
+
+/* Рабочая версия (/app) на компьютере */
+.app-bg {
+  background:
+    radial-gradient(55% 45% at 100% 0%, rgba(239,49,36,.13), rgba(239,49,36,0) 70%),
+    radial-gradient(35% 35% at 20% 100%, rgba(239,49,36,.05), rgba(239,49,36,0) 70%),
+    var(--color-bg);
+}
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #2c2c31 transparent; }
+/* Сетка карточек: по умолчанию на всю ширину, с 1100px карточки встают рядом по data-span */
+.wide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-content: start; }
+.wide-grid > * { grid-column: span 12; }
+.wide-grid > .card-ring:not(.hero-card) { padding: 22px; }
+@media (min-width: 1100px) {
+  .wide-grid > [data-span="5"] { grid-column: span 5; }
+  .wide-grid > [data-span="6"] { grid-column: span 6; }
+  .wide-grid > [data-span="7"] { grid-column: span 7; }
+  .wide-grid > [data-tall] { grid-row: span 2; }
+}

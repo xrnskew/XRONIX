@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Card, Chip, Screen, SectionTitle } from '../ui'
+import { useContext, useState } from 'react'
+import { Card, Chip, Screen, SectionTitle, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError } from '../../api'
 
@@ -7,6 +7,7 @@ const field = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text 
 
 export default function ProfileScreen() {
   const { user, saveProfile, signOut } = useCabinet()
+  const wide = useContext(Wide)
   const [draft, setDraft] = useState(() => ({ name: user?.name ?? '', city: user?.city ?? '', experience: user?.experience ?? '', budget: user?.budget_rub == null ? '' : String(user.budget_rub) }))
   const [tag, setTag] = useState('')
   const [state, setState] = useState<{ kind: 'idle' | 'saving' | 'saved' | 'error'; text?: string }>({ kind: 'idle' })
@@ -36,8 +37,8 @@ export default function ProfileScreen() {
   const pct = Math.round((filled / 5) * 100)
 
   return (
-    <Screen title="Профиль">
-      <Card delay={0}>
+    <Screen title="Профиль" sub={wide ? 'Эти данные ИИ учитывает в каждом плане' : undefined}>
+      <Card delay={0} span={7}>
         <div className="flex items-center gap-3.5">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#ff6a5c] to-[#d12419] text-[22px] font-bold" aria-hidden>{user.name[0]?.toUpperCase()}</div>
           <div className="min-w-0">
@@ -49,7 +50,7 @@ export default function ProfileScreen() {
           <div className="mb-1.5 flex justify-between text-[12px] text-muted"><span>Профиль заполнен</span><span>{pct}%</span></div>
           <div className="h-1.5 overflow-hidden rounded-full bg-surface-3"><div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} /></div>
         </div>
-        <div className="mt-4 space-y-3">
+        <div className={`mt-4 ${wide ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'space-y-3'}`}>
           <Field label="Имя" value={draft.name} onChange={(v) => set('name', v)} />
           <Field label="Город" value={draft.city} onChange={(v) => set('city', v)} />
           <Field label="Опыт" value={draft.experience} onChange={(v) => set('experience', v)} />
@@ -63,7 +64,7 @@ export default function ProfileScreen() {
         </div>
       </Card>
 
-      <Card id="profile-tags" delay={1}>
+      <Card id="profile-tags" delay={1} span={5} className="self-start">
         <SectionTitle>Что ИИ знает о вас</SectionTitle>
         <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Теги учитываются в каждом ответе. Нажмите на тег, чтобы удалить, или добавьте свой.</p>
         {user.tags.length === 0 && <p className="mb-3 text-[13px] text-muted">Тегов пока нет. После первого плана ИИ добавит их сам.</p>}
@@ -78,7 +79,7 @@ export default function ProfileScreen() {
         </form>
       </Card>
 
-      <button onClick={signOut} className="h-12 w-full rounded-2xl bg-surface-2 text-[15px] font-semibold text-accent active:bg-surface-3">Выйти</button>
+      {!wide && <button onClick={signOut} className="h-12 w-full rounded-2xl bg-surface-2 text-[15px] font-semibold text-accent active:bg-surface-3">Выйти</button>}
     </Screen>
   )
 }

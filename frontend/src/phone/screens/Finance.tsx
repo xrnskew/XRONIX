@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
+import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { annuity, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, matchProducts } from '../../data/alfaProducts'
@@ -16,6 +16,7 @@ const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 export default function Finance() {
   const { plan, planLoading, planError, reloadPlan } = useCabinet()
   const nav = useNavigate()
+  const wide = useContext(Wide)
   const [amount, setAmount] = useState(plan?.credit.amount_rub ?? 1000000)
   const [months, setMonths] = useState(plan?.credit.recommended_term_months ?? 24)
   const matches = useMemo(() => matchProducts(amount, months), [amount, months])
@@ -63,7 +64,7 @@ export default function Finance() {
 
   return (
     <Screen title="Финансы и кредит">
-      <Card delay={0}>
+      <Card delay={0} span={7}>
         <SectionTitle>Откуда взять {short(f.startup_cost_rub)} ₽</SectionTitle>
         <div className="flex h-3 overflow-hidden rounded-full bg-surface-3" role="img" aria-label={`Свои средства ${ownShare}%, не хватает ${100 - ownShare}%`}>
           <div className="bg-ok" style={{ width: `${ownShare}%` }} />
@@ -75,7 +76,7 @@ export default function Finance() {
         </div>
       </Card>
 
-      <Card className="flex items-center gap-4" delay={1}>
+      <Card className={`flex items-center gap-4 ${wide ? 'gap-6 p-6' : ''}`} delay={1} span={5}>
         <Gauge value={load} tone={loadTone(load)} />
         <div className="min-w-0">
           <Badge tone={v.tone}>{v.text}</Badge>
@@ -85,8 +86,10 @@ export default function Finance() {
 
       <Card className="space-y-4" id="credit-calc" delay={2}>
         <SectionTitle>Калькулятор платежа</SectionTitle>
-        <Slider label="Сумма" value={amount} min={100000} max={5000000} step={50000} onChange={setAmount} display={rub(amount)} />
-        <Slider label="Срок" value={months} min={6} max={60} step={6} onChange={setMonths} display={`${months} мес.`} />
+        <div className={wide ? 'grid grid-cols-2 gap-10' : 'space-y-4'}>
+          <Slider label="Сумма" value={amount} min={100000} max={5000000} step={50000} onChange={setAmount} display={rub(amount)} />
+          <Slider label="Срок" value={months} min={6} max={60} step={6} onChange={setMonths} display={`${months} мес.`} />
+        </div>
         <div className="grid grid-cols-3 gap-3 border-t border-line pt-3">
           <Stat label="Ставка (оценка)" value={`${rate}%`} />
           <Stat label="Платёж в месяц" value={rub(payment)} />
@@ -97,7 +100,7 @@ export default function Finance() {
 
       <Card id="alfa-products" delay={3}>
         <SectionTitle>Кредиты Альфа-Банка для бизнеса</SectionTitle>
-        <ul className="space-y-3">
+        <ul className={wide ? 'grid gap-3 min-[1100px]:grid-cols-2' : 'space-y-3'}>
           {matches.map(({ product: p, fits, reasons }) => (
             <li key={p.id} className={`rounded-2xl bg-surface-2 p-3.5 ${fits ? '' : 'opacity-55'}`}>
               <div className="flex items-start justify-between gap-2">

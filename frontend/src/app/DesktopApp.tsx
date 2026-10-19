@@ -10,6 +10,7 @@ import ProfileScreen from '../phone/screens/Profile'
 import { Logo, Wide } from '../phone/ui'
 import { api } from '../api'
 import type { ChatSummary } from '../types/plan'
+import { short } from '../lib/format'
 import { useMediaQuery } from '../landing/useSlides'
 
 // Рабочая версия (/app): тот же кабинет, что в телефоне на презентации, но на весь экран и без слайдов.
@@ -26,12 +27,74 @@ const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
 )
 
-// Вход и онбординг: экраны телефона в карточке по центру
+const points = [
+  ['Опишите идею', 'Своими словами, как рассказали бы другу'],
+  ['Ответьте на вопросы', 'Бюджет, опыт, город: ИИ спросит только нужное'],
+  ['Получите план', 'Шаги, деньги, риски и кредит, который бизнес потянет'],
+]
+
+// Вход: слева о продукте, справа форма. Онбординг: экран телефона в карточке по центру.
+function AuthLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="grid min-h-svh lg:grid-cols-[1.1fr_1fr]">
+      <section className="relative hidden overflow-hidden border-r border-white/5 p-12 lg:flex lg:flex-col">
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(closest-side,rgba(239,49,36,.35),rgba(239,49,36,0))]" aria-hidden />
+        <div className="pointer-events-none absolute -bottom-56 right-[-120px] h-[520px] w-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(239,49,36,.16),rgba(239,49,36,0))]" aria-hidden />
+        <div className="relative flex items-center gap-3">
+          <Logo size={40} />
+          <div className="leading-tight">
+            <div className="font-display text-[16px] font-semibold text-brand">XRONIX</div>
+            <div className="text-[13px] text-muted">Кабинет предпринимателя</div>
+          </div>
+        </div>
+        <div className="relative my-auto max-w-[560px] py-12">
+          <h2 className="font-display text-[44px] font-semibold leading-[1.05] tracking-tight xl:text-[52px]">Идея бизнеса. План. Кредит под него.</h2>
+          <ol className="mt-10 space-y-5">
+            {points.map(([t, d], i) => (
+              <li key={t} className="flex gap-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-fill font-display text-[15px] font-semibold text-white">{i + 1}</span>
+                <div><div className="text-[17px] font-semibold">{t}</div><div className="text-[14px] text-muted">{d}</div></div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <a href="./" className="relative inline-flex w-fit items-center gap-2 text-[14px] text-muted transition-colors hover:text-text">
+          <Icon d="M15 5l-7 7 7 7" size={16} />Презентация проекта
+        </a>
+      </section>
+      <section className="flex items-center justify-center p-6">
+        <div className="w-full max-w-[400px]">
+          <div className="mb-10 flex items-center gap-3 lg:hidden"><Logo size={36} /><span className="font-display text-[16px] font-semibold text-brand">XRONIX</span></div>
+          {children}
+        </div>
+      </section>
+    </div>
+  )
+}
+
 const Centered = ({ children }: { children: ReactNode }) => (
   <div className="flex min-h-svh items-center justify-center p-4">
-    <div className="card-ring h-[min(760px,calc(100svh-32px))] w-full max-w-[440px] overflow-hidden rounded-[32px] bg-bg pt-6">{children}</div>
+    <div className="card-ring h-[min(760px,calc(100svh-32px))] w-full max-w-[440px] overflow-hidden rounded-[32px] bg-bg pt-6 shadow-[0_40px_80px_-30px_rgba(0,0,0,.9)]">{children}</div>
   </div>
 )
+
+// Коротко о текущем плане в боковой панели: главное видно с любого экрана
+function PlanBadge() {
+  const { plan } = useCabinet()
+  if (!plan) return null
+  const f = plan.finance
+  return (
+    <NavLink to="/plan" className="hero-card card-ring mb-5 block rounded-2xl p-3.5 transition-opacity hover:opacity-90">
+      <div className="text-[11px] font-medium uppercase tracking-wider text-text/50">Текущий план</div>
+      <div className="mt-1 truncate text-[15px] font-semibold">{plan.title}</div>
+      <div className="mt-2.5 flex gap-4 text-[12px]">
+        <div><div className="text-text/50">На старт</div><div className="mt-0.5 font-semibold tabular-nums">{short(f.startup_cost_rub)} ₽</div></div>
+        <div><div className="text-text/50">Прибыль</div><div className="mt-0.5 font-semibold tabular-nums text-ok">{short(f.monthly_profit_rub)} ₽</div></div>
+        {f.payback_months != null && <div><div className="text-text/50">Окупаемость</div><div className="mt-0.5 font-semibold tabular-nums">{f.payback_months} мес.</div></div>}
+      </div>
+    </NavLink>
+  )
+}
 
 function Dialogs() {
   const { chatId, messages, busy, openChat, newChat } = useCabinet()
@@ -73,7 +136,7 @@ function Dialogs() {
 function Sidebar() {
   const { user, signOut } = useCabinet()
   return (
-    <aside className="hidden w-[280px] shrink-0 flex-col border-r border-white/5 bg-[#0b0b0d] p-4 md:flex">
+    <aside className="hidden w-[288px] shrink-0 flex-col border-r border-white/5 bg-[#0b0b0d]/80 p-4 md:flex">
       <div className="mb-6 flex items-center gap-3 px-1">
         <Logo size={36} />
         <div className="leading-tight">
@@ -84,11 +147,12 @@ function Sidebar() {
       <nav className="mb-6 space-y-0.5" aria-label="Разделы кабинета">
         {tabs.map((t) => (
           <NavLink key={t.to} to={t.to}
-            className={({ isActive }) => `flex h-10 items-center gap-3 rounded-xl px-3 text-[15px] font-medium transition-colors ${isActive ? 'bg-surface-2 text-text' : 'text-muted hover:bg-surface hover:text-text'}`}>
+            className={({ isActive }) => `relative flex h-10 items-center gap-3 rounded-xl px-3 text-[15px] font-medium transition-colors ${isActive ? 'bg-surface-2 text-text before:absolute before:-left-4 before:top-2 before:h-6 before:w-[3px] before:rounded-r-full before:bg-accent' : 'text-muted hover:bg-surface hover:text-text'}`}>
             {({ isActive }) => <><span className={isActive ? 'text-accent' : ''}><Icon d={t.d} /></span>{t.label}</>}
           </NavLink>
         ))}
       </nav>
+      <PlanBadge />
       <Dialogs />
       <div className="mt-4 space-y-1 border-t border-white/5 pt-4">
         {user && (
@@ -118,16 +182,16 @@ function Shell() {
 
   if (status === 'booting')
     return <div className="flex h-svh items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
-  if (status === 'out') return <Centered><Login /></Centered>
+  if (status === 'out') return <AuthLayout><Login /></AuthLayout>
   if (needsOnboarding) return <Centered><Onboarding /></Centered>
 
   return (
     <div className="flex h-svh">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="mx-auto min-h-0 w-full max-w-[820px] flex-1 pt-6">
+        <main className="mx-auto min-h-0 w-full max-w-[1180px] flex-1">
           <Routes>
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat" element={<div className="mx-auto h-full max-w-[880px]"><Chat /></div>} />
             <Route path="/plan" element={<PlanScreen />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/profile" element={<ProfileScreen />} />
@@ -152,7 +216,7 @@ export default function DesktopApp() {
   const wide = useMediaQuery('(min-width: 768px)') // как md: с этой ширины диалоги в боковой панели
   return (
     <Wide.Provider value={wide}>
-      <div className="min-h-svh bg-bg text-text">
+      <div className="app-bg min-h-svh text-text">
         <MemoryRouter initialEntries={['/chat']}>
           <CabinetProvider>
             <Shell />

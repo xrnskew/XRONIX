@@ -7,6 +7,12 @@ import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
 
 const starters = ['Кофейня у метро', 'Пекарня', 'Автомойка', 'Магазин одежды']
+const starterHints: Record<string, string> = {
+  'Кофейня у метро': 'Кофе с собой в проходном месте',
+  'Пекарня': 'Своя выпечка и кофе рядом с домом',
+  'Автомойка': 'Ручная мойка на 2–3 поста',
+  'Магазин одежды': 'Небольшой шоурум в торговом центре',
+}
 
 export default function Chat() {
   const { messages, busy, canRetry, send, retry, newChat, openChat, demoAnswers } = useCabinet()
@@ -31,7 +37,7 @@ export default function Chat() {
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-center gap-3 px-5 pb-3 pt-2">
+      <header className={`flex items-center gap-3 pb-3 ${wide ? 'border-b border-white/5 px-8 pb-4 pt-6' : 'px-5 pt-2'}`}>
         <Logo size={40} />
         <div className="min-w-0 flex-1">
           <h1 className="text-[18px] font-bold leading-tight">ИИ-консультант</h1>
@@ -41,10 +47,28 @@ export default function Chat() {
         {!wide && <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>}
       </header>
 
-      <div ref={list} className="no-scrollbar flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-3" aria-live="polite">
-        {messages.map((m) => (
-          <div key={m.id} className={`rise flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[88%] whitespace-pre-line px-4 py-3 text-[15px] leading-snug ${
+      <div ref={list} className={`flex-1 space-y-3 overflow-y-auto overscroll-contain pb-3 ${wide ? 'thin-scroll px-8 pt-5' : 'no-scrollbar px-4'}`} aria-live="polite">
+        {wide && messages.length === 1 && !busy && (
+          <div className="rise flex min-h-full flex-col justify-center pb-10">
+            <h2 className="font-display text-[34px] font-semibold leading-[1.1] tracking-tight">Какой бизнес хотите открыть?</h2>
+            <p className="mt-3 max-w-[520px] text-[16px] leading-snug text-muted">Опишите идею своими словами. ИИ задаст несколько вопросов и соберёт план: шаги, деньги и кредит, который бизнес потянет.</p>
+            <div className="mt-8 grid grid-cols-2 gap-3">
+              {starters.map((s) => (
+                <button key={s} type="button" onClick={() => submit(`Хочу открыть: ${s.toLowerCase()}`)}
+                  className="card-ring group rounded-2xl bg-surface p-4 text-left transition-colors hover:bg-surface-2">
+                  <div className="flex items-center justify-between text-[16px] font-semibold">{s}
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                  </div>
+                  <div className="mt-1 text-[13px] text-muted">{starterHints[s]}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {!(wide && messages.length === 1 && !busy) && messages.map((m) => (
+          <div key={m.id} className={`rise flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} ${wide ? 'gap-3' : ''}`}>
+            {wide && m.role === 'assistant' && <div className="mt-1"><Logo size={30} /></div>}
+            <div className={`${wide ? 'max-w-[78%]' : 'max-w-[88%]'} whitespace-pre-line px-4 py-3 text-[15px] leading-snug ${
               m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
@@ -55,13 +79,14 @@ export default function Chat() {
             </div>
           </div>
         ))}
-        {messages.length === 1 && !busy && (
+        {!wide && messages.length === 1 && !busy && (
           <div className="rise flex flex-wrap gap-2 pt-1">
             {starters.map((s) => <Chip key={s} onClick={() => submit(`Хочу открыть: ${s.toLowerCase()}`)}>{s}</Chip>)}
           </div>
         )}
         {busy && (
-          <div className="flex" role="status" aria-label="ИИ печатает">
+          <div className={`flex ${wide ? 'gap-3' : ''}`} role="status" aria-label="ИИ печатает">
+            {wide && <div className="mt-1"><Logo size={30} /></div>}
             <div className="card-ring flex gap-1.5 rounded-[22px] rounded-bl-md bg-surface px-4 py-4">
               <span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" />
             </div>
@@ -69,11 +94,11 @@ export default function Chat() {
         )}
       </div>
 
-      <form className="flex items-center gap-2 px-3 pb-2 pt-2" onSubmit={(e) => { e.preventDefault(); submit(text) }}>
+      <form className={`flex items-center gap-2 ${wide ? 'px-8 pb-6 pt-3' : 'px-3 pb-2 pt-2'}`} onSubmit={(e) => { e.preventDefault(); submit(text) }}>
         <label className="sr-only" htmlFor="msg">Сообщение</label>
         <input id="msg" value={text} onChange={(e) => setText(e.target.value)} placeholder="Хочу открыть кофейню у метро" maxLength={4000}
-          className="h-12 min-w-0 flex-1 rounded-full bg-surface px-5 text-[15px] outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent" />
-        <button aria-label="Отправить" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-fill text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35" disabled={busy || !text.trim()}>
+          className={`${wide ? 'h-14 rounded-2xl text-[16px]' : 'h-12 rounded-full text-[15px]'} min-w-0 flex-1 bg-surface px-5 outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent`} />
+        <button aria-label="Отправить" className={`flex ${wide ? 'h-14 w-14 rounded-2xl' : 'h-12 w-12 rounded-full'} shrink-0 items-center justify-center bg-fill text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35`} disabled={busy || !text.trim()}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 19V5M5 12l7-7 7 7" /></svg>
         </button>
       </form>

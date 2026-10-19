@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button, Logo } from '../ui'
+import { useContext, useState } from 'react'
+import { Button, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError, USE_MOCKS } from '../../api'
 
@@ -8,6 +8,7 @@ const field = 'h-[52px] w-full rounded-2xl bg-surface px-4 text-[16px] text-text
 
 export default function Login() {
   const { signIn, signUp, notice } = useCabinet()
+  const wide = useContext(Wide)
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState(USE_MOCKS ? 'demo@xronix.ru' : '')
@@ -33,22 +34,31 @@ export default function Login() {
   }
 
   return (
-    <form className="relative flex h-full flex-col px-6 pb-10" onSubmit={submit} noValidate>
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-accent/25 blur-[90px]" aria-hidden />
-      <div className="relative mb-auto pt-12">
-        <Logo size={reg ? 44 : 56} />
-        <h1 className="mt-5 font-display text-[28px] font-semibold leading-[1.1] tracking-tight">{reg ? 'Создайте аккаунт' : 'Кабинет предпринимателя'}</h1>
-        {!reg && (
-          <ul className="mt-5 space-y-2.5">
-            {points.map((p) => (
-              <li key={p} className="flex items-start gap-3 text-[15px] leading-snug text-text/80">
-                <svg className="mt-0.5 shrink-0 text-accent" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-                {p}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <form className={wide ? 'w-full' : 'relative flex h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
+      {wide ? (
+        <div className="mb-8">
+          <h1 className="font-display text-[30px] font-semibold leading-tight tracking-tight">{reg ? 'Создайте аккаунт' : 'Вход в кабинет'}</h1>
+          <p className="mt-2 text-[15px] text-muted">{reg ? 'Займёт минуту. Потом ИИ задаст пару вопросов о вас.' : 'Планы и диалоги сохраняются в аккаунте.'}</p>
+        </div>
+      ) : (
+        <>
+          <div className="pointer-events-none absolute -top-24 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-accent/25 blur-[90px]" aria-hidden />
+          <div className="relative mb-auto pt-12">
+            <Logo size={reg ? 44 : 56} />
+            <h1 className="mt-5 font-display text-[28px] font-semibold leading-[1.1] tracking-tight">{reg ? 'Создайте аккаунт' : 'Кабинет предпринимателя'}</h1>
+            {!reg && (
+              <ul className="mt-5 space-y-2.5">
+                {points.map((p) => (
+                  <li key={p} className="flex items-start gap-3 text-[15px] leading-snug text-text/80">
+                    <svg className="mt-0.5 shrink-0 text-accent" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </>
+      )}
       <div className="relative space-y-3">
         {(error || notice) && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error ?? notice}</p>}
         {reg && (<><label className="sr-only" htmlFor="name">Имя</label><input id="name" className={field} value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" autoComplete="name" /></>)}
