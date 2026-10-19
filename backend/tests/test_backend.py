@@ -113,7 +113,7 @@ def test_full_flow_and_isolation(client):
     CONTRACTS.validate('reply', p.json())
     assert p.json()['type'] == 'plan'
     check_plan(p.json()['plan'])
-    assert p.json()['plan']['credit']['monthly_payment_rub'] == 51878
+    assert p.json()['plan']['credit']['monthly_payment_rub'] == 51920
     pid = p.json()['plan_id']
     record = client.get(f'/api/plans/{pid}', headers=h).json()
     assert record['plan'] == p.json()['plan']
@@ -250,6 +250,9 @@ def test_finance():
 ])
 def test_payback_uses_recalculated_profit(startup, revenue, expenses, expected):
     plan=CONTRACTS.example('plan.no-credit.json')
+    # Isolate profit/payback; launch-cost reconciliation has its own regression tests.
+    for step in plan['steps']:
+        step['cost_rub'] = None
     plan['finance'].update(startup_cost_rub=startup, monthly_revenue_rub=revenue,
                            monthly_expenses_rub=expenses, monthly_profit_rub=1, payback_months=16)
     calculated=recalculate(plan)
@@ -323,10 +326,10 @@ def test_retry_recovers_and_server_recalculates(settings, product_id):
         r=send(c,h,cid)
         assert r.status_code==200,r.text
         body=r.json()
-        assert body['plan']['finance']['payback_months']==10
+        assert body['plan']['finance']['payback_months']==11
         assert c.get(f"/api/plans/{body['plan_id']}",headers=h).json()['plan']==body['plan']
         credit=body['plan']['credit']
-        assert credit['monthly_payment_rub']==51878
+        assert credit['monthly_payment_rub']==51920
         assert credit['debt_load_percent']==35
         assert credit['verdict']=='ok'
         assert credit['recommended_product_id']==product_id

@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import logging
 import sqlite3
 import re
@@ -20,7 +21,7 @@ from starlette.exceptions import HTTPException
 
 from .ai import AI, history
 from .config import Settings
-from .db import Base, Chat, Message, Plan, User, database, now, uid
+from .db import Base, Chat, Message, Plan, RateBucket, User, database, now, uid
 from .errors import ApiError
 from .limits import consume, sqlite_busy
 from .maintenance import backup_loop
@@ -28,7 +29,8 @@ from .migrations import CURRENT_VERSION, running_database
 from .storage import StorageError, backup_directory, check_space, database_path, private_directory
 from .middleware import ApiCORS
 from .security import hash_password, token_for, verify_password
-from .validation import Contracts
+from .validation import Contracts, recalculate
+from .planning import apply_preferences, location_clarification, with_answers
 
 logger = logging.getLogger(__name__)
 
@@ -160,19 +162,47 @@ def create_app(settings=None, ai_transport=None):
         with sessions() as session:
             yield session
 
-    def authenticated(request: Request, session: Session = Depends(db)):
+    def cookie_name(request):
+        return '__Host-xronix_session' if request.url.scheme == 'https' else 'xronix_session'
+
+    def request_token(request):
         header = request.headers.get('authorization', '')
-        scheme, _, token = header.partition(' ')
-        if scheme.lower() != 'bearer' or not token:
+        if header:
+            scheme, _, token = header.partition(' ')
+            return token if scheme.lower() == 'bearer' else ''
+        return request.cookies.get(cookie_name(request), '')
+
+    def revocation_key(token):
+        return 'revoked:' + hashlib.sha256(token.encode()).hexdigest()
+
+    def authenticated(request: Request, session: Session = Depends(db)):
+        token = request_token(request)
+        if not token:
             raise ApiError('UNAUTHORIZED')
+        # Cookie-authenticated writes require an allowed Origin, even for non-browser clients.
+        if not request.headers.get('authorization') and request.method not in ('GET', 'HEAD', 'OPTIONS'):
+            if request.headers.get('origin') not in settings.cors_origins:
+                raise ApiError('UNAUTHORIZED')
         try:
             payload = jwt.decode(token, key, algorithms=['HS256'], issuer='xronix', audience='xronix-api', options={'require': ['sub', 'iat', 'exp', 'iss', 'aud']})
         except jwt.InvalidTokenError as exc:
             raise ApiError('UNAUTHORIZED') from exc
+        if session.get(RateBucket, revocation_key(token)) is not None:
+            raise ApiError('UNAUTHORIZED')
         user = session.get(User, payload['sub'])
         if user is None:
             raise ApiError('UNAUTHORIZED')
         return user
+
+    def auth_result(user, request, response):
+        token = token_for(user, key, settings.jwt_expire_minutes)
+        response.headers['Cache-Control'] = 'no-store'
+        if request.headers.get('x-session-mode') == 'cookie':
+            if request.headers.get('origin') not in settings.cors_origins:
+                raise ApiError('UNAUTHORIZED')
+            response.set_cookie(cookie_name(request), token, max_age=settings.jwt_expire_minutes * 60,
+                                secure=request.url.scheme == 'https', httponly=True, samesite='strict', path='/')
+        return {'token': token, 'user': profile(user)}
 
     def owned_chat(session, chat_id, user_id):
         chat = session.scalar(select(Chat).where(Chat.id == chat_id, Chat.user_id == user_id))
@@ -225,7 +255,9 @@ def create_app(settings=None, ai_transport=None):
         return {'status': 'ok'}
 
     @app.post('/api/auth/register', status_code=201)
-    def register(body: Register, session: Session = Depends(db)):
+    def register(body: Register, request: Request, response: Response, session: Session = Depends(db)):
+        if request.headers.get('x-session-mode') == 'cookie' and request.headers.get('origin') not in settings.cors_origins:
+            raise ApiError('UNAUTHORIZED')
         user = User(email=body.email, name=body.name, password_hash=hash_password(body.password))
         session.add(user)
         try:
@@ -233,18 +265,35 @@ def create_app(settings=None, ai_transport=None):
         except IntegrityError as exc:
             session.rollback()
             raise ApiError('EMAIL_TAKEN') from exc
-        return {'token': token_for(user, key, settings.jwt_expire_minutes), 'user': profile(user)}
+        return auth_result(user, request, response)
 
     # Same PBKDF2 cost for unknown email and wrong password.
     dummy_hash = hash_password(uid())
 
     @app.post('/api/auth/login')
-    def login(body: Login, session: Session = Depends(db)):
+    def login(body: Login, request: Request, response: Response, session: Session = Depends(db)):
         user = session.scalar(select(User).where(User.email == body.email))
         valid = verify_password(body.password, user.password_hash if user else dummy_hash)
         if not valid or user is None:
             raise ApiError('INVALID_CREDENTIALS')
-        return {'token': token_for(user, key, settings.jwt_expire_minutes), 'user': profile(user)}
+        return auth_result(user, request, response)
+
+    @app.post('/api/auth/logout', status_code=204)
+    def logout(request: Request, session: Session = Depends(db)):
+        # Idempotent logout also clears an expired cookie. Never accept a cross-site write.
+        if request.headers.get('origin') not in settings.cors_origins:
+            raise ApiError('UNAUTHORIZED')
+        token = request_token(request)
+        if token:
+            try:
+                payload = jwt.decode(token, key, algorithms=['HS256'], issuer='xronix', audience='xronix-api', options={'require': ['sub', 'iat', 'exp', 'iss', 'aud']})
+                session.merge(RateBucket(key=revocation_key(token), count=1, expires_at=float(payload['exp'])))
+                session.commit()
+            except jwt.InvalidTokenError:
+                pass
+        response = Response(status_code=204, headers={'Cache-Control': 'no-store'})
+        response.delete_cookie(cookie_name(request), path='/', secure=request.url.scheme == 'https', httponly=True, samesite='strict')
+        return response
 
     @app.get('/api/me')
     def get_me(user: User = Depends(authenticated)):
@@ -272,8 +321,15 @@ def create_app(settings=None, ai_transport=None):
     @app.get('/api/chats/{chat_id}')
     def get_chat(chat_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
         owned_chat(session, chat_id, user.id)
-        messages = session.scalars(select(Message).where(Message.chat_id == chat_id).order_by(Message.seq))
-        return {'id': chat_id, 'messages': [{'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': m.reply} for m in messages]}
+        messages = session.scalars(select(Message).where(Message.chat_id == chat_id).order_by(Message.seq)).all()
+        result = []
+        for index, m in enumerate(messages):
+            reply = m.reply
+            if reply['type'] == 'plan':
+                context = {'history': history(messages[:index]), 'message': ''}
+                reply = {**reply, 'plan': apply_preferences(recalculate(reply['plan']), context)}
+            result.append({'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': reply})
+        return {'id': chat_id, 'messages': result}
 
     @app.delete('/api/chats/{chat_id}', status_code=204)
     def delete_chat(chat_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
@@ -325,8 +381,10 @@ def create_app(settings=None, ai_transport=None):
             session.add(Message(chat_id=chat_id, role='user', reply={'type': 'message', 'text': body.text}, answers=[a.model_dump() for a in body.answers]))
             chat.updated_at = now()
             session.commit()  # User message survives an unavailable AI service.
-            reply = await app.state.ai.respond(payload, chat.mock_stage)
+            clarification = location_clarification(payload)
+            reply = clarification or await app.state.ai.respond(payload, chat.mock_stage)
             if reply['type'] == 'plan':
+                reply['plan'] = apply_preferences(reply['plan'], with_answers(payload, [a.model_dump() for a in body.answers]))
                 plan_id = uid()
                 reply['plan_id'] = plan_id
                 session.add(Plan(id=plan_id, user_id=user.id, chat_id=chat.id, body=reply['plan']))
@@ -337,7 +395,7 @@ def create_app(settings=None, ai_transport=None):
             contracts.validate('reply', reply)
             session.add(Message(chat_id=chat_id, role='assistant', reply=reply))
             chat.updated_at = now()
-            if settings.mock_ai:
+            if settings.mock_ai and not clarification:
                 chat.mock_stage += 1
             session.commit()
             if reply['type'] == 'plan':
@@ -362,7 +420,15 @@ def create_app(settings=None, ai_transport=None):
         plan = session.scalar(select(Plan).where(Plan.id == plan_id, Plan.user_id == user.id))
         if plan is None:
             raise ApiError('NOT_FOUND')
-        return {'plan_id': plan.id, 'chat_id': plan.chat_id, 'created_at': plan.created_at, 'plan': plan.body}
+        messages = session.scalars(select(Message).where(Message.chat_id == plan.chat_id).order_by(Message.seq)).all()
+        before = []
+        for message in messages:
+            if message.reply.get('plan_id') == plan_id:
+                break
+            before.append(message)
+        # Repair derived figures on read; keep the historical database record intact.
+        view = apply_preferences(recalculate(plan.body), {'history': history(before), 'message': ''})
+        return {'plan_id': plan.id, 'chat_id': plan.chat_id, 'created_at': plan.created_at, 'plan': view}
 
     # Wrap the whole app so even INTERNAL responses include CORS headers.
     return ApiCORS(app, settings, sessions)

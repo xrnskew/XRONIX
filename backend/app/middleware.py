@@ -15,7 +15,7 @@ class ApiCORS(CORSMiddleware):
     def __init__(self, app, settings, sessions):
         super().__init__(app, allow_origins=settings.cors_origins,
                          allow_methods=['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-                         allow_headers=['Authorization', 'Content-Type'])
+                         allow_headers=['Authorization', 'Content-Type', 'X-Session-Mode'], allow_credentials=True)
         self.settings, self.sessions = settings, sessions
 
     def failure(self, code, origin=None):
@@ -41,6 +41,12 @@ class ApiCORS(CORSMiddleware):
     async def __call__(self, scope, receive, send):
         if scope['type'] != 'http':
             return await super().__call__(scope, receive, send)
+        original_send = send
+        async def private_send(event):
+            if event['type'] == 'http.response.start' and scope['path'].startswith('/api/'):
+                event = {**event, 'headers': [(k, v) for k, v in event.get('headers', []) if k.lower() != b'cache-control'] + [(b'cache-control', b'no-store')]}
+            await original_send(event)
+        send = private_send
         headers = Headers(scope=scope)
         origin = headers.get('origin')
         if origin and not self.is_allowed_origin(origin):

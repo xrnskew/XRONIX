@@ -7,6 +7,7 @@ from jsonschema import ValidationError
 
 from .errors import ApiError
 from .validation import check_plan, recalculate
+from .planning import METRO_CITIES, normalized_city, apply_preferences, check_location, retry_context
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,11 @@ class AI:
                 return self.contracts.example('reply.questions.json')
             if stage == 1:
                 reply = self.contracts.example('reply.plan.ai.json')
+                city = payload['user_context']['profile']['city']
+                if city:
+                    reply['plan']['business']['city'] = city
+                    if normalized_city(city) not in METRO_CITIES:
+                        reply = json.loads(json.dumps(reply, ensure_ascii=False).replace('метро', 'остановки'))
                 reply['plan']['tags_update'] = list(payload['user_context']['tags'])
                 return reply
             return self.contracts.example('reply.message.json')
@@ -73,7 +79,8 @@ class AI:
                         raise ValueError('question rounds or count')
                 if endpoint == 'respond' and result['type'] == 'plan':
                     check_plan(result['plan'])
-                    result['plan'] = recalculate(result['plan'])
+                    result['plan'] = apply_preferences(recalculate(result['plan']), payload)
+                    check_location(result['plan'], payload)
                     self.contracts.validate('plan', result['plan'])
                     check_plan(result['plan'])
                 return result
@@ -82,6 +89,8 @@ class AI:
                     raise
             except (ValidationError, ValueError, OverflowError):
                 pass
+            if endpoint == 'respond':
+                payload = retry_context(payload)
             logger.warning('Invalid AI %s response, attempt %d/3', endpoint, attempt + 1)
         raise ApiError('AI_BAD_RESPONSE')
 

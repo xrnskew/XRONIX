@@ -20,4 +20,4 @@ def verify_password(password, encoded):
 
 def token_for(user, key, minutes):
     now = datetime.now(timezone.utc)
-    return jwt.encode({'sub': user.id, 'iat': now, 'exp': now + timedelta(minutes=minutes), 'iss': 'xronix', 'aud': 'xronix-api'}, key, algorithm='HS256')
+    return jwt.encode({'sub': user.id, 'jti': secrets.token_hex(16), 'iat': now, 'exp': now + timedelta(minutes=minutes), 'iss': 'xronix', 'aud': 'xronix-api'}, key, algorithm='HS256')

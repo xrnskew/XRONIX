@@ -61,11 +61,14 @@ def verdict_for(load):
 def recalculate(plan):
     plan = copy.deepcopy(plan)
     f, c = plan['finance'], plan['credit']
+    # The total must cover all known launch costs.
+    f['startup_cost_rub'] = max(f['startup_cost_rub'], sum(s['cost_rub'] or 0 for s in plan['steps']))
     f['funding_gap_rub'] = max(0, f['startup_cost_rub'] - f['own_funds_rub'])
     f['monthly_profit_rub'] = f['monthly_revenue_rub'] - f['monthly_expenses_rub']
     f['payback_months'] = ((f['startup_cost_rub'] + f['monthly_profit_rub'] - 1) // f['monthly_profit_rub']
                            if f['monthly_profit_rub'] > 0 else None)
     if c['needed']:
+        c['amount_rub'] = max(c['amount_rub'], f['funding_gap_rub'])
         c['monthly_payment_rub'] = annuity(c['amount_rub'], c['estimated_rate_percent'], c['recommended_term_months'])
         c['debt_load_percent'] = js_round(c['monthly_payment_rub'] / f['monthly_profit_rub'] * 100) if f['monthly_profit_rub'] > 0 else 100
         c['verdict'] = verdict_for(c['debt_load_percent'])
