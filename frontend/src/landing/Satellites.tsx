@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { mockPlan, mockProfile } from '../mocks/data'
 import { annuity, rub, shortParts } from '../lib/format'
+import { alfaProducts } from '../data/alfaProducts'
 
 // Карточки вокруг телефона. Висят в 3D на разной глубине (translateZ), поэтому при наклоне телефона
 // сдвигаются с параллаксом. Набор меняется вместе со слайдом. Все цифры из того же плана, что и в кабинете.
@@ -34,7 +35,9 @@ const c = mockPlan.credit
 const start = shortParts(f.startup_cost_rub)
 const profit = shortParts(f.monthly_profit_rub)
 // Платёж пересчитываем по аннуитету, как кабинет и бэкенд, а не берём оценку ИИ: цифры на экране должны совпадать
-const payment = annuity(c.amount_rub ?? 0, c.estimated_rate_percent ?? 0, c.recommended_term_months ?? 1)
+const product = alfaProducts.find((p) => p.id === c.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
+const payment = annuity(c.amount_rub ?? 0, product.rateFrom ?? c.estimated_rate_percent ?? 0, c.recommended_term_months ?? 1)
+const load = f.monthly_profit_rub > 0 ? Math.round(payment / f.monthly_profit_rub * 100) : 100
 
 const sets: Record<string, Item[]> = {
   top: [
@@ -62,9 +65,9 @@ const sets: Record<string, Item[]> = {
   ],
   credit: [
     { slot: 'a', kind: 'stat', value: rub(payment), label: 'платёж в месяц' },
-    { slot: 'b', kind: 'gauge', value: c.debt_load_percent ?? 0 },
-    { slot: 'c', kind: 'check', text: 'Кредит подходит' },
-    { slot: 'd', kind: 'chip', text: 'Быстрый бизнес-кредит' },
+    { slot: 'b', kind: 'gauge', value: load },
+    { slot: 'c', kind: 'check', text: load > 50 ? 'Не рекомендуем' : load > 35 ? 'Есть риски' : 'Кредит подходит' },
+    { slot: 'd', kind: 'chip', text: product.collateral ? 'Кредит с залогом' : 'Кредит без залога' },
   ],
   memory: [
     ...mockProfile.tags.slice(0, 3).map((t, i): Item => ({ slot: (['a', 'b', 'c'] as const)[i], kind: 'chip', text: t })),
