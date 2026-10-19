@@ -46,8 +46,9 @@ def test_live_wal_snapshot_is_standalone_and_preserves_users_and_plans(settings)
             connection.execute('UPDATE users SET city=?',('Данные из WAL',));connection.commit()
             assert Path(str(path)+'-wal').stat().st_size>0
             backup=create_backup(settings)
-            assert backup.stat().st_mode & 0o777==0o600
-            assert backup.parent.stat().st_mode & 0o777==0o700
+            if os.name != 'nt':
+                assert backup.stat().st_mode & 0o777==0o600
+                assert backup.parent.stat().st_mode & 0o777==0o700
             assert verify(backup)==CURRENT_VERSION
             with closing(readonly(backup)) as reader:
                 assert reader.execute('SELECT city FROM users').fetchone()[0]=='Данные из WAL'
@@ -218,7 +219,8 @@ def test_external_export_verified_private_and_does_not_overwrite(settings,tmp_pa
         register(c); backup=create_backup(settings)
         exported=export_backup(settings,backup,tmp_path/'external-mount')
         assert exported.read_bytes()==backup.read_bytes()
-        assert exported.stat().st_mode & 0o777==0o600
+        if os.name != 'nt':
+            assert exported.stat().st_mode & 0o777==0o600
         assert verify(exported)==CURRENT_VERSION
         with pytest.raises(StorageError,match='EXISTS'):export_backup(settings,backup,exported.parent)
 

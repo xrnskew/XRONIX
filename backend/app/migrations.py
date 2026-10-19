@@ -1,11 +1,11 @@
 """Versioned, additive SQLite migrations. Published definitions must remain immutable."""
-import fcntl
 import hashlib
 import json
 import os
 import sqlite3
 from contextlib import closing, contextmanager
 
+from .fileguard import open_private
 from .storage import StorageError, check_space, database_path, file_lock, integrity, readonly, service_lock_path
 
 BASELINE = (
@@ -103,7 +103,7 @@ def running_database(settings):
                     validate_schema(connection)
         if current < CURRENT_VERSION:
             try:
-                fcntl.flock(guard, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                guard.acquire(exclusive=True)
             except BlockingIOError:
                 raise StorageError('STOP_BACKEND_BEFORE_MIGRATION') from None
             check_space(path.parent, settings.db_min_free_bytes)
@@ -114,7 +114,7 @@ def running_database(settings):
                     # A verified pre-upgrade snapshot is mandatory before touching existing data.
                     from .maintenance import snapshot
                     snapshot(settings, kind='pre-migration')
-            descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+            descriptor = open_private(path)
             os.close(descriptor)
             with closing(sqlite3.connect(path, timeout=5)) as connection:
                 connection.execute('PRAGMA foreign_keys=ON')
@@ -126,5 +126,5 @@ def running_database(settings):
                     connection.rollback()
                     raise
             os.chmod(path, 0o600)
-            fcntl.flock(guard, fcntl.LOCK_SH)
+            guard.acquire()
         yield

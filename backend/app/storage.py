@@ -1,5 +1,4 @@
 """Local SQLite maintenance primitives. No public HTTP routes."""
-import fcntl
 import os
 import shutil
 import sqlite3
@@ -7,6 +6,9 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from sqlalchemy.engine import make_url
+
+from . import fileguard
+from .fileguard import FileGuard, open_private
 
 
 class StorageError(Exception):
@@ -28,19 +30,23 @@ def backup_directory(settings):
 
 def private_directory(path):
     path.mkdir(mode=0o700, parents=True, exist_ok=True)
-    if path.is_symlink() or not path.is_dir() or path.stat().st_mode & 0o077:
+    if path.is_symlink() or not path.is_dir() or (not fileguard.WINDOWS and path.stat().st_mode & 0o077):
         raise StorageError('BACKUP_DIRECTORY_MUST_BE_PRIVATE')
 
 
 @contextmanager
 def file_lock(path, exclusive=False, blocking=False):
-    descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(descriptor, 'a') as stream:
+    descriptor = open_private(path)
+    with os.fdopen(descriptor, 'r+', encoding='utf-8') as stream:
+        guard = FileGuard(stream)
         try:
-            fcntl.flock(stream, (fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH) | (0 if blocking else fcntl.LOCK_NB))
-        except BlockingIOError:
-            raise StorageError('DATABASE_OR_BACKUP_IN_USE') from None
-        yield stream
+            try:
+                guard.acquire(exclusive=exclusive, blocking=blocking)
+            except BlockingIOError:
+                raise StorageError('DATABASE_OR_BACKUP_IN_USE') from None
+            yield guard
+        finally:
+            guard.release()
 
 
 def service_lock_path(settings):
@@ -73,11 +79,14 @@ def integrity(connection):
 
 
 def fsync_file(path):
-    with path.open('rb') as stream:
+    with path.open('r+b' if fileguard.WINDOWS else 'rb') as stream:
         os.fsync(stream.fileno())
 
 
 def fsync_directory(path):
+    if fileguard.WINDOWS:
+        # Directory fsync has no os-level Windows equivalent; files are still fsynced.
+        return
     descriptor = os.open(path, os.O_RDONLY)
     try:
         os.fsync(descriptor)

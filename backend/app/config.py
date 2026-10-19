@@ -1,10 +1,12 @@
-import fcntl
 import os
 import secrets
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+from .fileguard import private_mode
+from .storage import file_lock
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / '.env')
@@ -55,9 +57,8 @@ class Settings:
         # Stable local key: tokens survive restarts. Never tracked by Git.
         path = ROOT / 'data/jwt.key'
         path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-        with os.fdopen(descriptor, 'r+') as stream:
-            fcntl.flock(stream, fcntl.LOCK_EX)
+        with file_lock(path, exclusive=True, blocking=True) as guard:
+            stream = guard.stream
             value = stream.read().strip()
             if not value:
                 value = secrets.token_urlsafe(48)
@@ -68,5 +69,5 @@ class Settings:
                 os.fsync(stream.fileno())
             if len(value.encode()) < 32:
                 raise ValueError('Persisted JWT key is too short')
-            os.fchmod(stream.fileno(), 0o600)
+            private_mode(stream, path)
             return value

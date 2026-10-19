@@ -1,3 +1,17 @@
+# Совместимость Windows · 19 октября 2026
+
+Локально добавлены Windows LockFileEx вместо обязательного fcntl, переносимый open_private, обработка Windows-прав/fsync и run.cmd. Linux/macOS продолжают использовать flock, O_NOFOLLOW и POSIX-проверки.
+
+Проверки на macOS / Python 3.13.15:
+- Полный pytest: **114 passed**, 26.65 с (одно прежнее предупреждение Starlette/httpx).
+- Шесть тестов переносимого слоя: shared/exclusive, upgrade/downgrade, взаимное исключение между процессами, отсутствие O_NOFOLLOW, отказ symlink, Windows API flags/contention через управляемую подмену native API.
+- Реальный HTTP smoke, Backup API, offline restore и перезапуск — PASS.
+- Все 18 проверок contracts npm run check — PASS.
+
+**Реальный Windows здесь отсутствует.** Нативные WinAPI-вызовы и run.cmd нужно дополнительно запустить на компьютере участника. Подмена API проверяет нашу диспетчеризацию/флаги, а не заменяет Windows-интеграционный тест. Инструкции Git → run.cmd добавлены в README. Production Ubuntu-код сохраняет прежние гарантии; Windows использует NTFS ACL и не обещает POSIX directory fsync.
+
+---
+
 # SQLite: резервирование и миграции · 19 октября 2026
 
 Базовый коммит этой доработки: `4127f5f`. API, контракты и бизнес-логика не изменялись; новых зависимостей нет.

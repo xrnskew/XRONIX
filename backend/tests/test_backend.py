@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import json
+import os
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -338,7 +339,8 @@ def test_local_signing_key_survives_restart(tmp_path, monkeypatch):
     first=s.signing_key()
     assert len(first)>=32
     assert Settings(jwt_secret='').signing_key()==first
-    assert (tmp_path/'data/jwt.key').stat().st_mode & 0o777 == 0o600
+    if os.name != 'nt':
+        assert (tmp_path/'data/jwt.key').stat().st_mode & 0o777 == 0o600
 
 
 def test_question_round_limit(settings):

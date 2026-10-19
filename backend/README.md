@@ -18,6 +18,22 @@
 - Проверка: http://localhost:8000/health → `{"status":"ok"}`
 - Swagger: http://localhost:8000/docs
 
+## Windows: запуск из Git без Docker
+
+Нужны Git и Python 3.12+ с Python Launcher (`py`). В PowerShell:
+
+```powershell
+git clone --branch backend --single-branch https://github.com/xrnskew/XRONIX.git
+cd XRONIX
+.\backend\run.cmd
+```
+
+Если репозиторий уже есть, сохранить свои незакоммиченные изменения, затем `git switch backend` и `git pull --ff-only origin backend`. Запускать команды после публикации коммита с исправлением Windows; `git pull` не скачивает локальные неопубликованные изменения Ильи.
+
+`run.cmd` создаёт Windows-окружение `.venv`, ставит requirements и запускает http://localhost:8000 . Без launcher можно создать окружение вручную командой `python -m venv backend\.venv`, затем запустить run.cmd. Виртуальные окружения не переносятся между macOS/Linux и Windows.
+
+На Windows нет обязательного импорта fcntl: используются нативные shared/exclusive блокировки LockFileEx. На Linux/macOS остаётся flock. Блокировки не отключаются. POSIX 0600/0700 и directory fsync относятся к Linux/macOS; в Windows доступ к data/backups регулируют NTFS ACL. Держите локальную копию в личном каталоге пользователя, не в общей доступной папке. Production-процедура Ubuntu не меняется. Фактический запуск на Windows нужно проверить отдельно — текущая среда macOS.
+
 ## Переменные окружения
 
 Необязательно скопировать `backend/.env.example` в `backend/.env` и отредактировать. Переменные процесса имеют приоритет над `.env`.
