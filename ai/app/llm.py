@@ -1,4 +1,5 @@
 """Тонкая обёртка над GigaChat: запрос с JSON-схемой, разбор ответа, понятные ошибки."""
+import asyncio
 import json
 import logging
 import re
@@ -78,6 +79,18 @@ class LLM:
             return json.loads(extract_json(choice.message.content))
         except json.JSONDecodeError as e:
             raise LLMBadOutput(f"не JSON (finish={choice.finish_reason}): {e}") from e
+
+    async def warmup(self):
+        """Заранее получить токен и открыть соединение, чтобы первый пользователь не ждал.
+        Не критично: если GigaChat сейчас недоступен, сервис всё равно стартует."""
+        t = time.monotonic()
+        try:
+            async with asyncio.timeout(15):
+                await self.giga.aget_token()
+                await self.giga.aget_models()
+            logger.info("GigaChat warmup: %.1fs", time.monotonic() - t)
+        except Exception as e:
+            logger.warning("GigaChat warmup не удался (%r), продолжаем без него", e)
 
     async def aclose(self):
         await self.giga.aclose()

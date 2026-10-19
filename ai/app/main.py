@@ -21,6 +21,7 @@ logger = logging.getLogger("ai")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.llm = LLM()
+    await app.state.llm.warmup()
     yield
     await app.state.llm.aclose()
 

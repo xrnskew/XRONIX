@@ -1,7 +1,7 @@
 """Вход и выход сервиса по contracts/schemas: ai-request, reply (без plan_id), summarize."""
 from typing import Annotated, List, Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, model_validator
 
 from .plan import Plan
 
@@ -94,6 +94,7 @@ class QuestionDraft(BaseModel):
 
 
 class Decision(BaseModel):
-    action: Literal["questions", "plan", "message"]
+    # В истории наши ответы лежат с полем "type", и модель иногда пишет его вместо "action".
+    action: Literal["questions", "plan", "message"] = Field(validation_alias=AliasChoices("action", "type"))
     text: str = ""
     questions: List[QuestionDraft] = []
