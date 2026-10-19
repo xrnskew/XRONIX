@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Onest", system-ui, sans-serif;
-  --font-display: "Unbounded", "Onest", sans-serif;
+  --font-sans: "Onest Variable", system-ui, sans-serif;
+  --font-display: "Unbounded Variable", "Onest Variable", sans-serif;
 
   /* Презентация (светлая) */
   --color-paper: #ffffff;
