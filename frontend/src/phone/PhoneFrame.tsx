@@ -2,8 +2,13 @@ import { useEffect, useState, type ReactNode } from 'react'
 
 const W = 414
 const H = 880
+const DEPTH = 40 // толщина корпуса в 3D, px
+const SLICES = 14
 
-// Макет iPhone. Внутри — живой кабинет. Масштабируется под окно, чтобы телефон всегда влезал.
+const flat3d = { transformStyle: 'preserve-3d' } as const
+
+// Макет iPhone. Внутри живой кабинет. Масштабируется под окно, чтобы телефон всегда влезал.
+// Корпус имеет толщину: за лицевой гранью стопка тонких слоёв, видных сбоку при наклоне (см. Phone3D).
 export default function PhoneFrame({ children }: { children: ReactNode }) {
   const [scale, setScale] = useState(1)
   useEffect(() => {
@@ -14,16 +19,24 @@ export default function PhoneFrame({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div style={{ width: W * scale, height: H * scale }}>
+    <div style={{ width: W * scale, height: H * scale, ...flat3d }}>
       <div
         className="relative origin-top-left rounded-[60px] bg-gradient-to-b from-[#3a3a40] via-[#1a1a1d] to-[#2a2a2f] p-[3px] shadow-[0_50px_90px_-20px_rgba(60,0,0,.65),0_0_0_1px_rgba(255,255,255,.08)]"
-        style={{ width: W, height: H, transform: `scale(${scale})` }}
+        style={{ width: W, height: H, transform: `scale(${scale})`, ...flat3d }}
       >
-        {/* кнопки на корпусе */}
-        <span className="absolute -left-[3px] top-[130px] h-8 w-[3px] rounded-l bg-[#2a2a2f]" aria-hidden />
-        <span className="absolute -left-[3px] top-[190px] h-14 w-[3px] rounded-l bg-[#2a2a2f]" aria-hidden />
-        <span className="absolute -left-[3px] top-[262px] h-14 w-[3px] rounded-l bg-[#2a2a2f]" aria-hidden />
-        <span className="absolute -right-[3px] top-[210px] h-20 w-[3px] rounded-r bg-[#2a2a2f]" aria-hidden />
+        {/* тень под корпусом, смещается вместе с наклоном */}
+        <div className="pointer-events-none absolute inset-6 rounded-[60px] bg-black/60 blur-[34px]" style={{ transform: `translateZ(${-DEPTH - 36}px)` }} aria-hidden />
+        {/* боковая стенка */}
+        {Array.from({ length: SLICES }, (_, i) => {
+          const f = (i + 1) / SLICES
+          return <div key={i} className="pointer-events-none absolute inset-0 rounded-[60px]" aria-hidden
+            style={{ transform: `translateZ(${-f * DEPTH}px)`, background: `hsl(240 5% ${30 - f * 17}%)` }} />
+        })}
+        {/* кнопки на боковых гранях */}
+        {[[-3, 130, 32], [-3, 190, 56], [-3, 262, 56]].map(([x, y, h]) => (
+          <span key={y} className="absolute w-[3px] rounded-l bg-[#2a2a2f]" style={{ left: x, top: y, height: h, transform: `translateZ(${-DEPTH / 2}px)` }} aria-hidden />
+        ))}
+        <span className="absolute -right-[3px] top-[210px] h-20 w-[3px] rounded-r bg-[#2a2a2f]" style={{ transform: `translateZ(${-DEPTH / 2}px)` }} aria-hidden />
 
         <div className="relative h-full w-full rounded-[57px] bg-black p-[9px]">
           <div className="relative h-full w-full overflow-hidden rounded-[48px] bg-bg text-text">
@@ -31,7 +44,9 @@ export default function PhoneFrame({ children }: { children: ReactNode }) {
             <StatusBar />
             <div className="absolute inset-0 pt-[54px]">{children}</div>
             <div className="pointer-events-none absolute bottom-[8px] left-1/2 z-50 h-[5px] w-[134px] -translate-x-1/2 rounded-full bg-white/80" aria-hidden />
-            <div className="pointer-events-none absolute inset-0 z-[60] rounded-[48px] bg-gradient-to-br from-white/[.07] via-transparent to-transparent" aria-hidden />
+            {/* блик на стекле: положение задаёт Phone3D через --glare */}
+            <div className="pointer-events-none absolute inset-0 z-[60] rounded-[48px]" aria-hidden
+              style={{ background: 'linear-gradient(115deg, rgba(255,255,255,0) calc(var(--glare, 50) * 1% - 22%), rgba(255,255,255,.13) calc(var(--glare, 50) * 1%), rgba(255,255,255,0) calc(var(--glare, 50) * 1% + 22%))' }} />
           </div>
         </div>
       </div>

@@ -3,16 +3,17 @@ export type Scene = 'login' | 'chat-empty' | 'chat-demo' | 'chat-final' | 'plan'
 
 export const reduceMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Прокручивает экран ВНУТРИ телефона (не страницу). Телефон масштабируется через transform, поэтому
-// расстояния из getBoundingClientRect приводим к масштабу самого контейнера.
+// Прокручивает экран ВНУТРИ телефона (не страницу). Считаем по offsetTop: он не зависит от масштаба и 3D-наклона телефона.
+function offsetWithin(el: HTMLElement, box: HTMLElement) {
+  let y = 0
+  for (let n: HTMLElement | null = el; n && n !== box; n = n.offsetParent as HTMLElement | null) y += n.offsetTop
+  return y
+}
+
 export function scrollPhone(targetId: string | null, smooth = true) {
   const box = document.querySelector<HTMLElement>('[data-phone-scroll]')
   if (!box) return
   const behavior: ScrollBehavior = smooth && !reduceMotion() ? 'smooth' : 'auto'
-  if (!targetId) return box.scrollTo({ top: 0, behavior })
-  const t = document.getElementById(targetId)
-  if (!t) return
-  const k = box.clientHeight ? box.getBoundingClientRect().height / box.clientHeight : 1
-  const top = (t.getBoundingClientRect().top - box.getBoundingClientRect().top) / k + box.scrollTop - 6
-  box.scrollTo({ top, behavior })
+  const t = targetId ? document.getElementById(targetId) : null
+  box.scrollTo({ top: t ? offsetWithin(t, box) - 6 : 0, behavior })
 }

@@ -62,3 +62,16 @@ html { scroll-snap-type: y proximity; scroll-behavior: smooth; }
 @keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .caret { animation: caret 1s steps(1) infinite; }
 @media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+
+/* Мягкая подложка слайда: радиальный градиент гаснет раньше краёв, поэтому границ нет */
+.tint { background: radial-gradient(75% 55% at 30% 50%, rgba(0,0,0,.4), rgba(0,0,0,0) 72%); }
+
+/* Шапка без резких краёв: фон и размытие растворяются вниз и вправо */
+.header-fade {
+  background: linear-gradient(to bottom, rgba(7,7,8,.9), rgba(7,7,8,.55) 55%, rgba(7,7,8,0));
+  backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent), linear-gradient(to right, #000 78%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, #000 45%, transparent), linear-gradient(to right, #000 78%, transparent);
+  mask-composite: intersect;
+}

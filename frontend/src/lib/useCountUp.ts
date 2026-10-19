@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 
 const still = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
-// Число плавно «набегает» от 0 до target при появлении экрана. При reduced-motion сразу показывает итог.
-export function useCountUp(target: number, ms = 900) {
+// Число плавно «набегает» от 0 до target. run=false держит 0 (для слайдов, пока их не видно).
+// При reduced-motion сразу показывает итог.
+export function useCountUp(target: number, ms = 900, run = true) {
   const [v, setV] = useState(still() ? target : 0)
   useEffect(() => {
     if (still()) { setV(target); return }
+    if (!run) { setV(0); return }
     let raf = 0
     const t0 = performance.now()
     const tick = (t: number) => {
@@ -16,6 +18,6 @@ export function useCountUp(target: number, ms = 900) {
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [target, ms])
+  }, [target, ms, run])
   return v
 }

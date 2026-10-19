@@ -12,6 +12,7 @@ precision mediump float;
 #endif
 uniform vec2 u_res;
 uniform float u_time;
+uniform float u_scroll; // 0..1, прокрутка страницы: сдвигает границу красного
 
 float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float noise(vec2 p){
@@ -35,7 +36,7 @@ void main(){
   float n = fbm(p * 1.1 + 1.7 * q + vec2(t * 0.7, 0.0));
 
   // g растёт слева направо; шум делает границу живой
-  float g = uv.x + (n - 0.5) * 0.6;
+  float g = uv.x + (n - 0.5) * 0.6 + (u_scroll - 0.5) * 0.16;
 
   vec3 black = vec3(0.028, 0.028, 0.032);
   vec3 ember = vec3(0.34, 0.05, 0.045);
@@ -45,7 +46,7 @@ void main(){
   col = mix(col, hot, pow(smoothstep(0.62, 1.05, g), 1.5));
 
   // тонкие светлые прожилки только в красной зоне
-  float veins = smoothstep(0.58, 0.9, fbm(p * 3.2 + q * 2.2 + t)) * smoothstep(0.7, 1.0, g);
+  float veins = smoothstep(0.58, 0.9, fbm(p * 3.2 + q * 2.2 + t + u_scroll * 1.5)) * smoothstep(0.7, 1.0, g);
   col += vec3(1.0, 0.42, 0.32) * veins * 0.22;
 
   // мягкое затемнение к верху и низу
@@ -84,6 +85,7 @@ export default function ShaderBackground() {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
     const uRes = gl.getUniformLocation(prog, 'u_res')
     const uTime = gl.getUniformLocation(prog, 'u_time')
+    const uScroll = gl.getUniformLocation(prog, 'u_scroll')
 
     const resize = () => {
       const k = Math.min(window.devicePixelRatio || 1, 1.5) * 0.7
@@ -97,8 +99,12 @@ export default function ShaderBackground() {
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const t0 = performance.now()
     let raf = 0
+    let scroll = 0 // сглаженная прокрутка
     const draw = (now: number) => {
+      const target = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+      scroll += (target - scroll) * (still ? 1 : 0.06)
       gl.uniform2f(uRes, canvas.width, canvas.height)
+      gl.uniform1f(uScroll, scroll)
       gl.uniform1f(uTime, still ? 8 : (now - t0) / 1000 + 8)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       if (!still) raf = requestAnimationFrame(draw)

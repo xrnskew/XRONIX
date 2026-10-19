@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PhoneFrame from '../phone/PhoneFrame'
+import Phone3D from '../phone/Phone3D'
 import Cabinet, { type Scene } from '../phone/Cabinet'
 import ShaderBackground from './ShaderBackground'
 import { useMediaQuery, useSlides } from './useSlides'
@@ -17,10 +18,12 @@ const slides: { id: string; label: string; scene: Scene }[] = [
   { id: 'team', label: 'Команда', scene: 'hold' },
 ]
 const ids = slides.map((s) => s.id)
+// Базовый ракурс телефона на каждом слайде (градусы): чередуем наклон влево и вправо
+const angles = [{ x: 2, y: -12 }, { x: 0, y: 9 }, { x: -2, y: -8 }, { x: 2, y: 10 }, { x: 0, y: -9 }, { x: -2, y: 8 }, { x: 1, y: -10 }, { x: 0, y: 0 }]
 const goTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
 export default function Landing() {
-  const { current, settled, progress } = useSlides(ids)
+  const { current, settled } = useSlides(ids)
   const wide = useMediaQuery('(min-width: 1024px)')
   const [auto, setAuto] = useState(true)
   const [cabinetKey, setCabinetKey] = useState(0)
@@ -37,17 +40,21 @@ export default function Landing() {
     <div className="text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
       <ShaderBackground />
 
-      <aside className="relative flex items-center justify-center overflow-hidden px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
+      <aside className="relative flex items-center justify-center px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
         <Rings />
         <div className="relative" onPointerDownCapture={takeOver} onFocusCapture={takeOver}>
-          <PhoneFrame>
-            <Cabinet key={cabinetKey} scene={slides[settled].scene} auto={live} onDemoStep={setDemoStep} onRealSession={() => setAuto(false)} />
-          </PhoneFrame>
+          <Phone3D base={angles[settled]} enabled={wide}>
+            <PhoneFrame>
+              <Cabinet key={cabinetKey} scene={slides[settled].scene} auto={live} onDemoStep={setDemoStep} onRealSession={() => setAuto(false)} />
+            </PhoneFrame>
+          </Phone3D>
         </div>
       </aside>
 
       <main className="lg:order-1">
-        <header className={`sticky top-0 z-30 flex h-16 items-center gap-4 bg-black/60 backdrop-blur-md ${pad}`}>
+        <header className="sticky top-0 z-30 h-20">
+          <div className="header-fade absolute inset-0" aria-hidden />
+          <div className={`relative flex h-16 items-center gap-4 ${pad}`}>
           <div className="min-w-0 leading-tight">
             <div className="font-display text-[15px] font-semibold text-brand">XRONIX</div>
             <div className="truncate text-[12px] text-white/55" aria-live="polite">{slides[current].label}</div>
@@ -68,7 +75,7 @@ export default function Landing() {
               {auto ? 'Автопоказ идёт' : 'Вернуть автопоказ'}
             </button>
           )}
-          <span className="absolute inset-x-0 bottom-0 h-px bg-white/10"><span className="block h-full origin-left bg-brand" style={{ transform: `scaleX(${progress})` }} /></span>
+          </div>
         </header>
 
         <Hero onTry={tryIt} onHow={() => goTo('how')} />
