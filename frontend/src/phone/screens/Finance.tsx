@@ -1,3 +1,4 @@
+import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide } from '../ui'
@@ -63,6 +64,7 @@ export default function Finance() {
   if (!c.needed)
     return (
       <Screen title="Финансы и кредит">
+        {unconfirmedMetro(plan) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
         <Card>
           <Badge tone={f.funding_gap_rub > 0 ? "warn" : "ok"}>{f.funding_gap_rub > 0 ? "Финансирование без кредита" : "Кредит не нужен"}</Badge>
           <p className="mt-2 text-[14px] leading-snug text-muted">{c.comment}</p>
@@ -78,6 +80,7 @@ export default function Finance() {
 
   return (
     <Screen title="Финансы и кредит">
+      {unconfirmedMetro(plan) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
       <Card delay={0} span={7}>
         <SectionTitle>Откуда взять {short(f.startup_cost_rub)} ₽</SectionTitle>
         <div className="flex h-3 overflow-hidden rounded-full bg-surface-3" role="img" aria-label={`Свои средства ${ownShare}%, не хватает ${100 - ownShare}%`}>

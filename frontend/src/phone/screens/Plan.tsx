@@ -1,3 +1,4 @@
+import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
@@ -38,6 +39,7 @@ export default function PlanScreen() {
   const unallocated = Math.max(0, p.finance.startup_cost_rub - knownCosts)
   return (
     <Screen title="План">
+      {unconfirmedMetro(p) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
       <div className={`hero-card card-ring rise rounded-[26px] ${wide ? 'grid items-end gap-8 p-8 min-[1100px]:grid-cols-[1.15fr_1fr]' : 'p-5'}`}>
         <div>
           <div className="flex gap-1.5"><Badge tone="muted">{p.business.sphere}</Badge><Badge tone="muted">{p.business.city}</Badge></div>
