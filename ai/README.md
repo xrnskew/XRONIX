@@ -39,7 +39,7 @@ systemd-служба `xronix-ai` на `127.0.0.1:8001` рядом с бэкен�
 | `AI_DECIDE_TIMEOUT_SEC` | Шаг «вопросы или план», по умолчанию 8 |
 | `AI_MIN_RETRY_SEC` | Повтор плана, только если осталось столько секунд, по умолчанию 10 |
 
-Для `GigaChat-3-Ultra` план идёт 19–25 с, поэтому: бэк ждёт 45 с, `GIGACHAT_TIMEOUT_SEC=35`, `AI_DEADLINE_SEC=40`, `AI_MIN_RETRY_SEC=20`.
+На проде `GigaChat-3-Ultra` (план 19–25 с), бэк ждёт нас 170 с, фронт 180 с: `GIGACHAT_TIMEOUT_SEC=60`, `AI_DEADLINE_SEC=160`, `AI_DECIDE_TIMEOUT_SEC=15`, `AI_MIN_RETRY_SEC=30`. Худший случай: 15 с на вопросы + две попытки плана по 60 с = 135 с, укладываемся с запасом.
 
 ## Как устроена генерация плана
 
