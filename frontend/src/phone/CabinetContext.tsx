@@ -122,7 +122,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
 
   // ---- автопоказ: ничего не вызывает у бэкенда, только заготовленные данные ----
   const demoEnter = useCallback(() => {
-    if (demoRef.current) return
+    if (demoRef.current) { session.present({ plan: mockPlan, planId: 'demo' }); return }
     reset()
     demoRef.current = true
     setDemo(true); setUser({ ...mockProfile, id: 'u_demo' }); setPlan(mockPlan); setStatus('in')
@@ -131,6 +131,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
 
   const playDemoChat: Ctx['playDemoChat'] = ({ instant, onStep }) => {
     stopDemo()
+    session.present({ plan: mockPlan, planId: 'demo' })
     const msg = (m: Omit<ChatMessage, 'id'>): ChatMessage => ({ id: uid(), ...m })
     const idea = msg({ role: 'user', text: DEMO_IDEA })
     const questions = msg({ role: 'assistant', reply: mockQuestions })
