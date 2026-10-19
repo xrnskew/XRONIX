@@ -152,10 +152,10 @@ def fit_questions(questions: list, req: RespondRequest, rounds: int) -> list:
     return questions
 
 
-def questions_reply(text: str, questions: list, req: RespondRequest, rounds: int) -> dict:
-    questions = fit_questions(questions, req, rounds)
-    return QuestionsReply(text=text.strip()[:300] or FALLBACK_QUESTIONS.text,
-                          questions=questions).model_dump(exclude_none=True)
+def questions_reply(questions: list, req: RespondRequest, rounds: int) -> dict:
+    # Текст модели над вопросами часто пересказывает сами вопросы, поэтому фраза своя.
+    text = FALLBACK_QUESTIONS.text if rounds == 0 else "Ещё пара деталей, и план будет готов"
+    return QuestionsReply(text=text, questions=fit_questions(questions, req, rounds)).model_dump(exclude_none=True)
 
 
 async def respond(llm: LLM, req: RespondRequest) -> dict:
@@ -176,7 +176,7 @@ async def respond(llm: LLM, req: RespondRequest) -> dict:
 async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
     """Готовый ответ (вопросы или сообщение) или None, если пора делать план."""
     loop = asyncio.get_running_loop()
-    fallback = (questions_reply(FALLBACK_QUESTIONS.text, list(FALLBACK_QUESTIONS.questions), req, rounds)
+    fallback = (questions_reply(list(FALLBACK_QUESTIONS.questions), req, rounds)
                 if rounds == 0 else None)
     try:
         async with asyncio.timeout(min(DECIDE_TIMEOUT_SEC, deadline - loop.time())):
@@ -203,7 +203,7 @@ async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
         if not questions:
             logger.warning("decide: модель выбрала вопросы, но не дала ни одного")
             return fallback
-        return questions_reply(decision.text, questions, req, rounds)
+        return questions_reply(questions, req, rounds)
 
     return None
 

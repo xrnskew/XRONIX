@@ -99,6 +99,46 @@ def pick_product(amount: int, term: int, purpose: str) -> str:
     return "fast"
 
 
+def city_pattern(city: str):
+    """«Казань» -> шаблон для «казань», «казани», «казанью» внутри текста. None, если города нет."""
+    stems = []
+    for part in re.split(r"[\s-]+", (city or "").lower()):
+        if len(part) < 3 or part in ("на", "де"):
+            continue
+        stem = part.rstrip("аеёиоуыэюяьй")  # «нижний» -> «нижн», чтобы ловить «нижнем»
+        if len(stem) >= 2:
+            stems.append(re.escape(stem))
+    # Окончание до 2 букв: «Москвой», «Казанью», «Уфе», но не «москвичи».
+    return re.compile(r"(?<!\w)(" + "|".join(stems) + r")\w{0,2}(?!\w)") if stems else None
+
+
+# Сокращения, после которых точка — не конец предложения: «150 тыс. рублей», «г. Казань».
+ABBREVIATIONS = {"тыс", "млн", "млрд", "руб", "т", "д", "др", "пр", "г", "ул", "кв", "м", "мин", "ч", "мес", "см"}
+
+
+def sentence_case(text, city_re=None):
+    """Заглавная в начале предложений и у города. Модель иногда пишет весь план строчными."""
+    if not isinstance(text, str) or not text.strip():
+        return text
+    text = text.strip()
+    if city_re:
+        text = city_re.sub(lambda m: m.group(0)[:1].upper() + m.group(0)[1:], text)
+
+    def upper_after(m):
+        prev_word = re.findall(r"\w+$", text[:m.start(1)].rstrip(".!? "))
+        if m.start() > 0 and prev_word and prev_word[-1].lower() in ABBREVIATIONS:
+            return m.group(0)
+        return m.group(0)[:-1] + m.group(2).upper()
+
+    return re.sub(r"(^|[.!?]\s+)([а-яёa-z])", upper_after, text)
+
+
+# Общие теги, которые ничего не говорят о человеке.
+STOP_TAGS = {"старт", "стартап", "центр", "опыт", "бизнес", "малый бизнес", "маленький бизнес", "начало бизнеса",
+             "новый бизнес", "бизнес идея", "идея", "кредит", "кредитование", "инвестиции", "развитие",
+             "планирование", "средний бюджет", "низкий бюджет", "небольшой бюджет", "собственный капитал"}
+
+
 def clean_tags(tags, city=None) -> list:
     """Короткие теги в одном стиле: строчные, без дефисов, город — с заглавной, как в business.city."""
     out, seen = [], set()
@@ -114,10 +154,12 @@ def clean_tags(tags, city=None) -> list:
         if not t:
             continue
         t = city_words.get(t, t)
+        if t in STOP_TAGS or {"старт", "стартап"} & set(t.split()):
+            continue
         if t.lower() not in seen:
             seen.add(t.lower())
             out.append(t)
-    return out[:6]
+    return out[:5]
 
 
 def repair_plan(data: dict) -> tuple:
@@ -171,6 +213,15 @@ def repair_plan(data: dict) -> tuple:
             if isinstance(s, dict) and s.get("order") != i:
                 s["order"] = i
                 fixed.append("steps.order")
+        # Шаг за 0 ₽ капитан просил не показывать: отдаём таким шагам остаток стоимости запуска.
+        free = [s for s in steps if isinstance(s, dict) and not (_is_int(s.get("cost_rub")) and s["cost_rub"] > 0)]
+        start = f.get("startup_cost_rub") if isinstance(f, dict) else None
+        if free and _is_int(start):
+            paid = sum(s["cost_rub"] for s in steps if isinstance(s, dict) and s not in free)
+            share = max(int(round((start - paid) / len(free), -3)), 5000)
+            for s in free:
+                s["cost_rub"] = share
+            fixed.append("cost_rub у шагов")
 
     c = p.get("credit")
     if isinstance(c, dict):
@@ -221,8 +272,30 @@ def repair_plan(data: dict) -> tuple:
         b["city"] = city_name(b["city"])
         fixed.append("business.city")
 
+    city = b.get("city") if isinstance(b, dict) else None
+    city_re = city_pattern(city) if isinstance(city, str) else None
+
+    def fix_text(obj, key):
+        if isinstance(obj, dict) and isinstance(obj.get(key), str):
+            new = sentence_case(obj[key], city_re)
+            if new != obj[key]:
+                obj[key] = new
+                fixed.append("заглавные буквы")
+
+    for key in ("title", "summary"):
+        fix_text(p, key)
+    for key in ("sphere", "format"):
+        fix_text(b, key)
+    for item in p.get("steps") or []:
+        fix_text(item, "title"), fix_text(item, "description")
+    for item in p.get("opportunities") or []:
+        fix_text(item, "title"), fix_text(item, "description")
+    for item in p.get("risks") or []:
+        fix_text(item, "title"), fix_text(item, "mitigation")
+    if isinstance(c, dict):
+        fix_text(c, "purpose"), fix_text(c, "comment")
+
     if "tags_update" in p:
-        city = b.get("city") if isinstance(b, dict) else None
         tags = clean_tags(p["tags_update"], city)
         if tags != p["tags_update"]:
             p["tags_update"] = tags
