@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { MemoryRouter, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { HashRouter, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { CabinetProvider, useCabinet } from '../phone/CabinetContext'
+import PlanRoute, { planPath } from '../phone/PlanRoute'
 import Login from '../phone/screens/Login'
 import Onboarding from '../phone/screens/Onboarding'
 import Chat from '../phone/screens/Chat'
@@ -78,11 +79,11 @@ const Centered = ({ children }: { children: ReactNode }) => (
 
 // Коротко о текущем плане в боковой панели: главное видно с любого экрана
 function PlanBadge() {
-  const { plan } = useCabinet()
+  const { plan, planId } = useCabinet()
   if (!plan) return null
   const f = plan.finance
   return (
-    <NavLink to="/plan" className="hero-card card-ring mb-5 block rounded-2xl p-3.5 transition-opacity hover:opacity-90">
+    <NavLink to={planPath('/plan', planId)} className="hero-card card-ring mb-5 block rounded-2xl p-3.5 transition-opacity hover:opacity-90">
       <div className="text-[12px] text-text/55">Текущий план</div>
       <div className="mt-1 truncate text-[15px] font-semibold">{plan.title}</div>
       <div className="mt-2.5 flex gap-4 text-[12px]">
@@ -109,7 +110,7 @@ function Dialogs() {
     api.listChats().then((l) => { setItems(l); setFailed(false) }).catch(() => setFailed(true))
   }, [chatId, messages.length, busy])
 
-  const open = async (id: string) => { try { await openChat(id); nav('/chat') } catch { setFailed(true) } }
+  const open = async (id: string) => { try { if (await openChat(id)) nav('/chat') } catch { setFailed(true) } }
   const remove = async (id: string) => {
     setRemoving(true); setRemoveError(null)
     try {
@@ -160,7 +161,7 @@ function Dialogs() {
 }
 
 function Sidebar() {
-  const { user, signOut } = useCabinet()
+  const { user, signOut, planId } = useCabinet()
   return (
     <aside className="hidden w-[288px] shrink-0 flex-col border-r border-white/5 bg-[#09090b]/75 p-4 md:flex">
       <div className="mb-6 flex items-center gap-3 px-1">
@@ -172,7 +173,7 @@ function Sidebar() {
       </div>
       <nav className="mb-6 space-y-0.5" aria-label="Разделы кабинета">
         {tabs.map((t) => (
-          <NavLink key={t.to} to={t.to}
+          <NavLink key={t.to} to={planPath(t.to, planId)}
             className={({ isActive }) => `relative flex h-10 items-center gap-3 rounded-xl px-3 text-[15px] font-medium transition-colors ${isActive ? 'bg-surface-2 text-text before:absolute before:-left-4 before:top-2 before:h-6 before:w-[3px] before:rounded-r-full before:bg-accent' : 'text-muted hover:bg-surface hover:text-text'}`}>
             {({ isActive }) => <><span className={isActive ? 'text-accent' : ''}><Icon d={t.d} /></span>{t.label}</>}
           </NavLink>
@@ -221,9 +222,7 @@ function ShaderSync() {
 }
 
 function Shell() {
-  const { status, needsOnboarding } = useCabinet()
-  const nav = useNavigate()
-  useEffect(() => { if (status === 'in') nav('/chat', { replace: true }) }, [status]) // eslint-disable-line react-hooks/exhaustive-deps
+  const { status, needsOnboarding, planId, notice } = useCabinet()
 
   if (status === 'booting')
     return <div className="flex h-svh items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
@@ -234,11 +233,12 @@ function Shell() {
     <div className="flex h-svh">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
+        {notice && <p role="alert" className="bg-accent/10 p-3 text-[14px] text-accent">{notice}</p>}
         <main className="mx-auto min-h-0 w-full max-w-[1180px] flex-1">
           <Routes>
             <Route path="/chat" element={<div className="mx-auto h-full max-w-[880px]"><Chat /></div>} />
-            <Route path="/plan" element={<PlanScreen />} />
-            <Route path="/finance" element={<Finance />} />
+            <Route path="/plan" element={<PlanRoute><PlanScreen /></PlanRoute>} />
+            <Route path="/finance" element={<PlanRoute><Finance /></PlanRoute>} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="*" element={<Navigate to="/chat" replace />} />
           </Routes>
@@ -246,7 +246,7 @@ function Shell() {
         {/* узкий экран: боковой панели нет, разделы внизу, как в телефоне */}
         <nav className="mx-3 mb-4 grid grid-cols-4 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
           {tabs.map((t) => (
-            <NavLink key={t.to} to={t.to} className={({ isActive }) => `flex min-h-[50px] flex-col items-center justify-center gap-0.5 rounded-[20px] text-[11px] font-medium transition-colors ${isActive ? 'bg-fill text-white' : 'text-muted'}`}>
+            <NavLink key={t.to} to={planPath(t.to, planId)} className={({ isActive }) => `flex min-h-[50px] flex-col items-center justify-center gap-0.5 rounded-[20px] text-[11px] font-medium transition-colors ${isActive ? 'bg-fill text-white' : 'text-muted'}`}>
               <Icon d={t.d} size={21} />{t.label}
             </NavLink>
           ))}
@@ -263,12 +263,12 @@ export default function DesktopApp() {
     <Wide.Provider value={wide}>
       <div className="relative min-h-svh text-text">
         <AppShader />
-        <MemoryRouter initialEntries={['/chat']}>
+        <HashRouter>
           <CabinetProvider>
             <ShaderSync />
             <Shell />
           </CabinetProvider>
-        </MemoryRouter>
+        </HashRouter>
       </div>
     </Wide.Provider>
   )

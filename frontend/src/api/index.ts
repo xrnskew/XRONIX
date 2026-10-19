@@ -8,6 +8,7 @@ export { ApiError, USE_MOCKS, getToken, onUnauthorized, setToken } from './clien
 export interface Api {
   register(b: { email: string; password: string; name: string }): Promise<AuthResult>
   login(b: { email: string; password: string }): Promise<AuthResult>
+  logout(): Promise<void>
   getMe(): Promise<Profile>
   patchMe(patch: Partial<Pick<Profile, 'name' | 'city' | 'experience' | 'budget_rub' | 'tags'>>): Promise<Profile>
   listChats(): Promise<ChatSummary[]>
@@ -19,11 +20,12 @@ export interface Api {
   getPlan(id: string): Promise<PlanRecord>
 }
 
-const AI_TIMEOUT = 180_000 // ИИ может думать до 3 минут: столько ждём ответа, потом показываем ошибку с «Повторить»
+const AI_TIMEOUT = 180_000 // backend has a total AI deadline of 170 seconds
 
 const realApi: Api = {
   async register(b) { const r = await request<AuthResult>('POST', '/auth/register', b); setToken(r.token); return r },
   async login(b) { const r = await request<AuthResult>('POST', '/auth/login', b); setToken(r.token); return r },
+  logout: () => request('POST', '/auth/logout'),
   getMe: () => request('GET', '/me'),
   patchMe: (patch) => request('PATCH', '/me', patch),
   listChats: () => request('GET', '/chats'),

@@ -6,17 +6,19 @@ import { Chip, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
+import { submittedAnswers } from '../answers'
+import { planPath } from '../PlanRoute'
 
-const starters = ['Кофейня у метро', 'Пекарня', 'Автомойка', 'Магазин одежды']
+const starters = ['Кофейня с собой', 'Пекарня', 'Автомойка', 'Магазин одежды']
 const starterHints: Record<string, string> = {
-  'Кофейня у метро': 'Кофе с собой в проходном месте',
+  'Кофейня с собой': 'Кофе с собой в проходном месте',
   'Пекарня': 'Своя выпечка и кофе рядом с домом',
   'Автомойка': 'Ручная мойка на 2–3 поста',
   'Магазин одежды': 'Небольшой шоурум в торговом центре',
 }
 
 export default function Chat() {
-  const { messages, busy, canRetry, send, retry, newChat, openChat, demoAnswers, user, saveProfile, demo } = useCabinet()
+  const { messages, busy, canRetry, send, retry, newChat, openChat, openPlan, chatId, demoAnswers, user, saveProfile, demo } = useCabinet()
   const [cityDraft, setCityDraft] = useState('')
   const [citySaving, setCitySaving] = useState(false)
   const [cityError, setCityError] = useState('')
@@ -28,10 +30,12 @@ export default function Chat() {
   const nav = useNavigate()
   const wide = useContext(Wide)
 
+  useEffect(() => { setAnswers({}); setText('') }, [chatId])
+
   // Прокручиваем только сам список сообщений. scrollIntoView здесь нельзя: он двигает и страницу с презентацией.
   useEffect(() => { if (view === 'chat') list.current?.scrollTo({ top: list.current.scrollHeight, behavior: 'smooth' }) }, [messages, busy, view])
 
-  if (view === 'list') return <ChatList onClose={() => setView('chat')} onOpen={async (id) => { await openChat(id); setView('chat') }} onNew={() => { newChat(); setView('chat') }} />
+  if (view === 'list') return <ChatList onClose={() => setView('chat')} onOpen={async (id) => { if (await openChat(id)) setView('chat') }} onNew={() => { newChat(); setView('chat') }} />
 
   const submit = (t: string, ans?: Answer[]) => {
     if (!t.trim() || busy) return
@@ -89,14 +93,14 @@ export default function Chat() {
             </div>
           </div>
         )}
-        {!(wide && messages.length === 1 && !busy) && messages.map((m) => (
+        {!(wide && messages.length === 1 && !busy) && messages.map((m, index) => (
           <div key={m.id} className={`rise flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} ${wide ? 'gap-3' : ''}`}>
             {wide && m.role === 'assistant' && <div className="mt-1"><Logo size={30} /></div>}
             <div className={`${wide ? 'max-w-[78%]' : 'max-w-[88%]'} whitespace-pre-line px-4 py-3 text-[15px] leading-snug ${
               m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
-              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={demoAnswers ?? answers} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => nav('/plan')} />}
+              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} />}
               {m.error && canRetry && m === last && (
                 <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
               )}
@@ -118,7 +122,7 @@ export default function Chat() {
 
       <form className={`flex items-center gap-2 ${wide ? 'px-8 pb-6 pt-3' : 'px-3 pb-2 pt-2'}`} onSubmit={(e) => { e.preventDefault(); submit(text) }}>
         <label className="sr-only" htmlFor="msg">Сообщение</label>
-        <input id="msg" value={text} onChange={(e) => setText(e.target.value)} placeholder="Хочу открыть кофейню у метро" maxLength={4000}
+        <input id="msg" value={text} onChange={(e) => setText(e.target.value)} placeholder="Хочу открыть кофейню с собой" maxLength={4000}
           className={`${wide ? 'h-14 rounded-2xl text-[16px]' : 'h-12 rounded-full text-[15px]'} min-w-0 flex-1 bg-surface px-5 outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent`} />
         <button aria-label="Отправить" className={`flex ${wide ? 'h-14 w-14 rounded-2xl' : 'h-12 w-12 rounded-full'} shrink-0 items-center justify-center bg-fill text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35`} disabled={busy || !text.trim()}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 19V5M5 12l7-7 7 7" /></svg>

@@ -34,6 +34,8 @@ export default function PlanScreen() {
       </Screen>
     )
   const p = plan
+  const knownCosts = p.steps.reduce((sum, step) => sum + (step.cost_rub ?? 0), 0)
+  const unallocated = Math.max(0, p.finance.startup_cost_rub - knownCosts)
   return (
     <Screen title="План">
       <div className={`hero-card card-ring rise rounded-[26px] ${wide ? 'grid items-end gap-8 p-8 min-[1100px]:grid-cols-[1.15fr_1fr]' : 'p-5'}`}>
@@ -67,6 +69,7 @@ export default function PlanScreen() {
 
       <Card id="plan-steps" delay={2} span={7} tall>
         <SectionTitle>Шаги запуска</SectionTitle>
+        <p className="mb-4 text-[13px] text-muted">Разовые затраты по шагам: {rub(knownCosts)}. {unallocated > 0 && <>Бюджет сверх указанных статей: {rub(unallocated)} — уточните его назначение до запуска. </>}Итого на старт: {rub(p.finance.startup_cost_rub)}.{p.steps.some((step) => step.cost_rub == null) && ' Часть статей пока не оценена.'}</p>
         <ol className="relative">
           <span className="absolute bottom-3 left-[13px] top-3 w-px bg-line" aria-hidden />
           {p.steps.map((s) => (

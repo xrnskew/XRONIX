@@ -27,6 +27,7 @@ export const mockApi: Api = {
     user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
     return session()
   },
+  async logout() { setToken(null) },
   async getMe() { await delay(150); return user },
   async patchMe(patch) { await delay(250); user = { ...user, ...patch }; return user },
 

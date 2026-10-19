@@ -111,7 +111,7 @@ function Shell() {
 export default function Cabinet({ scene, auto = false, onDemoStep, onRealSession }: { scene?: Scene; auto?: boolean; onDemoStep?: (n: number) => void; onRealSession?: () => void }) {
   return (
     <MemoryRouter initialEntries={['/chat']}>
-      <CabinetProvider>
+      <CabinetProvider restoreSession={false}>
         <Director scene={scene} auto={auto} onStep={onDemoStep} onRealSession={onRealSession} />
         <Shell />
       </CabinetProvider>

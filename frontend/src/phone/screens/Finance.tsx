@@ -5,11 +5,8 @@ import { useCabinet } from '../CabinetContext'
 import { annuity, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, alfaProducts, alfaSnapshotIsStale, matchProducts, productTerm } from '../../data/alfaProducts'
 
-const verdict = {
-  ok: { text: 'Кредит подходит', tone: 'ok' as const },
-  risky: { text: 'Есть риски', tone: 'warn' as const },
-  not_recommended: { text: 'Не рекомендуем', tone: 'bad' as const },
-}
+import { creditAssessment, creditParameters } from '../../lib/credit'
+
 const loadTone = (n: number) => (n > 50 ? 'bad' : n > 35 ? 'warn' : 'ok')
 const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 
@@ -17,16 +14,22 @@ export default function Finance() {
   const { plan, planLoading, planError, reloadPlan } = useCabinet()
   const nav = useNavigate()
   const wide = useContext(Wide)
-  const [amount, setAmount] = useState(plan?.credit.amount_rub ?? 1000000)
-  const [months, setMonths] = useState(plan?.credit.recommended_term_months ?? 24)
-  const [selectedId, setSelectedId] = useState('fast')
+  const initialProduct = alfaProducts.find((p) => p.id === plan?.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
+  const initial = creditParameters(initialProduct, plan?.credit.amount_rub ?? 1000000, plan?.credit.recommended_term_months ?? 24)
+  const [amount, setAmount] = useState(initial.amount)
+  const [months, setMonths] = useState(initial.months)
+  const [selectedId, setSelectedId] = useState(initialProduct.id)
   useEffect(() => {
     if (!plan) return
-    setAmount(plan.credit.amount_rub ?? 1000000)
-    setMonths(plan.credit.recommended_term_months ?? 24)
-    const id = plan.credit.recommended_product_id
-    setSelectedId(alfaProducts.some((p) => p.id === id && p.rateFrom != null && p.id !== 'revolving') ? id! : 'fast')
+    const selected = alfaProducts.find((p) => p.id === plan.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
+    const params = creditParameters(selected, plan.credit.amount_rub ?? 1000000, plan.credit.recommended_term_months ?? 24)
+    setSelectedId(selected.id); setAmount(params.amount); setMonths(params.months)
   }, [plan])
+  const chooseProduct = (id: string) => {
+    const selected = alfaProducts.find((p) => p.id === id) ?? alfaProducts[0]
+    const params = creditParameters(selected, amount, months)
+    setSelectedId(selected.id); setAmount(params.amount); setMonths(params.months)
+  }
   const matches = useMemo(() => matchProducts(amount, months), [amount, months])
 
   if (planLoading && !plan) return <Screen title="Финансы и кредит"><Skeleton /></Screen>
@@ -54,19 +57,21 @@ export default function Finance() {
   const rate = selected.rateFrom ?? c.estimated_rate_percent ?? 22
   const payment = annuity(amount, rate, months)
   const load = f.monthly_profit_rub > 0 ? Math.round((payment / f.monthly_profit_rub) * 100) : 100
-  const v = verdict[load > 50 ? 'not_recommended' : load > 35 ? 'risky' : 'ok']
-  const ownShare = Math.round((f.own_funds_rub / f.startup_cost_rub) * 100)
+  const v = creditAssessment(selected, amount, months, load)
+  const ownShare = f.startup_cost_rub > 0 ? Math.min(100, Math.round((f.own_funds_rub / f.startup_cost_rub) * 100)) : 100
 
   if (!c.needed)
     return (
       <Screen title="Финансы и кредит">
         <Card>
-          <Badge tone="ok">Кредит не нужен</Badge>
+          <Badge tone={f.funding_gap_rub > 0 ? "warn" : "ok"}>{f.funding_gap_rub > 0 ? "Финансирование без кредита" : "Кредит не нужен"}</Badge>
           <p className="mt-2 text-[14px] leading-snug text-muted">{c.comment}</p>
           <div className="mt-4 grid grid-cols-2 gap-3">
             <Stat label="Нужно на старт" value={rub(f.startup_cost_rub)} />
             <Stat label="Свои средства" value={rub(f.own_funds_rub)} tone="ok" />
+            {f.funding_gap_rub > 0 && <Stat label="Нужно найти без кредита" value={rub(f.funding_gap_rub)} tone="warn" />}
           </div>
+          {f.funding_gap_rub > 0 && <p className="mt-3 text-[14px] text-muted">Уменьшите стартовый бюджет, запускайтесь поэтапно или рассмотрите вклад партнёра. До покрытия нехватки средств план не обеспечен финансированием.</p>}
         </Card>
       </Screen>
     )
@@ -89,21 +94,22 @@ export default function Finance() {
         <Gauge value={load} tone={loadTone(load)} size={wide ? 112 : 96} />
         <div className="min-w-0">
           <Badge tone={v.tone}>{v.text}</Badge>
-          <p className="mt-2 text-[13px] leading-snug text-muted">Оценка по ожидаемой прибыли и выбранному кредиту. Решение по заявке принимает банк.</p>
+          <p className="mt-2 text-[13px] leading-snug text-muted">Оценка нагрузки по прогнозной прибыли. Стаж бизнеса, залог и доступность продукта для вас не проверены. Решение принимает банк.</p>
         </div>
       </Card>
 
       <Card className="space-y-4" id="credit-calc" delay={2}>
         <SectionTitle>Калькулятор платежа</SectionTitle>
         <label className="block text-[13px] text-muted">Продукт для расчёта
-          <select value={selectedId} onChange={(e) => setSelectedId(e.target.value)} className="mt-1 h-12 w-full rounded-xl bg-surface-2 px-3 text-[14px] text-text outline-none focus:ring-2 focus:ring-accent">
+          <select value={selectedId} onChange={(e) => chooseProduct(e.target.value)} className="mt-1 h-12 w-full rounded-xl bg-surface-2 px-3 text-[14px] text-text outline-none focus:ring-2 focus:ring-accent">
             {alfaProducts.filter((p) => p.rateFrom != null && p.id !== 'revolving').map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </label>
         <div className={wide ? 'grid grid-cols-2 gap-10' : 'space-y-4'}>
-          <Slider label="Сумма" value={amount} min={100000} max={Math.max(5000000, amount)} step={50000} onChange={setAmount} display={rub(amount)} />
-          <Slider label="Срок" value={months} min={1} max={120} step={1} onChange={setMonths} display={`${months} мес.`} />
+          <Slider label="Сумма" value={amount} min={selected.amountMin ?? 1} max={selected.amountMax} step={1} onChange={setAmount} display={rub(amount)} />
+          <Slider label="Срок" value={months} min={selected.termMin ?? 1} max={selected.termMax} step={1} onChange={setMonths} display={`${months} мес.`} />
         </div>
+        {amount !== f.funding_gap_rub && <p className="text-[13px] text-warn">Нехватка средств по плану — {rub(f.funding_gap_rub)}. В калькуляторе — {rub(amount)}, в пределах выбранного продукта. Это не рекомендация занимать больше необходимого.</p>}
         <div className="grid grid-cols-3 gap-3 border-t border-line pt-3">
           <Stat label="Ставка от (оценка)" value={`${String(rate).replace('.', ',')}%`} />
           <Stat label="Платёж в месяц" value={rub(payment)} />
@@ -176,7 +182,7 @@ function Slider({ label, value, min, max, step, onChange, display }: { label: st
   return (
     <label className="block">
       <div className="mb-1.5 flex justify-between text-[14px]"><span className="text-muted">{label}</span><span className="font-semibold tabular-nums">{display}</span></div>
-      <input type="range" className="w-full accent-[#ff4538]" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} />
+      <input type="range" className="w-full accent-[#ff4538]" min={min} max={max} step={step} value={value} aria-valuetext={display} onChange={(e) => onChange(Number(e.target.value))} />
     </label>
   )
 }

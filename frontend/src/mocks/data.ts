@@ -2,7 +2,7 @@ import type { AiReply, Plan, Profile } from '../types/plan'
 
 export const mockPlan: Plan = {
   title: 'Кофейня у метро',
-  summary: 'Кофе с собой в проходном месте: небольшая площадь, быстрый оборот, окупаемость за 10 месяцев при кредите на оборудование и аренду.',
+  summary: 'Кофе с собой в проходном месте: небольшая площадь, быстрый оборот, окупаемость за 11 месяцев при кредите на оборудование и аренду.',
   business: { sphere: 'Общепит', format: 'Кофе с собой', city: 'Москва' },
   steps: [
     { order: 1, title: 'Регистрация ИП', description: 'Подать заявление, выбрать УСН «доходы минус расходы».', duration_days: 5, cost_rub: 800 },
@@ -21,13 +21,13 @@ export const mockPlan: Plan = {
     { title: 'Текучка бариста', level: 'low', mitigation: 'Обучение и процент от выручки.' },
   ],
   finance: {
-    startup_cost_rub: 1500000,
+    startup_cost_rub: 1500800,
     own_funds_rub: 500000,
-    funding_gap_rub: 1000000,
+    funding_gap_rub: 1000800,
     monthly_revenue_rub: 600000,
     monthly_expenses_rub: 450000,
     monthly_profit_rub: 150000,
-    payback_months: 10,
+    payback_months: 11,
     revenue_forecast: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => ({
       month: m,
       revenue_rub: Math.round(200000 + Math.min(m, 6) * 70000 - (m > 8 ? 30000 : 0)),
@@ -36,11 +36,11 @@ export const mockPlan: Plan = {
   },
   credit: {
     needed: true,
-    amount_rub: 1000000,
+    amount_rub: 1000800,
     purpose: 'Оборудование и аренда',
     recommended_term_months: 24,
     estimated_rate_percent: 22,
-    monthly_payment_rub: 51900,
+    monthly_payment_rub: 51920,
     debt_load_percent: 35,
     verdict: 'ok',
     comment: 'Платёж около трети прогнозной прибыли: нагрузка умеренная, запас на сезонный спад есть.',

@@ -1,7 +1,8 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import type { AiReply, Answer, ChatMessage, Plan, Profile } from '../types/plan'
-import { ApiError, api, getToken, onUnauthorized, setToken } from '../api'
+import { ApiError, api, USE_MOCKS, getToken, onUnauthorized, setToken } from '../api'
 import { mockPlan, mockProfile, mockQuestions } from '../mocks/data'
+import { CabinetSession } from './session'
 
 type Status = 'booting' | 'out' | 'in'
 type ProfilePatch = Partial<Pick<Profile, 'name' | 'city' | 'experience' | 'budget_rub' | 'tags'>>
@@ -19,10 +20,12 @@ interface Ctx {
   skipOnboarding: () => void
   signIn: (email: string, password: string) => Promise<void>
   signUp: (name: string, email: string, password: string) => Promise<void>
-  signOut: () => void
+  signOut: () => Promise<void>
   saveProfile: (patch: ProfilePatch) => Promise<void>
 
   plan: Plan | null
+  planId: string | null
+  openPlan: (id: string, cached?: Plan) => Promise<void>
   planLoading: boolean
   planError: string | null
   reloadPlan: () => Promise<void>
@@ -34,7 +37,7 @@ interface Ctx {
   send: (text: string, answers?: Answer[]) => Promise<void>
   retry: () => Promise<void>
   newChat: () => void
-  openChat: (id: string) => Promise<void>
+  openChat: (id: string) => Promise<boolean>
   deleteChat: (id: string) => Promise<void> // вместе с диалогом удаляется и его план
 
   // Автопоказ (презентация слева): телефон показывает заготовленные данные, а не настоящую сессию.
@@ -54,38 +57,24 @@ const wasSkipped = (id?: string) => { try { return localStorage.getItem(skipKey(
 const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
 const uid = () => crypto.randomUUID()
 
-export function CabinetProvider({ children }: { children: ReactNode }) {
-  const [status, setStatus] = useState<Status>(getToken() ? 'booting' : 'out')
+export function CabinetProvider({ children, restoreSession = true }: { children: ReactNode; restoreSession?: boolean }) {
+  const [status, setStatus] = useState<Status>(restoreSession && (!USE_MOCKS || getToken()) ? 'booting' : 'out')
   const [user, setUser] = useState<Profile | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [skipped, setSkipped] = useState(false)
   const [demo, setDemo] = useState(false)
   const [demoAnswers, setDemoAnswers] = useState<Record<string, string> | null>(null)
 
-  const [plan, setPlan] = useState<Plan | null>(null)
-  const [planLoading, setPlanLoading] = useState(false)
-  const [planError, setPlanError] = useState<string | null>(null)
-
-  const [chatId, setChatId] = useState<string | null>(null)
-  const [messages, setMessages] = useState<ChatMessage[]>([greeting])
-  const [busy, setBusy] = useState(false)
-  const failed = useRef<{ text: string; answers?: Answer[] } | null>(null)
-  const [canRetry, setCanRetry] = useState(false)
+  const [session] = useState(() => new CabinetSession(api, greeting, errText))
+  const state = useSyncExternalStore(session.subscribe, session.getSnapshot)
+  const { reloadPlan, openPlan, send, retry, newChat, openChat, deleteChat } = session
+  const setPlan = (plan: Plan | null) => session.present({ plan })
+  const setMessages = (messages: ChatMessage[]) => session.present({ messages })
+  const setBusy = (busy: boolean) => session.present({ busy })
+  const setChatId = (chatId: string | null) => session.present({ chatId })
   const timers = useRef<number[]>([])
   const demoRef = useRef(false)
-
-  const reloadPlan = useCallback(async () => {
-    setPlanLoading(true)
-    setPlanError(null)
-    try {
-      const list = await api.listPlans()
-      setPlan(list.length ? (await api.getPlan(list[0].plan_id)).plan : null)
-    } catch (e) {
-      setPlanError(errText(e))
-    } finally {
-      setPlanLoading(false)
-    }
-  }, [])
+  const authGeneration = useRef(0)
 
   const stopDemo = useCallback(() => {
     timers.current.forEach(clearTimeout)
@@ -96,11 +85,14 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     stopDemo()
-    setUser(null); setPlan(null); setChatId(null); setMessages([greeting]); setSkipped(false); setDemo(false); demoRef.current = false
-    failed.current = null; setCanRetry(false)
-  }, [stopDemo])
+    authGeneration.current++; session.reset()
+    setUser(null); setSkipped(false); setDemo(false); demoRef.current = false
+  }, [stopDemo, session])
 
-  const signOut = useCallback(() => { setToken(null); reset(); setStatus('out') }, [reset])
+  const signOut = useCallback(async () => {
+    try { await api.logout(); setToken(null); reset(); setNotice(null); setStatus('out') }
+    catch { setNotice('Не удалось завершить сессию на сервере. Проверьте соединение и повторите выход.') }
+  }, [reset])
 
   const enter = useCallback(async (u: Profile) => {
     reset(); setUser(u); setNotice(null); setStatus('in')
@@ -113,54 +105,20 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
   }, [reset])
 
   useEffect(() => {
-    if (!getToken()) return
-    api.getMe().then(enter).catch((e) => {
+    if (!restoreSession || (USE_MOCKS && !getToken())) return
+    const generation = authGeneration.current
+    let mounted = true
+    api.getMe().then((u) => { if (mounted && generation === authGeneration.current) return enter(u) }).catch((e) => {
+      if (!mounted || generation !== authGeneration.current) return
       if (!(e instanceof ApiError && e.code === 'UNAUTHORIZED')) setNotice(errText(e))
       setStatus('out')
     })
-  }, [enter])
+    return () => { mounted = false }
+  }, [enter, restoreSession])
 
   const signIn: Ctx['signIn'] = async (email, password) => { await enter((await api.login({ email, password })).user) }
   const signUp: Ctx['signUp'] = async (name, email, password) => { await enter((await api.register({ name, email, password })).user) }
-  const saveProfile: Ctx['saveProfile'] = async (patch) => { setUser(await api.patchMe(patch)) }
-
-  const push = (m: Omit<ChatMessage, 'id'>) => setMessages((all) => [...all, { id: uid(), ...m }])
-
-  const run = async (text: string, answers: Answer[] | undefined, isRetry: boolean) => {
-    if (busy) return
-    if (isRetry) setMessages((all) => all.filter((m) => !m.error))
-    else push({ role: 'user', text })
-    failed.current = null; setCanRetry(false); setBusy(true)
-    try {
-      let id = chatId
-      if (!id) { id = (await api.createChat()).chat_id; setChatId(id) }
-      const reply = await api.sendMessage(id, text, answers)
-      if (reply.type === 'plan') setPlan(reply.plan)
-      push({ role: 'assistant', reply })
-    } catch (e) {
-      failed.current = { text, answers }; setCanRetry(true)
-      push({ role: 'assistant', text: errText(e), error: true })
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const send: Ctx['send'] = (text, answers) => run(text, answers, false)
-  const retry = async () => { if (failed.current) await run(failed.current.text, failed.current.answers, true) }
-  const newChat = () => { setChatId(null); setMessages([greeting]); failed.current = null; setCanRetry(false) }
-
-  const openChat = async (id: string) => {
-    const c = await api.getChat(id)
-    setChatId(id)
-    failed.current = null; setCanRetry(false)
-    setMessages([greeting, ...c.messages.map((m): ChatMessage => (m.role === 'user' && m.reply.type === 'message' ? { id: m.id, role: 'user', text: m.reply.text } : { id: m.id, role: m.role, reply: m.reply }))])
-  }
-
-  const deleteChat: Ctx['deleteChat'] = async (id) => {
-    await api.deleteChat(id)
-    if (id === chatId) newChat()
-    await reloadPlan() // если удалили диалог с текущим планом, покажется предыдущий план или пусто
-  }
+  const saveProfile: Ctx['saveProfile'] = async (patch) => { const generation = authGeneration.current; const updated = await api.patchMe(patch); if (generation === authGeneration.current) setUser(updated) }
 
   // ---- автопоказ: ничего не вызывает у бэкенда, только заготовленные данные ----
   const demoEnter = useCallback(() => {
@@ -197,10 +155,10 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
     status, user, notice, needsOnboarding,
     skipOnboarding: () => { try { localStorage.setItem(skipKey(user?.id), '1') } catch { /* хранилище недоступно */ } setSkipped(true) },
     signIn, signUp, signOut, saveProfile,
-    plan, planLoading, planError, reloadPlan,
-    chatId, messages, busy, canRetry, send, retry, newChat, openChat, deleteChat,
+    ...state, reloadPlan, openPlan,
+    send, retry, newChat, openChat, deleteChat,
     demo, demoAnswers, demoEnter, demoExit, playDemoChat, stopDemo,
-    showDemoPlan: () => setPlan((p) => p ?? mockPlan),
+    showDemoPlan: () => setPlan(state.plan ?? mockPlan),
   }
   return <C.Provider value={value}>{children}</C.Provider>
 }

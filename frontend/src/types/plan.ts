@@ -16,7 +16,7 @@ export interface Plan {
     monthly_revenue_rub: number
     monthly_expenses_rub: number
     monthly_profit_rub: number
-    payback_months: number
+    payback_months: number | null
     revenue_forecast: { month: number; revenue_rub: number; expenses_rub: number }[]
   }
   credit: {
@@ -54,6 +54,7 @@ export interface ChatMessage {
   reply?: AiReply
   text?: string
   error?: boolean
+  answers?: Answer[]
 }
 
 export interface Profile {
