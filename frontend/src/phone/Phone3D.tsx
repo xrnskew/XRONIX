@@ -67,7 +67,7 @@ export default function Phone3D({ base, enabled, children }: { base: { x: number
 
   return (
     <div ref={stage} style={{ perspective: '2000px', perspectiveOrigin: '50% 45%' }}>
-      <div ref={body} style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}>{children}</div>
+      <div ref={body} style={{ position: 'relative', transformStyle: 'preserve-3d', willChange: 'transform' }}>{children}</div>
     </div>
   )
 }

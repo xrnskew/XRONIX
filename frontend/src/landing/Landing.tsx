@@ -3,6 +3,7 @@ import PhoneFrame from '../phone/PhoneFrame'
 import Phone3D from '../phone/Phone3D'
 import Cabinet, { type Scene } from '../phone/Cabinet'
 import ShaderBackground from './ShaderBackground'
+import Satellites from './Satellites'
 import { useMediaQuery, useSlides } from './useSlides'
 import { USE_MOCKS, setToken } from '../api'
 import { Arch, Credit, Hero, How, Memory, PlanSlide, Problem, Team, pad } from './Slides'
@@ -49,9 +50,12 @@ export default function Landing() {
       <ShaderBackground />
 
       <aside className="relative flex items-center justify-center px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
-        <Rings />
+        <Orbits />
         <div className="relative" onPointerDownCapture={takeOver} onFocusCapture={takeOver}>
-          <Phone3D base={angles[settled]} enabled={wide}>{phone}</Phone3D>
+          <Phone3D base={angles[settled]} enabled={wide}>
+            {phone}
+            <Satellites slide={slides[settled].id} />
+          </Phone3D>
         </div>
       </aside>
 
@@ -95,10 +99,23 @@ export default function Landing() {
   )
 }
 
-function Rings() {
+// Медленные орбиты за телефоном со светящимися точками. Вращается div целиком (transform),
+// это работа видеокарты. Маска растворяет кольца к краям, резких границ нет.
+function Orbits() {
+  const orbits = [
+    { size: 560, dur: 70, rev: false },
+    { size: 760, dur: 110, rev: true },
+    { size: 980, dur: 160, rev: false },
+  ]
   return (
-    <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden>
-      {[180, 280, 380, 480, 580].map((r, k) => <circle key={r} cx="300" cy="450" r={r} stroke="white" strokeOpacity={0.12 - k * 0.02} strokeWidth="1.5" />)}
-    </svg>
+    <div className="orbits-mask pointer-events-none absolute inset-0 hidden items-center justify-center lg:flex" aria-hidden>
+      {orbits.map((o) => (
+        <div key={o.size} className="orbit absolute rounded-full border border-white/[.14]"
+          style={{ width: o.size, height: o.size, animationDuration: `${o.dur}s`, animationDirection: o.rev ? 'reverse' : 'normal' }}>
+          <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/80 shadow-[0_0_14px_5px_rgba(255,110,90,.55)]" />
+          <span className="absolute bottom-[14%] right-[3%] h-1.5 w-1.5 rounded-full bg-white/50 shadow-[0_0_10px_3px_rgba(255,110,90,.4)]" />
+        </div>
+      ))}
+    </div>
   )
 }

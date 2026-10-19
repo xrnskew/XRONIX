@@ -75,3 +75,25 @@ html { scroll-snap-type: y proximity; scroll-behavior: smooth; }
   mask-image: linear-gradient(to bottom, #000 45%, transparent), linear-gradient(to right, #000 78%, transparent);
   mask-composite: intersect;
 }
+
+/* Карточки вокруг телефона: плавают, появляются и гаснут при смене слайда */
+@keyframes sat-float { 0%, 100% { transform: translateY(-6px); } 50% { transform: translateY(6px); } }
+.sat-float { animation: sat-float 6s ease-in-out infinite; }
+@keyframes sat-in { from { opacity: 0; transform: scale(.82) translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes sat-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(.9); } }
+.sat { opacity: 0; }
+.sat-in { animation: sat-in .6s cubic-bezier(.2,.75,.2,1) both; }
+.sat-out { animation: sat-out .3s ease both; }
+
+/* Орбиты за телефоном */
+@keyframes spin { to { transform: rotate(360deg); } }
+.orbit { animation: spin linear infinite; }
+.orbits-mask {
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent);
+  mask-image: radial-gradient(closest-side, #000 72%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sat-float, .orbit { animation: none; }
+  .sat, .sat-in, .sat-out { opacity: 1; animation: none; }
+}
