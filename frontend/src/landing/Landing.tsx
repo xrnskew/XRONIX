@@ -3,6 +3,7 @@ import PhoneFrame from '../phone/PhoneFrame'
 import Cabinet, { type Screen } from '../phone/Cabinet'
 import { ALFA_DISCLAIMER, alfaProducts } from '../data/alfaProducts'
 import { short } from '../lib/format'
+import ShaderBackground from './ShaderBackground'
 
 interface Slide { id: string; label: string; screen: Screen }
 const slides: Slide[] = [
@@ -19,7 +20,7 @@ const slides: Slide[] = [
 const pad = 'px-6 sm:px-12 lg:px-16'
 const slide = `flex min-h-svh flex-col justify-center py-24 ${pad}`
 const h2 = 'font-display text-[clamp(28px,3.2vw,44px)] font-semibold leading-[1.1] tracking-tight max-w-[20ch]'
-const lead = 'mt-6 max-w-[54ch] text-[18px] leading-relaxed text-ink/70'
+const lead = 'mt-6 max-w-[54ch] text-[18px] leading-relaxed text-white/70'
 
 function useActive() {
   const [i, setI] = useState(0)
@@ -42,17 +43,18 @@ function useActive() {
 export default function Landing() {
   const { i, progress } = useActive()
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
-      <aside className="panel-red relative flex items-center justify-center overflow-hidden px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
+    <div className="text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
+      <ShaderBackground />
+      <aside className="relative flex items-center justify-center overflow-hidden px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
         <Rings />
         <div className="relative"><PhoneFrame><Cabinet screen={slides[i].screen} /></PhoneFrame></div>
       </aside>
 
       <main className="lg:order-1">
-        <header className={`sticky top-0 z-30 flex h-16 items-center justify-between bg-paper/85 backdrop-blur ${pad}`}>
+        <header className={`sticky top-0 z-30 flex h-16 items-center justify-between bg-black/15 backdrop-blur-md ${pad}`}>
           <span className="font-display text-[15px] font-semibold text-brand">XRONIX</span>
-          <span className="text-[14px] text-ink/55" aria-live="polite">{slides[i].label}</span>
-          <span className="absolute inset-x-0 bottom-0 h-px bg-ink/10"><span className="block h-full origin-left bg-brand" style={{ transform: `scaleX(${progress})` }} /></span>
+          <span className="text-[14px] text-white/55" aria-live="polite">{slides[i].label}</span>
+          <span className="absolute inset-x-0 bottom-0 h-px bg-white/10"><span className="block h-full origin-left bg-brand" style={{ transform: `scaleX(${progress})` }} /></span>
         </header>
 
         <section className={`${slide} -mt-16`} id="top">
@@ -60,14 +62,14 @@ export default function Landing() {
             Идея бизнеса. План. Кредит под него.
           </h1>
           <p className={lead}>Предприниматель пишет, что хочет открыть. ИИ уточняет детали, считает, сколько нужно денег, и показывает, потянет ли бизнес кредит.</p>
-          <p className="mt-10 flex items-center gap-3 text-[15px] text-ink/60">
+          <p className="mt-10 flex items-center gap-3 text-[15px] text-white/60">
             <span className="h-2 w-2 rounded-full bg-brand" aria-hidden />Справа живой кабинет: нажмите «Войти» и попробуйте. Телефон следит за презентацией.
           </p>
         </section>
 
-        <section className={`${slide} bg-mist`} id="problem">
+        <section className={`${slide} bg-black/30`} id="problem">
           <h2 className={h2}>Начинающий предприниматель не знает три вещи</h2>
-          <dl className="mt-12 max-w-[640px] divide-y divide-ink/10 border-y border-ink/10">
+          <dl className="mt-12 max-w-[640px] divide-y divide-white/10 border-y border-white/10">
             {[
               ['Сколько денег нужно', 'Расходы вспоминают уже по ходу запуска, когда деньги на исходе.'],
               ['Какой кредит брать', 'Сумма, срок и ставка выбираются наугад, продуктов много, различия неочевидны.'],
@@ -75,7 +77,7 @@ export default function Landing() {
             ].map(([t, d]) => (
               <div key={t} className="grid gap-1 py-6 sm:grid-cols-[220px_1fr] sm:gap-8">
                 <dt className="text-[20px] font-semibold leading-snug">{t}</dt>
-                <dd className="text-[16px] leading-relaxed text-ink/65">{d}</dd>
+                <dd className="text-[16px] leading-relaxed text-white/65">{d}</dd>
               </div>
             ))}
           </dl>
@@ -84,7 +86,7 @@ export default function Landing() {
         <section className={slide} id="how">
           <h2 className={h2}>Один диалог вместо недель расчётов</h2>
           <ol className="relative mt-12 max-w-[560px]">
-            <span className="absolute bottom-3 left-[15px] top-3 w-px bg-ink/15" aria-hidden />
+            <span className="absolute bottom-3 left-[15px] top-3 w-px bg-white/15" aria-hidden />
             {[
               ['Вы описываете идею', 'Одной фразой, как другу: «хочу кофейню у метро».'],
               ['ИИ уточняет', '3–6 вопросов, на часть можно ответить одним нажатием.'],
@@ -92,19 +94,19 @@ export default function Landing() {
               ['Вы получаете план', 'Шаги, риски, финансовая модель и подходящий кредит. Теги и память обновляются.'],
             ].map(([t, d], n) => (
               <li key={t} className="relative flex gap-5 pb-8 last:pb-0">
-                <span className="relative z-10 flex h-[31px] w-[31px] shrink-0 items-center justify-center rounded-full bg-brand font-display text-[13px] font-semibold text-white ring-8 ring-paper">{n + 1}</span>
-                <div><div className="text-[20px] font-semibold leading-tight">{t}</div><div className="mt-1 text-[16px] leading-relaxed text-ink/65">{d}</div></div>
+                <span className="relative z-10 flex h-[31px] w-[31px] shrink-0 items-center justify-center rounded-full bg-brand font-display text-[13px] font-semibold text-white">{n + 1}</span>
+                <div><div className="text-[20px] font-semibold leading-tight">{t}</div><div className="mt-1 text-[16px] leading-relaxed text-white/65">{d}</div></div>
               </li>
             ))}
           </ol>
         </section>
 
-        <section className={`${slide} bg-mist`} id="plan">
+        <section className={`${slide} bg-black/30`} id="plan">
           <h2 className={h2}>План, который можно выполнять</h2>
           <p className={lead}>Каждый шаг со сроком и стоимостью, риски с мерами защиты, прогноз выручки и расходов на год.</p>
           <ul className="mt-10 flex max-w-[560px] flex-wrap gap-2.5 text-[15px]">
             {['Шаги запуска', 'Риски и меры', 'Возможности', 'Срок окупаемости', 'Прогноз на 12 месяцев'].map((t) => (
-              <li key={t} className="rounded-full bg-paper px-4 py-2 font-medium ring-1 ring-ink/10">{t}</li>
+              <li key={t} className="rounded-full bg-white/[.07] px-4 py-2 font-medium ring-1 ring-white/15">{t}</li>
             ))}
           </ul>
         </section>
@@ -115,10 +117,10 @@ export default function Landing() {
           <div className="mt-10 max-w-[680px] overflow-x-auto">
             <table className="w-full min-w-[520px] text-left text-[15px]">
               <caption className="sr-only">Кредитные продукты Альфа-Банка для бизнеса</caption>
-              <thead className="border-b border-ink/15 text-[13px] text-ink/55">
+              <thead className="border-b border-white/15 text-[13px] text-white/55">
                 <tr><th className="py-2 pr-4 font-medium">Продукт</th><th className="py-2 pr-4 font-medium">Ставка</th><th className="py-2 pr-4 font-medium">Сумма до</th><th className="py-2 font-medium">Срок</th></tr>
               </thead>
-              <tbody className="divide-y divide-ink/10">
+              <tbody className="divide-y divide-white/10">
                 {alfaProducts.map((p) => (
                   <tr key={p.id}>
                     <td className="py-3.5 pr-4 font-semibold">{p.name}</td>
@@ -130,10 +132,10 @@ export default function Landing() {
               </tbody>
             </table>
           </div>
-          <p className="mt-5 max-w-[56ch] text-[13px] leading-relaxed text-ink/50">{ALFA_DISCLAIMER}</p>
+          <p className="mt-5 max-w-[56ch] text-[13px] leading-relaxed text-white/50">{ALFA_DISCLAIMER}</p>
         </section>
 
-        <section className={`${slide} bg-mist`} id="memory">
+        <section className={`${slide} bg-black/30`} id="memory">
           <h2 className={h2}>ИИ помнит вас между диалогами</h2>
           <p className={lead}>Теги вроде «общепит», «новичок», «Москва» и короткая выжимка прошлых разговоров попадают в каждый запрос. Пользователь сам видит и правит эти теги в профиле.</p>
         </section>
@@ -144,7 +146,7 @@ export default function Landing() {
           <Diagram />
         </section>
 
-        <section className={`${slide} bg-ink text-white`} id="team">
+        <section className={`${slide}`} id="team">
           <h2 className={`${h2} text-white`}>Команда XRONIX</h2>
           <ul className="mt-10 max-w-[640px] divide-y divide-white/15">
             {[
@@ -167,7 +169,7 @@ export default function Landing() {
 function Rings() {
   return (
     <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden>
-      {[180, 280, 380, 480, 580].map((r, k) => <circle key={r} cx="300" cy="450" r={r} stroke="white" strokeOpacity={0.14 - k * 0.02} strokeWidth="1.5" />)}
+      {[180, 280, 380, 480, 580].map((r, k) => <circle key={r} cx="300" cy="450" r={r} stroke="white" strokeOpacity={0.12 - k * 0.02} strokeWidth="1.5" />)}
     </svg>
   )
 }
@@ -184,18 +186,18 @@ function Diagram() {
     <svg viewBox="0 0 720 150" className="mt-12 w-full max-w-[720px]" role="img" aria-label="Схема: фронтенд, бэкенд, ИИ-сервис, GigaChat">
       {nodes.map((n) => (
         <g key={n.t} transform={`translate(${n.x * 190}, 40)`}>
-          <rect width="150" height="70" rx="16" fill={n.x === 1 ? '#ef3124' : '#ffffff'} stroke={n.x === 1 ? '#ef3124' : '#16161a'} strokeOpacity={n.x === 1 ? 1 : 0.18} />
-          <text x="75" y="31" textAnchor="middle" fontSize="16" fontWeight="600" fill={n.x === 1 ? '#fff' : '#16161a'}>{n.t}</text>
-          <text x="75" y="52" textAnchor="middle" fontSize="11.5" fill={n.x === 1 ? '#fff' : '#16161a'} opacity=".65">{n.s}</text>
+          <rect width="150" height="70" rx="16" fill={n.x === 1 ? '#ef3124' : 'rgba(255,255,255,.07)'} stroke={n.x === 1 ? '#ef3124' : '#ffffff'} strokeOpacity={n.x === 1 ? 1 : 0.25} />
+          <text x="75" y="31" textAnchor="middle" fontSize="16" fontWeight="600" fill="#fff">{n.t}</text>
+          <text x="75" y="52" textAnchor="middle" fontSize="11.5" fill="#fff" opacity=".7">{n.s}</text>
         </g>
       ))}
       {links.map((l, k) => (
         <g key={l}>
-          <path d={`M${k * 190 + 152} 75 H${k * 190 + 188}`} stroke="#16161a" strokeOpacity=".4" strokeWidth="1.5" markerEnd="url(#a)" />
-          <text x={k * 190 + 170} y="30" textAnchor="middle" fontSize="10.5" fill="#16161a" opacity=".55">{l}</text>
+          <path d={`M${k * 190 + 152} 75 H${k * 190 + 188}`} stroke="#fff" strokeOpacity=".5" strokeWidth="1.5" markerEnd="url(#a)" />
+          <text x={k * 190 + 170} y="30" textAnchor="middle" fontSize="10.5" fill="#fff" opacity=".6">{l}</text>
         </g>
       ))}
-      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L7 4L0 8z" fill="#16161a" opacity=".5" /></marker></defs>
+      <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L7 4L0 8z" fill="#fff" opacity=".6" /></marker></defs>
     </svg>
   )
 }

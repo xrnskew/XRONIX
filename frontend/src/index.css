@@ -24,7 +24,7 @@
 }
 
 html, body, #root { height: 100%; }
-body { margin: 0; font-family: var(--font-sans); color: var(--color-ink); background: var(--color-paper); -webkit-font-smoothing: antialiased; }
+body { margin: 0; font-family: var(--font-sans); color: var(--color-ink); background: #070708; -webkit-font-smoothing: antialiased; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
