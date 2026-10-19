@@ -11,21 +11,21 @@
    - Ресурсы для хакатона: 2 vCPU, 4 ГБ RAM, гарантированная доля vCPU 100 %, диск SSD 20 ГБ.
    - **«Прерываемая» не включать**: такая ВМ выключается раз в сутки и может упасть посреди защиты.
    - Сеть: публичный IP **автоматически**.
-   - Доступ: логин `ilya`, в поле SSH-ключа вставить **публичный** ключ Ильи (строка из `~/.ssh/id_ed25519.pub`, начинается с `ssh-ed25519`). Приватный ключ никому не передаётся.
+   - Доступ: логин `xronix`, в поле SSH-ключа вставить **публичный** ключ Ильи (строка из `~/.ssh/id_ed25519.pub`, начинается с `ssh-ed25519`). Приватный ключ никому не передаётся.
 2. **Сделать IP постоянным:** Virtual Private Cloud → IP-адреса → у адреса ВМ «Сделать статическим». Иначе после перезапуска ВМ адрес сменится и `api.xronix.ru` перестанет работать.
 3. **Группа безопасности** ВМ (Virtual Private Cloud → Группы безопасности), входящие правила:
    - TCP 22 только с IP Ильи (или с `0.0.0.0/0` на время настройки, потом сузить);
    - TCP 80 и TCP 443 с `0.0.0.0/0`;
    - больше ничего, порт 8000 наружу не открываем.
 4. **Cloud DNS → зона `xronix.ru.` → Создать запись:** имя `api`, тип `A`, TTL 600, значение: статический IP ВМ.
-5. Передать Илье IP и логин `ilya`.
+5. Передать Илье IP и логин `xronix`.
 
 ### Что делает Илья на сервере
 ```sh
-ssh ilya@<IP>
+ssh xronix@<IP>
 sudo apt update && sudo apt -y upgrade
 sudo apt -y install git python3-venv
-sudo mkdir -p /srv && sudo chown ilya /srv
+sudo mkdir -p /srv && sudo chown xronix /srv
 git clone https://github.com/xrnskew/XRONIX.git /srv/xronix
 cd /srv/xronix && git checkout backend
 cp backend/.env.example backend/.env
@@ -45,7 +45,7 @@ Description=XRONIX backend
 After=network.target
 
 [Service]
-User=ilya
+User=xronix
 WorkingDirectory=/srv/xronix/backend
 ExecStart=/srv/xronix/backend/run.sh
 Restart=always
