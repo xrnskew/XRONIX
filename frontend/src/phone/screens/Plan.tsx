@@ -1,22 +1,32 @@
 import { useNavigate } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
-import { Badge, Button, Card, Screen, SectionTitle } from '../ui'
-import { useCabinet } from '../PlanContext'
+import { Badge, Button, Card, Screen, SectionTitle, Skeleton } from '../ui'
+import { useCabinet } from '../CabinetContext'
 import { rub, shortParts } from '../../lib/format'
-import { mockPlan } from '../../mocks/data'
+import { USE_MOCKS } from '../../api'
 
 const level = { low: { tone: 'ok', name: 'Низкий' }, medium: { tone: 'warn', name: 'Средний' }, high: { tone: 'bad', name: 'Высокий' } } as const
 
 export default function PlanScreen() {
-  const { plan, setPlan } = useCabinet()
+  const { plan, planLoading, planError, reloadPlan, showDemoPlan } = useCabinet()
   const nav = useNavigate()
+  if (planLoading && !plan) return <Screen title="План"><Skeleton /></Screen>
+  if (planError && !plan)
+    return (
+      <Screen title="План">
+        <Card className="space-y-3 py-8 text-center" >
+          <p role="alert" className="mx-auto max-w-[260px] text-[15px] leading-snug text-accent">{planError}</p>
+          <Button onClick={reloadPlan}>Повторить</Button>
+        </Card>
+      </Screen>
+    )
   if (!plan)
     return (
       <Screen title="План">
         <Card className="space-y-3 py-8 text-center">
           <p className="mx-auto max-w-[240px] text-[15px] leading-snug text-muted">Плана пока нет. Опишите идею в чате, и ИИ соберёт его.</p>
           <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
-          <Button variant="ghost" onClick={() => setPlan(mockPlan)}>Показать пример</Button>
+          {USE_MOCKS && <Button variant="ghost" onClick={showDemoPlan}>Показать пример</Button>}
         </Card>
       </Screen>
     )
@@ -30,7 +40,7 @@ export default function PlanScreen() {
         <div className="mt-5 grid grid-cols-3 gap-2">
           <Big label="На старт" {...shortParts(p.finance.startup_cost_rub)} />
           <Big label="Прибыль в мес." {...shortParts(p.finance.monthly_profit_rub)} tone="ok" />
-          <Big label="Окупится за" value={String(p.finance.payback_months)} unit="мес." />
+          <Big label="Окупится за" value={p.finance.payback_months == null ? '—' : String(p.finance.payback_months)} unit="мес." />
         </div>
       </div>
 

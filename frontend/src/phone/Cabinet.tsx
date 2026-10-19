@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { MemoryRouter, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import { CabinetProvider, useCabinet } from './PlanContext'
+import { CabinetProvider, useCabinet } from './CabinetContext'
 import Login from './screens/Login'
+import Onboarding from './screens/Onboarding'
 import Chat from './screens/Chat'
 import PlanScreen from './screens/Plan'
 import Finance from './screens/Finance'
 import ProfileScreen from './screens/Profile'
-import { mockPlan } from '../mocks/data'
+import { Logo } from './ui'
+import { USE_MOCKS } from '../api'
 
 export type Screen = 'login' | 'chat' | 'plan' | 'finance' | 'profile'
 
@@ -17,24 +19,35 @@ const tabs = [
   { to: '/profile', label: 'Профиль', d: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6' },
 ]
 
-// Презентация слева переключает экран телефона. Сам пользователь может нажимать как обычно.
+// Презентация слева переключает экран телефона. Работает только на моках: с настоящим бэкендом презентация никого не логинит.
 function Sync({ screen }: { screen?: Screen }) {
   const nav = useNavigate()
-  const { setAuthed, plan, setPlan } = useCabinet()
+  const { signOut, demoLogin, showDemoPlan, status, userControlled } = useCabinet()
   useEffect(() => {
-    if (!screen) return
-    if (screen === 'login') { setAuthed(false); return }
-    setAuthed(true)
-    if ((screen === 'plan' || screen === 'finance') && !plan) setPlan(mockPlan)
-    nav('/' + screen)
+    if (!screen || !USE_MOCKS || userControlled) return
+    let cancelled = false
+    ;(async () => {
+      if (screen === 'login') { if (status === 'in') signOut(); return }
+      await demoLogin()
+      if (cancelled) return
+      if (screen === 'plan' || screen === 'finance') showDemoPlan()
+      nav('/' + screen)
+    })()
+    return () => { cancelled = true }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen])
+  }, [screen, userControlled])
   return null
 }
 
 function Shell() {
-  const { authed } = useCabinet()
-  if (!authed) return <Login />
+  const { status, needsOnboarding, userControlled } = useCabinet()
+  const nav = useNavigate()
+  // после своего входа всегда начинаем с чата, а не с экрана, на котором вышли
+  useEffect(() => { if (status === 'in' && userControlled) nav('/chat', { replace: true }) }, [status, userControlled, nav])
+  if (status === 'booting')
+    return <div className="flex h-full items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
+  if (status === 'out') return <Login />
+  if (needsOnboarding) return <Onboarding />
   return (
     <div className="flex h-full flex-col">
       <main className="min-h-0 flex-1">

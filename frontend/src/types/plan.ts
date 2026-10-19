@@ -47,11 +47,13 @@ export type AiReply =
   | { type: 'questions'; text: string; questions: Question[] }
   | { type: 'plan'; text: string; plan_id: string; plan: Plan }
 
+// Сообщение в интерфейсе: текст пользователя, ответ ИИ или ошибка
 export interface ChatMessage {
   id: string
   role: 'user' | 'assistant'
   reply?: AiReply
   text?: string
+  error?: boolean
 }
 
 export interface Profile {
@@ -68,3 +70,11 @@ export interface Answer {
   question_id: string
   answer: string
 }
+
+// Ответы API (см. /contracts/api.md)
+export interface AuthResult { token: string; user: Profile }
+export interface ChatSummary { id: string; title: string; updated_at: string; plan_id: string | null }
+export interface ChatMessageDto { id: string; role: 'user' | 'assistant'; created_at: string; reply: AiReply }
+export interface ChatDetail { id: string; messages: ChatMessageDto[] }
+export interface PlanSummary { plan_id: string; chat_id: string; title: string; created_at: string }
+export interface PlanRecord { plan_id: string; chat_id: string; created_at: string; plan: Plan }

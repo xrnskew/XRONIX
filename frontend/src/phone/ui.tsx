@@ -39,6 +39,7 @@ export const Button = ({ children, onClick, variant = 'primary', disabled }: { c
 
 export const Chip = ({ children, onClick, active }: { children: ReactNode; onClick?: () => void; active?: boolean }) => (
   <button
+    type="button"
     onClick={onClick}
     aria-pressed={active}
     className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${active ? 'bg-accent text-white' : 'bg-surface-2 text-text active:bg-surface-3'}`}
@@ -59,5 +60,11 @@ export const Logo = ({ size = 40 }: { size?: number }) => (
     aria-hidden
   >
     X
+  </div>
+)
+
+export const Skeleton = () => (
+  <div className="space-y-3" aria-busy="true" aria-label="Загрузка">
+    {[150, 190, 130].map((h, i) => <div key={i} className="animate-pulse rounded-[22px] bg-surface" style={{ height: h }} />)}
   </div>
 )

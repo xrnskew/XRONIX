@@ -1,20 +1,36 @@
-import type { AiReply, Answer, Plan, Profile } from '../types/plan'
-import { mockPlan, mockProfile, mockQuestions } from '../mocks/data'
+import type { AiReply, Answer, AuthResult, ChatDetail, ChatSummary, PlanRecord, PlanSummary, Profile } from '../types/plan'
+import { USE_MOCKS, request, setToken } from './client'
+import { mockApi } from './mock'
 
-const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
-const delay = (ms = 700) => new Promise((r) => setTimeout(r, ms))
+export { ApiError, USE_MOCKS, getToken, onUnauthorized, setToken } from './client'
 
-// Мок-диалог: идея -> вопросы -> ответы -> план. Реальный вызов подключим по контракту.
-let step = 0
-export async function sendMessage(_chatId: string, _text: string, _answers?: Answer[]): Promise<AiReply> {
-  if (!USE_MOCKS) throw new Error('Бэкенд ещё не подключён')
-  await delay()
-  step += 1
-  if (step === 1) return mockQuestions
-  step = 0
-  return { type: 'plan', text: 'План готов', plan_id: 'demo', plan: mockPlan }
+// Контракт: /contracts/api.md
+export interface Api {
+  register(b: { email: string; password: string; name: string }): Promise<AuthResult>
+  login(b: { email: string; password: string }): Promise<AuthResult>
+  getMe(): Promise<Profile>
+  patchMe(patch: Partial<Pick<Profile, 'name' | 'city' | 'experience' | 'budget_rub' | 'tags'>>): Promise<Profile>
+  listChats(): Promise<ChatSummary[]>
+  createChat(): Promise<{ chat_id: string }>
+  getChat(id: string): Promise<ChatDetail>
+  sendMessage(chatId: string, text: string, answers?: Answer[]): Promise<AiReply>
+  listPlans(): Promise<PlanSummary[]>
+  getPlan(id: string): Promise<PlanRecord>
 }
-export const resetMockDialog = () => { step = 0 }
 
-export async function getPlan(_id: string): Promise<Plan> { await delay(200); return mockPlan }
-export async function getProfile(): Promise<Profile> { await delay(200); return mockProfile }
+const AI_TIMEOUT = 35_000 // ИИ думает до 30 секунд
+
+const realApi: Api = {
+  async register(b) { const r = await request<AuthResult>('POST', '/auth/register', b); setToken(r.token); return r },
+  async login(b) { const r = await request<AuthResult>('POST', '/auth/login', b); setToken(r.token); return r },
+  getMe: () => request('GET', '/me'),
+  patchMe: (patch) => request('PATCH', '/me', patch),
+  listChats: () => request('GET', '/chats'),
+  createChat: () => request('POST', '/chats'),
+  getChat: (id) => request('GET', `/chats/${id}`),
+  sendMessage: (chatId, text, answers) => request('POST', `/chats/${chatId}/messages`, answers?.length ? { text, answers } : { text }, AI_TIMEOUT),
+  listPlans: () => request('GET', '/plans'),
+  getPlan: (id) => request('GET', `/plans/${id}`),
+}
+
+export const api: Api = USE_MOCKS ? mockApi : realApi

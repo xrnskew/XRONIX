@@ -51,7 +51,7 @@ export default function Landing() {
       </aside>
 
       <main className="lg:order-1">
-        <header className={`sticky top-0 z-30 flex h-16 items-center justify-between bg-black/15 backdrop-blur-md ${pad}`}>
+        <header className={`sticky top-0 z-30 flex h-16 items-center justify-between bg-black/60 backdrop-blur-md ${pad}`}>
           <span className="font-display text-[15px] font-semibold text-brand">XRONIX</span>
           <span className="text-[14px] text-white/55" aria-live="polite">{slides[i].label}</span>
           <span className="absolute inset-x-0 bottom-0 h-px bg-white/10"><span className="block h-full origin-left bg-brand" style={{ transform: `scaleX(${progress})` }} /></span>

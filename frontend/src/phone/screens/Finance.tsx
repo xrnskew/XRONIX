@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Stat } from '../ui'
-import { useCabinet } from '../PlanContext'
+import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
+import { useCabinet } from '../CabinetContext'
 import { annuity, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, matchProducts } from '../../data/alfaProducts'
 
@@ -14,12 +14,22 @@ const loadTone = (n: number) => (n > 50 ? 'bad' : n > 35 ? 'warn' : 'ok')
 const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 
 export default function Finance() {
-  const { plan } = useCabinet()
+  const { plan, planLoading, planError, reloadPlan } = useCabinet()
   const nav = useNavigate()
   const [amount, setAmount] = useState(plan?.credit.amount_rub ?? 1000000)
   const [months, setMonths] = useState(plan?.credit.recommended_term_months ?? 24)
   const matches = useMemo(() => matchProducts(amount, months), [amount, months])
 
+  if (planLoading && !plan) return <Screen title="Финансы и кредит"><Skeleton /></Screen>
+  if (planError && !plan)
+    return (
+      <Screen title="Финансы и кредит">
+        <Card className="space-y-3 py-8 text-center">
+          <p role="alert" className="mx-auto max-w-[260px] text-[15px] leading-snug text-accent">{planError}</p>
+          <Button onClick={reloadPlan}>Повторить</Button>
+        </Card>
+      </Screen>
+    )
   if (!plan)
     return (
       <Screen title="Финансы и кредит">
