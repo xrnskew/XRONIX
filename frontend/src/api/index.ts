@@ -19,7 +19,7 @@ export interface Api {
   getPlan(id: string): Promise<PlanRecord>
 }
 
-const AI_TIMEOUT = 35_000 // ИИ думает до 30 секунд
+const AI_TIMEOUT = 180_000 // ИИ может думать до 3 минут: столько ждём ответа, потом показываем ошибку с «Повторить»
 
 const realApi: Api = {
   async register(b) { const r = await request<AuthResult>('POST', '/auth/register', b); setToken(r.token); return r },

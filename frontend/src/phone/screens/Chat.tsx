@@ -111,9 +111,7 @@ export default function Chat() {
         {busy && (
           <div className={`flex ${wide ? 'gap-3' : ''}`} role="status" aria-label="ИИ печатает">
             {wide && <div className="mt-1"><Logo size={30} /></div>}
-            <div className="card-ring flex gap-1.5 rounded-[22px] rounded-bl-md bg-surface px-4 py-4">
-              <span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" />
-            </div>
+            <Thinking />
           </div>
         )}
       </div>
@@ -126,6 +124,19 @@ export default function Chat() {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 19V5M5 12l7-7 7 7" /></svg>
         </button>
       </form>
+    </div>
+  )
+}
+
+// «Печатает» с подсказкой: ответ ИИ может идти до 3 минут, без неё долгие точки выглядят как зависание
+function Thinking() {
+  const [sec, setSec] = useState(0)
+  useEffect(() => { const t = window.setInterval(() => setSec((s) => s + 1), 1000); return () => clearInterval(t) }, [])
+  const hint = sec >= 60 ? 'Сложный план, нужно ещё немного времени. Ответ придёт в течение 3 минут.' : sec >= 12 ? 'Считаю план, это может занять пару минут.' : null
+  return (
+    <div className="card-ring rounded-[22px] rounded-bl-md bg-surface px-4 py-4">
+      <div className="flex gap-1.5"><span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" /><span className="dot h-2 w-2 rounded-full bg-muted" /></div>
+      {hint && <p className="rise mt-2.5 max-w-[260px] text-[13px] leading-snug text-muted">{hint}</p>}
     </div>
   )
 }
