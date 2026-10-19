@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/ai-request.schema.json",
+  "title": "AiRespondRequest",
+  "description": "Вход POST /ai/respond. Собирает бэкенд.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["mode", "user_context", "history", "message"],
+  "properties": {
+    "mode": { "enum": ["chat"] },
+    "user_context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["profile", "tags", "memory"],
+      "properties": {
+        "profile": {
+          "type": "object", "additionalProperties": false,
+          "required": ["name", "city", "experience", "budget_rub"],
+          "properties": {
+            "name": { "type": "string" },
+            "city": { "type": ["string", "null"] },
+            "experience": { "type": ["string", "null"] },
+            "budget_rub": { "type": ["integer", "null"], "minimum": 0 }
+          }
+        },
+        "tags": { "type": "array", "maxItems": 12, "items": { "type": "string" } },
+        "memory": { "type": "string", "maxLength": 800, "description": "Пустая строка, если памяти ещё нет" }
+      }
+    },
+    "history": {
+      "type": "array", "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["role", "content"],
+        "properties": { "role": { "enum": ["user", "assistant"] }, "content": { "type": "string" } }
+      }
+    },
+    "message": { "type": "string", "minLength": 1, "maxLength": 4000 }
+  }
+}

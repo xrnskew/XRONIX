@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/ai-reply.schema.json",
+  "title": "AiReplyFromAiService",
+  "description": "Выход POST /ai/respond: как reply.schema.json, но у плана нет plan_id.",
+  "oneOf": [
+    { "$ref": "https://xronix/schemas/reply.schema.json#/definitions/message" },
+    { "$ref": "https://xronix/schemas/reply.schema.json#/definitions/questions" },
+    { "$ref": "https://xronix/schemas/reply.schema.json#/definitions/planFromAi" }
+  ]
+}

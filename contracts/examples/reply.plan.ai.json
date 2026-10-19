@@ -1,0 +1,166 @@
+{
+  "type": "plan",
+  "text": "План готов",
+  "plan": {
+    "title": "Кофейня у метро",
+    "summary": "Кофе с собой в проходном месте: небольшая площадь, быстрый оборот, окупаемость за 10 месяцев при кредите на оборудование и аренду.",
+    "business": {
+      "sphere": "Общепит",
+      "format": "Кофе с собой",
+      "city": "Москва"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "title": "Регистрация ИП",
+        "description": "Подать заявление, выбрать УСН «доходы минус расходы».",
+        "duration_days": 5,
+        "cost_rub": 800
+      },
+      {
+        "order": 2,
+        "title": "Поиск точки",
+        "description": "Павильон 8–12 м² у выхода из метро, договор аренды на 11 месяцев.",
+        "duration_days": 21,
+        "cost_rub": 120000
+      },
+      {
+        "order": 3,
+        "title": "Оборудование",
+        "description": "Кофемашина, гриндер, холодильник, касса.",
+        "duration_days": 14,
+        "cost_rub": 650000
+      },
+      {
+        "order": 4,
+        "title": "Ремонт и вывеска",
+        "description": "Стойка, освещение, вывеска, согласование с арендодателем.",
+        "duration_days": 14,
+        "cost_rub": 380000
+      },
+      {
+        "order": 5,
+        "title": "Запуск",
+        "description": "Найм двух бариста, закупка сырья, открытие.",
+        "duration_days": 7,
+        "cost_rub": 350000
+      }
+    ],
+    "opportunities": [
+      {
+        "title": "Высокий проходной поток",
+        "description": "Утренний пик 7:30–10:00 даёт до 60% выручки."
+      },
+      {
+        "title": "Низкий порог входа",
+        "description": "Небольшая площадь и один кассовый узел."
+      }
+    ],
+    "risks": [
+      {
+        "title": "Рост аренды",
+        "level": "high",
+        "mitigation": "Договор на 3 года с фиксированной ставкой."
+      },
+      {
+        "title": "Сезонный спад летом",
+        "level": "medium",
+        "mitigation": "Холодные напитки и десерты в меню."
+      },
+      {
+        "title": "Текучка бариста",
+        "level": "low",
+        "mitigation": "Обучение и процент от выручки."
+      }
+    ],
+    "finance": {
+      "startup_cost_rub": 1500000,
+      "own_funds_rub": 500000,
+      "funding_gap_rub": 1000000,
+      "monthly_revenue_rub": 600000,
+      "monthly_expenses_rub": 450000,
+      "monthly_profit_rub": 150000,
+      "payback_months": 10,
+      "revenue_forecast": [
+        {
+          "month": 1,
+          "revenue_rub": 270000,
+          "expenses_rub": 410000
+        },
+        {
+          "month": 2,
+          "revenue_rub": 340000,
+          "expenses_rub": 420000
+        },
+        {
+          "month": 3,
+          "revenue_rub": 410000,
+          "expenses_rub": 430000
+        },
+        {
+          "month": 4,
+          "revenue_rub": 480000,
+          "expenses_rub": 440000
+        },
+        {
+          "month": 5,
+          "revenue_rub": 550000,
+          "expenses_rub": 450000
+        },
+        {
+          "month": 6,
+          "revenue_rub": 620000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 7,
+          "revenue_rub": 620000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 8,
+          "revenue_rub": 620000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 9,
+          "revenue_rub": 590000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 10,
+          "revenue_rub": 590000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 11,
+          "revenue_rub": 590000,
+          "expenses_rub": 460000
+        },
+        {
+          "month": 12,
+          "revenue_rub": 590000,
+          "expenses_rub": 460000
+        }
+      ]
+    },
+    "credit": {
+      "needed": true,
+      "amount_rub": 1000000,
+      "purpose": "Оборудование и аренда",
+      "recommended_term_months": 24,
+      "estimated_rate_percent": 22,
+      "monthly_payment_rub": 51878,
+      "debt_load_percent": 35,
+      "verdict": "ok",
+      "recommended_product_id": "fast",
+      "comment": "Платёж около трети прогнозной прибыли: нагрузка умеренная, запас на сезонный спад есть."
+    },
+    "tags_update": [
+      "общепит",
+      "старт",
+      "Москва",
+      "бюджет до 2 млн"
+    ]
+  }
+}
