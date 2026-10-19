@@ -21,7 +21,8 @@ const slides: { id: string; label: string; scene: Scene }[] = [
 ]
 const ids = slides.map((s) => s.id)
 // Базовый ракурс телефона на каждом слайде (градусы): чередуем наклон влево и вправо
-const angles = [{ x: 2, y: -12 }, { x: 0, y: 9 }, { x: -2, y: -8 }, { x: 2, y: 10 }, { x: 0, y: -9 }, { x: -2, y: 8 }, { x: 1, y: -10 }, { x: 0, y: 0 }]
+// Телефон всегда смотрит влево, к тексту слайда, или прямо; вправо не поворачивается (y ≤ 0, см. Phone3D)
+const angles = [{ x: 2, y: -12 }, { x: 0, y: -6 }, { x: -2, y: -10 }, { x: 2, y: -5 }, { x: 0, y: -9 }, { x: -2, y: -6 }, { x: 1, y: -10 }, { x: 0, y: -4 }]
 const goTo = goToSlide
 
 export default function Landing() {

@@ -52,7 +52,7 @@ export default function Phone3D({ base, enabled, children }: { base: { x: number
       bob += dt
       const b = baseRef.current
       cur.x += (b.x - ptr.ny * 8 - cur.x) * 0.07
-      cur.y += (b.y + ptr.nx * 12 - cur.y) * 0.07
+      cur.y += (Math.min(0, b.y + ptr.nx * 12) - cur.y) * 0.07 // вправо (y > 0) не поворачиваем
       el.style.transform = `translate3d(0, ${(Math.sin(bob / 1700) * 5).toFixed(2)}px, 0) rotateX(${cur.x.toFixed(2)}deg) rotateY(${cur.y.toFixed(2)}deg)`
       const g = glare(); if (g) g.style.transform = `translateX(${(-cur.y * 1.6).toFixed(1)}%)`
     }

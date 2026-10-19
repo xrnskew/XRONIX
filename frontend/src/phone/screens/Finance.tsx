@@ -77,7 +77,7 @@ export default function Finance() {
       </Card>
 
       <Card className={`flex items-center gap-4 ${wide ? 'gap-6 p-6' : ''}`} delay={1} span={5}>
-        <Gauge value={load} tone={loadTone(load)} />
+        <Gauge value={load} tone={loadTone(load)} size={wide ? 112 : 96} />
         <div className="min-w-0">
           <Badge tone={v.tone}>{v.text}</Badge>
           <p className="mt-2 text-[13px] leading-snug text-muted">{c.comment}</p>
@@ -128,21 +128,25 @@ export default function Finance() {
   )
 }
 
-function Gauge({ value, tone }: { value: number; tone: 'ok' | 'warn' | 'bad' }) {
-  const r = 36
+// Кольцо нагрузки. Цифра подобрана так, чтобы даже «100%» помещалась внутри кольца, не задевая дугу.
+function Gauge({ value, tone, size = 96 }: { value: number; tone: 'ok' | 'warn' | 'bad'; size?: number }) {
+  const r = 40
   const circ = 2 * Math.PI * r
   const [shown, setShown] = useState(0)
   useEffect(() => { const r = requestAnimationFrame(() => setShown(value)); return () => cancelAnimationFrame(r) }, [value])
   const pct = Math.min(shown, 100) / 100
+  const k = size / 96
   return (
-    <div className="relative h-[96px] w-[96px] shrink-0" role="img" aria-label={`Долговая нагрузка ${value}%`}>
-      <svg viewBox="0 0 96 96" className="-rotate-90">
-        <circle cx="48" cy="48" r={r} fill="none" stroke="#2d2d33" strokeWidth="9" />
-        <circle cx="48" cy="48" r={r} fill="none" stroke={toneColor[tone]} strokeWidth="9" strokeLinecap="round" strokeDasharray={`${circ * pct} ${circ}`} style={{ transition: 'stroke-dasharray .4s ease' }} />
+    <div className="relative shrink-0" style={{ width: size, height: size }} role="img" aria-label={`Долговая нагрузка ${value}%`}>
+      <svg viewBox="0 0 96 96" className="-rotate-90" width={size} height={size}>
+        <circle cx="48" cy="48" r={r} fill="none" stroke="#2d2d33" strokeWidth="6" />
+        <circle cx="48" cy="48" r={r} fill="none" stroke={toneColor[tone]} strokeWidth="6" strokeLinecap="round" strokeDasharray={`${circ * pct} ${circ}`} style={{ transition: 'stroke-dasharray .4s ease' }} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-display text-[20px] font-semibold tabular-nums leading-none">{value}%</span>
-        <span className="mt-1 text-[10px] text-muted">нагрузка</span>
+        <span className="flex items-baseline font-display font-semibold tabular-nums leading-none" style={{ fontSize: 17 * k }}>
+          {value}<span className="ml-px" style={{ fontSize: 11 * k }}>%</span>
+        </span>
+        <span className="mt-1 text-muted" style={{ fontSize: 10 * k }}>нагрузка</span>
       </div>
     </div>
   )
