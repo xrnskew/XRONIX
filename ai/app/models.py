@@ -78,3 +78,22 @@ class PlanReply(_Out):
 class SummarizeResponse(_Out):
     memory: Annotated[str, Field(max_length=800)]
     tags: Annotated[List[Annotated[str, Field(min_length=1, max_length=30)]], Field(max_length=12)]
+
+
+# ---------- что просим у GigaChat на шаге «решить, что ответить» ----------
+# Нарочно мягче контракта: длины и id чистим кодом (service.clean_questions),
+# чтобы из-за лишнего символа не терять весь ответ.
+
+# Пустые поля модель часто просто не пишет (нет options у text, нет questions у message),
+# поэтому у них значения по умолчанию.
+class QuestionDraft(BaseModel):
+    id: str = ""
+    text: str
+    kind: Literal["choice", "text"] = "text"
+    options: List[str] = []
+
+
+class Decision(BaseModel):
+    action: Literal["questions", "plan", "message"]
+    text: str = ""
+    questions: List[QuestionDraft] = []

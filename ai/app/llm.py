@@ -49,15 +49,22 @@ class LLM:
         for client in (self.giga._aclient, self.giga._auth_aclient):
             client.timeout = httpx.Timeout(20, connect=5)
 
-    async def json_chat(self, messages: list, schema: type[BaseModel], max_tokens: int = 4000) -> dict:
-        """messages: [(role, content)]. Ответ сервера ограничен JSON-схемой (response_format)."""
+    async def json_chat(self, messages: list, schema: type[BaseModel], max_tokens: int = 4000,
+                        use_schema: bool = True) -> dict:
+        """messages: [(role, content)].
+
+        use_schema=True — сервер ограничивает ответ JSON-схемой (response_format, бета).
+        На плане это даёт 6/6 валидных против 5/6, но на некоторых схемах (Decision) сервер
+        отдаёт пустой ответ — там формат задаём только промптом и проверяем кодом.
+        """
         chat = Chat(
             model=config.MODEL,
             messages=[Messages(role=ROLES[r], content=c) for r, c in messages],
             temperature=0.3,
             max_tokens=max_tokens,
-            response_format=JsonSchemaResponseFormat(schema=schema, strict=True),
         )
+        if use_schema:
+            chat.response_format = JsonSchemaResponseFormat(schema=schema, strict=True)
         t = time.monotonic()
         try:
             resp = await self.giga.achat(chat)

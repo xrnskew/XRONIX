@@ -1,25 +1,33 @@
 """Логика /ai/respond и /ai/summarize.
 
-Сейчас (этап 0):
-  - уточняющие вопросы — мок (MOCK_QUESTIONS);
-  - план — настоящий, через GigaChat;
-  - summarize — мок.
+/ai/respond в два шага:
+  1. decide — короткий запрос к GigaChat: задать вопросы, ответить сообщением или делать план;
+  2. generate_plan — сам план (если на шаге 1 выбран план или вопросов было уже 2 раунда).
+Если шаг 1 сломался, не роняем диалог: в начале отдаём запасные вопросы, дальше идём в план.
+
+summarize — пока мок.
 """
 import asyncio
 import json
 import logging
+import re
 
 from pydantic import ValidationError
 
 from . import config
 from .llm import LLM, LLMBadOutput, LLMUnavailable
-from .models import (PlanReply, QuestionsReply, RespondRequest, SummarizeRequest,
-                     SummarizeResponse)
+from .models import (Decision, MessageReply, PlanReply, Question, QuestionsReply,
+                     RespondRequest, SummarizeRequest, SummarizeResponse)
 from .plan import Plan, check_plan
-from .prompts import plan_messages
+from .prompts import decide_messages, plan_messages
 from .repair import repair_plan
 
 logger = logging.getLogger(__name__)
+
+# Больше двух раундов вопросов подряд бэк не принимает (contracts/ai.md).
+MAX_QUESTION_ROUNDS = 2
+# Шаг decide не должен съедать время, нужное плану (~10–13 с).
+DECIDE_TIMEOUT_SEC = 8
 
 
 class AiError(Exception):
@@ -34,8 +42,8 @@ class AiError(Exception):
         self.code, self.status, self.message = code, self.STATUS[code], self.MESSAGES[code]
 
 
-# TODO(этап 1): генерировать вопросы через GigaChat под конкретную идею.
-MOCK_QUESTIONS = QuestionsReply(
+# Запасные вопросы, если GigaChat не смог их придумать на первом сообщении.
+FALLBACK_QUESTIONS = QuestionsReply(
     text="Уточню пару моментов, чтобы план был точным",
     questions=[
         {"id": "budget", "text": "Сколько своих денег готовы вложить?", "kind": "choice",
@@ -45,6 +53,18 @@ MOCK_QUESTIONS = QuestionsReply(
         {"id": "location", "text": "В каком городе и где именно планируете открыться?", "kind": "text"},
     ],
 )
+
+
+# Модель часто задаёт 2 вопроса вместо 3+. Добиваем этими: они полезны для любой идеи
+# и не пересекаются с обязательными (идея, город, деньги, опыт).
+EXTRA_QUESTIONS = [
+    Question(id="loan_ready", text="Готовы взять кредит, если своих денег не хватит?", kind="choice",
+             options=["Да", "Только небольшой", "Нет"]),
+    Question(id="premises", text="Есть ли уже помещение или точка?", kind="choice",
+             options=["Да, есть", "Ищу", "Не нужно, работаю онлайн"]),
+    Question(id="launch", text="Когда хотите запуститься?", kind="choice",
+             options=["В течение месяца", "Через 2–3 месяца", "Через полгода и позже"]),
+]
 
 
 def question_rounds(history) -> int:
@@ -63,15 +83,76 @@ def question_rounds(history) -> int:
     return rounds
 
 
+def clean_questions(drafts) -> list:
+    """Подгоняет вопросы модели под контракт: id, длины, options только у choice."""
+    out, seen = [], set()
+    for draft in drafts[:6]:
+        text = draft.text.strip()[:200]
+        if not text:
+            continue
+        qid = re.sub(r"[^a-z0-9_]+", "_", draft.id.lower()).strip("_")[:31]
+        if not re.match(r"^[a-z]", qid) or qid in seen:
+            qid = f"q{len(out) + 1}"
+        while qid in seen:
+            qid += "_"
+        seen.add(qid)
+        options = list(dict.fromkeys(o.strip()[:40] for o in draft.options if o.strip()))[:5]
+        if draft.kind == "choice" and len(options) >= 2:
+            out.append(Question(id=qid, text=text, kind="choice", options=options))
+        else:
+            out.append(Question(id=qid, text=text, kind="text"))
+    return out
+
+
 async def respond(llm: LLM, req: RespondRequest) -> dict:
-    if question_rounds(req.history) == 0:
-        return MOCK_QUESTIONS.model_dump(exclude_none=True)
-    return await generate_plan(llm, req)
-
-
-async def generate_plan(llm: LLM, req: RespondRequest) -> dict:
     loop = asyncio.get_running_loop()
     deadline = loop.time() + config.DEADLINE_SEC
+    rounds = question_rounds(req.history)
+
+    if rounds < MAX_QUESTION_ROUNDS:
+        reply = await decide(llm, req, rounds, deadline)
+        if reply is not None:
+            return reply
+    return await generate_plan(llm, req, deadline)
+
+
+async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
+    """Готовый ответ (вопросы или сообщение) или None, если пора делать план."""
+    loop = asyncio.get_running_loop()
+    fallback = FALLBACK_QUESTIONS.model_dump(exclude_none=True) if rounds == 0 else None
+    try:
+        async with asyncio.timeout(min(DECIDE_TIMEOUT_SEC, deadline - loop.time())):
+            # Со схемой Decision response_format у GigaChat отдаёт пустой ответ — только промпт.
+            raw = await llm.json_chat(decide_messages(req, rounds), Decision, max_tokens=1500, use_schema=False)
+        decision = Decision.model_validate(raw)
+    except (LLMUnavailable, LLMBadOutput, TimeoutError, ValidationError) as e:
+        logger.warning("decide: не получилось (%r), %s", e, "запасные вопросы" if fallback else "делаем план")
+        return fallback
+
+    logger.info("decide: rounds=%d -> %s", rounds, decision.action)
+
+    if decision.action == "message":
+        text = decision.text.strip()[:2000] or "Расскажите, какой бизнес вы хотите открыть и в каком городе."
+        return MessageReply(text=text).model_dump()
+
+    if decision.action == "questions":
+        questions = clean_questions(decision.questions)
+        if 0 < len(questions) < 3:
+            ids = {q.id for q in questions}
+            extra = [q for q in EXTRA_QUESTIONS if q.id not in ids][:3 - len(questions)]
+            logger.info("decide: модель дала %d вопрос(а), добавили %s", len(questions), [q.id for q in extra])
+            questions += extra
+        if len(questions) >= 3:
+            text = decision.text.strip()[:300] or FALLBACK_QUESTIONS.text
+            return QuestionsReply(text=text, questions=questions).model_dump(exclude_none=True)
+        logger.warning("decide: модель дала %d вопрос(а), а нужно минимум 3", len(questions))
+        return fallback
+
+    return None
+
+
+async def generate_plan(llm: LLM, req: RespondRequest, deadline: float) -> dict:
+    loop = asyncio.get_running_loop()
     messages = plan_messages(req)
     last_error = "AI_BAD_RESPONSE"
 
