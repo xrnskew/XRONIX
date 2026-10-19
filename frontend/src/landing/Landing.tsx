@@ -3,7 +3,7 @@ import PhoneFrame from '../phone/PhoneFrame'
 import Phone3D from '../phone/Phone3D'
 import Cabinet, { type Scene } from '../phone/Cabinet'
 import ShaderBackground from './ShaderBackground'
-import Satellites from './Satellites'
+import Satellites, { RAIL } from './Satellites'
 import { useMediaQuery, useSlides } from './useSlides'
 import { USE_MOCKS, setToken } from '../api'
 import { Arch, Credit, Hero, How, Memory, PlanSlide, Problem, Team, pad } from './Slides'
@@ -26,6 +26,7 @@ const goTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behav
 export default function Landing() {
   const { current, settled } = useSlides(ids)
   const wide = useMediaQuery('(min-width: 1024px)')
+  const roomy = useMediaQuery('(min-width: 1280px)')
   const [auto, setAuto] = useState(true)
   const [cabinetKey, setCabinetKey] = useState(0)
   const [demoStep, setDemoStep] = useState(0)
@@ -36,6 +37,8 @@ export default function Landing() {
   // С настоящим бэкендом «вернуть автопоказ» выходит из аккаунта: иначе заготовка перекрыла бы чужую сессию
   const resume = () => { if (!USE_MOCKS) setToken(null); setAuto(true); setCabinetKey((k) => k + 1) }
   const live = auto && wide
+  // Карточки вокруг телефона только в автопоказе: когда человек сам пользуется телефоном, они мешают
+  const sats = live && roomy
   const scene = slides[settled].scene
   const onRealSession = useCallback(() => setAuto(false), [])
   // Кабинет тяжёлый: пересоздаём его только когда меняется то, что он реально получает
@@ -46,15 +49,16 @@ export default function Landing() {
   ), [cabinetKey, scene, live, onRealSession])
 
   return (
-    <div className="overflow-x-clip text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
+    <div className="overflow-x-clip text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)] xl:grid-cols-[minmax(0,1fr)_minmax(600px,46%)]">
       <ShaderBackground />
 
       <aside className="relative flex items-center justify-center px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
         <Orbits />
-        <div className="relative" onPointerDownCapture={takeOver} onFocusCapture={takeOver}>
+        <div className="relative transition-transform duration-700 ease-out" style={{ transform: sats ? `translateX(${RAIL / 2}px)` : 'none' }}
+          onPointerDownCapture={takeOver} onFocusCapture={takeOver}>
           <Phone3D base={angles[settled]} enabled={wide}>
             {phone}
-            <Satellites slide={slides[settled].id} />
+            <Satellites slide={slides[settled].id} show={sats} />
           </Phone3D>
         </div>
       </aside>

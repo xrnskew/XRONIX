@@ -5,7 +5,7 @@ import { annuity, rub, shortParts } from '../lib/format'
 // Карточки вокруг телефона. Висят в 3D на разной глубине (translateZ), поэтому при наклоне телефона
 // сдвигаются с параллаксом. Набор меняется вместе со слайдом. Все цифры из того же плана, что и в кабинете.
 // Чисто декоративные: pointer-events: none и aria-hidden, текст дублирует слайд слева.
-// Показываются от 1280 px: на более узких экранах вокруг телефона нет места.
+// Показываются от 1280 px (решает Landing): на более узких экранах рядом с телефоном нет места.
 
 type Slot = 'a' | 'b' | 'c' | 'd'
 type Item =
@@ -17,12 +17,15 @@ type Item =
   | { slot: Slot; kind: 'gauge'; value: number }
   | { slot: Slot; kind: 'bars' }
 
-// Отступы в процентах от ширины телефона: на всех экранах карточки остаются в пределах правой колонки
+// Карточки стоят колонкой СЛЕВА от телефона и не заходят на экран: экран должен оставаться читаемым.
+// Под колонку Landing сдвигает телефон вправо на RAIL/2. Небольшой сдвиг dx делает колонку «живой».
+export const RAIL = 236 // ширина колонки карточек вместе с зазором до телефона, px
+const GAP = 26
 const SLOTS: Record<Slot, { style: React.CSSProperties; z: number }> = {
-  a: { style: { left: '-36%', top: '9%' }, z: 90 },
-  b: { style: { right: '-34%', top: '30%' }, z: 130 },
-  c: { style: { left: '-36%', top: '60%' }, z: 110 },
-  d: { style: { right: '-30%', top: '79%' }, z: 70 },
+  a: { style: { right: `calc(100% + ${GAP}px)`, top: '6%' }, z: 90 },
+  b: { style: { right: `calc(100% + ${GAP + 28}px)`, top: '30%' }, z: 130 },
+  c: { style: { right: `calc(100% + ${GAP + 6}px)`, top: '55%' }, z: 110 },
+  d: { style: { right: `calc(100% + ${GAP + 32}px)`, top: '78%' }, z: 70 },
 }
 
 const f = mockPlan.finance
@@ -81,23 +84,25 @@ const sets: Record<string, Item[]> = {
 
 const still = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export default function Satellites({ slide }: { slide: string }) {
+// show=false (человек взял телефон в руки или узкий экран): карточки гаснут и не рисуются
+export default function Satellites({ slide, show }: { slide: string; show: boolean }) {
   // Смена набора: старые карточки гаснут, затем появляются новые по очереди
-  const [shown, setShown] = useState(slide)
+  const target = show ? slide : ''
+  const [shown, setShown] = useState(target)
   const [phase, setPhase] = useState<'in' | 'out'>('in')
   useEffect(() => {
-    if (slide === shown) return
-    if (still()) { setShown(slide); return }
+    if (target === shown) return
+    if (still()) { setShown(target); return }
     setPhase('out')
-    const t = window.setTimeout(() => { setShown(slide); setPhase('in') }, 320)
+    const t = window.setTimeout(() => { setShown(target); setPhase('in') }, 320)
     return () => window.clearTimeout(t)
-  }, [slide, shown])
+  }, [target, shown])
 
   const items = sets[shown] ?? []
   return (
-    <div className="pointer-events-none absolute inset-0 hidden xl:block" style={{ transformStyle: 'preserve-3d' }} aria-hidden>
+    <div className="pointer-events-none absolute inset-0" style={{ transformStyle: 'preserve-3d' }} aria-hidden>
       {items.map((it, i) => (
-        <div key={shown + it.slot} className="absolute" style={{ ...SLOTS[it.slot].style, transform: `translateZ(${SLOTS[it.slot].z}px)` }}>
+        <div key={shown + it.slot} className="absolute" style={{ ...SLOTS[it.slot].style, width: 'max-content', transform: `translateZ(${SLOTS[it.slot].z}px)` }}>
           <div className="sat-float" style={{ animationDelay: `${-i * 1.7}s`, animationDuration: `${5.5 + i * 0.9}s` }}>
             <div className={`sat ${phase === 'in' ? 'sat-in' : 'sat-out'}`} style={{ animationDelay: phase === 'in' ? `${120 + i * 110}ms` : '0ms' }}>
               <Card it={it} />
@@ -114,17 +119,17 @@ const box = 'rounded-2xl bg-[#141416]/95 px-4 py-3 text-white shadow-[0_24px_40p
 function Card({ it }: { it: Item }) {
   switch (it.kind) {
     case 'user':
-      return <div className="max-w-[170px] rounded-[18px] rounded-br-md bg-fill px-4 py-2.5 text-[14px] font-medium leading-snug text-white shadow-[0_18px_34px_-12px_rgba(224,42,30,.7)]">{it.text}</div>
+      return <div className="max-w-[190px] rounded-[18px] rounded-br-md bg-fill px-4 py-2.5 text-[14px] font-medium leading-snug text-white shadow-[0_18px_34px_-12px_rgba(224,42,30,.7)]">{it.text}</div>
     case 'ai':
-      return <div className={`max-w-[170px] rounded-[18px] rounded-bl-md text-[14px] leading-snug ${box} py-2.5`}>{it.text}</div>
+      return <div className={`max-w-[190px] rounded-[18px] rounded-bl-md text-[14px] leading-snug ${box} py-2.5`}>{it.text}</div>
     case 'typing':
       return <div className={`flex gap-1.5 ${box} rounded-bl-md py-3.5`}>{[0, 1, 2].map((k) => <span key={k} className="dot h-2 w-2 rounded-full bg-white/60" />)}</div>
     case 'chip':
       return <div className={`whitespace-nowrap rounded-full px-4 py-2 text-[14px] font-medium ${it.active ? 'bg-fill text-white shadow-[0_14px_30px_-12px_rgba(224,42,30,.8)]' : 'bg-[#141416]/95 text-white ring-1 ring-white/10 shadow-[0_18px_30px_-14px_rgba(0,0,0,.8)]'}`}>{it.text}</div>
     case 'check':
       return (
-        <div className={`flex items-center gap-2.5 whitespace-nowrap text-[14px] font-medium ${box} py-2.5`}>
-          <span className={`flex h-6 w-6 items-center justify-center rounded-full ${it.lock ? 'bg-fill' : 'bg-ok/20 text-ok'}`}>
+        <div className={`flex max-w-[200px] items-center gap-2.5 text-[14px] font-medium leading-snug ${box} py-2.5`}>
+          <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${it.lock ? 'bg-fill' : 'bg-ok/20 text-ok'}`}>
             {it.lock
               ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M7 11V8a5 5 0 0110 0v3M5 11h14v10H5z" /></svg>
               : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>}

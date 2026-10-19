@@ -36,6 +36,7 @@ export default function Phone3D({ base, enabled, children }: { base: { x: number
     const leave = () => { hovered = false }
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('resize', remeasure)
+    const remeasureTimer = window.setInterval(remeasure, 800) // обёртка может сдвигаться (место под карточки)
     st.addEventListener('pointerenter', enter)
     st.addEventListener('pointerleave', leave)
 
@@ -60,6 +61,7 @@ export default function Phone3D({ base, enabled, children }: { base: { x: number
       cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('resize', remeasure)
+      window.clearInterval(remeasureTimer)
       st.removeEventListener('pointerenter', enter)
       st.removeEventListener('pointerleave', leave)
     }
