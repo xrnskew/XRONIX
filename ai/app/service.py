@@ -55,6 +55,34 @@ FALLBACK_QUESTIONS = QuestionsReply(
 )
 
 
+BUDGET_QUESTION = Question(**FALLBACK_QUESTIONS.questions[0].model_dump())
+
+# «Привет» в новом чате: отвечаем сразу, без модели, чтобы она не вспоминала прошлые идеи из памяти.
+GREETING = re.compile(r"^\s*(привет\w*|здравствуй\w*|добр\w+\s+(утро|день|вечер)|доброго\s+\w+|хай|салют|"
+                      r"hello|hi)\s*[!.)]*\s*$", re.I)
+GREETING_REPLY = ("Здравствуйте! Расскажите, какой бизнес хотите открыть или развить и в каком городе. "
+                  "Задам пару вопросов и соберу план с расчётом кредита.")
+
+# Пользователь назвал свои деньги: «500 тыс», «2 млн», «300000 руб», вариант ответа «до 500 тыс».
+MONEY = re.compile(r"\d[\d\s.,]*\s*(тыс|т\.\s?р|млн|миллион|руб|₽|k\b|к\b)|\d{5,}|"
+                   r"без\s+(своих\s+)?(денег|вложений)|своих\s+(денег\s+)?нет|нет\s+своих", re.I)
+BUDGET_TEXT = re.compile(r"бюджет|сколько\s+(своих\s+)?(денег|средств)|сво\w*\s+(денег|средств)|готов\w*\s+вложить|"
+                         r"стартов\w+\s+капитал|собственн\w+\s+средств", re.I)
+BUDGET_IDS = {"budget", "own_funds", "money", "investment", "investments", "capital", "funds", "start_budget"}
+
+
+def money_known(req: RespondRequest) -> bool:
+    """Свои деньги известны из профиля или из того, что пользователь написал в этом диалоге."""
+    if req.user_context.profile.budget_rub is not None:
+        return True
+    said = [req.message] + [h.content for h in req.history if h.role == "user"]
+    return any(MONEY.search(t) for t in said)
+
+
+def is_budget_question(q: Question) -> bool:
+    return (q.id in BUDGET_IDS or bool(BUDGET_TEXT.search(q.text))) and "кредит" not in q.text.lower()
+
+
 # Модель часто задаёт 2 вопроса вместо 3+. Добиваем этими: они полезны для любой идеи
 # и не пересекаются с обязательными (идея, город, деньги, опыт).
 EXTRA_QUESTIONS = [
@@ -104,7 +132,36 @@ def clean_questions(drafts) -> list:
     return out
 
 
+def fit_questions(questions: list, req: RespondRequest, rounds: int) -> list:
+    """Вопросы под ситуацию: не спрашиваем деньги, если их назвали; спрашиваем, если нет; от 3 до 6."""
+    if money_known(req):
+        questions = [q for q in questions if not is_budget_question(q)]
+    elif rounds == 0 and not any(is_budget_question(q) for q in questions):
+        questions = [BUDGET_QUESTION] + [q for q in questions if q.id != BUDGET_QUESTION.id]
+    p = req.user_context.profile
+    if p.city:
+        questions = [q for q in questions if q.id not in ("city", "location")]
+    if p.experience:
+        questions = [q for q in questions if q.id != "experience"]
+    questions = questions[:6]
+    if len(questions) < 3:
+        ids = {q.id for q in questions}
+        extra = [q for q in EXTRA_QUESTIONS if q.id not in ids][:3 - len(questions)]
+        logger.info("decide: вопросов %d, добавили %s", len(questions), [q.id for q in extra])
+        questions += extra
+    return questions
+
+
+def questions_reply(text: str, questions: list, req: RespondRequest, rounds: int) -> dict:
+    questions = fit_questions(questions, req, rounds)
+    return QuestionsReply(text=text.strip()[:300] or FALLBACK_QUESTIONS.text,
+                          questions=questions).model_dump(exclude_none=True)
+
+
 async def respond(llm: LLM, req: RespondRequest) -> dict:
+    if not req.history and GREETING.match(req.message):
+        return MessageReply(text=GREETING_REPLY).model_dump()
+
     loop = asyncio.get_running_loop()
     deadline = loop.time() + config.DEADLINE_SEC
     rounds = question_rounds(req.history)
@@ -119,7 +176,8 @@ async def respond(llm: LLM, req: RespondRequest) -> dict:
 async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
     """Готовый ответ (вопросы или сообщение) или None, если пора делать план."""
     loop = asyncio.get_running_loop()
-    fallback = FALLBACK_QUESTIONS.model_dump(exclude_none=True) if rounds == 0 else None
+    fallback = (questions_reply(FALLBACK_QUESTIONS.text, list(FALLBACK_QUESTIONS.questions), req, rounds)
+                if rounds == 0 else None)
     try:
         async with asyncio.timeout(min(DECIDE_TIMEOUT_SEC, deadline - loop.time())):
             # Со схемой Decision response_format у GigaChat отдаёт пустой ответ — только промпт.
@@ -135,18 +193,17 @@ async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
         text = decision.text.strip()[:2000] or "Расскажите, какой бизнес вы хотите открыть и в каком городе."
         return MessageReply(text=text).model_dump()
 
+    if decision.action == "plan" and rounds == 0:
+        # Капитан: сначала уточняющие вопросы, потом план — даже если профиль заполнен.
+        logger.info("decide: план на первом ходу, сначала задаём вопросы")
+        return fallback
+
     if decision.action == "questions":
         questions = clean_questions(decision.questions)
-        if 0 < len(questions) < 3:
-            ids = {q.id for q in questions}
-            extra = [q for q in EXTRA_QUESTIONS if q.id not in ids][:3 - len(questions)]
-            logger.info("decide: модель дала %d вопрос(а), добавили %s", len(questions), [q.id for q in extra])
-            questions += extra
-        if len(questions) >= 3:
-            text = decision.text.strip()[:300] or FALLBACK_QUESTIONS.text
-            return QuestionsReply(text=text, questions=questions).model_dump(exclude_none=True)
-        logger.warning("decide: модель дала %d вопрос(а), а нужно минимум 3", len(questions))
-        return fallback
+        if not questions:
+            logger.warning("decide: модель выбрала вопросы, но не дала ни одного")
+            return fallback
+        return questions_reply(decision.text, questions, req, rounds)
 
     return None
 

@@ -8,6 +8,7 @@ Optional[...] без значения по умолчанию — поле об�
 from typing import Annotated, List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic.json_schema import SkipJsonSchema
 
 Rub = Annotated[int, Field(ge=0)]
 NonEmpty = Annotated[str, Field(min_length=1)]
@@ -68,6 +69,8 @@ class Credit(_Strict):
     monthly_payment_rub: Optional[Rub]
     debt_load_percent: Optional[Annotated[int, Field(ge=0)]]
     verdict: Optional[Literal["ok", "risky", "not_recommended"]]
+    # Продукт Альфа-Банка ставит код (repair.pick_product), не модель: в схему для GigaChat не попадает.
+    recommended_product_id: SkipJsonSchema[Optional[Literal["fast", "secured", "mortgage", "revolving"]]] = None
     comment: str
 
 
