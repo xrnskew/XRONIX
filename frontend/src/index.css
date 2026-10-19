@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Onest", system-ui, sans-serif;
+  --font-display: "Unbounded", "Onest", sans-serif;
+
+  /* Презентация (светлая) */
+  --color-paper: #ffffff;
+  --color-ink: #16161a;
+  --color-mist: #f2f2f4;
+  --color-brand: #ef3124;
+  --color-brand-deep: #c9231a;
+
+  /* Кабинет (тёмный) */
+  --color-bg: #0e0e10;
+  --color-surface: #19191c;
+  --color-surface-2: #232327;
+  --color-line: #2c2c31;
+  --color-text: #f5f5f6;
+  --color-muted: #8d8d95;
+  --color-accent: #ff4538;
+  --color-ok: #3ddc84;
+  --color-warn: #ffb020;
+}
+
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: var(--font-sans); color: var(--color-ink); background: var(--color-paper); -webkit-font-smoothing: antialiased; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .25s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .rise { animation: none; } * { scroll-behavior: auto !important; } }
