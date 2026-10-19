@@ -55,9 +55,8 @@ button { font: inherit; cursor: pointer; }
 
 input[type="range"] { height: 4px; }
 
-html { scroll-snap-type: y proximity; scroll-behavior: smooth; }
-.snap { scroll-snap-align: start; }
-@media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; scroll-behavior: auto; } }
+/* Листание по слайдам делает landing/useSlides.ts (useSlideScroll). scroll-snap не используем:
+   он тянул короткие прокрутки обратно к началу слайда, и колесо казалось медленным. */
 
 @keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .caret { animation: caret 1s steps(1) infinite; }

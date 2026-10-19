@@ -4,7 +4,7 @@ import Phone3D from '../phone/Phone3D'
 import Cabinet, { type Scene } from '../phone/Cabinet'
 import ShaderBackground from './ShaderBackground'
 import Satellites, { RAIL } from './Satellites'
-import { useMediaQuery, useSlides } from './useSlides'
+import { goToSlide, useMediaQuery, useSlideScroll, useSlides } from './useSlides'
 import { USE_MOCKS, setToken } from '../api'
 import { Arch, Credit, Hero, How, Memory, PlanSlide, Problem, Team, pad } from './Slides'
 
@@ -21,12 +21,13 @@ const slides: { id: string; label: string; scene: Scene }[] = [
 const ids = slides.map((s) => s.id)
 // Базовый ракурс телефона на каждом слайде (градусы): чередуем наклон влево и вправо
 const angles = [{ x: 2, y: -12 }, { x: 0, y: 9 }, { x: -2, y: -8 }, { x: 2, y: 10 }, { x: 0, y: -9 }, { x: -2, y: 8 }, { x: 1, y: -10 }, { x: 0, y: 0 }]
-const goTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+const goTo = goToSlide
 
 export default function Landing() {
   const { current, settled } = useSlides(ids)
   const wide = useMediaQuery('(min-width: 1024px)')
   const roomy = useMediaQuery('(min-width: 1280px)')
+  useSlideScroll(ids, wide)
   const [auto, setAuto] = useState(true)
   const [cabinetKey, setCabinetKey] = useState(0)
   const [demoStep, setDemoStep] = useState(0)

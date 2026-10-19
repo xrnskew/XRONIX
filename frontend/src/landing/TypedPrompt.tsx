@@ -24,7 +24,7 @@ export default function TypedPrompt() {
   }, [])
 
   return (
-    <div className="flex h-14 max-w-[520px] items-center gap-3 rounded-full bg-white/[.07] pl-6 pr-2 ring-1 ring-white/15" role="img" aria-label={`Пример запроса: ${ideas[0]}`}>
+    <div className="flex h-14 max-w-[520px] items-center gap-3 rounded-full bg-[#161618] pl-6 pr-2 ring-1 ring-white/15 shadow-[0_18px_40px_-18px_rgba(0,0,0,.9)]" role="img" aria-label={`Пример запроса: ${ideas[0]}`}>
       <span className="min-w-0 flex-1 truncate text-[17px] text-white/90" aria-hidden>
         {text}<span className="caret ml-0.5 inline-block h-[1.1em] w-[2px] translate-y-[3px] bg-brand" />
       </span>

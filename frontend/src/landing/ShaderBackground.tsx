@@ -52,7 +52,7 @@ void main(){
   // мягкое затемнение к верху и низу
   col *= 0.82 + 0.18 * sin(uv.y * 3.14159);
 
-  col += (hash(gl_FragCoord.xy + fract(u_time) * 97.0) - 0.5) * 0.05;
+  col += (hash(gl_FragCoord.xy + fract(u_time) * 97.0) - 0.5) * 0.03;
   gl_FragColor = vec4(col, 1.0);
 }`
 

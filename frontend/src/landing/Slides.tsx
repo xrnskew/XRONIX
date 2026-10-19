@@ -7,7 +7,7 @@ import { plural, short } from '../lib/format'
 import { useCountUp } from '../lib/useCountUp'
 
 export const pad = 'px-6 sm:px-12 lg:px-16'
-const slide = `snap flex min-h-svh flex-col justify-center py-24 ${pad}`
+const slide = `flex min-h-svh flex-col justify-center py-24 ${pad}`
 const h2 = 'font-display text-[clamp(28px,3.2vw,44px)] font-semibold leading-[1.1] tracking-tight max-w-[20ch]'
 const leadCls = 'mt-6 max-w-[54ch] text-[18px] leading-relaxed text-white/70'
 
