@@ -43,7 +43,8 @@ function Shell() {
   const { status, needsOnboarding, userControlled } = useCabinet()
   const nav = useNavigate()
   // после своего входа всегда начинаем с чата, а не с экрана, на котором вышли
-  useEffect(() => { if (status === 'in' && userControlled) nav('/chat', { replace: true }) }, [status, userControlled, nav])
+  // useNavigate меняется при каждой навигации, поэтому в зависимости его не кладём
+  useEffect(() => { if (status === 'in' && userControlled) nav('/chat', { replace: true }) }, [status, userControlled]) // eslint-disable-line react-hooks/exhaustive-deps
   if (status === 'booting')
     return <div className="flex h-full items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
   if (status === 'out') return <Login />
