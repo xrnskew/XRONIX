@@ -35,6 +35,7 @@ interface Ctx {
   retry: () => Promise<void>
   newChat: () => void
   openChat: (id: string) => Promise<void>
+  deleteChat: (id: string) => Promise<void> // вместе с диалогом удаляется и его план
 
   // Автопоказ (презентация слева): телефон показывает заготовленные данные, а не настоящую сессию.
   demo: boolean
@@ -155,6 +156,12 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
     setMessages([greeting, ...c.messages.map((m): ChatMessage => (m.role === 'user' && m.reply.type === 'message' ? { id: m.id, role: 'user', text: m.reply.text } : { id: m.id, role: m.role, reply: m.reply }))])
   }
 
+  const deleteChat: Ctx['deleteChat'] = async (id) => {
+    await api.deleteChat(id)
+    if (id === chatId) newChat()
+    await reloadPlan() // если удалили диалог с текущим планом, покажется предыдущий план или пусто
+  }
+
   // ---- автопоказ: ничего не вызывает у бэкенда, только заготовленные данные ----
   const demoEnter = useCallback(() => {
     if (demoRef.current) return
@@ -191,7 +198,7 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
     skipOnboarding: () => { try { localStorage.setItem(skipKey(user?.id), '1') } catch { /* хранилище недоступно */ } setSkipped(true) },
     signIn, signUp, signOut, saveProfile,
     plan, planLoading, planError, reloadPlan,
-    chatId, messages, busy, canRetry, send, retry, newChat, openChat,
+    chatId, messages, busy, canRetry, send, retry, newChat, openChat, deleteChat,
     demo, demoAnswers, demoEnter, demoExit, playDemoChat, stopDemo,
     showDemoPlan: () => setPlan((p) => p ?? mockPlan),
   }

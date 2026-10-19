@@ -8,7 +8,7 @@ import PlanScreen from '../phone/screens/Plan'
 import Finance from '../phone/screens/Finance'
 import ProfileScreen from '../phone/screens/Profile'
 import { Logo, Wide } from '../phone/ui'
-import { api } from '../api'
+import { api, ApiError } from '../api'
 import type { ChatSummary } from '../types/plan'
 import { short } from '../lib/format'
 import { useMediaQuery } from '../landing/useSlides'
@@ -95,10 +95,13 @@ function PlanBadge() {
 }
 
 function Dialogs() {
-  const { chatId, messages, busy, openChat, newChat } = useCabinet()
+  const { chatId, messages, busy, openChat, newChat, deleteChat } = useCabinet()
   const nav = useNavigate()
   const [items, setItems] = useState<ChatSummary[] | null>(null)
   const [failed, setFailed] = useState(false)
+  const [confirm, setConfirm] = useState<string | null>(null) // id диалога, который просим подтвердить
+  const [removing, setRemoving] = useState(false)
+  const [removeError, setRemoveError] = useState<string | null>(null)
 
   // Список обновляем, когда в чате пришёл ответ: у нового диалога появляется название, у старого план
   useEffect(() => {
@@ -107,6 +110,16 @@ function Dialogs() {
   }, [chatId, messages.length, busy])
 
   const open = async (id: string) => { try { await openChat(id); nav('/chat') } catch { setFailed(true) } }
+  const remove = async (id: string) => {
+    setRemoving(true); setRemoveError(null)
+    try {
+      await deleteChat(id)
+      setItems((l) => l?.filter((c) => c.id !== id) ?? null)
+      setConfirm(null)
+    } catch (e) {
+      setRemoveError(e instanceof ApiError && e.code !== 'NETWORK' ? e.message : 'Не удалось удалить диалог. Попробуйте позже.')
+    } finally { setRemoving(false) }
+  }
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -119,12 +132,27 @@ function Dialogs() {
         {failed && <p className="px-2 py-2 text-[13px] text-accent">Не удалось загрузить диалоги.</p>}
         {!items && !failed && [0, 1, 2].map((i) => <div key={i} className="mx-1 my-1 h-9 animate-pulse rounded-lg bg-surface" aria-hidden />)}
         {items?.length === 0 && <p className="px-2 py-2 text-[13px] leading-snug text-muted">Пока пусто. Опишите идею в чате.</p>}
-        {items?.map((c) => (
-          <button key={c.id} onClick={() => open(c.id)} aria-current={c.id === chatId ? 'true' : undefined}
-            className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[14px] transition-colors ${c.id === chatId ? 'bg-surface-2 text-text' : 'text-text/75 hover:bg-surface hover:text-text'}`}>
-            <span className="min-w-0 flex-1 truncate">{c.title}</span>
-            {c.plan_id && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-ok" title="План готов" aria-label="план готов" />}
-          </button>
+        {items?.map((c) => confirm === c.id ? (
+          <div key={c.id} className="rounded-lg bg-surface-2 p-2.5" role="group" aria-label={`Удалить диалог «${c.title}»`}>
+            <p className="text-[13px] leading-snug text-text/80">Удалить «{c.title}»{c.plan_id ? ' вместе с планом' : ''}?</p>
+            {removeError && <p role="alert" className="mt-1.5 text-[12px] leading-snug text-accent">{removeError}</p>}
+            <div className="mt-2 flex gap-1.5">
+              <button onClick={() => remove(c.id)} disabled={removing || busy} className="h-8 rounded-lg bg-fill px-3 text-[13px] font-semibold text-white disabled:opacity-50">{removing ? 'Удаляем…' : 'Удалить'}</button>
+              <button onClick={() => { setConfirm(null); setRemoveError(null) }} disabled={removing} className="h-8 rounded-lg px-3 text-[13px] text-muted hover:text-text">Отмена</button>
+            </div>
+          </div>
+        ) : (
+          <div key={c.id} className={`group/row flex items-center rounded-lg transition-colors ${c.id === chatId ? 'bg-surface-2' : 'hover:bg-surface'}`}>
+            <button onClick={() => open(c.id)} aria-current={c.id === chatId ? 'true' : undefined}
+              className={`flex min-w-0 flex-1 items-center gap-2 py-2 pl-2.5 pr-1 text-left text-[14px] ${c.id === chatId ? 'text-text' : 'text-text/75 hover:text-text'}`}>
+              <span className="min-w-0 flex-1 truncate">{c.title}</span>
+              {c.plan_id && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-ok" title="План готов" aria-label="план готов" />}
+            </button>
+            <button onClick={() => { setConfirm(c.id); setRemoveError(null) }} aria-label={`Удалить диалог «${c.title}»`} title="Удалить"
+              className="mr-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition-opacity hover:bg-surface-3 hover:text-accent focus-visible:opacity-100 group-hover/row:opacity-100">
+              <Icon d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" size={16} />
+            </button>
+          </div>
         ))}
       </div>
     </div>

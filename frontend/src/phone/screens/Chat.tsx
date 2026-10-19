@@ -111,7 +111,10 @@ const IconBtn = ({ label, onClick, children }: { label: string; onClick: () => v
 )
 
 function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id: string) => Promise<void>; onNew: () => void }) {
+  const { deleteChat } = useCabinet()
   const [items, setItems] = useState<ChatSummary[] | null>(null)
+  const [confirm, setConfirm] = useState<string | null>(null)
+  const [removing, setRemoving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [opening, setOpening] = useState<string | null>(null)
   const load = () => { setError(null); setItems(null); api.listChats().then(setItems).catch((e) => setError(e instanceof ApiError ? e.message : 'Не удалось загрузить диалоги.')) }
@@ -120,6 +123,12 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
   const open = async (id: string) => {
     setOpening(id)
     try { await onOpen(id) } catch (e) { setError(e instanceof ApiError ? e.message : 'Не удалось открыть диалог.'); setOpening(null) }
+  }
+  const remove = async (id: string) => {
+    setRemoving(true); setError(null)
+    try { await deleteChat(id); setItems((l) => l?.filter((c) => c.id !== id) ?? null); setConfirm(null) }
+    catch (e) { setError(e instanceof ApiError && e.code !== 'NETWORK' ? e.message : 'Не удалось удалить диалог. Попробуйте позже.') }
+    finally { setRemoving(false) }
   }
   const date = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
 
@@ -138,14 +147,28 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
         )}
         {!items && !error && [0, 1, 2].map((i) => <div key={i} className="h-[68px] animate-pulse rounded-2xl bg-surface" aria-hidden />)}
         {items?.length === 0 && <p className="px-2 py-10 text-center text-[15px] leading-snug text-muted">Диалогов пока нет. Опишите идею бизнеса в новом диалоге.</p>}
-        {items?.map((c) => (
-          <button key={c.id} onClick={() => open(c.id)} disabled={!!opening} className="card-ring flex w-full items-center gap-3 rounded-2xl bg-surface p-3.5 text-left active:bg-surface-2 disabled:opacity-60">
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[15px] font-semibold">{c.title}</div>
-              <div className="mt-0.5 text-[12px] text-muted">{opening === c.id ? 'Открываем…' : date(c.updated_at)}</div>
+        {items?.map((c) => confirm === c.id ? (
+          <div key={c.id} className="card-ring rounded-2xl bg-surface-2 p-3.5" role="group" aria-label={`Удалить диалог «${c.title}»`}>
+            <p className="text-[14px] leading-snug">Удалить «{c.title}»{c.plan_id ? ' вместе с планом' : ''}?</p>
+            <div className="mt-2.5 flex gap-2">
+              <button onClick={() => remove(c.id)} disabled={removing} className="h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-50">{removing ? 'Удаляем…' : 'Удалить'}</button>
+              <button onClick={() => setConfirm(null)} disabled={removing} className="h-9 rounded-full px-4 text-[14px] text-muted">Отмена</button>
             </div>
-            {c.plan_id && <span className="shrink-0 rounded-full bg-ok/15 px-2.5 py-0.5 text-[12px] font-medium text-ok">План готов</span>}
-          </button>
+          </div>
+        ) : (
+          <div key={c.id} className="card-ring flex items-center rounded-2xl bg-surface">
+            <button onClick={() => open(c.id)} disabled={!!opening} className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl p-3.5 text-left active:bg-surface-2 disabled:opacity-60">
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[15px] font-semibold">{c.title}</div>
+                <div className="mt-0.5 text-[12px] text-muted">{opening === c.id ? 'Открываем…' : date(c.updated_at)}</div>
+              </div>
+              {c.plan_id && <span className="shrink-0 rounded-full bg-ok/15 px-2.5 py-0.5 text-[12px] font-medium text-ok">План готов</span>}
+            </button>
+            <button type="button" onClick={() => { setConfirm(c.id); setError(null) }} aria-label={`Удалить диалог «${c.title}»`}
+              className="mr-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted active:bg-surface-2 active:text-accent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" /></svg>
+            </button>
+          </div>
         ))}
       </div>
     </div>

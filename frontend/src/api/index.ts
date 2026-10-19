@@ -13,6 +13,7 @@ export interface Api {
   listChats(): Promise<ChatSummary[]>
   createChat(): Promise<{ chat_id: string }>
   getChat(id: string): Promise<ChatDetail>
+  deleteChat(id: string): Promise<void>
   sendMessage(chatId: string, text: string, answers?: Answer[]): Promise<AiReply>
   listPlans(): Promise<PlanSummary[]>
   getPlan(id: string): Promise<PlanRecord>
@@ -28,6 +29,7 @@ const realApi: Api = {
   listChats: () => request('GET', '/chats'),
   createChat: () => request('POST', '/chats'),
   getChat: (id) => request('GET', `/chats/${id}`),
+  deleteChat: (id) => request('DELETE', `/chats/${id}`),
   sendMessage: (chatId, text, answers) => request('POST', `/chats/${chatId}/messages`, answers?.length ? { text, answers } : { text }, AI_TIMEOUT),
   listPlans: () => request('GET', '/plans'),
   getPlan: (id) => request('GET', `/plans/${id}`),

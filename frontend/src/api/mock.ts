@@ -46,6 +46,11 @@ export const mockApi: Api = {
     if (!c) throw new ApiError('NOT_FOUND', 'Диалог не найден.', 404)
     return { id, messages: c.messages }
   },
+  async deleteChat(id) {
+    await delay(250)
+    if (!chats.delete(id)) throw new ApiError('NOT_FOUND', 'Диалог не найден.', 404)
+    for (const [pid, p] of plans) if (p.chat_id === id) plans.delete(pid)
+  },
   async sendMessage(chatId, text) {
     await delay(900)
     const c = chats.get(chatId)
