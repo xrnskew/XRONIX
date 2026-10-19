@@ -27,15 +27,14 @@ export function SectionBox({ id, className = '', children }: { id: string; class
   )
 }
 
-// Плавное появление: прозрачность, сдвиг вверх и снятие размытия
+// Плавное появление: прозрачность и сдвиг вверх. Без filter: blur, он дорогой поверх анимированного фона
 export function Reveal({ children, delay = 0, y = 22, className = '', as: Tag = 'div' }: { children: ReactNode; delay?: number; y?: number; className?: string; as?: ElementType }) {
   const on = useVisible()
   return (
     <Tag className={className} style={{
       opacity: on ? 1 : 0,
       transform: on ? 'none' : `translateY(${y}px)`,
-      filter: on ? 'none' : 'blur(6px)',
-      transition: on && !still() ? `opacity .8s ${ease} ${delay}ms, transform .8s ${ease} ${delay}ms, filter .8s ${ease} ${delay}ms` : 'none',
+      transition: on && !still() ? `opacity .8s ${ease} ${delay}ms, transform .8s ${ease} ${delay}ms` : 'none',
     }}>{children}</Tag>
   )
 }

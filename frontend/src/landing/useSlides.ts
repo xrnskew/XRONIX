@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 
 // Какой слайд сейчас в центре экрана.
-// current обновляется сразу (подпись в шапке), settled только когда прокрутка остановилась:
+// current обновляется сразу (подпись в шапке), settled только когда прокрутка остановилась.
+// setState с тем же числом React пропускает, поэтому при прокрутке внутри слайда ничего не перерисовывается.
+//
 // по нему переключаются сцены телефона, чтобы они не мелькали при быстром скролле.
 export function useSlides(ids: string[]) {
   const [current, setCurrent] = useState(0)
   const [settled, setSettled] = useState(0)
-  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     const pick = () => {
@@ -23,7 +24,6 @@ export function useSlides(ids: string[]) {
     }
     let t = 0
     const onScroll = () => {
-      setProgress(window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight))
       setCurrent(pick())
       window.clearTimeout(t)
       t = window.setTimeout(() => setSettled(pick()), 220)
@@ -36,7 +36,7 @@ export function useSlides(ids: string[]) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return { current, settled, progress }
+  return { current, settled }
 }
 
 export function useMediaQuery(q: string) {

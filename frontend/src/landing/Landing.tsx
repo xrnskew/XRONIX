@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import PhoneFrame from '../phone/PhoneFrame'
 import Phone3D from '../phone/Phone3D'
 import Cabinet, { type Scene } from '../phone/Cabinet'
@@ -35,19 +35,23 @@ export default function Landing() {
   // С настоящим бэкендом «вернуть автопоказ» выходит из аккаунта: иначе заготовка перекрыла бы чужую сессию
   const resume = () => { if (!USE_MOCKS) setToken(null); setAuto(true); setCabinetKey((k) => k + 1) }
   const live = auto && wide
+  const scene = slides[settled].scene
+  const onRealSession = useCallback(() => setAuto(false), [])
+  // Кабинет тяжёлый: пересоздаём его только когда меняется то, что он реально получает
+  const phone = useMemo(() => (
+    <PhoneFrame>
+      <Cabinet key={cabinetKey} scene={scene} auto={live} onDemoStep={setDemoStep} onRealSession={onRealSession} />
+    </PhoneFrame>
+  ), [cabinetKey, scene, live, onRealSession])
 
   return (
-    <div className="text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
+    <div className="overflow-x-clip text-white lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,42%)]">
       <ShaderBackground />
 
       <aside className="relative flex items-center justify-center px-4 py-10 lg:sticky lg:top-0 lg:order-2 lg:h-svh lg:py-0">
         <Rings />
         <div className="relative" onPointerDownCapture={takeOver} onFocusCapture={takeOver}>
-          <Phone3D base={angles[settled]} enabled={wide}>
-            <PhoneFrame>
-              <Cabinet key={cabinetKey} scene={slides[settled].scene} auto={live} onDemoStep={setDemoStep} onRealSession={() => setAuto(false)} />
-            </PhoneFrame>
-          </Phone3D>
+          <Phone3D base={angles[settled]} enabled={wide}>{phone}</Phone3D>
         </div>
       </aside>
 

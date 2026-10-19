@@ -2,14 +2,16 @@ import { useEffect, useState, type ReactNode } from 'react'
 
 const W = 414
 const H = 880
-const DEPTH = 40 // толщина корпуса в 3D, px
-const SLICES = 14
+const R = 60 // радиус скругления корпуса
+const DEPTH = 32 // толщина корпуса в 3D, px
+const SLICES = 8
 const MAX_SCALE = 0.84
 
-const flat3d = { transformStyle: 'preserve-3d' } as const
-
 // Макет iPhone. Внутри живой кабинет. Масштабируется под окно, чтобы телефон всегда влезал.
-// Корпус имеет толщину: за лицевой гранью стопка тонких слоёв, видных сбоку при наклоне (см. Phone3D).
+//
+// Устройство 3D (см. Phone3D): толщина корпуса и тень лежат ОТДЕЛЬНЫМ слоем позади, а лицевая часть
+// с экраном это одна плоская картинка (без preserve-3d внутри). Если вложить экран в 3D-сцену, Chrome
+// путается, что под курсором: поля ввода перестают ловить мышь, а курсор мигает.
 export default function PhoneFrame({ children }: { children: ReactNode }) {
   const [scale, setScale] = useState(1)
   useEffect(() => {
@@ -24,35 +26,43 @@ export default function PhoneFrame({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('resize', fit)
   }, [])
 
+  const w = W * scale
+  const h = H * scale
+  const r = R * scale
+  const d = DEPTH * scale
+
   return (
-    <div style={{ width: W * scale, height: H * scale, ...flat3d }}>
-      <div
-        className="relative origin-top-left rounded-[60px] bg-gradient-to-b from-[#3a3a40] via-[#1a1a1d] to-[#2a2a2f] p-[3px] shadow-[0_50px_90px_-20px_rgba(60,0,0,.65),0_0_0_1px_rgba(255,255,255,.08)]"
-        style={{ width: W, height: H, transform: `scale(${scale})`, ...flat3d }}
-      >
-        {/* тень под корпусом, смещается вместе с наклоном */}
-        <div className="pointer-events-none absolute inset-6 rounded-[60px] bg-black/60 blur-[34px]" style={{ transform: `translateZ(${-DEPTH - 36}px)` }} aria-hidden />
-        {/* боковая стенка */}
+    <div className="relative" style={{ width: w, height: h, transformStyle: 'preserve-3d' }}>
+      {/* корпус в глубину: тень и боковые стенки, всё некликабельное */}
+      <div className="pointer-events-none absolute inset-0" style={{ transformStyle: 'preserve-3d' }} aria-hidden>
+        <div className="absolute" style={{ inset: -40 * scale, transform: `translateZ(${-d - 30}px)`, background: 'radial-gradient(closest-side, rgba(0,0,0,.55), rgba(0,0,0,0))' }} />
         {Array.from({ length: SLICES }, (_, i) => {
           const f = (i + 1) / SLICES
-          return <div key={i} className="pointer-events-none absolute inset-0 rounded-[60px]" aria-hidden
-            style={{ transform: `translateZ(${-f * DEPTH}px)`, background: `hsl(240 5% ${30 - f * 17}%)` }} />
+          return <div key={i} className="absolute inset-0" style={{ borderRadius: r, transform: `translateZ(${-f * d}px)`, background: `hsl(240 5% ${28 - f * 15}%)` }} />
         })}
-        {/* кнопки на боковых гранях */}
-        {[[-3, 130, 32], [-3, 190, 56], [-3, 262, 56]].map(([x, y, h]) => (
-          <span key={y} className="absolute w-[3px] rounded-l bg-[#2a2a2f]" style={{ left: x, top: y, height: h, transform: `translateZ(${-DEPTH / 2}px)` }} aria-hidden />
+        {[[130, 32], [190, 56], [262, 56]].map(([y, bh]) => (
+          <span key={y} className="absolute rounded-l bg-[#2a2a2f]" style={{ left: -3 * scale, top: y * scale, width: 3 * scale, height: bh * scale, transform: `translateZ(${-d / 2}px)` }} />
         ))}
-        <span className="absolute -right-[3px] top-[210px] h-20 w-[3px] rounded-r bg-[#2a2a2f]" style={{ transform: `translateZ(${-DEPTH / 2}px)` }} aria-hidden />
+        <span className="absolute rounded-r bg-[#2a2a2f]" style={{ right: -3 * scale, top: 210 * scale, width: 3 * scale, height: 80 * scale, transform: `translateZ(${-d / 2}px)` }} />
+      </div>
 
-        <div className="relative h-full w-full rounded-[57px] bg-black p-[9px]">
-          <div className="relative h-full w-full overflow-hidden rounded-[48px] bg-bg text-text">
-            <div className="absolute left-1/2 top-[11px] z-50 h-[32px] w-[112px] -translate-x-1/2 rounded-full bg-black" aria-hidden />
-            <StatusBar />
-            <div className="absolute inset-0 pt-[54px]">{children}</div>
-            <div className="pointer-events-none absolute bottom-[8px] left-1/2 z-50 h-[5px] w-[134px] -translate-x-1/2 rounded-full bg-white/80" aria-hidden />
-            {/* блик на стекле: положение задаёт Phone3D через --glare */}
-            <div className="pointer-events-none absolute inset-0 z-[60] rounded-[48px]" aria-hidden
-              style={{ background: 'linear-gradient(115deg, rgba(255,255,255,0) calc(var(--glare, 50) * 1% - 22%), rgba(255,255,255,.13) calc(var(--glare, 50) * 1%), rgba(255,255,255,0) calc(var(--glare, 50) * 1% + 22%))' }} />
+      {/* лицевая часть: плоская, translateZ(1px) ставит её строго перед корпусом */}
+      <div className="absolute inset-0" style={{ transform: 'translateZ(1px)' }}>
+        <div
+          className="relative origin-top-left rounded-[60px] bg-gradient-to-b from-[#3a3a40] via-[#1a1a1d] to-[#2a2a2f] p-[3px] shadow-[0_50px_90px_-20px_rgba(60,0,0,.55),0_0_0_1px_rgba(255,255,255,.08)]"
+          style={{ width: W, height: H, transform: `scale(${scale})` }}
+        >
+          <div className="relative h-full w-full rounded-[57px] bg-black p-[9px]">
+            <div className="relative h-full w-full overflow-hidden rounded-[48px] bg-bg text-text">
+              <div className="absolute left-1/2 top-[11px] z-50 h-[32px] w-[112px] -translate-x-1/2 rounded-full bg-black" aria-hidden />
+              <StatusBar />
+              <div className="absolute inset-0 pt-[54px]">{children}</div>
+              <div className="pointer-events-none absolute bottom-[8px] left-1/2 z-50 h-[5px] w-[134px] -translate-x-1/2 rounded-full bg-white/80" aria-hidden />
+              {/* блик на стекле: широкая полоса, Phone3D сдвигает её transform-ом (дёшево, без перерисовки экрана) */}
+              <div className="pointer-events-none absolute inset-0 z-[60] overflow-hidden rounded-[48px]" aria-hidden>
+                <div data-glare className="absolute inset-y-0 -left-full w-[300%]" style={{ background: 'linear-gradient(115deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.12) 50%, rgba(255,255,255,0) 58%)' }} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

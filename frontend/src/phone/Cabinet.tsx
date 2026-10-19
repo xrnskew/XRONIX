@@ -96,7 +96,7 @@ function Shell() {
           <Route path="*" element={<Navigate to="/chat" replace />} />
         </Routes>
       </main>
-      <nav className="mx-3 mb-6 grid grid-cols-4 rounded-[26px] bg-surface-2/90 p-1.5 shadow-[0_10px_30px_-10px_rgba(0,0,0,.8)] ring-1 ring-white/5 backdrop-blur" aria-label="Разделы кабинета">
+      <nav className="mx-3 mb-6 grid grid-cols-4 rounded-[26px] bg-surface-2/90 p-1.5 shadow-[0_10px_30px_-10px_rgba(0,0,0,.8)] ring-1 ring-white/5" aria-label="Разделы кабинета">
         {tabs.map((t) => (
           <NavLink key={t.to} to={t.to} className={({ isActive }) => `flex min-h-[50px] flex-col items-center justify-center gap-0.5 rounded-[20px] text-[11px] font-medium transition-colors ${isActive ? 'bg-fill text-white' : 'text-muted'}`}>
             <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={t.d} /></svg>

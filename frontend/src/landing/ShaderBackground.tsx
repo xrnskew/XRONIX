@@ -88,7 +88,7 @@ export default function ShaderBackground() {
     const uScroll = gl.getUniformLocation(prog, 'u_scroll')
 
     const resize = () => {
-      const k = Math.min(window.devicePixelRatio || 1, 1.5) * 0.7
+      const k = Math.min(window.devicePixelRatio || 1, 1.5) * 0.5 // фон размытый по природе, полное разрешение не нужно
       canvas.width = Math.max(2, Math.round(window.innerWidth * k))
       canvas.height = Math.max(2, Math.round(window.innerHeight * k))
       gl.viewport(0, 0, canvas.width, canvas.height)
@@ -100,14 +100,17 @@ export default function ShaderBackground() {
     const t0 = performance.now()
     let raf = 0
     let scroll = 0 // сглаженная прокрутка
+    let lastFrame = 0
     const draw = (now: number) => {
+      if (!still) raf = requestAnimationFrame(draw)
+      if (now - lastFrame < 32) return // ~30 кадров в секунду: фон медленный, чаще незаметно
+      lastFrame = now
       const target = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
       scroll += (target - scroll) * (still ? 1 : 0.06)
       gl.uniform2f(uRes, canvas.width, canvas.height)
       gl.uniform1f(uScroll, scroll)
       gl.uniform1f(uTime, still ? 8 : (now - t0) / 1000 + 8)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
-      if (!still) raf = requestAnimationFrame(draw)
     }
     raf = requestAnimationFrame(draw)
 
