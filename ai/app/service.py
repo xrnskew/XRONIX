@@ -81,11 +81,16 @@ def is_budget_question(q: Question) -> bool:
     return (q.id in BUDGET_IDS or bool(BUDGET_TEXT.search(q.text))) and "кредит" not in q.text.lower()
 
 
+# Про готовность брать кредит не спрашиваем: если своих денег не хватает, план всё равно
+# считает кредит (repair), и ответ «нет» пользователь бы видел проигнорированным.
+CREDIT_QUESTION = re.compile(r"кредит|за[её]м|в долг|заимств", re.I)
+
+
 # Модель часто задаёт 2 вопроса вместо 3+. Добиваем этими: они полезны для любой идеи
 # и не пересекаются с обязательными (идея, город, деньги, опыт).
 EXTRA_QUESTIONS = [
-    Question(id="loan_ready", text="Готовы взять кредит, если своих денег не хватит?", kind="choice",
-             options=["Да", "Только небольшой", "Нет"]),
+    Question(id="clients", text="Как планируете привлекать клиентов?", kind="choice",
+             options=["Проходимое место", "Соцсети и карты", "Знакомые и рекомендации"]),
     Question(id="premises", text="Есть ли уже помещение или точка?", kind="choice",
              options=["Да, есть", "Ищу", "Не нужно, работаю онлайн"]),
     Question(id="launch", text="Когда хотите запуститься?", kind="choice",
@@ -132,6 +137,7 @@ def clean_questions(drafts) -> list:
 
 def fit_questions(questions: list, req: RespondRequest, rounds: int) -> list:
     """Вопросы под ситуацию: не спрашиваем деньги, если их назвали; спрашиваем, если нет; от 3 до 6."""
+    questions = [q for q in questions if not CREDIT_QUESTION.search(q.text) and q.id != "loan_ready"]
     if money_known(req):
         questions = [q for q in questions if not is_budget_question(q)]
     elif rounds == 0 and not any(is_budget_question(q) for q in questions):

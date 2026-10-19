@@ -133,6 +133,18 @@ def sentence_case(text, city_re=None):
     return re.sub(r"(^|[.!?]\s+)([а-яёa-z])", upper_after, text)
 
 
+# Города России с метро. В остальных модель всё равно пишет «у метро», если так сказал пользователь.
+METRO_CITIES = {"москва", "санкт-петербург", "нижний новгород", "новосибирск", "самара", "екатеринбург", "казань"}
+NEAR_METRO = re.compile(r"(?<!\w)(у|возле|рядом с|около|недалеко от|близ)\s+(станци\w+\s+)?метро(?!\w)", re.I)
+
+
+def drop_metro(text, city):
+    """«Кофейня у метро» в Южно-Сахалинске -> «Кофейня в проходимом месте»."""
+    if not isinstance(text, str) or not city or city.strip().lower() in METRO_CITIES:
+        return text
+    return NEAR_METRO.sub("в проходимом месте", text)
+
+
 # Общие теги, которые ничего не говорят о человеке.
 STOP_TAGS = {"старт", "стартап", "центр", "опыт", "бизнес", "малый бизнес", "маленький бизнес", "начало бизнеса",
              "новый бизнес", "бизнес идея", "идея", "кредит", "кредитование", "инвестиции", "развитие",
@@ -277,10 +289,11 @@ def repair_plan(data: dict) -> tuple:
 
     def fix_text(obj, key):
         if isinstance(obj, dict) and isinstance(obj.get(key), str):
-            new = sentence_case(obj[key], city_re)
+            no_metro = drop_metro(obj[key], city)
+            new = sentence_case(no_metro, city_re)
             if new != obj[key]:
+                fixed.append("метро в городе без метро" if no_metro != obj[key] else "заглавные буквы")
                 obj[key] = new
-                fixed.append("заглавные буквы")
 
     for key in ("title", "summary"):
         fix_text(p, key)
