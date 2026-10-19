@@ -12,7 +12,7 @@ const now = () => new Date().toISOString()
 interface MockChat extends ChatSummary { messages: ChatMessageDto[]; step: number }
 const chats = new Map<string, MockChat>()
 const plans = new Map<string, PlanRecord>()
-let user: Profile = { ...mockProfile, id: 'u_demo' }
+let user: Profile = { id: 'u_mock', name: '', email: '', city: null, experience: null, budget_rub: null, tags: [] }
 
 const session = () => { setToken('mock-token'); return { token: 'mock-token', user } }
 
@@ -24,7 +24,7 @@ export const mockApi: Api = {
   },
   async login({ email }) {
     await delay()
-    user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { ...user, email, name: user.name || email.split('@')[0] }
+    user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
     return session()
   },
   async getMe() { await delay(150); return user },
@@ -63,11 +63,15 @@ export const mockApi: Api = {
     if (c.step === 1) reply = mockQuestions
     else {
       const plan_id = uid()
-      plans.set(plan_id, { plan_id, chat_id: chatId, created_at: now(), plan: mockPlan })
+      const plan = structuredClone(mockPlan)
+      plan.business.city = user.city?.trim() || 'Город не указан'
+      plan.tags_update = plan.tags_update.filter((tag) => tag !== mockPlan.business.city)
+      if (user.city) plan.tags_update.push(user.city)
+      plans.set(plan_id, { plan_id, chat_id: chatId, created_at: now(), plan })
       c.plan_id = plan_id
       c.title = mockPlan.title
       c.step = 0
-      reply = { type: 'plan', text: 'План готов', plan_id, plan: mockPlan }
+      reply = { type: 'plan', text: 'План готов', plan_id, plan }
     }
     c.messages.push({ id: uid(), role: 'assistant', created_at: now(), reply })
     c.updated_at = now()

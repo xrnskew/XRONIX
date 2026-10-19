@@ -93,7 +93,7 @@ export default function Landing() {
               title={!auto && !USE_MOCKS ? 'Выйдет из вашего аккаунта на сайте' : undefined}
               className="flex h-9 shrink-0 items-center gap-2 rounded-full px-4 text-[13px] font-medium ring-1 ring-white/20 transition-colors hover:bg-white/10 sm:ml-0">
               <span className={`h-2 w-2 rounded-full ${auto ? 'bg-ok' : 'bg-white/40'}`} aria-hidden />
-              {auto ? 'Автопоказ идёт' : 'Вернуть автопоказ'}
+              {auto ? 'Пример · автопоказ' : 'Вернуть автопоказ'}
             </button>
           )}
           </div>
@@ -124,7 +124,7 @@ function TryHint({ onClick, k }: { onClick: () => void; k: number }) {
         <span className="ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-70" />
         <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent" />
       </span>
-      Живой кабинет: нажмите и попробуйте
+      Пример данных · Попробовать самому
     </button>
   )
 }

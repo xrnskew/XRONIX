@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button, Chip, Logo } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError } from '../../api'
+import CityPicker from '../components/CityPicker'
 
 const spheres = ['Общепит', 'Розница', 'Услуги', 'Производство', 'IT', 'Другое']
 const experience = ['Новичок', '1–3 года', 'Больше 3 лет']
@@ -9,7 +10,7 @@ const budgets: [string, number][] = [['до 500 тыс', 300_000], ['500 тыс 
 
 export default function Onboarding() {
   const { user, saveProfile, skipOnboarding } = useCabinet()
-  const [city, setCity] = useState('')
+  const [city, setCity] = useState(user?.city ?? '')
   const [sphere, setSphere] = useState<string | null>(null)
   const [exp, setExp] = useState<string | null>(null)
   const [budget, setBudget] = useState<number | null>(null)
@@ -41,11 +42,7 @@ export default function Onboarding() {
       <p className="mt-1 text-[14px] leading-snug text-muted">ИИ учтёт это в плане и подборе кредита. Всё можно изменить в профиле.</p>
 
       <div className="mt-5 space-y-5">
-        <div>
-          <label htmlFor="city" className="mb-1.5 block text-[14px] font-semibold">Город</label>
-          <input id="city" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Например, Москва" autoComplete="address-level2"
-            className="h-12 w-full rounded-xl bg-surface px-3.5 text-[15px] outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent" />
-        </div>
+        <CityPicker value={city} onChange={setCity} />
         <Group title="Сфера" items={spheres.map((s) => [s, s === sphere])} onPick={(s) => setSphere(s === sphere ? null : s)} />
         <Group title="Опыт в бизнесе" items={experience.map((s) => [s, s === exp])} onPick={(s) => setExp(s === exp ? null : s)} />
         <Group title="Стартовый бюджет" items={budgets.map(([l, v]) => [l, v === budget])} onPick={(l) => { const v = budgets.find(([x]) => x === l)![1]; setBudget(v === budget ? null : v) }} />

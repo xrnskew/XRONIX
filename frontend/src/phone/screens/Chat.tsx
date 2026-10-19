@@ -5,6 +5,7 @@ import type { AiReply, Answer, ChatSummary, Question } from '../../types/plan'
 import { Chip, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
+import CityPicker from '../components/CityPicker'
 
 const starters = ['Кофейня у метро', 'Пекарня', 'Автомойка', 'Магазин одежды']
 const starterHints: Record<string, string> = {
@@ -15,7 +16,11 @@ const starterHints: Record<string, string> = {
 }
 
 export default function Chat() {
-  const { messages, busy, canRetry, send, retry, newChat, openChat, demoAnswers } = useCabinet()
+  const { messages, busy, canRetry, send, retry, newChat, openChat, demoAnswers, user, saveProfile, demo } = useCabinet()
+  const [cityDraft, setCityDraft] = useState('')
+  const [citySaving, setCitySaving] = useState(false)
+  const [cityError, setCityError] = useState('')
+  const needsCity = !demo && !!user && !user.city?.trim()
   const [view, setView] = useState<'chat' | 'list'>('chat')
   const [text, setText] = useState('')
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -28,7 +33,18 @@ export default function Chat() {
 
   if (view === 'list') return <ChatList onClose={() => setView('chat')} onOpen={async (id) => { await openChat(id); setView('chat') }} onNew={() => { newChat(); setView('chat') }} />
 
-  const submit = (t: string, ans?: Answer[]) => { if (!t.trim() || busy) return; setText(''); send(t, ans) }
+  const submit = (t: string, ans?: Answer[]) => {
+    if (!t.trim() || busy) return
+    if (needsCity) { setText(t); setCityError('Сначала выберите город для расчёта.'); return }
+    setText(''); send(t, ans)
+  }
+  const chooseCity = async (city: string) => {
+    if (!city.trim() || citySaving) return
+    setCitySaving(true); setCityError('')
+    try { await saveProfile({ city: city.trim() }) }
+    catch (e) { setCityError(e instanceof ApiError ? e.message : 'Не удалось сохранить город. Попробуйте ещё раз.') }
+    finally { setCitySaving(false) }
+  }
   const submitAnswers = (qs: Question[]) => {
     submit(qs.map((q) => `${q.text} ${answers[q.id] ?? '—'}`).join('\n'), qs.map((q) => ({ question_id: q.id, answer: answers[q.id] ?? '' })))
     setAnswers({})
@@ -46,6 +62,16 @@ export default function Chat() {
         <IconBtn label="Новый диалог" onClick={() => { newChat(); setAnswers({}) }}><path d="M12 5v14M5 12h14" /></IconBtn>
         {!wide && <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>}
       </header>
+
+      {needsCity && <div className={`${wide ? 'px-8' : 'px-4'} max-h-[50%] overflow-y-auto overscroll-contain pb-3`}>
+        <div className="rounded-2xl bg-surface p-4 ring-1 ring-white/10">
+          <p className="mb-3 text-[13px] text-muted">Выберите город: от него зависят аренда, спрос и расчёты плана.</p>
+          <CityPicker value={cityDraft} onChange={setCityDraft} onSelect={chooseCity} disabled={citySaving} />
+          <button type="button" onClick={() => chooseCity(cityDraft)} disabled={!cityDraft.trim() || citySaving}
+            className="mt-3 h-10 rounded-xl bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-35">{citySaving ? 'Сохраняем…' : 'Выбрать город'}</button>
+          {cityError && <p role="alert" className="mt-2 text-[13px] text-accent">{cityError}</p>}
+        </div>
+      </div>}
 
       <div ref={list} className={`flex-1 space-y-3 overflow-y-auto overscroll-contain pb-3 ${wide ? 'thin-scroll px-8 pt-5' : 'no-scrollbar px-4'}`} aria-live="polite">
         {wide && messages.length === 1 && !busy && (
@@ -207,6 +233,8 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen }: {
             <div className="flex flex-wrap gap-1.5">
               {q.options?.map((o) => <Chip key={o} active={answers[q.id] === o} onClick={() => setAnswers({ ...answers, [q.id]: o })}>{o}</Chip>)}
             </div>
+          ) : /city|location|town/i.test(q.id) || /город|насел[её]нн.{0,5}пункт/i.test(q.text) ? (
+            <CityPicker label={q.text} value={answers[q.id] ?? ''} onChange={(value) => setAnswers({ ...answers, [q.id]: value })} />
           ) : (
             <input aria-label={q.text} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
               className="h-11 w-full rounded-xl bg-surface-2 px-3 text-[15px] outline-none focus:ring-2 focus:ring-accent" placeholder="Ваш ответ" />

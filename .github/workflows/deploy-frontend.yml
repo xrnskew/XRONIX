@@ -27,6 +27,11 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
         working-directory: frontend
+      - name: Refresh official Alfa-Bank terms (keep last checked snapshot on failure)
+        run: python3 scripts/refresh_alfa.py --allow-cached
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend
       - run: npm run build
         working-directory: frontend
         env:

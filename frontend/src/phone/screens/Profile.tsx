@@ -2,6 +2,8 @@ import { useContext, useState } from 'react'
 import { Card, Chip, Screen, SectionTitle, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError } from '../../api'
+import CityPicker from '../components/CityPicker'
+import { normalizeCity } from '../../data/cities'
 
 const field = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text outline-none ring-1 ring-white/5 focus:ring-2 focus:ring-accent'
 
@@ -25,7 +27,11 @@ export default function ProfileScreen() {
     const budget = draft.budget.replace(/\s/g, '')
     if (budget && !/^\d+$/.test(budget)) return setState({ kind: 'error', text: 'Бюджет укажите числом в рублях, например 500000.' })
     if (!draft.name.trim()) return setState({ kind: 'error', text: 'Имя не может быть пустым.' })
-    run({ name: draft.name.trim(), city: draft.city.trim() || null, experience: draft.experience.trim() || null, budget_rub: budget ? Number(budget) : null })
+    const city = draft.city.trim() || null
+    const tags = city !== user.city
+      ? [...new Set([...user.tags.filter((t) => !user.city || normalizeCity(t) !== normalizeCity(user.city)), ...(city ? [city] : [])])].slice(0, 12)
+      : user.tags
+    run({ name: draft.name.trim(), city, experience: draft.experience.trim() || null, budget_rub: budget ? Number(budget) : null, tags })
   }
   const addTag = () => {
     const t = tag.trim().slice(0, 30)
@@ -52,7 +58,7 @@ export default function ProfileScreen() {
         </div>
         <div className={`mt-4 ${wide ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'space-y-3'}`}>
           <Field label="Имя" value={draft.name} onChange={(v) => set('name', v)} />
-          <Field label="Город" value={draft.city} onChange={(v) => set('city', v)} />
+          <CityPicker value={draft.city} onChange={(v) => set('city', v)} />
           <Field label="Опыт" value={draft.experience} onChange={(v) => set('experience', v)} />
           <Field label="Стартовый бюджет, ₽" value={draft.budget} onChange={(v) => set('budget', v)} inputMode="numeric" />
         </div>
