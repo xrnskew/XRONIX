@@ -9,14 +9,15 @@ import { rub } from '../../lib/format'
 const starters = ['Кофейня у метро', 'Пекарня', 'Автомойка', 'Магазин одежды']
 
 export default function Chat() {
-  const { messages, busy, canRetry, send, retry, newChat, openChat } = useCabinet()
+  const { messages, busy, canRetry, send, retry, newChat, openChat, demoAnswers } = useCabinet()
   const [view, setView] = useState<'chat' | 'list'>('chat')
   const [text, setText] = useState('')
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const end = useRef<HTMLDivElement>(null)
+  const list = useRef<HTMLDivElement>(null)
   const nav = useNavigate()
 
-  useEffect(() => { if (view === 'chat') end.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, busy, view])
+  // Прокручиваем только сам список сообщений. scrollIntoView здесь нельзя: он двигает и страницу с презентацией.
+  useEffect(() => { if (view === 'chat') list.current?.scrollTo({ top: list.current.scrollHeight, behavior: 'smooth' }) }, [messages, busy, view])
 
   if (view === 'list') return <ChatList onClose={() => setView('chat')} onOpen={async (id) => { await openChat(id); setView('chat') }} onNew={() => { newChat(); setView('chat') }} />
 
@@ -39,16 +40,16 @@ export default function Chat() {
         <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>
       </header>
 
-      <div className="no-scrollbar flex-1 space-y-3 overflow-y-auto px-4 pb-3" aria-live="polite">
+      <div ref={list} className="no-scrollbar flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-3" aria-live="polite">
         {messages.map((m) => (
           <div key={m.id} className={`rise flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[88%] whitespace-pre-line px-4 py-3 text-[15px] leading-snug ${
-              m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-accent text-white'
+              m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
-              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={answers} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => nav('/plan')} />}
+              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={demoAnswers ?? answers} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => nav('/plan')} />}
               {m.error && canRetry && m === last && (
-                <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-accent px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
+                <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
               )}
             </div>
           </div>
@@ -65,14 +66,13 @@ export default function Chat() {
             </div>
           </div>
         )}
-        <div ref={end} />
       </div>
 
       <form className="flex items-center gap-2 px-3 pb-2 pt-2" onSubmit={(e) => { e.preventDefault(); submit(text) }}>
         <label className="sr-only" htmlFor="msg">Сообщение</label>
         <input id="msg" value={text} onChange={(e) => setText(e.target.value)} placeholder="Хочу открыть кофейню у метро" maxLength={4000}
           className="h-12 min-w-0 flex-1 rounded-full bg-surface px-5 text-[15px] outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent" />
-        <button aria-label="Отправить" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35" disabled={busy || !text.trim()}>
+        <button aria-label="Отправить" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-fill text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35" disabled={busy || !text.trim()}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 19V5M5 12l7-7 7 7" /></svg>
         </button>
       </form>
@@ -105,11 +105,11 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
         <IconBtn label="Назад к чату" onClick={onClose}><path d="M15 5l-7 7 7 7" /></IconBtn>
         <h1 className="flex-1 text-[22px] font-bold tracking-tight">Диалоги</h1>
       </header>
-      <div className="no-scrollbar flex-1 space-y-2 overflow-y-auto px-4 pb-4">
-        <button onClick={onNew} className="flex h-12 w-full items-center justify-center rounded-2xl bg-accent text-[15px] font-semibold text-white active:bg-brand-deep">Новый диалог</button>
+      <div className="no-scrollbar flex-1 space-y-2 overflow-y-auto overscroll-contain px-4 pb-4">
+        <button onClick={onNew} className="flex h-12 w-full items-center justify-center rounded-2xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Новый диалог</button>
         {error && (
           <div role="alert" className="rounded-2xl bg-accent/12 p-3.5 text-[14px] leading-snug text-accent">
-            {error}<button onClick={load} className="mt-2 block h-9 rounded-full bg-accent px-4 text-[14px] font-semibold text-white">Повторить</button>
+            {error}<button onClick={load} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white">Повторить</button>
           </div>
         )}
         {!items && !error && [0, 1, 2].map((i) => <div key={i} className="h-[68px] animate-pulse rounded-2xl bg-surface" aria-hidden />)}
@@ -146,7 +146,7 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen }: {
           <div><div className="text-[12px] text-muted">Нужно на старт</div><div className="font-semibold tabular-nums">{rub(reply.plan.finance.startup_cost_rub)}</div></div>
           <div><div className="text-[12px] text-muted">Окупаемость</div><div className="font-semibold">{reply.plan.finance.payback_months ?? '—'} мес.</div></div>
         </div>
-        <button onClick={onOpen} className="h-11 w-full rounded-xl bg-accent text-[15px] font-semibold text-white active:bg-brand-deep">Открыть план</button>
+        <button onClick={onOpen} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Открыть план</button>
       </div>
     )
   const done = reply.questions.every((q) => answers[q.id]?.trim())
@@ -166,7 +166,7 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen }: {
           )}
         </div>
       ))}
-      {active && <button disabled={!done} onClick={() => onSubmit(reply.questions)} className="h-11 w-full rounded-xl bg-accent text-[15px] font-semibold text-white transition-opacity disabled:opacity-35">Ответить</button>}
+      {active && <button disabled={!done} onClick={() => onSubmit(reply.questions)} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white transition-opacity disabled:opacity-35">Ответить</button>}
     </fieldset>
   )
 }

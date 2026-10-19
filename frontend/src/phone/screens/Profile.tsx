@@ -37,7 +37,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen title="Профиль">
-      <Card>
+      <Card delay={0}>
         <div className="flex items-center gap-3.5">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#ff6a5c] to-[#d12419] text-[22px] font-bold" aria-hidden>{user.name[0]?.toUpperCase()}</div>
           <div className="min-w-0">
@@ -56,14 +56,14 @@ export default function ProfileScreen() {
           <Field label="Стартовый бюджет, ₽" value={draft.budget} onChange={(v) => set('budget', v)} inputMode="numeric" />
         </div>
         <div className="mt-4 flex items-center gap-3">
-          <button onClick={save} disabled={!dirty || state.kind === 'saving'} className="h-11 rounded-xl bg-accent px-5 text-[14px] font-semibold text-white transition-opacity disabled:opacity-35">
+          <button onClick={save} disabled={!dirty || state.kind === 'saving'} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white transition-opacity disabled:opacity-35">
             {state.kind === 'saving' ? 'Сохраняем…' : 'Сохранить'}
           </button>
           <span role="status" className={`text-[13px] ${state.kind === 'error' ? 'text-accent' : 'text-ok'}`}>{state.kind === 'saved' ? 'Сохранено' : state.kind === 'error' ? state.text : ''}</span>
         </div>
       </Card>
 
-      <Card>
+      <Card id="profile-tags" delay={1}>
         <SectionTitle>Что ИИ знает о вас</SectionTitle>
         <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Теги учитываются в каждом ответе. Нажмите на тег, чтобы удалить, или добавьте свой.</p>
         {user.tags.length === 0 && <p className="mb-3 text-[13px] text-muted">Тегов пока нет. После первого плана ИИ добавит их сам.</p>}

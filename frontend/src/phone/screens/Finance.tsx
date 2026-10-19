@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
 import { useCabinet } from '../CabinetContext'
@@ -63,7 +63,7 @@ export default function Finance() {
 
   return (
     <Screen title="Финансы и кредит">
-      <Card>
+      <Card delay={0}>
         <SectionTitle>Откуда взять {short(f.startup_cost_rub)} ₽</SectionTitle>
         <div className="flex h-3 overflow-hidden rounded-full bg-surface-3" role="img" aria-label={`Свои средства ${ownShare}%, не хватает ${100 - ownShare}%`}>
           <div className="bg-ok" style={{ width: `${ownShare}%` }} />
@@ -75,7 +75,7 @@ export default function Finance() {
         </div>
       </Card>
 
-      <Card className="flex items-center gap-4">
+      <Card className="flex items-center gap-4" delay={1}>
         <Gauge value={load} tone={loadTone(load)} />
         <div className="min-w-0">
           <Badge tone={v.tone}>{v.text}</Badge>
@@ -83,7 +83,7 @@ export default function Finance() {
         </div>
       </Card>
 
-      <Card className="space-y-4">
+      <Card className="space-y-4" id="credit-calc" delay={2}>
         <SectionTitle>Калькулятор платежа</SectionTitle>
         <Slider label="Сумма" value={amount} min={100000} max={5000000} step={50000} onChange={setAmount} display={rub(amount)} />
         <Slider label="Срок" value={months} min={6} max={60} step={6} onChange={setMonths} display={`${months} мес.`} />
@@ -95,7 +95,7 @@ export default function Finance() {
         <p className="text-[12px] leading-snug text-muted">Нагрузка — доля платежа в ожидаемой прибыли. Итоговый расчёт делает сервер.</p>
       </Card>
 
-      <Card>
+      <Card id="alfa-products" delay={3}>
         <SectionTitle>Кредиты Альфа-Банка для бизнеса</SectionTitle>
         <ul className="space-y-3">
           {matches.map(({ product: p, fits, reasons }) => (
@@ -128,7 +128,9 @@ export default function Finance() {
 function Gauge({ value, tone }: { value: number; tone: 'ok' | 'warn' | 'bad' }) {
   const r = 36
   const circ = 2 * Math.PI * r
-  const pct = Math.min(value, 100) / 100
+  const [shown, setShown] = useState(0)
+  useEffect(() => { const r = requestAnimationFrame(() => setShown(value)); return () => cancelAnimationFrame(r) }, [value])
+  const pct = Math.min(shown, 100) / 100
   return (
     <div className="relative h-[96px] w-[96px] shrink-0" role="img" aria-label={`Долговая нагрузка ${value}%`}>
       <svg viewBox="0 0 96 96" className="-rotate-90">

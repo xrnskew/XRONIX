@@ -35,7 +35,7 @@ export default function Onboarding() {
   }
 
   return (
-    <form className="no-scrollbar flex h-full flex-col overflow-y-auto px-6 pb-8 pt-4" onSubmit={submit}>
+    <form className="no-scrollbar flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-4" onSubmit={submit}>
       <Logo size={44} />
       <h1 className="mt-4 text-[26px] font-bold leading-tight tracking-tight">Расскажите о себе</h1>
       <p className="mt-1 text-[14px] leading-snug text-muted">ИИ учтёт это в плане и подборе кредита. Всё можно изменить в профиле.</p>

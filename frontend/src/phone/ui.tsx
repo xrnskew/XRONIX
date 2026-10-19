@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 
-export const Card = ({ children, className = '' }: { children: ReactNode; className?: string }) => (
-  <div className={`card-ring rounded-[22px] bg-surface p-4 ${className}`}>{children}</div>
+// delay: порядковый номер для каскадного появления карточек при открытии экрана
+export const Card = ({ children, className = '', id, delay }: { children: ReactNode; className?: string; id?: string; delay?: number }) => (
+  <div id={id} className={`card-ring rounded-[22px] bg-surface p-4 ${delay === undefined ? '' : 'rise'} ${className}`} style={delay === undefined ? undefined : { animationDelay: `${delay * 70}ms` }}>{children}</div>
 )
 
 export const Screen = ({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) => (
@@ -10,7 +11,7 @@ export const Screen = ({ title, sub, children }: { title: string; sub?: string; 
       <h1 className="text-[26px] font-bold leading-tight tracking-tight">{title}</h1>
       {sub && <p className="mt-0.5 text-[14px] text-muted">{sub}</p>}
     </div>
-    <div className="no-scrollbar flex-1 space-y-3 overflow-y-auto px-4 pb-8">{children}</div>
+    <div data-phone-scroll className="no-scrollbar relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-8">{children}</div>
   </div>
 )
 
@@ -30,7 +31,7 @@ export const Button = ({ children, onClick, variant = 'primary', disabled }: { c
     onClick={onClick}
     disabled={disabled}
     className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] disabled:opacity-40 ${
-      variant === 'primary' ? 'bg-accent text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep' : 'bg-surface-2 text-text active:bg-surface-3'
+      variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep' : 'bg-surface-2 text-text active:bg-surface-3'
     }`}
   >
     {children}
@@ -42,7 +43,7 @@ export const Chip = ({ children, onClick, active }: { children: ReactNode; onCli
     type="button"
     onClick={onClick}
     aria-pressed={active}
-    className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${active ? 'bg-accent text-white' : 'bg-surface-2 text-text active:bg-surface-3'}`}
+    className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${active ? 'bg-fill text-white' : 'bg-surface-2 text-text active:bg-surface-3'}`}
   >
     {children}
   </button>

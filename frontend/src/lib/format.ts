@@ -16,3 +16,11 @@ export function shortParts(n: number): { value: string; unit: string } {
   if (n >= 1000) return { value: String(Math.round(n / 1000)), unit: 'тыс ₽' }
   return { value: String(n), unit: '₽' }
 }
+
+// Русское склонение: plural(3, ['шаг', 'шага', 'шагов']) -> 'шага'
+export function plural(n: number, forms: [string, string, string]) {
+  const a = Math.abs(n) % 100, b = a % 10
+  if (a > 10 && a < 20) return forms[2]
+  if (b > 1 && b < 5) return forms[1]
+  return b === 1 ? forms[0] : forms[2]
+}
