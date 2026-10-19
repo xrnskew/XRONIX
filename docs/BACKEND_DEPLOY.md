@@ -2,46 +2,85 @@
 
 Фронт живёт на GitHub Pages (`https://xronix.ru`), бэкенд отдельно в Яндекс Облаке на `https://api.xronix.ru`. Две вещи обязательны, иначе кабинет не сможет обращаться к API.
 
-## 1. HTTPS обязателен
-Сайт на HTTPS не может ходить на `http://`: браузер блокирует такие запросы (mixed content). Нужен сертификат на `api.xronix.ru`.
+## 1. Сервер в Яндекс Облаке (без Docker)
 
-Самый простой путь: одна ВМ в Яндекс Облаке (Compute Cloud, Ubuntu) и **Caddy** перед бэкендом. Caddy сам получает и продлевает сертификат Let's Encrypt.
+### Что делает Саша в консоли Яндекс Облака
+1. **Compute Cloud → Виртуальные машины → Создать ВМ.**
+   - Образ: **Ubuntu 24.04 LTS** (в ней сразу Python 3.12, которого требует бэкенд).
+   - Зона доступности любая, например `ru-central1-a`.
+   - Ресурсы для хакатона: 2 vCPU, 4 ГБ RAM, гарантированная доля vCPU 100 %, диск SSD 20 ГБ.
+   - **«Прерываемая» не включать**: такая ВМ выключается раз в сутки и может упасть посреди защиты.
+   - Сеть: публичный IP **автоматически**.
+   - Доступ: логин `ilya`, в поле SSH-ключа вставить **публичный** ключ Ильи (строка из `~/.ssh/id_ed25519.pub`, начинается с `ssh-ed25519`). Приватный ключ никому не передаётся.
+2. **Сделать IP постоянным:** Virtual Private Cloud → IP-адреса → у адреса ВМ «Сделать статическим». Иначе после перезапуска ВМ адрес сменится и `api.xronix.ru` перестанет работать.
+3. **Группа безопасности** ВМ (Virtual Private Cloud → Группы безопасности), входящие правила:
+   - TCP 22 только с IP Ильи (или с `0.0.0.0/0` на время настройки, потом сузить);
+   - TCP 80 и TCP 443 с `0.0.0.0/0`;
+   - больше ничего, порт 8000 наружу не открываем.
+4. **Cloud DNS → зона `xronix.ru.` → Создать запись:** имя `api`, тип `A`, TTL 600, значение: статический IP ВМ.
+5. Передать Илье IP и логин `ilya`.
 
-1. Создай ВМ, зарезервируй **статический публичный IP** (иначе он поменяется при перезапуске).
-2. Группа безопасности: открыть входящие `80` и `443` (с любого адреса), `22` только с твоего IP. Порты бэкенда и ИИ-сервиса наружу не открывать.
-3. Скажи Саше IP: он добавит в зону `xronix.ru` запись `api` `A` → IP. Пока домен `xronix.ru` не обновился в DNS (сейчас идёт обновление), сертификат не выпустится, Caddy будет повторять попытки сам.
-4. `docker-compose.yml` на ВМ (схематично):
+### Что делает Илья на сервере
+```sh
+ssh ilya@<IP>
+sudo apt update && sudo apt -y upgrade
+sudo apt -y install git python3-venv
+sudo mkdir -p /srv && sudo chown ilya /srv
+git clone https://github.com/xrnskew/XRONIX.git /srv/xronix
+cd /srv/xronix && git checkout backend
+cp backend/.env.example backend/.env
+```
+В `backend/.env`:
+```dotenv
+CORS_ORIGINS=https://xronix.ru,https://www.xronix.ru,http://localhost:5173
+JWT_SECRET=<вывод команды: openssl rand -hex 32>
+MOCK_AI=true            # пока нет сервиса Дани
+```
+Проверка руками: `./backend/run.sh`, в другом окне `curl localhost:8000/health` → `{"status":"ok"}`.
 
-```yaml
-services:
-  caddy:
-    image: caddy:2
-    ports: ["80:80", "443:443"]
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-    depends_on: [backend]
-  backend:
-    build: ./backend
-    env_file: .env
-    expose: ["8000"]          # наружу не публикуем, только для Caddy
-  ai:
-    build: ./ai
-    env_file: .env
-    expose: ["8001"]          # только внутренняя сеть, бэкенд ходит на http://ai:8001
-volumes:
-  caddy_data:
+Запуск как службы, `/etc/systemd/system/xronix-backend.service`:
+```ini
+[Unit]
+Description=XRONIX backend
+After=network.target
+
+[Service]
+User=ilya
+WorkingDirectory=/srv/xronix/backend
+ExecStart=/srv/xronix/backend/run.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+```sh
+sudo systemctl daemon-reload && sudo systemctl enable --now xronix-backend
+systemctl status xronix-backend      # active (running)
 ```
 
-`Caddyfile`:
+HTTPS через Caddy (сам получает и продлевает сертификат Let's Encrypt):
+```sh
+sudo apt -y install debian-keyring debian-archive-keyring apt-transport-https curl
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update && sudo apt -y install caddy
+```
+`/etc/caddy/Caddyfile`:
 ```
 api.xronix.ru {
   encode gzip
-  reverse_proxy backend:8000
+  reverse_proxy 127.0.0.1:8000
 }
 ```
+```sh
+sudo systemctl reload caddy
+curl https://api.xronix.ru/health    # {"status":"ok"} по HTTPS
+```
+Сертификат выпустится, только когда запись `api` уже указывает на этот IP (шаг 4 у Саши). Если Caddy ругается на сертификат, подождать несколько минут: он повторяет попытки сам.
 
-Другой вариант: Application Load Balancer + Certificate Manager. Он сложнее в настройке, для хакатона Caddy быстрее.
+Обновление после новых коммитов: `cd /srv/xronix && git pull && sudo systemctl restart xronix-backend`.
+
+Вариант с Docker и docker-compose можно сделать позже, сейчас он не нужен.
 
 ## 2. CORS
 Фронт и API на разных адресах, поэтому браузер сначала шлёт предзапрос `OPTIONS`. Бэкенд должен на него отвечать.
@@ -90,8 +129,9 @@ curl -i -X OPTIONS https://api.xronix.ru/api/me \
 - **Лимиты.** Желательно ограничить частоту запросов к `/messages` (ответ `429 RATE_LIMITED` по контракту), чтобы никто не сжёг лимиты GigaChat.
 
 ## Чек-лист
-- [ ] ВМ с белым статическим IP, открыты 80 и 443
+- [ ] ВМ Ubuntu 24.04 с белым статическим IP, открыты 80 и 443 (Саша)
 - [ ] `api` `A` → IP добавлено в зону `xronix.ru` (Саша)
+- [ ] Бэкенд работает как служба `xronix-backend`, Caddy проксирует `api.xronix.ru` (Илья)
 - [ ] `https://api.xronix.ru/health` отдаёт `ok` по HTTPS
 - [ ] `curl OPTIONS` из раздела 2 возвращает нужные CORS-заголовки
 - [ ] В репозитории `Settings → Variables`: `VITE_API_URL=https://api.xronix.ru`, `VITE_USE_MOCKS=false` (Саша)
