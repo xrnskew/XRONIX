@@ -186,6 +186,25 @@ def test_finance():
     assert calculated['credit']['verdict']=='not_recommended'
 
 
+@pytest.mark.parametrize('startup,revenue,expenses,expected', [
+    (950000, 1000000, 400000, 2),
+    (1200000, 1000000, 400000, 2),
+    (1200001, 1000000, 400000, 3),
+    (0, 1000000, 400000, 0),
+    (950000, 400000, 400000, None),
+    (950000, 300000, 400000, None),
+])
+def test_payback_uses_recalculated_profit(startup, revenue, expenses, expected):
+    plan=CONTRACTS.example('plan.no-credit.json')
+    plan['finance'].update(startup_cost_rub=startup, monthly_revenue_rub=revenue,
+                           monthly_expenses_rub=expenses, monthly_profit_rub=1, payback_months=16)
+    calculated=recalculate(plan)
+    assert calculated['finance']['payback_months'] == expected
+    CONTRACTS.validate('plan', calculated)
+    check_plan(calculated)
+    assert plan['finance']['payback_months'] == 16
+
+
 def live_client(settings, handler):
     settings.mock_ai=False
     return TestClient(create_app(settings, httpx.MockTransport(handler)), raise_server_exceptions=False)
@@ -241,13 +260,17 @@ def test_retry_recovers_and_server_recalculates(settings):
         if request.url.path.endswith('summarize'):
             return httpx.Response(200,json=CONTRACTS.example('response.summarize.json'))
         r=CONTRACTS.example('reply.plan.ai.json')
+        r['plan']['finance']['payback_months']=16
         r['plan']['credit'].update(monthly_payment_rub=1,debt_load_percent=1,verdict='not_recommended',recommended_product_id='mortgage')
         return httpx.Response(200,json=r)
     with live_client(settings,handler) as c:
         h=register(c); cid=chat(c,h)
         r=send(c,h,cid)
         assert r.status_code==200,r.text
-        credit=r.json()['plan']['credit']
+        body=r.json()
+        assert body['plan']['finance']['payback_months']==10
+        assert c.get(f"/api/plans/{body['plan_id']}",headers=h).json()['plan']==body['plan']
+        credit=body['plan']['credit']
         assert credit['monthly_payment_rub']==51878
         assert credit['debt_load_percent']==35
         assert credit['verdict']=='ok'

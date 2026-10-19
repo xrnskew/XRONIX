@@ -63,6 +63,8 @@ def recalculate(plan):
     f, c = plan['finance'], plan['credit']
     f['funding_gap_rub'] = max(0, f['startup_cost_rub'] - f['own_funds_rub'])
     f['monthly_profit_rub'] = f['monthly_revenue_rub'] - f['monthly_expenses_rub']
+    f['payback_months'] = ((f['startup_cost_rub'] + f['monthly_profit_rub'] - 1) // f['monthly_profit_rub']
+                           if f['monthly_profit_rub'] > 0 else None)
     if c['needed']:
         c['monthly_payment_rub'] = annuity(c['amount_rub'], c['estimated_rate_percent'], c['recommended_term_months'])
         c['debt_load_percent'] = js_round(c['monthly_payment_rub'] / f['monthly_profit_rub'] * 100) if f['monthly_profit_rub'] > 0 else 100
