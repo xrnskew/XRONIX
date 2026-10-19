@@ -449,9 +449,13 @@ def test_simultaneous_messages_are_serialized(settings):
         assert len(c.get(f'/api/chats/{cid}',headers=h).json()['messages'])==2
 
 
-def test_delete_chat_rejects_inflight_ai_across_workers(settings):
+def test_delete_chat_rejects_inflight_ai_across_workers(settings, monkeypatch):
+    import app.main
     from concurrent.futures import ThreadPoolExecutor
     from threading import Event
+    from types import SimpleNamespace
+    clock = [time.time()]
+    monkeypatch.setattr(app.main, 'time', SimpleNamespace(time=lambda: clock[0]))
     entered, release = Event(), Event()
 
     async def handler(request):
@@ -468,6 +472,10 @@ def test_delete_chat_rejects_inflight_ai_across_workers(settings):
             pending = pool.submit(send, sender, h, cid)
             try:
                 assert entered.wait(5)
+                # The previous 120-second lease must not admit a second send
+                # or deletion while the new 170-second AI deadline is active.
+                clock[0] += 130
+                error(send(deleter, h, cid), 'RATE_LIMITED')
                 error(deleter.delete(f'/api/chats/{cid}', headers=other), 'NOT_FOUND')
                 response = deleter.delete(f'/api/chats/{cid}', headers={**h, 'Origin': 'https://xronix.ru'})
                 error(response, 'RATE_LIMITED')

@@ -32,7 +32,7 @@ class AI:
                 return reply
             return self.contracts.example('reply.message.json')
         try:
-            async with self.client.stream('POST', f'{self.settings.ai_service_url}/ai/{endpoint}', json=payload, timeout=45) as response:
+            async with self.client.stream('POST', f'{self.settings.ai_service_url}/ai/{endpoint}', json=payload, timeout=170) as response:
                 body = bytearray()
                 async for chunk in response.aiter_bytes():
                     body.extend(chunk)
@@ -87,15 +87,15 @@ class AI:
 
     async def respond(self, payload, stage):
         try:
-            # Total deadline includes retries; frontend should wait 50 seconds.
-            async with asyncio.timeout(45):
+            # Total deadline includes retries; frontend should wait 180 seconds.
+            async with asyncio.timeout(170):
                 return await self.validated('respond', payload, stage)
         except TimeoutError as exc:
             raise ApiError('AI_UNAVAILABLE') from exc
 
     async def summarize(self, payload):
         try:
-            async with asyncio.timeout(45):
+            async with asyncio.timeout(170):
                 return await self.validated('summarize', payload)
         except TimeoutError as exc:
             raise ApiError('AI_UNAVAILABLE') from exc

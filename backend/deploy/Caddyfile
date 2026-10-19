@@ -10,7 +10,7 @@ api.xronix.ru {
         header_up X-Forwarded-For {remote_host}
         transport http {
             dial_timeout 3s
-            response_header_timeout 50s
+            response_header_timeout 180s
         }
     }
     handle_errors {

@@ -294,7 +294,10 @@ def test_global_concurrency_cap(settings):
 def test_respond_total_deadline_including_retries(settings,monkeypatch):
     import app.ai
     original_timeout=asyncio.timeout
-    monkeypatch.setattr(app.ai.asyncio,'timeout',lambda seconds: original_timeout(0.02))
+    def deadline(seconds):
+        assert seconds == 170
+        return original_timeout(0.02)
+    monkeypatch.setattr(app.ai.asyncio, 'timeout', deadline)
     async def handler(request):
         await asyncio.sleep(0.5)
         return httpx.Response(200,json=CONTRACTS.example('reply.message.json'))
@@ -309,7 +312,7 @@ def test_slow_ai_plan_survives_thirty_seconds(settings):
 
     async def handler(request):
         endpoints.append(request.url.path)
-        assert request.extensions['timeout']['read'] == 45
+        assert request.extensions['timeout']['read'] == 170
         if request.url.path.endswith('summarize'):
             return httpx.Response(200, json=CONTRACTS.example('response.summarize.json'))
         await asyncio.sleep(31)

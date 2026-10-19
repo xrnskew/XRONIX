@@ -6,7 +6,7 @@ services:
       dockerfile: backend/Dockerfile
     restart: unless-stopped
     init: true
-    stop_grace_period: 80s
+    stop_grace_period: 220s
     read_only: true
     tmpfs:
       - /tmp:size=16m,noexec,nosuid
@@ -29,7 +29,7 @@ services:
       AI_MAX_CONCURRENT: ${AI_MAX_CONCURRENT:-4}
       API_REQUESTS_PER_MINUTE: ${API_REQUESTS_PER_MINUTE:-120}
       AUTH_REQUESTS_PER_MINUTE: ${AUTH_REQUESTS_PER_MINUTE:-20}
-    command: [uvicorn, 'app.main:create_app', --factory, --host, 0.0.0.0, --port, '8000', --proxy-headers, --forwarded-allow-ips, '*', --timeout-graceful-shutdown, '40']
+    command: [uvicorn, 'app.main:create_app', --factory, --host, 0.0.0.0, --port, '8000', --proxy-headers, --forwarded-allow-ips, '*', --timeout-graceful-shutdown, '180']
     volumes:
       - backend_data:/srv/backend/data
       - backend_backups:/srv/backend/backups

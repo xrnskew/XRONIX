@@ -296,7 +296,7 @@ def create_app(settings=None, ai_transport=None):
         if cached is not None:
             return cached
         stamp = time.time()
-        lease = stamp + 120
+        lease = stamp + 200
         try:
             acquired = session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until < stamp).values(busy_until=lease)).rowcount
             if not acquired:
