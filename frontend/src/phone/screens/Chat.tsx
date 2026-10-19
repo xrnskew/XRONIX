@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { sendMessage } from '../../api'
-import type { AiReply, ChatMessage, Question } from '../../types/plan'
+import type { AiReply, Answer, ChatMessage, Question } from '../../types/plan'
 import { Chip, Logo } from '../ui'
 import { useCabinet } from '../PlanContext'
 import { rub } from '../../lib/format'
@@ -20,13 +20,13 @@ export default function Chat() {
 
   useEffect(() => { end.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs, busy])
 
-  async function send(t: string) {
+  async function send(t: string, ans?: Answer[]) {
     if (!t.trim() || busy) return
     setMsgs((m) => [...m, { id: crypto.randomUUID(), role: 'user', text: t }])
     setText('')
     setBusy(true)
     try {
-      const reply = await sendMessage('demo', t)
+      const reply = await sendMessage('demo', t, ans)
       if (reply.type === 'plan') setPlan(reply.plan)
       setMsgs((m) => [...m, { id: crypto.randomUUID(), role: 'assistant', reply }])
     } catch {
@@ -35,7 +35,10 @@ export default function Chat() {
   }
 
   const submitAnswers = (qs: Question[]) => {
-    send(qs.map((q) => `${q.text} ${answers[q.id] ?? '—'}`).join('\n'))
+    send(
+      qs.map((q) => `${q.text} ${answers[q.id] ?? '—'}`).join('\n'),
+      qs.map((q) => ({ question_id: q.id, answer: answers[q.id] ?? '' })),
+    )
     setAnswers({})
   }
 

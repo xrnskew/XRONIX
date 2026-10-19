@@ -1,4 +1,4 @@
-import type { AiReply, Plan, Profile } from '../types/plan'
+import type { AiReply, Answer, Plan, Profile } from '../types/plan'
 import { mockPlan, mockProfile, mockQuestions } from '../mocks/data'
 
 const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false'
@@ -6,7 +6,7 @@ const delay = (ms = 700) => new Promise((r) => setTimeout(r, ms))
 
 // Мок-диалог: идея -> вопросы -> ответы -> план. Реальный вызов подключим по контракту.
 let step = 0
-export async function sendMessage(_chatId: string, text: string): Promise<AiReply> {
+export async function sendMessage(_chatId: string, _text: string, _answers?: Answer[]): Promise<AiReply> {
   if (!USE_MOCKS) throw new Error('Бэкенд ещё не подключён')
   await delay()
   step += 1

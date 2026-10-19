@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/profile.schema.json",
+  "title": "User",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "email", "city", "experience", "budget_rub", "tags"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+    "email": { "type": "string", "format": "email" },
+    "city": { "type": ["string", "null"], "maxLength": 60 },
+    "experience": { "type": ["string", "null"], "maxLength": 60 },
+    "budget_rub": { "type": ["integer", "null"], "minimum": 0 },
+    "tags": { "type": "array", "maxItems": 12, "items": { "type": "string", "minLength": 1, "maxLength": 30 } }
+  }
+}

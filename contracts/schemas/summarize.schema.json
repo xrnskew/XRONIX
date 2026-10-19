@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/summarize.schema.json",
+  "title": "Summarize",
+  "definitions": {
+    "request": {
+      "type": "object", "additionalProperties": false,
+      "required": ["memory", "history"],
+      "properties": {
+        "memory": { "type": "string", "maxLength": 800 },
+        "history": {
+          "type": "array", "maxItems": 30,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["role", "content"],
+            "properties": { "role": { "enum": ["user", "assistant"] }, "content": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "response": {
+      "type": "object", "additionalProperties": false,
+      "required": ["memory", "tags"],
+      "properties": {
+        "memory": { "type": "string", "maxLength": 800 },
+        "tags": { "type": "array", "maxItems": 12, "items": { "type": "string", "minLength": 1, "maxLength": 30 } }
+      }
+    }
+  }
+}

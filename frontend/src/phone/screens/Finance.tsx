@@ -31,11 +31,25 @@ export default function Finance() {
     )
 
   const { finance: f, credit: c } = plan
-  const rate = c.estimated_rate_percent
+  const rate = c.estimated_rate_percent ?? 22
   const payment = annuity(amount, rate, months)
   const load = Math.round((payment / Math.max(f.monthly_profit_rub, 1)) * 100)
-  const v = verdict[c.verdict]
+  const v = verdict[c.verdict ?? 'ok']
   const ownShare = Math.round((f.own_funds_rub / f.startup_cost_rub) * 100)
+
+  if (!c.needed)
+    return (
+      <Screen title="Финансы и кредит">
+        <Card>
+          <Badge tone="ok">Кредит не нужен</Badge>
+          <p className="mt-2 text-[14px] leading-snug text-muted">{c.comment}</p>
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <Stat label="Нужно на старт" value={rub(f.startup_cost_rub)} />
+            <Stat label="Свои средства" value={rub(f.own_funds_rub)} tone="ok" />
+          </div>
+        </Card>
+      </Screen>
+    )
 
   return (
     <Screen title="Финансы и кредит">
@@ -81,7 +95,7 @@ export default function Finance() {
                   <div className="text-[15px] font-semibold leading-tight">{p.name}</div>
                   <div className="mt-0.5 text-[12px] text-muted">{p.short}</div>
                 </div>
-                <span className="shrink-0 whitespace-nowrap"><Badge tone={!fits ? 'muted' : p.collateral ? 'warn' : 'ok'}>{!fits ? 'Не подходит' : p.collateral ? 'Нужен залог' : 'Подходит'}</Badge></span>
+                <span className="shrink-0 whitespace-nowrap"><Badge tone={!fits ? 'muted' : p.collateral ? 'warn' : 'ok'}>{p.id === c.recommended_product_id && fits ? 'Рекомендуем' : !fits ? 'Не подходит' : p.collateral ? 'Нужен залог' : 'Подходит'}</Badge></span>
               </div>
               <dl className="mt-3 grid grid-cols-3 gap-2 text-[12px]">
                 <div><dt className="text-muted">Ставка</dt><dd className="mt-0.5 text-[14px] font-semibold">{p.rateFrom ? `от ${String(p.rateFrom).replace('.', ',')}%` : 'по запросу'}</dd></div>

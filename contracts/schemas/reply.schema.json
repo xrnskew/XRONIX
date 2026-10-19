@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/reply.schema.json",
+  "title": "AiReply",
+  "description": "Ответ ИИ в чате. Три типа. Для AI-сервиса plan_id не нужен и запрещён, его ставит бэкенд (смотри $defs.planFromAi и $defs.planToFront).",
+  "definitions": {
+    "message": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "text"],
+      "properties": { "type": { "const": "message" }, "text": { "type": "string", "minLength": 1, "maxLength": 2000 } }
+    },
+    "question": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "text", "kind"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,30}$" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "kind": { "enum": ["choice", "text"] },
+        "options": { "type": "array", "minItems": 2, "maxItems": 5, "items": { "type": "string", "minLength": 1, "maxLength": 40 } }
+      },
+      "if": { "properties": { "kind": { "const": "choice" } } },
+      "then": { "required": ["options"] },
+      "else": { "not": { "required": ["options"] } }
+    },
+    "questions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "text", "questions"],
+      "properties": {
+        "type": { "const": "questions" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "questions": { "type": "array", "minItems": 1, "maxItems": 6, "items": { "$ref": "#/definitions/question" } }
+      }
+    },
+    "planFromAi": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "text", "plan"],
+      "properties": {
+        "type": { "const": "plan" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "plan": { "$ref": "https://xronix/schemas/plan.schema.json" }
+      }
+    },
+    "planToFront": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type", "text", "plan_id", "plan"],
+      "properties": {
+        "type": { "const": "plan" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "plan_id": { "type": "string" },
+        "plan": { "$ref": "https://xronix/schemas/plan.schema.json" }
+      }
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/definitions/message" },
+    { "$ref": "#/definitions/questions" },
+    { "$ref": "#/definitions/planToFront" }
+  ]
+}

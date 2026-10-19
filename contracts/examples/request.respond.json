@@ -1,0 +1,27 @@
+{
+  "mode": "chat",
+  "user_context": {
+    "profile": {
+      "name": "Александр",
+      "city": "Москва",
+      "experience": "Новичок",
+      "budget_rub": 500000
+    },
+    "tags": [
+      "общепит",
+      "новичок"
+    ],
+    "memory": ""
+  },
+  "history": [
+    {
+      "role": "user",
+      "content": "Хочу открыть кофейню у метро"
+    },
+    {
+      "role": "assistant",
+      "content": "Какой стартовый бюджет?"
+    }
+  ],
+  "message": "500 тыс – 2 млн, опыта нет, Москва"
+}

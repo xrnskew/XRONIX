@@ -29,8 +29,8 @@ export default function ProfileScreen() {
           <div className="h-1.5 overflow-hidden rounded-full bg-surface-3"><div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} /></div>
         </div>
         <div className="mt-4 space-y-3">
-          <label className="block text-[13px] text-muted">Город<input className={`${field} mt-1`} value={profile.city} onChange={(e) => set('city', e.target.value)} /></label>
-          <label className="block text-[13px] text-muted">Опыт<input className={`${field} mt-1`} value={profile.experience} onChange={(e) => set('experience', e.target.value)} /></label>
+          <label className="block text-[13px] text-muted">Город<input className={`${field} mt-1`} value={profile.city ?? ""} onChange={(e) => set('city', e.target.value)} /></label>
+          <label className="block text-[13px] text-muted">Опыт<input className={`${field} mt-1`} value={profile.experience ?? ""} onChange={(e) => set('experience', e.target.value)} /></label>
         </div>
       </Card>
       <Card>

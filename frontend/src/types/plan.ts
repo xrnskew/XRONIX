@@ -1,4 +1,4 @@
-// Черновик типов по разделам 5.2–5.3 документа. Финально фиксируются в /contracts.
+// Типы повторяют /contracts/schemas. При правке контрактов обновлять здесь.
 export type RiskLevel = 'low' | 'medium' | 'high'
 export type CreditVerdict = 'ok' | 'risky' | 'not_recommended'
 
@@ -21,13 +21,15 @@ export interface Plan {
   }
   credit: {
     needed: boolean
-    amount_rub: number
-    purpose: string
-    recommended_term_months: number
-    estimated_rate_percent: number
-    monthly_payment_rub: number
-    debt_load_percent: number
-    verdict: CreditVerdict
+    // при needed=false все поля, кроме comment, равны null
+    amount_rub: number | null
+    purpose: string | null
+    recommended_term_months: number | null
+    estimated_rate_percent: number | null
+    monthly_payment_rub: number | null
+    debt_load_percent: number | null
+    verdict: CreditVerdict | null
+    recommended_product_id?: 'fast' | 'secured' | 'mortgage' | 'revolving' | null
     comment: string
   }
   tags_update: string[]
@@ -53,10 +55,16 @@ export interface ChatMessage {
 }
 
 export interface Profile {
+  id?: string
   name: string
   email: string
-  city: string
-  experience: string
-  budget_rub: number
+  city: string | null
+  experience: string | null
+  budget_rub: number | null
   tags: string[]
+}
+
+export interface Answer {
+  question_id: string
+  answer: string
 }
