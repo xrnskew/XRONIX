@@ -4,6 +4,7 @@ const W = 414
 const H = 880
 const DEPTH = 40 // толщина корпуса в 3D, px
 const SLICES = 14
+const MAX_SCALE = 0.84
 
 const flat3d = { transformStyle: 'preserve-3d' } as const
 
@@ -12,7 +13,12 @@ const flat3d = { transformStyle: 'preserve-3d' } as const
 export default function PhoneFrame({ children }: { children: ReactNode }) {
   const [scale, setScale] = useState(1)
   useEffect(() => {
-    const fit = () => setScale(Math.min(1, (window.innerHeight - 48) / H, (window.innerWidth - 32) / W))
+    // На широком экране телефон закреплён и не должен упираться в края окна: оставляем запас под 3D-наклон
+    // и не даём ему расти на больших мониторах. На узком экране он лежит над слайдами, ограничение по высоте не нужно.
+    const fit = () => {
+      const wide = window.innerWidth >= 1024
+      setScale(Math.min(wide ? MAX_SCALE : 1, wide ? (window.innerHeight - 150) / H : 1, (window.innerWidth - 32) / W))
+    }
     fit()
     window.addEventListener('resize', fit)
     return () => window.removeEventListener('resize', fit)
