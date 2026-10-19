@@ -47,7 +47,7 @@ DNSSEC в reg.ru не включай: ключи нужно сначала со�
 ## 4. Бэкенд на поддомене api
 1. В Яндекс Облаке получи публичный IP ВМ (или адрес балансировщика), в DNS-зоне добавь `api` `A` → этот IP.
 2. **HTTPS обязателен**: сайт на HTTPS не может ходить на `http://` API, браузер заблокирует запросы. Варианты: Certificate Manager + Application Load Balancer либо Caddy или nginx с Let's Encrypt на самой ВМ.
-3. **CORS на бэкенде** (скажи Илье): разрешить `Origin: https://app.xronix.ru` (и `http://localhost:5173` для разработки), заголовок `Authorization`, методы `GET, POST, PATCH, OPTIONS`. Без этого кабинет на Pages не сможет обращаться к `api.xronix.ru`.
+3. **CORS на бэкенде** (скажи Илье): разрешить `Origin: https://xronix.ru` (и `http://localhost:5173` для разработки), заголовок `Authorization`, методы `GET, POST, PATCH, OPTIONS`. Без этого кабинет на Pages не сможет обращаться к `api.xronix.ru`.
 4. В репозитории: `Settings → Secrets and variables → Actions → Variables`:
    - `VITE_API_URL` = `https://api.xronix.ru`
    - `VITE_USE_MOCKS` = `false`
