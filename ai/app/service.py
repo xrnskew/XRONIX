@@ -21,6 +21,7 @@ from .models import (Decision, MessageReply, PlanReply, Question, QuestionsReply
 from .plan import Plan, check_plan
 from .prompts import decide_messages, plan_messages
 from .repair import repair_plan
+from .scope import BUSINESS_REDIRECT, needs_redirect
 
 logger = logging.getLogger(__name__)
 
@@ -163,6 +164,8 @@ def questions_reply(questions: list, req: RespondRequest, rounds: int) -> dict:
 
 
 async def respond(llm: LLM, req: RespondRequest) -> dict:
+    if needs_redirect(req.message):
+        return MessageReply(text=BUSINESS_REDIRECT).model_dump()
     if not req.history and GREETING.match(req.message):
         return MessageReply(text=GREETING_REPLY).model_dump()
 
@@ -170,10 +173,11 @@ async def respond(llm: LLM, req: RespondRequest) -> dict:
     deadline = loop.time() + config.DEADLINE_SEC
     rounds = question_rounds(req.history)
 
-    if rounds < MAX_QUESTION_ROUNDS:
-        reply = await decide(llm, req, rounds, deadline)
-        if reply is not None:
-            return reply
+    # Classification also runs after the last questionnaire: an off-topic turn
+    # must not accidentally trigger a full plan from the previous business idea.
+    reply = await decide(llm, req, rounds, deadline)
+    if reply is not None:
+        return reply
     return await generate_plan(llm, req, deadline)
 
 
@@ -201,6 +205,9 @@ async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
         # Капитан: сначала уточняющие вопросы, потом план — даже если профиль заполнен.
         logger.info("decide: план на первом ходу, сначала задаём вопросы")
         return fallback
+
+    if decision.action == "questions" and rounds >= MAX_QUESTION_ROUNDS:
+        return None
 
     if decision.action == "questions":
         questions = clean_questions(decision.questions)
@@ -256,6 +263,7 @@ async def generate_plan(llm: LLM, req: RespondRequest, deadline: float) -> dict:
 
 # TODO(этап 3): настоящая выжимка через GigaChat (contracts/ai.md, раздел «Память»).
 async def summarize(req: SummarizeRequest) -> dict:
-    said = " ".join(h.content for h in req.history if h.role == "user")
-    memory = f"{req.memory} {said}".strip()[:800]
+    said = " ".join(h.content for h in req.history if h.role == "user" and not needs_redirect(h.content))
+    old = req.memory if not needs_redirect(req.memory) else ""
+    memory = f"{old} {said}".strip()[:800]
     return SummarizeResponse(memory=memory, tags=[]).model_dump()
