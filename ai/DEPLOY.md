@@ -1,130 +1,115 @@
 # Деплой AI-сервиса на ВМ
 
-AI-сервис живёт на той же ВМ в Яндекс Облаке, что и бэкенд Ильи (`backend/deploy/`), в отдельном контейнере.
+AI-сервис живёт на той же ВМ в Яндекс Облаке, что и бэкенд Ильи (`xronix@178.154.249.21`). Запускается так же, как бэк: без Docker, systemd-служба `xronix-ai`.
 
 ```
-браузер → https://api.xronix.ru → Caddy → backend ──(сеть xronix_ai)──→ ai:8001 → GigaChat
+браузер → https://api.xronix.ru → Caddy (80/443) → xronix-backend (127.0.0.1:8000) → xronix-ai (127.0.0.1:8001) → GigaChat
 ```
 
-- Порт 8001 **наружу не открывается**. В сервис ходит только бэкенд, по адресу `http://ai:8001`.
-- Сеть `xronix_ai` создаёт compose бэкенда, наш `compose.yaml` к ней только подключается. Поэтому **бэкенд поднимается первым**.
-- Ключ GigaChat лежит только в `ai/.env` на сервере. В git, в чат и в образ он не попадает.
+- Сервис слушает только `127.0.0.1:8001`, **наружу порт не открывается**. В него ходит только бэкенд (`AI_SERVICE_URL=http://127.0.0.1:8001` в `/srv/xronix/backend/.env`).
+- Код лежит отдельно от бэка, в `/srv/xronix-ai` (ветка `ai`). Checkout бэка `/srv/xronix` не трогаем.
+- Ключ GigaChat лежит только в `/srv/xronix-ai/ai/.env` на сервере. В git и в чат он не попадает.
 
 ## 0. Что должно быть готово
 
-| Что | Кто |
-|---|---|
-| ВМ Ubuntu, Docker и Compose установлены | Илья / Саша |
-| Бэкенд запущен по `backend/deploy/README.md` (значит, сеть `xronix_ai` уже есть) | Илья |
-| У Дани есть SSH-доступ на ВМ (шаг 1) | Илья добавляет ключ |
+- SSH-доступ: публичный ключ Дани добавлен на ВМ (делает Илья).
+- Бэкенд работает: `systemctl status xronix-backend` показывает `active (running)`.
+- На ВМ есть Python 3.12 и `python3-venv` (Ubuntu 24.04, ставил Илья).
 
-## 1. SSH-доступ (один раз)
+## 1. Код и окружение
 
-На своём компьютере (PowerShell):
+На сервере:
+```sh
+git clone -b ai https://github.com/xrnskew/XRONIX.git /srv/xronix-ai
+cd /srv/xronix-ai/ai
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+## 2. Ключ GigaChat
+
+На **своём компьютере**, во втором окне PowerShell:
 ```powershell
-ssh-keygen -t ed25519 -C "danya-xronix"
-Get-Content $HOME\.ssh\id_ed25519.pub
+scp $HOME\Documents\XRONIX\ai\.env xronix@178.154.249.21:/srv/xronix-ai/ai/.env
 ```
-На все вопросы `ssh-keygen` можно нажать Enter. Строку, которую вывела вторая команда (`ssh-ed25519 AAAA... danya-xronix`), отправь Илье. Это **публичный** ключ, его можно пересылать. Файл `id_ed25519` без `.pub` не отправляй никому.
-
-Илья на ВМ:
+На сервере:
 ```sh
-echo 'ssh-ed25519 AAAA... danya-xronix' >> ~/.ssh/authorized_keys
-```
-SSH в группе безопасности открыт только с разрешённых IP. Если подключение висит, Илья добавляет туда твой IP.
-
-Проверка:
-```powershell
-ssh xronix@<IP_ВМ>
+chmod 600 /srv/xronix-ai/ai/.env
 ```
 
-## 2. Код на ВМ
-
-Пока ветка `ai` не слита в `dev`, держим отдельную копию, чтобы не трогать checkout бэкенда:
-```sh
-git clone -b ai https://github.com/xrnskew/XRONIX.git ~/XRONIX-ai
-cd ~/XRONIX-ai/ai
-```
-
-## 3. Ключ GigaChat
+## 3. Служба
 
 ```sh
-cp .env.example .env
-chmod 600 .env
-nano .env
-```
-Вписать `GIGACHAT_AUTH_KEY=` (тот же ключ, что в локальном `.env`). Остальное можно оставить как в примере. Сохранить: Ctrl+O, Enter, Ctrl+X.
+sudo tee /etc/systemd/system/xronix-ai.service > /dev/null <<'EOF'
+[Unit]
+Description=XRONIX AI service
+After=network-online.target
+Wants=network-online.target
 
-## 4. Запуск
+[Service]
+User=xronix
+WorkingDirectory=/srv/xronix-ai/ai
+ExecStart=/srv/xronix-ai/ai/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8001
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable --now xronix-ai
+systemctl status xronix-ai --no-pager | head -5
+journalctl -u xronix-ai -n 20 --no-pager
+```
+Должно быть `active (running)`, а в логе строка `GigaChat warmup: 0.Xs`.
+
+## 4. Проверка
 
 ```sh
-sudo docker network inspect xronix_ai > /dev/null && echo "сеть есть"
-sudo docker compose config --quiet
-sudo docker compose up -d --build
-sudo docker compose ps
-```
-Через ~30 секунд в `ps` должно быть `healthy`. Логи:
-```sh
-sudo docker compose logs --tail=50 ai
-```
-Хороший знак: строка `GigaChat warmup: 0.Xs`. Если там `warmup не удался`, смотри таблицу внизу.
-
-## 5. Проверка изнутри
-
-Видит ли бэкенд AI-сервис по сети:
-```sh
-sudo docker exec xronix-backend-1 python -c "import urllib.request; print(urllib.request.urlopen('http://ai:8001/ai/health', timeout=5).read().decode())"
+curl -s http://127.0.0.1:8001/ai/health
 ```
 Ожидается `{"status":"ok"}`.
 
-Настоящий запрос в GigaChat (вопросы по идее кофейни):
+Настоящий запрос в GigaChat:
 ```sh
-sudo docker exec -i xronix-ai-ai-1 python -c "import sys, urllib.request; r = urllib.request.Request('http://127.0.0.1:8001/ai/respond', data=sys.stdin.buffer.read(), headers={'Content-Type': 'application/json'}); print(urllib.request.urlopen(r, timeout=40).read().decode())" <<'EOF'
-{"mode": "chat",
- "user_context": {"profile": {"name": "Тест", "city": "Москва", "experience": "Новичок", "budget_rub": 500000},
-                  "tags": [], "memory": ""},
- "history": [],
- "message": "Хочу открыть кофейню у метро"}
-EOF
+curl -s -m 40 http://127.0.0.1:8001/ai/respond -H 'Content-Type: application/json' -d '{"mode":"chat","user_context":{"profile":{"name":"Тест","city":"Москва","experience":"Новичок","budget_rub":500000},"tags":[],"memory":""},"history":[],"message":"Хочу открыть кофейню у метро"}'
 ```
-Ожидается JSON с `"type": "questions"` или `"type": "message"`.
+Ожидается JSON с `"type":"questions"` (или `"message"`).
 
-## 6. Переключить бэкенд на настоящий ИИ (Илья)
+## 5. Переключить бэкенд на настоящий ИИ (Илья)
 
-В `backend/deploy/.env`:
-```
-MOCK_AI=false
-AI_SERVICE_URL=http://ai:8001
-```
-Из корня checkout бэкенда:
+В `/srv/xronix/backend/.env` поставить `MOCK_AI=false` (`AI_SERVICE_URL=http://127.0.0.1:8001` там уже стоит), потом:
 ```sh
-sudo docker compose --env-file backend/deploy/.env -f backend/deploy/compose.yaml up -d --force-recreate backend
+sudo systemctl restart xronix-backend
 ```
 
-## 7. Сквозная проверка
+## 6. Сквозная проверка
 
 На https://xronix.ru: регистрация → чат → «Хочу открыть кофейню у метро» → ответить на вопросы → план → вкладки «План» и «Финансы». Перезагрузить страницу: план должен остаться.
 
 ## Обновление после пуша в `ai`
 
 ```sh
-cd ~/XRONIX-ai && git pull && cd ai
-sudo docker compose up -d --build
+cd /srv/xronix-ai && git pull
+ai/.venv/bin/pip install -r ai/requirements.txt
+sudo systemctl restart xronix-ai
 ```
-Бэкенд перезапускать не нужно. Пока контейнер пересобирается (~10–30 с), чат отвечает `AI_UNAVAILABLE`.
+Бэкенд перезапускать не нужно. Пока служба перезапускается (несколько секунд), чат отвечает `AI_UNAVAILABLE`.
 
 ## Если что-то не так
 
+Логи: `journalctl -u xronix-ai -n 100 --no-pager`.
+
 | Симптом | Причина | Что делать |
 |---|---|---|
-| `network xronix_ai declared as external, but could not be found` | Бэкенд не запущен | Сначала поднять бэкенд (шаг 0) |
-| В логах `CERTIFICATE_VERIFY_FAILED` | Не нашёлся сертификат Минцифры | Проверить `GIGACHAT_CA_BUNDLE_FILE=certs/russian_bundle.pem` в `.env` |
-| В логах 400/401 от `ngw.devices.sberbank.ru` | Неверный ключ | Проверить `GIGACHAT_AUTH_KEY` в `.env` (без кавычек и пробелов), потом `sudo docker compose up -d` |
+| `activating (auto-restart)`, в логе `Address already in use` | Порт 8001 занят | `sudo ss -ltnp \| grep 8001` и остановить того, кто его держит |
+| В логе `CERTIFICATE_VERIFY_FAILED` | Не нашёлся сертификат Минцифры | Проверить `GIGACHAT_CA_BUNDLE_FILE=certs/russian_bundle.pem` в `.env` |
+| `warmup не удался`, 400/401 от `ngw.devices.sberbank.ru` | Неверный ключ | Проверить `GIGACHAT_AUTH_KEY` в `.env` (без кавычек и пробелов), потом `sudo systemctl restart xronix-ai` |
 | `404 No such model` | Модели нет на этом ключе | Поменять `GIGACHAT_MODEL` в `.env` |
-| Шаг 5 первой командой: `Name or service not known` | Бэкенд и ИИ в разных сетях | `sudo docker network inspect xronix_ai`: в списке должны быть оба контейнера |
-| На сайте `AI_UNAVAILABLE`, а шаг 5 проходит | Бэкенд всё ещё на моках или со старым адресом | Шаг 6 |
-| На сайте `AI_BAD_RESPONSE` | GigaChat вернул план, который не прошёл проверку | `sudo docker compose logs --tail=100 ai` и прислать Дане |
+| На сайте `AI_UNAVAILABLE`, а шаг 4 проходит | Бэкенд всё ещё на моках | Шаг 5 |
+| На сайте `AI_BAD_RESPONSE` | GigaChat вернул план, который не прошёл проверку | Логи и прислать Дане |
 
-## После интеграции
+## Вариант с Docker
 
-Когда `ai` слита в `dev` и бэкенд деплоится из `dev`, отдельная копия `~/XRONIX-ai` не нужна. Запускать из `ai/` того же checkout, что и бэкенд, начиная с шага 3.
+Если ВМ переведут на Docker Compose (`backend/deploy/compose.yaml` в ветке `backend`), для ИИ есть `compose.yaml`: контейнер подключается к сети бэка `xronix_ai` как `http://ai:8001`. Запуск из папки `ai`: `sudo docker compose up -d --build`. Перед этим остановить службу: `sudo systemctl disable --now xronix-ai`.

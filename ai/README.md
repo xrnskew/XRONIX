@@ -24,7 +24,7 @@ python -m venv .venv
 
 ## Запуск на сервере
 
-Docker-контейнер рядом с бэкендом на ВМ: `compose.yaml`, пошагово в [DEPLOY.md](DEPLOY.md).
+systemd-служба `xronix-ai` на `127.0.0.1:8001` рядом с бэкендом на ВМ, пошагово в [DEPLOY.md](DEPLOY.md). Вариант с Docker: `compose.yaml`.
 
 ## Переменные окружения (`.env`)
 
