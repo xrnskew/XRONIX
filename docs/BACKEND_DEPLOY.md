@@ -1,5 +1,7 @@
 # Памятка для бэкенда: HTTPS и CORS на api.xronix.ru
 
+> **Устарело в части запуска.** На сервере бэкенд, Caddy и AI-сервис работают в Docker Compose: см. `backend/deploy/README.md` (ветка `backend`) и `ai/DEPLOY.md` (ветка `ai`). Вариант без Docker ниже оставлен для истории; требования к HTTPS и CORS в силе.
+
 Фронт живёт на GitHub Pages (`https://xronix.ru`), бэкенд отдельно в Яндекс Облаке на `https://api.xronix.ru`. Две вещи обязательны, иначе кабинет не сможет обращаться к API.
 
 ## 1. Сервер в Яндекс Облаке (без Docker)
