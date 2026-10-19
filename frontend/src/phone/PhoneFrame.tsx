@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react'
+import { uiScale } from '../lib/uiScale'
 
 const W = 414
 const H = 880
@@ -19,7 +20,7 @@ export default function PhoneFrame({ children }: { children: ReactNode }) {
     // и не даём ему расти на больших мониторах. На узком экране он лежит над слайдами, ограничение по высоте не нужно.
     const fit = () => {
       const wide = window.innerWidth >= 1024
-      setScale(Math.min(wide ? MAX_SCALE : 1, wide ? (window.innerHeight - 150) / H : 1, (window.innerWidth - 32) / W))
+      setScale(Math.min(wide ? MAX_SCALE * uiScale() : 1, wide ? (window.innerHeight - 150 * uiScale()) / H : 1, (window.innerWidth - 32) / W))
     }
     fit()
     window.addEventListener('resize', fit)
@@ -49,7 +50,7 @@ export default function PhoneFrame({ children }: { children: ReactNode }) {
       {/* лицевая часть: плоская, translateZ(1px) ставит её строго перед корпусом */}
       <div className="absolute inset-0" style={{ transform: 'translateZ(1px)' }}>
         <div
-          className="relative origin-top-left rounded-[60px] bg-gradient-to-b from-[#3a3a40] via-[#1a1a1d] to-[#2a2a2f] p-[3px] shadow-[0_50px_90px_-20px_rgba(60,0,0,.55),0_0_0_1px_rgba(255,255,255,.08)]"
+          className="relative origin-top-left rounded-[60px] bg-gradient-to-b from-[#3a3a40] via-[#1a1a1d] to-[#2a2a2f] p-[3px] shadow-[0_50px_90px_-20px_rgba(60,0,0,.55),0_0_0_1px_rgba(255,255,255,.08)] transition-shadow duration-300 group-hover:shadow-[0_50px_90px_-20px_rgba(60,0,0,.55),0_0_0_3px_rgba(255,69,56,.8),0_0_60px_6px_rgba(255,69,56,.35)]"
           style={{ width: W, height: H, transform: `scale(${scale})` }}
         >
           <div className="relative h-full w-full rounded-[57px] bg-black p-[9px]">

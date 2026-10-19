@@ -96,3 +96,8 @@ input[type="range"] { height: 4px; }
   .sat-float, .orbit { animation: none; }
   .sat, .sat-in, .sat-out { opacity: 1; animation: none; }
 }
+
+/* Пульсирующая точка в подсказке «Живой кабинет» */
+@keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+.ping { animation: ping 1.6s cubic-bezier(0, 0, .2, 1) infinite; }
+@media (prefers-reduced-motion: reduce) { .ping { animation: none; } }

@@ -21,12 +21,13 @@ type Item =
 // Под колонку Landing сдвигает телефон вправо на RAIL/2. Небольшой сдвиг dx делает колонку «живой».
 export const RAIL = 236 // ширина колонки карточек вместе с зазором до телефона, px
 const GAP = 26
-const SLOTS: Record<Slot, { style: React.CSSProperties; z: number }> = {
-  a: { style: { right: `calc(100% + ${GAP}px)`, top: '6%' }, z: 90 },
-  b: { style: { right: `calc(100% + ${GAP + 28}px)`, top: '30%' }, z: 130 },
-  c: { style: { right: `calc(100% + ${GAP + 6}px)`, top: '55%' }, z: 110 },
-  d: { style: { right: `calc(100% + ${GAP + 32}px)`, top: '78%' }, z: 70 },
+const SLOTS: Record<Slot, { dx: number; top: string; z: number }> = {
+  a: { dx: 0, top: '6%', z: 90 },
+  b: { dx: 28, top: '30%', z: 130 },
+  c: { dx: 6, top: '55%', z: 110 },
+  d: { dx: 32, top: '78%', z: 70 },
 }
+const slotStyle = (s: Slot, k: number): React.CSSProperties => ({ right: `calc(100% + ${(GAP + SLOTS[s].dx) * k}px)`, top: SLOTS[s].top })
 
 const f = mockPlan.finance
 const c = mockPlan.credit
@@ -85,7 +86,7 @@ const sets: Record<string, Item[]> = {
 const still = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // show=false (человек взял телефон в руки или узкий экран): карточки гаснут и не рисуются
-export default function Satellites({ slide, show }: { slide: string; show: boolean }) {
+export default function Satellites({ slide, show, k = 1 }: { slide: string; show: boolean; k?: number }) {
   // Смена набора: старые карточки гаснут, затем появляются новые по очереди
   const target = show ? slide : ''
   const [shown, setShown] = useState(target)
@@ -102,7 +103,7 @@ export default function Satellites({ slide, show }: { slide: string; show: boole
   return (
     <div className="pointer-events-none absolute inset-0" style={{ transformStyle: 'preserve-3d' }} aria-hidden>
       {items.map((it, i) => (
-        <div key={shown + it.slot} className="absolute" style={{ ...SLOTS[it.slot].style, width: 'max-content', transform: `translateZ(${SLOTS[it.slot].z}px)` }}>
+        <div key={shown + it.slot} className="absolute" style={{ ...slotStyle(it.slot, k), width: 'max-content', transformOrigin: 'right center', transform: `translateZ(${SLOTS[it.slot].z * k}px) scale(${k})` }}>
           <div className="sat-float" style={{ animationDelay: `${-i * 1.7}s`, animationDuration: `${5.5 + i * 0.9}s` }}>
             <div className={`sat ${phase === 'in' ? 'sat-in' : 'sat-out'}`} style={{ animationDelay: phase === 'in' ? `${120 + i * 110}ms` : '0ms' }}>
               <Card it={it} />
