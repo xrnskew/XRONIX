@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
 import type { AiReply, Answer, ChatSummary, Question } from '../../types/plan'
-import { Chip, Logo } from '../ui'
+import { Chip, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
 
@@ -15,6 +15,7 @@ export default function Chat() {
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const list = useRef<HTMLDivElement>(null)
   const nav = useNavigate()
+  const wide = useContext(Wide)
 
   // Прокручиваем только сам список сообщений. scrollIntoView здесь нельзя: он двигает и страницу с презентацией.
   useEffect(() => { if (view === 'chat') list.current?.scrollTo({ top: list.current.scrollHeight, behavior: 'smooth' }) }, [messages, busy, view])
@@ -37,7 +38,7 @@ export default function Chat() {
           <p className="flex items-center gap-1.5 text-[13px] text-muted"><span className="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />на связи</p>
         </div>
         <IconBtn label="Новый диалог" onClick={() => { newChat(); setAnswers({}) }}><path d="M12 5v14M5 12h14" /></IconBtn>
-        <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>
+        {!wide && <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>}
       </header>
 
       <div ref={list} className="no-scrollbar flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-3" aria-live="polite">

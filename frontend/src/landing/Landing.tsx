@@ -86,10 +86,11 @@ export default function Landing() {
               </button>
             ))}
           </nav>
+          <a href="./app" className="ml-auto flex h-9 shrink-0 items-center rounded-full px-4 text-[13px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white sm:ml-0">Рабочая версия</a>
           {wide && (
             <button role="switch" aria-checked={auto} onClick={auto ? () => setAuto(false) : resume}
               title={!auto && !USE_MOCKS ? 'Выйдет из вашего аккаунта на сайте' : undefined}
-              className="ml-auto flex h-9 shrink-0 items-center gap-2 rounded-full px-4 text-[13px] font-medium ring-1 ring-white/20 transition-colors hover:bg-white/10 sm:ml-0">
+              className="flex h-9 shrink-0 items-center gap-2 rounded-full px-4 text-[13px] font-medium ring-1 ring-white/20 transition-colors hover:bg-white/10 sm:ml-0">
               <span className={`h-2 w-2 rounded-full ${auto ? 'bg-ok' : 'bg-white/40'}`} aria-hidden />
               {auto ? 'Автопоказ идёт' : 'Вернуть автопоказ'}
             </button>

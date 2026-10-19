@@ -247,7 +247,14 @@ export function Team() {
           </Reveal>
         ))}
       </ul>
-      <Reveal delay={1000}><p className="mt-10 text-[14px] text-white/50">xronix.ru · github.com/xrnskew/XRONIX</p></Reveal>
+      <Reveal delay={1000} className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="./app" className="group inline-flex h-14 items-center gap-3 rounded-full bg-fill pl-7 pr-5 text-[17px] font-semibold text-white shadow-[0_16px_40px_-14px_rgba(239,49,36,.9)] transition-colors hover:bg-brand-deep">
+          Открыть рабочую версию
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1" aria-hidden><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <p className="text-[14px] text-white/50">Кабинет на весь экран, без презентации</p>
+      </Reveal>
+      <Reveal delay={1150}><p className="mt-10 text-[14px] text-white/50">xronix.ru · github.com/xrnskew/XRONIX</p></Reveal>
     </Section>
   )
 }

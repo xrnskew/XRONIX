@@ -27,6 +27,7 @@ interface Ctx {
   planError: string | null
   reloadPlan: () => Promise<void>
 
+  chatId: string | null
   messages: ChatMessage[]
   busy: boolean
   canRetry: boolean
@@ -190,7 +191,7 @@ export function CabinetProvider({ children }: { children: ReactNode }) {
     skipOnboarding: () => { try { localStorage.setItem(skipKey(user?.id), '1') } catch { /* хранилище недоступно */ } setSkipped(true) },
     signIn, signUp, signOut, saveProfile,
     plan, planLoading, planError, reloadPlan,
-    messages, busy, canRetry, send, retry, newChat, openChat,
+    chatId, messages, busy, canRetry, send, retry, newChat, openChat,
     demo, demoAnswers, demoEnter, demoExit, playDemoChat, stopDemo,
     showDemoPlan: () => setPlan((p) => p ?? mockPlan),
   }

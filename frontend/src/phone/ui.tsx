@@ -1,4 +1,7 @@
-import type { ReactNode } from 'react'
+import { createContext, type ReactNode } from 'react'
+
+// true в рабочей версии на компьютере (/app): там диалоги в боковой панели, а экраны шире телефона
+export const Wide = createContext(false)
 
 // delay: порядковый номер для каскадного появления карточек при открытии экрана
 export const Card = ({ children, className = '', id, delay }: { children: ReactNode; className?: string; id?: string; delay?: number }) => (

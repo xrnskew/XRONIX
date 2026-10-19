@@ -124,6 +124,8 @@ export function useSlideScroll(ids: string[], enabled: boolean) {
       if (e.ctrlKey || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return // зум и горизонтальная прокрутка
       if (innerCanScroll(e.target, e.deltaY)) return
       e.preventDefault()
+      // Колесо над телефоном принадлежит телефону: дошли до края его экрана, и всё, слайды не листаем
+      if ((e.target as Element | null)?.closest?.('aside')) return
       const now = performance.now()
       const idle = now - lastWheel
       lastWheel = now
