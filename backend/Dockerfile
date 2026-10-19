@@ -6,7 +6,7 @@ COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/app ./app
 COPY contracts /srv/contracts
-RUN useradd --uid 10001 --create-home app && mkdir -p data && chown app:app data
+RUN useradd --uid 10001 --create-home app && mkdir -p data backups && chmod 700 backups && chown app:app data backups
 USER app
 VOLUME ["/srv/backend/data"]
 EXPOSE 8000

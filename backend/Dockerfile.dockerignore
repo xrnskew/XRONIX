@@ -8,3 +8,15 @@
 backend/data
 frontend
 ai
+**/backups
+**/backup-export
+**/*.sqlite*
+**/*.db
+**/*.key
+**/*.db-wal
+**/*.db-shm
+**/*.db-journal
+**/*.service.lock
+**/.export-*
+**/.partial-*
+**/.restore-*

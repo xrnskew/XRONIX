@@ -26,12 +26,24 @@ class Settings:
     api_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('API_REQUESTS_PER_MINUTE', '120')))
     auth_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('AUTH_REQUESTS_PER_MINUTE', '20')))
     max_body_bytes: int = 65536
+    backup_enabled: bool = field(default_factory=lambda: os.getenv('BACKUP_ENABLED', 'false').lower() == 'true')
+    backup_dir: str = field(default_factory=lambda: os.getenv('BACKUP_DIR', ''))
+    backup_retention_count: int = field(default_factory=lambda: int(os.getenv('BACKUP_RETENTION_COUNT', '7')))
+    backup_timeout_seconds: int = field(default_factory=lambda: int(os.getenv('BACKUP_TIMEOUT_SECONDS', '30')))
+    db_min_free_mb: int = field(default_factory=lambda: int(os.getenv('DB_MIN_FREE_MB', '100')))
+
+    @property
+    def db_min_free_bytes(self):
+        return self.db_min_free_mb * 1024 * 1024
+
 
     def __post_init__(self):
         if any(value < 1 for value in (self.jwt_expire_minutes, self.ai_requests_per_minute,
                 self.ai_global_per_minute, self.ai_max_concurrent,
                 self.api_requests_per_minute, self.auth_requests_per_minute)):
             raise ValueError('Limits and token lifetime must be positive')
+        if self.backup_retention_count < 1 or self.backup_timeout_seconds < 1 or self.db_min_free_mb < 0:
+            raise ValueError('Invalid database maintenance limits')
         if not self.cors_origins or '*' in self.cors_origins:
             raise ValueError('Explicit CORS origins required')
 

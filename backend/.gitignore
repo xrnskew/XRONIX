@@ -13,3 +13,10 @@ data/
 *.db-shm
 *.key
 *.pem
+backups/
+backup-export/
+*.service.lock
+*.db-journal
+.export-*
+.partial-*
+.restore-*

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sqlite3
 import re
 import time
 from contextlib import asynccontextmanager
@@ -22,6 +23,9 @@ from .config import Settings
 from .db import Base, Chat, Message, Plan, User, database, now, uid
 from .errors import ApiError
 from .limits import consume, sqlite_busy
+from .maintenance import backup_loop
+from .migrations import CURRENT_VERSION, running_database
+from .storage import StorageError, backup_directory, check_space, database_path, private_directory
 from .middleware import ApiCORS
 from .security import hash_password, token_for, verify_password
 from .validation import Contracts
@@ -103,11 +107,28 @@ def create_app(settings=None, ai_transport=None):
 
     @asynccontextmanager
     async def lifespan(app):
-        Base.metadata.create_all(engine)
-        async with httpx.AsyncClient(transport=ai_transport) as client:
-            app.state.ai = AI(settings, contracts, client)
-            yield
-        engine.dispose()
+        try:
+            with running_database(settings):
+                if settings.backup_enabled:
+                    private_directory(backup_directory(settings))
+                async with httpx.AsyncClient(transport=ai_transport) as client:
+                    app.state.ai = AI(settings, contracts, client)
+                    task = asyncio.create_task(backup_loop(settings)) if settings.backup_enabled else None
+                    try:
+                        yield
+                    finally:
+                        if task:
+                            task.cancel()
+                            try:
+                                await task
+                            except asyncio.CancelledError:
+                                pass
+        except (StorageError, sqlite3.Error, OSError) as exc:
+            code = exc.code if isinstance(exc, StorageError) else type(exc).__name__
+            logger.error('Database startup failed code=%s', code)
+            raise StorageError('DATABASE_STARTUP_FAILED') from None
+        finally:
+            engine.dispose()
 
     app = FastAPI(title='XRONIX Backend', version='1.0.0', lifespan=lifespan)
     app.state.sessions = sessions
@@ -191,7 +212,16 @@ def create_app(settings=None, ai_transport=None):
 
     @app.get('/health')
     def health(session: Session = Depends(db)):
-        session.execute(text('SELECT 1'))
+        if session.execute(text('SELECT MAX(version) FROM schema_migrations')).scalar() != CURRENT_VERSION:
+            raise ApiError('INTERNAL')
+        try:
+            check_space(database_path(settings).parent, settings.db_min_free_bytes)
+            directory = backup_directory(settings)
+            if settings.backup_enabled and directory.exists():
+                check_space(directory, settings.db_min_free_bytes)
+        except StorageError as exc:
+            logger.warning('Database health failed code=%s', exc.code)
+            raise ApiError('INTERNAL') from None
         return {'status': 'ok'}
 
     @app.post('/api/auth/register', status_code=201)
