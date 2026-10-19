@@ -110,7 +110,7 @@ def test_origin_rejected_before_mutation_and_preflight_json(settings):
             assert r.headers['access-control-allow-origin']==origin
             error(c.get('/api/me',headers={'Origin':origin}),'UNAUTHORIZED')
         for headers in [{'Origin':'https://evil.example','Access-Control-Request-Method':'GET'},
-                        {'Origin':'https://xronix.ru','Access-Control-Request-Method':'DELETE'},
+                        {'Origin':'https://xronix.ru','Access-Control-Request-Method':'PUT'},
                         {'Origin':'https://xronix.ru','Access-Control-Request-Method':'GET','Access-Control-Request-Headers':'X-Unknown'}]:
             error(c.options('/api/me',headers=headers),'VALIDATION_ERROR')
 

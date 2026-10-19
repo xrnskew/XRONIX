@@ -69,5 +69,6 @@ def recalculate(plan):
         c['monthly_payment_rub'] = annuity(c['amount_rub'], c['estimated_rate_percent'], c['recommended_term_months'])
         c['debt_load_percent'] = js_round(c['monthly_payment_rub'] / f['monthly_profit_rub'] * 100) if f['monthly_profit_rub'] > 0 else 100
         c['verdict'] = verdict_for(c['debt_load_percent'])
-    c['recommended_product_id'] = None
+    if c.get('recommended_product_id') not in ('fast', 'secured', 'mortgage', 'revolving'):
+        c['recommended_product_id'] = None
     return plan

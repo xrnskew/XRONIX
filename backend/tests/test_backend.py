@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.config import Settings
-from app.db import Chat, Message, User
+from app.db import Chat, Message, Plan, User
 from app.errors import MESSAGES
 from app.main import create_app
 from app.security import verify_password
@@ -24,7 +24,9 @@ CONTRACTS = Contracts(Path(__file__).resolve().parents[2] / 'contracts')
 
 @pytest.fixture
 def settings(tmp_path):
-    return Settings(database_url=f'sqlite:///{tmp_path}/db.sqlite', jwt_secret='test-secret-' * 5, ai_requests_per_minute=100, ai_global_per_minute=1000)
+    return Settings(database_url=f'sqlite:///{tmp_path}/db.sqlite', jwt_secret='test-secret-' * 5,
+                    cors_origins=['https://xronix.ru', 'https://www.xronix.ru', 'http://localhost:5173'],
+                    ai_requests_per_minute=100, ai_global_per_minute=1000)
 
 
 @pytest.fixture
@@ -88,7 +90,7 @@ def test_invalid_registration(client, body):
 
 
 def test_jwt_and_protected_routes(client, settings):
-    paths = [('/api/me','get'),('/api/me','patch'),('/api/chats','get'),('/api/chats','post'),('/api/chats/x','get'),('/api/chats/x/messages','post'),('/api/plans','get'),('/api/plans/x','get')]
+    paths = [('/api/me','get'),('/api/me','patch'),('/api/chats','get'),('/api/chats','post'),('/api/chats/x','get'),('/api/chats/x','delete'),('/api/chats/x/messages','post'),('/api/plans','get'),('/api/plans/x','get')]
     for path, method in paths:
         error(getattr(client, method)(path), 'UNAUTHORIZED')
     h = register(client)
@@ -135,6 +137,58 @@ def test_full_flow_and_isolation(client):
     assert client.get('/api/chats', headers=other).json() == []
     error(client.get('/api/chats/missing', headers=h), 'NOT_FOUND')
     error(client.get('/api/plans/missing', headers=h), 'NOT_FOUND')
+
+
+def test_delete_chat_removes_only_its_messages_and_plans(client):
+    h, other = register(client), register(client, 'other@example.com')
+    cid, kept = chat(client, h), chat(client, h)
+    plans = []
+    for chat_id in (cid, kept):
+        assert send(client, h, chat_id, 'Идея').status_code == 200
+        plans.append(send(client, h, chat_id, 'Москва').json()['plan_id'])
+    with client.app.app.state.sessions() as s:
+        user = s.scalar(select(User).where(User.email == 'ilya@example.com'))
+        before = (user.memory, user.tags)
+    error(client.delete(f'/api/chats/{cid}', headers=other), 'NOT_FOUND')
+    error(client.delete('/api/chats/missing', headers=h), 'NOT_FOUND')
+    assert client.get(f'/api/chats/{cid}', headers=h).status_code == 200
+    response = client.delete(f'/api/chats/{cid}', headers=h)
+    assert response.status_code == 204
+    assert response.content == b''
+    error(client.get(f'/api/chats/{cid}', headers=h), 'NOT_FOUND')
+    error(client.delete(f'/api/chats/{cid}', headers=h), 'NOT_FOUND')
+    error(client.get(f'/api/plans/{plans[0]}', headers=h), 'NOT_FOUND')
+    error(send(client, h, cid), 'NOT_FOUND')
+    assert [p['plan_id'] for p in client.get('/api/plans', headers=h).json()] == [plans[1]]
+    assert [c['id'] for c in client.get('/api/chats', headers=h).json()] == [kept]
+    assert len(client.get(f'/api/chats/{kept}', headers=h).json()['messages']) == 4
+    with client.app.app.state.sessions() as s:
+        assert s.get(Chat, cid) is None
+        assert s.scalar(select(Message).where(Message.chat_id == cid)) is None
+        assert s.scalar(select(Plan).where(Plan.chat_id == cid)) is None
+        user = s.scalar(select(User).where(User.email == 'ilya@example.com'))
+        assert (user.memory, user.tags) == before
+
+
+@pytest.mark.parametrize('origin', ['https://xronix.ru', 'https://www.xronix.ru', 'http://localhost:5173'])
+def test_delete_chat_cors_and_expired_lease(client, origin):
+    h = {**register(client), 'Origin': origin}
+    cid = chat(client, h)
+    with client.app.app.state.sessions() as s:
+        s.get(Chat, cid).busy_until = time.time() - 1
+        s.commit()
+    preflight = client.options(f'/api/chats/{cid}', headers={
+        'Origin': origin, 'Access-Control-Request-Method': 'DELETE',
+        'Access-Control-Request-Headers': 'authorization,content-type'})
+    assert preflight.status_code == 200
+    assert 'DELETE' in preflight.headers['access-control-allow-methods']
+    assert preflight.headers['access-control-allow-origin'] == origin
+    foreign = client.delete(f'/api/chats/{cid}', headers={**h, 'Origin': 'https://foreign.example'})
+    error(foreign, 'VALIDATION_ERROR')
+    assert 'access-control-allow-origin' not in foreign.headers
+    response = client.delete(f'/api/chats/{cid}', headers=h)
+    assert response.status_code == 204 and response.content == b''
+    assert response.headers['access-control-allow-origin'] == origin
 
 
 def test_restart_persists_everything_and_chat_stages(settings):
@@ -252,7 +306,8 @@ def test_unavailable_ai(settings, mode):
         assert c.get('/api/plans',headers=h).json()==[]
 
 
-def test_retry_recovers_and_server_recalculates(settings):
+@pytest.mark.parametrize('product_id', ['fast', 'secured', 'mortgage', 'revolving', None])
+def test_retry_recovers_and_server_recalculates(settings, product_id):
     calls=[]
     def handler(request):
         calls.append(request)
@@ -261,7 +316,7 @@ def test_retry_recovers_and_server_recalculates(settings):
             return httpx.Response(200,json=CONTRACTS.example('response.summarize.json'))
         r=CONTRACTS.example('reply.plan.ai.json')
         r['plan']['finance']['payback_months']=16
-        r['plan']['credit'].update(monthly_payment_rub=1,debt_load_percent=1,verdict='not_recommended',recommended_product_id='mortgage')
+        r['plan']['credit'].update(monthly_payment_rub=1,debt_load_percent=1,verdict='not_recommended',recommended_product_id=product_id)
         return httpx.Response(200,json=r)
     with live_client(settings,handler) as c:
         h=register(c); cid=chat(c,h)
@@ -274,7 +329,7 @@ def test_retry_recovers_and_server_recalculates(settings):
         assert credit['monthly_payment_rub']==51878
         assert credit['debt_load_percent']==35
         assert credit['verdict']=='ok'
-        assert credit['recommended_product_id'] is None
+        assert credit['recommended_product_id']==product_id
         assert len(calls)==4
 
 
@@ -392,3 +447,35 @@ def test_simultaneous_messages_are_serialized(settings):
             error(send(c,h,cid),'RATE_LIMITED')
             assert first.result().status_code==200
         assert len(c.get(f'/api/chats/{cid}',headers=h).json()['messages'])==2
+
+
+def test_delete_chat_rejects_inflight_ai_across_workers(settings):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+    entered, release = Event(), Event()
+
+    async def handler(request):
+        entered.set()
+        while not release.is_set():
+            await asyncio.sleep(0.01)
+        return httpx.Response(200, json=CONTRACTS.example('reply.message.json'))
+
+    with live_client(settings, handler) as sender, live_client(settings, handler) as deleter:
+        h = register(sender)
+        cid = chat(sender, h)
+        other = register(sender, 'other@example.com')
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            pending = pool.submit(send, sender, h, cid)
+            try:
+                assert entered.wait(5)
+                error(deleter.delete(f'/api/chats/{cid}', headers=other), 'NOT_FOUND')
+                response = deleter.delete(f'/api/chats/{cid}', headers={**h, 'Origin': 'https://xronix.ru'})
+                error(response, 'RATE_LIMITED')
+                assert response.headers['access-control-allow-origin'] == 'https://xronix.ru'
+                assert 'Retry-After' in response.headers
+                assert sender.get(f'/api/chats/{cid}', headers=h).status_code == 200
+            finally:
+                release.set()
+            assert pending.result(timeout=5).status_code == 200
+        assert len(sender.get(f'/api/chats/{cid}', headers=h).json()['messages']) == 2
+        assert deleter.delete(f'/api/chats/{cid}', headers=h).status_code == 204

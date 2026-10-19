@@ -11,9 +11,9 @@ import jwt
 from fastapi import BackgroundTasks, Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
-from sqlalchemy import select, update, text, func
+from sqlalchemy import select, update, delete, text, func
 from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException
@@ -274,6 +274,20 @@ def create_app(settings=None, ai_transport=None):
         owned_chat(session, chat_id, user.id)
         messages = session.scalars(select(Message).where(Message.chat_id == chat_id).order_by(Message.seq))
         return {'id': chat_id, 'messages': [{'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': m.reply} for m in messages]}
+
+    @app.delete('/api/chats/{chat_id}', status_code=204)
+    def delete_chat(chat_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
+        # Acquire SQLite's write lock before reading the lease so send_message
+        # cannot acquire it between our check and deletion, even across workers.
+        session.execute(update(Chat).where(Chat.id == chat_id, Chat.user_id == user.id).values(busy_until=Chat.busy_until))
+        chat = owned_chat(session, chat_id, user.id)
+        if chat.busy_until > time.time():
+            raise ApiError('RATE_LIMITED')
+        session.execute(delete(Plan).where(Plan.chat_id == chat_id))
+        session.execute(delete(Message).where(Message.chat_id == chat_id))
+        session.execute(delete(Chat).where(Chat.id == chat_id, Chat.user_id == user.id))
+        session.commit()
+        return Response(status_code=204)
 
     @app.post('/api/chats/{chat_id}/messages')
     async def send_message(chat_id: str, body: SendMessage, background: BackgroundTasks, user: User = Depends(authenticated), session: Session = Depends(db)):

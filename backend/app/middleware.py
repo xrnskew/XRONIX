@@ -14,7 +14,7 @@ class ApiCORS(CORSMiddleware):
     """Reject foreign browser origins before side effects; bound bodies and request rate."""
     def __init__(self, app, settings, sessions):
         super().__init__(app, allow_origins=settings.cors_origins,
-                         allow_methods=['GET', 'POST', 'PATCH', 'OPTIONS'],
+                         allow_methods=['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
                          allow_headers=['Authorization', 'Content-Type'])
         self.settings, self.sessions = settings, sessions
 
