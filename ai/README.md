@@ -32,9 +32,14 @@ systemd-служба `xronix-ai` на `127.0.0.1:8001` рядом с бэкен�
 |---|---|
 | `GIGACHAT_AUTH_KEY` | Authorization key из кабинета Сбера. Секрет |
 | `GIGACHAT_SCOPE` | `GIGACHAT_API_PERS` |
-| `GIGACHAT_MODEL` | `GigaChat-2` |
+| `GIGACHAT_MODEL` | `GigaChat-2` (быстрее) или `GigaChat-3-Ultra` (лучше тексты, но медленнее, см. таймауты ниже) |
 | `GIGACHAT_CA_BUNDLE_FILE` | `certs/russian_bundle.pem`, путь от папки `ai` |
-| `AI_DEADLINE_SEC` | Сколько секунд даём на ответ, по умолчанию 25 (у бэка таймаут 30) |
+| `AI_DEADLINE_SEC` | Сколько секунд даём на весь ответ, по умолчанию 25 (у бэка таймаут 30). Держать на ~5 с меньше таймаута бэка |
+| `GIGACHAT_TIMEOUT_SEC` | Один запрос к GigaChat, по умолчанию 20 |
+| `AI_DECIDE_TIMEOUT_SEC` | Шаг «вопросы или план», по умолчанию 8 |
+| `AI_MIN_RETRY_SEC` | Повтор плана, только если осталось столько секунд, по умолчанию 10 |
+
+Для `GigaChat-3-Ultra` план идёт 19–25 с, поэтому: бэк ждёт 45 с, `GIGACHAT_TIMEOUT_SEC=35`, `AI_DEADLINE_SEC=40`, `AI_MIN_RETRY_SEC=20`.
 
 ## Как устроена генерация плана
 

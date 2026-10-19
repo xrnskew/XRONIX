@@ -26,8 +26,6 @@ logger = logging.getLogger(__name__)
 
 # Больше двух раундов вопросов подряд бэк не принимает (contracts/ai.md).
 MAX_QUESTION_ROUNDS = 2
-# Шаг decide не должен съедать время, нужное плану (~10–13 с).
-DECIDE_TIMEOUT_SEC = 8
 
 
 class AiError(Exception):
@@ -179,7 +177,7 @@ async def decide(llm: LLM, req: RespondRequest, rounds: int, deadline: float):
     fallback = (questions_reply(list(FALLBACK_QUESTIONS.questions), req, rounds)
                 if rounds == 0 else None)
     try:
-        async with asyncio.timeout(min(DECIDE_TIMEOUT_SEC, deadline - loop.time())):
+        async with asyncio.timeout(min(config.DECIDE_TIMEOUT_SEC, deadline - loop.time())):
             # Со схемой Decision response_format у GigaChat отдаёт пустой ответ — только промпт.
             raw = await llm.json_chat(decide_messages(req, rounds), Decision, max_tokens=1500, use_schema=False)
         decision = Decision.model_validate(raw)

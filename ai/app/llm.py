@@ -40,7 +40,7 @@ class LLM:
             scope=config.SCOPE,
             model=config.MODEL,
             ca_bundle_file=config.CA_BUNDLE,
-            timeout=20,
+            timeout=config.REQUEST_TIMEOUT_SEC,
             max_retries=2,
         )
         # TLS-handshake с серверами Сбера иногда виснет. Библиотека даёт задать только один
@@ -48,7 +48,7 @@ class LLM:
         # и библиотека успевает повторить запрос в рамках нашего бюджета. Приватные поля
         # gigachat==0.2.3 — при обновлении библиотеки проверить.
         for client in (self.giga._aclient, self.giga._auth_aclient):
-            client.timeout = httpx.Timeout(20, connect=5)
+            client.timeout = httpx.Timeout(config.REQUEST_TIMEOUT_SEC, connect=5)
 
     async def json_chat(self, messages: list, schema: type[BaseModel], max_tokens: int = 4000,
                         use_schema: bool = True) -> dict:
