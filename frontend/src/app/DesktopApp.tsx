@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { MemoryRouter, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { CabinetProvider, useCabinet } from '../phone/CabinetContext'
 import Login from '../phone/screens/Login'
@@ -12,6 +12,7 @@ import { api } from '../api'
 import type { ChatSummary } from '../types/plan'
 import { short } from '../lib/format'
 import { useMediaQuery } from '../landing/useSlides'
+import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 
 // Рабочая версия (/app): тот же кабинет, что в телефоне на презентации, но на весь экран и без слайдов.
 // Экраны и логика общие с телефоном, своё здесь только обрамление: боковая панель с разделами и диалогами.
@@ -37,9 +38,7 @@ const points = [
 function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="grid min-h-svh lg:grid-cols-[1.1fr_1fr]">
-      <section className="relative hidden overflow-hidden border-r border-white/5 p-12 lg:flex lg:flex-col">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[620px] w-[620px] rounded-full bg-[radial-gradient(closest-side,rgba(239,49,36,.35),rgba(239,49,36,0))]" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-56 right-[-120px] h-[520px] w-[520px] rounded-full bg-[radial-gradient(closest-side,rgba(239,49,36,.16),rgba(239,49,36,0))]" aria-hidden />
+      <section className="relative hidden overflow-hidden p-12 lg:flex lg:flex-col">
         <div className="relative flex items-center gap-3">
           <Logo size={40} />
           <div className="leading-tight">
@@ -64,7 +63,6 @@ function AuthLayout({ children }: { children: ReactNode }) {
       </section>
       <section className="flex items-center justify-center p-6">
         <div className="w-full max-w-[400px]">
-          <div className="mb-10 flex items-center gap-3 lg:hidden"><Logo size={36} /><span className="font-display text-[16px] font-semibold text-brand">XRONIX</span></div>
           {children}
         </div>
       </section>
@@ -85,7 +83,7 @@ function PlanBadge() {
   const f = plan.finance
   return (
     <NavLink to="/plan" className="hero-card card-ring mb-5 block rounded-2xl p-3.5 transition-opacity hover:opacity-90">
-      <div className="text-[11px] font-medium uppercase tracking-wider text-text/50">Текущий план</div>
+      <div className="text-[12px] text-text/55">Текущий план</div>
       <div className="mt-1 truncate text-[15px] font-semibold">{plan.title}</div>
       <div className="mt-2.5 flex gap-4 text-[12px]">
         <div><div className="text-text/50">На старт</div><div className="mt-0.5 font-semibold tabular-nums">{short(f.startup_cost_rub)} ₽</div></div>
@@ -116,7 +114,7 @@ function Dialogs() {
         className="mb-4 flex h-11 items-center justify-center gap-2 rounded-xl bg-fill text-[14px] font-semibold text-white transition-colors hover:bg-brand-deep">
         <Icon d="M12 5v14M5 12h14" size={18} />Новый диалог
       </button>
-      <div className="px-2 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted">Диалоги</div>
+      <div className="px-2 pb-1.5 text-[13px] text-muted">Диалоги</div>
       <div className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto">
         {failed && <p className="px-2 py-2 text-[13px] text-accent">Не удалось загрузить диалоги.</p>}
         {!items && !failed && [0, 1, 2].map((i) => <div key={i} className="mx-1 my-1 h-9 animate-pulse rounded-lg bg-surface" aria-hidden />)}
@@ -136,7 +134,7 @@ function Dialogs() {
 function Sidebar() {
   const { user, signOut } = useCabinet()
   return (
-    <aside className="hidden w-[288px] shrink-0 flex-col border-r border-white/5 bg-[#0b0b0d]/80 p-4 md:flex">
+    <aside className="hidden w-[288px] shrink-0 flex-col border-r border-white/5 bg-[#09090b]/75 p-4 md:flex">
       <div className="mb-6 flex items-center gap-3 px-1">
         <Logo size={36} />
         <div className="leading-tight">
@@ -173,6 +171,25 @@ function Sidebar() {
       </div>
     </aside>
   )
+}
+
+// Фон отражает работу ИИ: думает — поле разгорается, пришёл новый план — вспышка
+function ShaderSync() {
+  const { busy, messages, status } = useCabinet()
+  const last = messages[messages.length - 1]
+  const planId = last?.reply?.type === 'plan' ? last.id : null
+  const seen = useRef(planId)
+  const wasBusy = useRef(busy)
+  // Вспышка только для плана, который пришёл ответом на запрос; план из истории не вспыхивает.
+  // Этот эффект объявлен раньше эффекта busy, поэтому видит busy предыдущего рендера.
+  useEffect(() => {
+    if (planId && planId !== seen.current && wasBusy.current) pulseShader()
+    seen.current = planId
+  }, [planId])
+  useEffect(() => { wasBusy.current = busy }, [busy])
+  // на экране входа поле теплее: там оно единственное украшение
+  useEffect(() => { setShaderEnergy(busy ? 1 : status === 'out' ? 0.55 : 0) }, [busy, status])
+  return null
 }
 
 function Shell() {
@@ -216,9 +233,11 @@ export default function DesktopApp() {
   const wide = useMediaQuery('(min-width: 768px)') // как md: с этой ширины диалоги в боковой панели
   return (
     <Wide.Provider value={wide}>
-      <div className="app-bg min-h-svh text-text">
+      <div className="relative min-h-svh text-text">
+        <AppShader />
         <MemoryRouter initialEntries={['/chat']}>
           <CabinetProvider>
+            <ShaderSync />
             <Shell />
           </CabinetProvider>
         </MemoryRouter>

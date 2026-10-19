@@ -38,7 +38,7 @@ export default function Login() {
       {wide ? (
         <div className="mb-8">
           <h1 className="font-display text-[30px] font-semibold leading-tight tracking-tight">{reg ? 'Создайте аккаунт' : 'Вход в кабинет'}</h1>
-          <p className="mt-2 text-[15px] text-muted">{reg ? 'Займёт минуту. Потом ИИ задаст пару вопросов о вас.' : 'Планы и диалоги сохраняются в аккаунте.'}</p>
+          <p className="mt-2 text-[15px] text-text/70">{reg ? 'Займёт минуту. Потом ИИ задаст пару вопросов о вас.' : 'Планы и диалоги сохраняются в аккаунте.'}</p>
         </div>
       ) : (
         <>

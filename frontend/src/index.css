@@ -113,7 +113,7 @@ input[type="range"] { height: 4px; }
 /* Сетка карточек: по умолчанию на всю ширину, с 1100px карточки встают рядом по data-span */
 .wide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-content: start; }
 .wide-grid > * { grid-column: span 12; }
-.wide-grid > .card-ring:not(.hero-card) { padding: 22px; }
+.wide-grid > .card-ring:not(.hero-card) { padding: 22px; background: rgba(25,25,28,.9); }
 @media (min-width: 1100px) {
   .wide-grid > [data-span="5"] { grid-column: span 5; }
   .wide-grid > [data-span="6"] { grid-column: span 6; }
