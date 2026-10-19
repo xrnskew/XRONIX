@@ -57,7 +57,7 @@ sudo docker compose --env-file backend/deploy/.env -f backend/deploy/compose.yam
 
 ## 4. Подключение Дани позже
 
-Backend обращается к `AI_SERVICE_URL + /ai/respond` и `/ai/summarize`; таймаут respond с ретраями — 30 секунд. Лимиты настроены окружением. Для сервиса на той же ВМ подключить его контейнер к сети `xronix_ai` с DNS-именем/alias `ai` и прослушиванием `0.0.0.0:8001`. **Не использовать `-p 8001:8001`.** Сеть уже создаёт Compose; сервис Дани может иметь собственный Compose с external network `xronix_ai`. Параметры его сборки, секреты GigaChat и сертификаты остаются в зоне Дани.
+Backend обращается к `AI_SERVICE_URL + /ai/respond` и `/ai/summarize`; таймаут respond с ретраями — 45 секунд; Caddy ждёт заголовки ответа до 50 секунд, frontend должен ждать POST /api/chats/{id}/messages до 50 секунд. Лимиты настроены окружением. Для сервиса на той же ВМ подключить его контейнер к сети `xronix_ai` с DNS-именем/alias `ai` и прослушиванием `0.0.0.0:8001`. **Не использовать `-p 8001:8001`.** Сеть уже создаёт Compose; сервис Дани может иметь собственный Compose с external network `xronix_ai`. Параметры его сборки, секреты GigaChat и сертификаты остаются в зоне Дани.
 
 Установить в серверном `.env` `MOCK_AI=false`, оставить `AI_SERVICE_URL=http://ai:8001`; либо указать доступный защищённый URL сервиса на другом хосте. Затем:
 

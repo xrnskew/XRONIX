@@ -304,6 +304,27 @@ def test_respond_total_deadline_including_retries(settings,monkeypatch):
         assert c.get('/api/plans',headers=h).json()==[]
 
 
+def test_slow_ai_plan_survives_thirty_seconds(settings):
+    endpoints = []
+
+    async def handler(request):
+        endpoints.append(request.url.path)
+        assert request.extensions['timeout']['read'] == 45
+        if request.url.path.endswith('summarize'):
+            return httpx.Response(200, json=CONTRACTS.example('response.summarize.json'))
+        await asyncio.sleep(31)
+        return httpx.Response(200, json=CONTRACTS.example('reply.plan.ai.json'))
+
+    with live_client(settings, handler) as c:
+        h = register(c)
+        cid = chat(c, h)
+        response = send(c, h, cid)
+        assert response.status_code == 200, response.text
+        pid = response.json()['plan_id']
+        assert c.get(f'/api/plans/{pid}', headers=h).status_code == 200
+        assert endpoints == ['/ai/respond', '/ai/summarize']
+
+
 def test_completed_plan_replay_even_with_crashed_worker_lease(settings):
     with TestClient(create_app(settings)) as c:
         h=register(c);cid=chat(c,h)
