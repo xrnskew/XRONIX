@@ -5,3 +5,11 @@ __pycache__/
 data/
 *.pyc
 .venv*/
+.env.*
+!.env.example
+*.sqlite*
+*.db
+*.db-wal
+*.db-shm
+*.key
+*.pem

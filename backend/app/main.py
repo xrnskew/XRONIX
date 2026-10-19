@@ -12,8 +12,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
-from sqlalchemy import select, update, text
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select, update, text, func
+from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException
 
@@ -21,6 +21,8 @@ from .ai import AI, history
 from .config import Settings
 from .db import Base, Chat, Message, Plan, User, database, now, uid
 from .errors import ApiError
+from .limits import consume, sqlite_busy
+from .middleware import ApiCORS
 from .security import hash_password, token_for, verify_password
 from .validation import Contracts
 
@@ -116,6 +118,10 @@ def create_app(settings=None, ai_transport=None):
     async def api_error(request, exc):
         return JSONResponse(exc.body(), status_code=exc.status, headers={'Retry-After': '2'} if exc.status == 429 else None)
 
+    @app.exception_handler(OperationalError)
+    async def database_error(request, exc):
+        return await api_error(request, ApiError('RATE_LIMITED' if sqlite_busy(exc) else 'INTERNAL'))
+
     @app.exception_handler(RequestValidationError)
     async def invalid(request, exc):
         return await api_error(request, ApiError('VALIDATION_ERROR'))
@@ -156,21 +162,32 @@ def create_app(settings=None, ai_transport=None):
     def recent(session, chat_id, limit):
         return list(reversed(session.scalars(select(Message).where(Message.chat_id == chat_id).order_by(Message.seq.desc()).limit(limit)).all()))
 
+    def completed_plan_replay(session, chat_id, body):
+        previous = recent(session, chat_id, 2)
+        if len(previous) == 2 and previous[0].role == 'user' and previous[1].role == 'assistant':
+            last_user, last_reply = previous
+            from datetime import datetime
+            age = time.time() - datetime.fromisoformat(last_reply.created_at.replace('Z', '+00:00')).timestamp()
+            if (last_reply.reply['type'] == 'plan' and 0 <= age < 120
+                    and last_user.reply['text'] == body.text
+                    and (last_user.answers or []) == [a.model_dump() for a in body.answers]):
+                return last_reply.reply
+        return None
+
     async def summarize(user_id, chat_id):
-        # Separate transaction: a failed summary must never lose a finished plan.
-        with sessions() as session:
-            user = session.get(User, user_id)
-            payload = {'memory': user.memory, 'history': history(recent(session, chat_id, 30))}
+        # A failed/stale background summary must never lose a finished plan.
         try:
+            with sessions() as session:
+                user = session.get(User, user_id)
+                payload = {'memory': user.memory, 'history': history(recent(session, chat_id, 30))}
             result = await app.state.ai.summarize(payload)
+            with sessions() as session:
+                user = session.get(User, user_id)
+                session.execute(update(User).where(User.id == user_id, User.memory == payload['memory'], User.tags == user.tags).values(
+                    memory=result['memory'], tags=merge_tags(user.tags, result['tags'])))
+                session.commit()
         except Exception as exc:
             logger.warning('Memory summary skipped: %s', type(exc).__name__)
-            return
-        with sessions() as session:
-            user = session.get(User, user_id)
-            user.memory = result['memory']
-            user.tags = merge_tags(user.tags, result['tags'])
-            session.commit()
 
     @app.get('/health')
     def health(session: Session = Depends(db)):
@@ -231,15 +248,33 @@ def create_app(settings=None, ai_transport=None):
     @app.post('/api/chats/{chat_id}/messages')
     async def send_message(chat_id: str, body: SendMessage, background: BackgroundTasks, user: User = Depends(authenticated), session: Session = Depends(db)):
         chat = owned_chat(session, chat_id, user.id)
-        lease = time.time() + 120
-        acquired = session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until < time.time()).values(busy_until=lease)).rowcount
-        session.commit()
-        if not acquired:
-            raise ApiError('RATE_LIMITED')
+        cached = completed_plan_replay(session, chat_id, body)
+        if cached is not None:
+            return cached
+        stamp = time.time()
+        lease = stamp + 120
+        try:
+            acquired = session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until < stamp).values(busy_until=lease)).rowcount
+            if not acquired:
+                raise ApiError('RATE_LIMITED')
+            active = Chat.busy_until > stamp
+            user_active = session.scalar(select(func.count()).select_from(Chat).where(active, Chat.user_id == user.id))
+            global_active = session.scalar(select(func.count()).select_from(Chat).where(active))
+            if user_active > 1 or global_active > settings.ai_max_concurrent:
+                raise ApiError('RATE_LIMITED')
+            session.commit()
+        except Exception:
+            session.rollback()
+            raise
         try:
             # Refresh after acquiring the database lease, including with multiple workers.
             session.refresh(chat)
             session.refresh(user)
+            cached = completed_plan_replay(session, chat_id, body)
+            if cached is not None:
+                return cached
+            consume(session, 'ai-user', user.id, settings.ai_requests_per_minute)
+            consume(session, 'ai-global', 'all', settings.ai_global_per_minute)
             payload = {'mode': 'chat', 'user_context': {'profile': {k: getattr(user, k) for k in ('name', 'city', 'experience', 'budget_rub')}, 'tags': user.tags, 'memory': user.memory}, 'history': history(recent(session, chat_id, 10)), 'message': body.text}
             if not session.scalar(select(Message.id).where(Message.chat_id == chat_id).limit(1)):
                 chat.title = body.text[:60]
@@ -266,8 +301,12 @@ def create_app(settings=None, ai_transport=None):
             return reply
         finally:
             session.rollback()
-            session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until == lease).values(busy_until=0.0))
-            session.commit()
+            try:
+                session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until == lease).values(busy_until=0.0))
+                session.commit()
+            except SQLAlchemyError as exc:
+                session.rollback()
+                logger.warning('Chat lease release skipped: %s', type(exc).__name__)
 
     @app.get('/api/plans')
     def list_plans(user: User = Depends(authenticated), session: Session = Depends(db)):
@@ -282,4 +321,4 @@ def create_app(settings=None, ai_transport=None):
         return {'plan_id': plan.id, 'chat_id': plan.chat_id, 'created_at': plan.created_at, 'plan': plan.body}
 
     # Wrap the whole app so even INTERNAL responses include CORS headers.
-    return CORSMiddleware(app, allow_origins=settings.cors_origins, allow_methods=['GET', 'POST', 'PATCH', 'OPTIONS'], allow_headers=['Authorization', 'Content-Type'])
+    return ApiCORS(app, settings, sessions)

@@ -1,3 +1,4 @@
+import fcntl
 import os
 import secrets
 from dataclasses import dataclass, field
@@ -19,6 +20,21 @@ class Settings:
     cors_origins: list[str] = field(default_factory=lambda: [v.strip() for v in os.getenv('CORS_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173').split(',') if v.strip()])
     contracts_dir: Path = field(default_factory=lambda: Path(os.getenv('CONTRACTS_DIR', str(ROOT.parent / 'contracts'))))
 
+    ai_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('AI_REQUESTS_PER_MINUTE', '6')))
+    ai_global_per_minute: int = field(default_factory=lambda: int(os.getenv('AI_GLOBAL_PER_MINUTE', '30')))
+    ai_max_concurrent: int = field(default_factory=lambda: int(os.getenv('AI_MAX_CONCURRENT', '4')))
+    api_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('API_REQUESTS_PER_MINUTE', '120')))
+    auth_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('AUTH_REQUESTS_PER_MINUTE', '20')))
+    max_body_bytes: int = 65536
+
+    def __post_init__(self):
+        if any(value < 1 for value in (self.jwt_expire_minutes, self.ai_requests_per_minute,
+                self.ai_global_per_minute, self.ai_max_concurrent,
+                self.api_requests_per_minute, self.auth_requests_per_minute)):
+            raise ValueError('Limits and token lifetime must be positive')
+        if not self.cors_origins or '*' in self.cors_origins:
+            raise ValueError('Explicit CORS origins required')
+
     def signing_key(self):
         if self.jwt_secret:
             if len(self.jwt_secret.encode()) < 32:
@@ -27,9 +43,18 @@ class Settings:
         # Stable local key: tokens survive restarts. Never tracked by Git.
         path = ROOT / 'data/jwt.key'
         path.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            with open(path, 'x', opener=lambda p, flags: os.open(p, flags, 0o600)) as f:
-                f.write(secrets.token_urlsafe(48))
-        except FileExistsError:
-            pass
-        return path.read_text().strip()
+        descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(descriptor, 'r+') as stream:
+            fcntl.flock(stream, fcntl.LOCK_EX)
+            value = stream.read().strip()
+            if not value:
+                value = secrets.token_urlsafe(48)
+                stream.seek(0)
+                stream.write(value)
+                stream.truncate()
+                stream.flush()
+                os.fsync(stream.fileno())
+            if len(value.encode()) < 32:
+                raise ValueError('Persisted JWT key is too short')
+            os.fchmod(stream.fileno(), 0o600)
+            return value

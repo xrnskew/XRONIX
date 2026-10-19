@@ -18,26 +18,38 @@ class AI:
     async def call(self, endpoint, payload, stage=0):
         if self.settings.mock_ai:
             if endpoint == 'summarize':
-                return self.contracts.example('response.summarize.json')
+                # Summarize only this user's statements, never the example person's facts.
+                statements = [m['content'] for m in payload['history'] if m['role'] == 'user']
+                old = payload['memory']
+                if old == self.contracts.example('response.summarize.json')['memory']:
+                    old = ''  # Repair the exact legacy mock fixture, not arbitrary user facts.
+                return {'memory': '\n'.join(dict.fromkeys([old, *statements])).strip()[-800:], 'tags': []}
             if stage == 0:
                 return self.contracts.example('reply.questions.json')
             if stage == 1:
-                return self.contracts.example('reply.plan.ai.json')
+                reply = self.contracts.example('reply.plan.ai.json')
+                reply['plan']['tags_update'] = list(payload['user_context']['tags'])
+                return reply
             return self.contracts.example('reply.message.json')
         try:
-            response = await self.client.post(f'{self.settings.ai_service_url}/ai/{endpoint}', json=payload, timeout=30)
+            async with self.client.stream('POST', f'{self.settings.ai_service_url}/ai/{endpoint}', json=payload, timeout=30) as response:
+                body = bytearray()
+                async for chunk in response.aiter_bytes():
+                    body.extend(chunk)
+                    if len(body) > 1024 * 1024:
+                        raise ApiError('AI_BAD_RESPONSE')
+                def reject_constant(value):
+                    raise ValueError('Non-finite JSON number')
+                try:
+                    result = json.loads(body, parse_constant=reject_constant)
+                except (ValueError, RecursionError) as exc:
+                    raise ApiError('AI_BAD_RESPONSE' if response.status_code == 200 else 'AI_UNAVAILABLE') from exc
+                if response.status_code != 200:
+                    bad = isinstance(result, dict) and isinstance(result.get('error'), dict) and result['error'].get('code') == 'AI_BAD_RESPONSE'
+                    raise ApiError('AI_BAD_RESPONSE' if bad else 'AI_UNAVAILABLE')
+                return result
         except httpx.RequestError as exc:
             raise ApiError('AI_UNAVAILABLE') from exc
-        if response.is_error:
-            try:
-                bad = response.json().get('error', {}).get('code') == 'AI_BAD_RESPONSE'
-            except (ValueError, AttributeError):
-                bad = False
-            raise ApiError('AI_BAD_RESPONSE' if bad else 'AI_UNAVAILABLE')
-        try:
-            return response.json()
-        except ValueError as exc:
-            raise ApiError('AI_BAD_RESPONSE') from exc
 
     async def validated(self, endpoint, payload, stage=0):
         self.contracts.validate('ai-request' if endpoint == 'respond' else 'summarize', payload, None if endpoint == 'respond' else 'request')

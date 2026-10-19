@@ -63,13 +63,20 @@ class Plan(Base):
     body: Mapped[dict] = mapped_column(JSON)
 
 
+class RateBucket(Base):
+    __tablename__ = 'rate_buckets'
+    key: Mapped[str] = mapped_column(String, primary_key=True)
+    count: Mapped[int] = mapped_column(Integer)
+    expires_at: Mapped[float] = mapped_column(index=True)
+
+
 def database(url):
     parsed = make_url(url)
     if parsed.drivername != 'sqlite':
         raise ValueError('MVP supports SQLite only')
     if parsed.database and parsed.database != ':memory:':
         Path(parsed.database).parent.mkdir(parents=True, exist_ok=True)
-    engine = create_engine(url, connect_args={'check_same_thread': False, 'timeout': 10})
+    engine = create_engine(url, hide_parameters=True, connect_args={'check_same_thread': False, 'timeout': 0.25})
 
     @event.listens_for(engine, 'connect')
     def configure(connection, _):

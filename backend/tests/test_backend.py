@@ -23,7 +23,7 @@ CONTRACTS = Contracts(Path(__file__).resolve().parents[2] / 'contracts')
 
 @pytest.fixture
 def settings(tmp_path):
-    return Settings(database_url=f'sqlite:///{tmp_path}/db.sqlite', jwt_secret='test-secret-' * 5)
+    return Settings(database_url=f'sqlite:///{tmp_path}/db.sqlite', jwt_secret='test-secret-' * 5, ai_requests_per_minute=100, ai_global_per_minute=1000)
 
 
 @pytest.fixture
@@ -149,7 +149,7 @@ def test_restart_persists_everything_and_chat_stages(settings):
         assert c.get(f'/api/plans/{pid}',headers=h).json()['plan'] == p['plan']
         assert len(c.get(f'/api/chats/{cid}',headers=h).json()['messages']) == 4
         assert send(c,h,second).json()['type'] == 'plan'
-        assert send(c,h,cid).json()['type'] == 'message'
+        assert send(c,h,cid,'Спасибо').json()['type'] == 'message'
         assert len(c.get('/api/plans',headers=h).json()) == 2
 
 
