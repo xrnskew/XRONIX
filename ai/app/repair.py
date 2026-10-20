@@ -182,13 +182,18 @@ def repair_plan(data: dict) -> tuple:
 
     f = p.get("finance")
     if isinstance(f, dict):
+        # Itemized estimates are the source of totals. Never invent missing lines.
+        for items, total in (("startup_items", "startup_cost_rub"), ("monthly_items", "monthly_expenses_rub")):
+            rows = f.get(items)
+            if isinstance(rows, list) and rows and all(isinstance(row, dict) and _is_int(row.get("amount_rub")) and row["amount_rub"] >= 0 for row in rows):
+                f[total] = sum(row["amount_rub"] for row in rows)
         s, o = f.get("startup_cost_rub"), f.get("own_funds_rub")
         if _is_int(s, o) and f.get("funding_gap_rub") != max(0, s - o):
             f["funding_gap_rub"] = max(0, s - o)
             fixed.append("funding_gap_rub")
 
         rev, exp = f.get("monthly_revenue_rub"), f.get("monthly_expenses_rub")
-        if _is_int(rev, exp) and rev > 0 and (rev - exp) / rev > MARGIN_MAX:
+        if "monthly_items" not in f and _is_int(rev, exp) and rev > 0 and (rev - exp) / rev > MARGIN_MAX:
             new_exp = rev - round(rev * MARGIN_TARGET)
             fc = f.get("revenue_forecast")
             if isinstance(fc, list) and exp > 0:
@@ -228,7 +233,7 @@ def repair_plan(data: dict) -> tuple:
         # Шаг за 0 ₽ капитан просил не показывать: отдаём таким шагам остаток стоимости запуска.
         free = [s for s in steps if isinstance(s, dict) and not (_is_int(s.get("cost_rub")) and s["cost_rub"] > 0)]
         start = f.get("startup_cost_rub") if isinstance(f, dict) else None
-        if free and _is_int(start):
+        if free and _is_int(start) and "startup_items" not in f:
             paid = sum(s["cost_rub"] for s in steps if isinstance(s, dict) and s not in free)
             share = max(int(round((start - paid) / len(free), -3)), 5000)
             for s in free:

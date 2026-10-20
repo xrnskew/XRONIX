@@ -49,7 +49,15 @@ class ForecastPoint(_Strict):
     expenses_rub: Rub
 
 
+class BudgetItem(_Strict):
+    title: Annotated[str, Field(min_length=1, max_length=100)]
+    amount_rub: Rub
+    assumption: Annotated[str, Field(min_length=1, max_length=500)]
+
+
 class Finance(_Strict):
+    startup_items: Annotated[List[BudgetItem], Field(min_length=1, max_length=20)]
+    monthly_items: Annotated[List[BudgetItem], Field(min_length=1, max_length=20)]
     startup_cost_rub: Rub
     own_funds_rub: Rub
     funding_gap_rub: Rub
@@ -93,6 +101,9 @@ CREDIT_NUMBERS = ("amount_rub", "recommended_term_months", "estimated_rate_perce
 def check_plan(p: Plan) -> List[str]:
     """Правила checkPlan из contracts/ai.md. Любая ошибка здесь = бэк отклонит план."""
     errors, f, c = [], p.finance, p.credit
+    for items, total in ((f.startup_items, f.startup_cost_rub), (f.monthly_items, f.monthly_expenses_rub)):
+        if sum(row.amount_rub for row in items) != total:
+            errors.append("Сумма статей сметы не совпадает с итогом")
     gap = max(0, f.startup_cost_rub - f.own_funds_rub)
     if f.funding_gap_rub != gap:
         errors.append(f"funding_gap_rub={f.funding_gap_rub}, а должно быть startup-own={gap}")
