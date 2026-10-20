@@ -262,11 +262,12 @@ async def generate_plan(llm: LLM, req: RespondRequest, deadline: float) -> dict:
         errors = check_plan(plan)
         if errors:
             logger.warning("plan attempt %d: не прошёл checkPlan: %s", attempt, errors)
-            messages.append(("system", "Предыдущая смета не прошла финансовые проверки. Сформируй план заново: "
+            role, instructions = messages[0]
+            messages[0] = (role, instructions + "\nПредыдущая смета не прошла финансовые проверки. Сформируй план заново: "
                 "суммы статей должны совпадать с итогами; прибыль не выше 30% выручки. "
                 "Перепроверь реалистичность выручки и полноту конкретных статей затрат. "
                 "Не добавляй фиктивные расходы ради нужной маржи и не дублируй статьи. "
-                "Сохрани исходные факты пользователя."))
+                "Сохрани исходные факты пользователя.")
             last_error = "AI_BAD_RESPONSE"
             continue
 

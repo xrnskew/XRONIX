@@ -39,3 +39,35 @@ class BudgetTests(unittest.TestCase):
         self.assertTrue(any('30%' in error for error in check_plan(p)))
         f.monthly_revenue_rub=70;f.monthly_profit_rub=20
         self.assertEqual(check_plan(p),[])
+
+
+class BudgetRetryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_retry_keeps_single_system_message_at_start(self):
+        import asyncio
+        from app.service import generate_plan
+        from test_scope import request
+        class Model:
+            def __init__(self): self.calls=[]
+            async def json_chat(self,messages,schema,**kwargs):
+                self.calls.append(copy.deepcopy(messages))
+                assert [r for r,_ in messages].count('system')==1
+                assert messages[0][0]=='system'
+                exp=50 if len(self.calls)==1 else 75
+                return {'title':'Кофейня','summary':'Предварительная оценка',
+                    'business':{'sphere':'Общепит','format':'Кофе с собой','city':'Казань'},
+                    'steps':[{'order':i,'title':'Подготовка','description':'Оценка','duration_days':1,'cost_rub':0} for i in range(1,4)],
+                    'opportunities':[{'title':'Спрос','description':'Проверить'}],
+                    'risks':[{'title':'Аренда','level':'high','mitigation':'Уточнить'}],
+                    'finance':{'startup_items':[{'title':'Комплект','amount_rub':1000,'assumption':'Оценка'}],
+                        'monthly_items':[{'title':'Расходы','amount_rub':exp,'assumption':'Оценка'}],
+                        'startup_cost_rub':1000,'own_funds_rub':1000,'funding_gap_rub':0,
+                        'monthly_revenue_rub':100,'monthly_expenses_rub':exp,'monthly_profit_rub':100-exp,
+                        'payback_months':40,'revenue_forecast':[{'month':i,'revenue_rub':100,'expenses_rub':exp} for i in range(1,13)]},
+                    'credit':dict(needed=False,amount_rub=None,purpose=None,recommended_term_months=None,
+                        estimated_rate_percent=None,monthly_payment_rub=None,debt_load_percent=None,verdict=None,comment='Без кредита'),
+                    'tags_update':[]}
+        model=Model()
+        result=await generate_plan(model,request('Хочу открыть кофейню'),asyncio.get_running_loop().time()+120)
+        self.assertEqual(len(model.calls),2)
+        self.assertIn('Предыдущая смета',model.calls[1][0][1])
+        self.assertEqual(result['plan']['finance']['monthly_expenses_rub'],75)
