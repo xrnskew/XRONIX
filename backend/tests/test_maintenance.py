@@ -133,7 +133,7 @@ def test_failed_migration_rolls_back_schema_and_preserves_rows(settings,monkeypa
     import app.migrations as migrations
     with seeded_client(settings) as c: register(c)
     with sqlite3.connect(database_path(settings)) as conn:
-        conn.execute('DELETE FROM schema_migrations WHERE version=2')
+        conn.execute('DELETE FROM schema_migrations WHERE version>=2')
     original=migrations.apply
     def fail(connection):
         connection.execute('ALTER TABLE users ADD COLUMN temporary_field TEXT')

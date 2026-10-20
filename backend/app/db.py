@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from sqlalchemy import JSON, ForeignKey, Integer, String, Text, create_engine, event
+from sqlalchemy import JSON, ForeignKey, Integer, String, Text, UniqueConstraint, create_engine, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 from sqlalchemy.engine import make_url
 from pathlib import Path
@@ -30,6 +30,7 @@ class User(Base):
     budget_rub: Mapped[int | None] = mapped_column(Integer, nullable=True)
     tags: Mapped[list] = mapped_column(JSON, default=list)
     memory: Mapped[str] = mapped_column(Text, default='')
+    auth_version: Mapped[int] = mapped_column(Integer, default=0)
 
 
 class Chat(Base):
@@ -41,6 +42,7 @@ class Chat(Base):
     plan_id: Mapped[str | None] = mapped_column(String, nullable=True)
     mock_stage: Mapped[int] = mapped_column(Integer, default=0)
     busy_until: Mapped[float] = mapped_column(default=0.0)
+    facts: Mapped[dict] = mapped_column(JSON, default=dict)
 
 
 class Message(Base):
@@ -68,6 +70,30 @@ class RateBucket(Base):
     key: Mapped[str] = mapped_column(String, primary_key=True)
     count: Mapped[int] = mapped_column(Integer)
     expires_at: Mapped[float] = mapped_column(index=True)
+
+
+class Generation(Base):
+    __tablename__ = 'generations'
+    __table_args__ = (UniqueConstraint('user_id', 'request_id'),)
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(ForeignKey('users.id'), index=True)
+    chat_id: Mapped[str] = mapped_column(ForeignKey('chats.id'), index=True)
+    request_id: Mapped[str] = mapped_column(String)
+    payload: Mapped[dict] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String, default='queued', index=True)
+    reply: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    error_code: Mapped[str | None] = mapped_column(String, nullable=True)
+    created_at: Mapped[str] = mapped_column(String, default=now)
+    updated_at: Mapped[str] = mapped_column(String, default=now)
+    lease_until: Mapped[float] = mapped_column(default=0.0)
+
+
+class ResetToken(Base):
+    __tablename__ = 'password_reset_tokens'
+    digest: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey('users.id'), index=True)
+    expires_at: Mapped[float] = mapped_column()
+    password_binding: Mapped[str] = mapped_column(String)
 
 
 def database(url):

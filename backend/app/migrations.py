@@ -27,7 +27,18 @@ LIMITS = (
     'CREATE TABLE IF NOT EXISTS rate_buckets (key VARCHAR NOT NULL PRIMARY KEY, count INTEGER NOT NULL, expires_at FLOAT NOT NULL)',
     'CREATE INDEX IF NOT EXISTS ix_rate_buckets_expires_at ON rate_buckets(expires_at)',
 )
-MIGRATIONS = ((1, 'baseline', BASELINE), (2, 'chat_state_and_limits', (*ADDITIONS, *LIMITS)))
+FEATURES = (
+    ('users', 'auth_version', 'INTEGER NOT NULL DEFAULT 0'),
+    ('chats', 'facts', "JSON NOT NULL DEFAULT '{}'"),
+    'CREATE TABLE IF NOT EXISTS generations (id VARCHAR PRIMARY KEY NOT NULL, user_id VARCHAR NOT NULL REFERENCES users(id), chat_id VARCHAR NOT NULL REFERENCES chats(id), request_id VARCHAR NOT NULL, payload JSON NOT NULL, status VARCHAR NOT NULL, reply JSON, error_code VARCHAR, created_at VARCHAR NOT NULL, updated_at VARCHAR NOT NULL, lease_until FLOAT NOT NULL DEFAULT 0, UNIQUE(user_id, request_id))',
+    'CREATE INDEX IF NOT EXISTS ix_generations_user_id ON generations(user_id)',
+    'CREATE INDEX IF NOT EXISTS ix_generations_chat_id ON generations(chat_id)',
+    'CREATE INDEX IF NOT EXISTS ix_generations_status ON generations(status)',
+    'CREATE TABLE IF NOT EXISTS password_reset_tokens (digest VARCHAR PRIMARY KEY NOT NULL, user_id VARCHAR NOT NULL REFERENCES users(id), expires_at FLOAT NOT NULL, password_binding VARCHAR NOT NULL)',
+    'CREATE INDEX IF NOT EXISTS ix_password_reset_tokens_user_id ON password_reset_tokens(user_id)',
+)
+MIGRATIONS = ((1, 'baseline', BASELINE), (2, 'chat_state_and_limits', (*ADDITIONS, *LIMITS)),
+              (3, 'facts_generations_and_auth_version', FEATURES))
 CURRENT_VERSION = MIGRATIONS[-1][0]
 REQUIRED = {
     'users': {'id', 'email', 'password_hash', 'name', 'city', 'experience', 'budget_rub', 'tags', 'memory'},
@@ -68,6 +79,14 @@ def validate_schema(connection, allow_legacy=False):
                 raise StorageError('DATABASE_SCHEMA_MISMATCH')
         if not {'key', 'count', 'expires_at'} <= {r[1] for r in connection.execute('PRAGMA table_info(rate_buckets)')}:
             raise StorageError('DATABASE_SCHEMA_MISMATCH')
+    if current >= 3:
+        for table, fields in {
+            'users': {'auth_version'}, 'chats': {'facts'},
+            'generations': {'id', 'user_id', 'chat_id', 'request_id', 'payload', 'status', 'reply', 'error_code', 'created_at', 'updated_at', 'lease_until'},
+            'password_reset_tokens': {'digest', 'user_id', 'expires_at', 'password_binding'},
+        }.items():
+            if not fields <= {r[1] for r in connection.execute(f'PRAGMA table_info({table})')}:
+                raise StorageError('DATABASE_SCHEMA_MISMATCH')
     return current
 
 
