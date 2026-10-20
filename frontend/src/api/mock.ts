@@ -22,6 +22,7 @@ export const registerMockPlan = (plan_id: string, plan: PlanRecord['plan']) => p
 export const findMockPlan = (plan_id: string) => plans.get(plan_id)?.plan ?? null
 let user: Profile = { id: 'u_mock', name: '', email: '', city: null, experience: null, budget_rub: null, tags: [] }
 export const mockUserName = () => user.name || 'Будущий предприниматель'
+export const mockUser = () => user
 
 const session = () => { setToken('mock-token'); return { token: 'mock-token', user } }
 
@@ -34,7 +35,7 @@ export const mockApi: Api = {
   async login({ email }) {
     await delay()
     user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
-    if (email.startsWith('analyst@')) user = { ...user, role: 'analyst' } // в моке аналитик — любой адрес analyst@…
+    if (email.startsWith('analyst@')) user = { ...user, name: 'Ольга Смирнова', role: 'analyst' } // в моке аналитик — любой адрес analyst@…
     return session()
   },
   async logout() { setToken(null) },

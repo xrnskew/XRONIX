@@ -10,6 +10,7 @@ import ProfileScreen from '../phone/screens/Profile'
 import NewApplication from '../phone/conveyor/NewApplication'
 import ApplicationView from '../phone/conveyor/ApplicationView'
 import { Applications, Feed } from '../phone/conveyor/Applications'
+import BankApp from './bank/BankApp'
 import { Conveyor, Logo, Wide } from '../phone/ui'
 import { useMediaQuery } from '../landing/useSlides'
 import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
@@ -72,12 +73,6 @@ function AuthLayout({ children }: { children: ReactNode }) {
   )
 }
 
-const Centered = ({ children }: { children: ReactNode }) => (
-  <div className="flex min-h-svh items-center justify-center p-4">
-    <div className="card-ring h-[min(760px,calc(100svh-32px))] w-full max-w-[440px] overflow-hidden rounded-[32px] bg-bg pt-6 shadow-[0_40px_80px_-30px_rgba(0,0,0,.9)]">{children}</div>
-  </div>
-)
-
 function Sidebar() {
   const { user, signOut } = useCabinet()
   return (
@@ -123,19 +118,6 @@ function FreshWizard() {
   return <NewApplication key={useLocation().key} />
 }
 
-// Рабочее место аналитика — раунд 2 (docs/tasks). Пока честная заглушка.
-function BankStub() {
-  const { signOut } = useCabinet()
-  return (
-    <div className="flex h-full flex-col justify-center gap-4 p-8">
-      <Logo size={44} />
-      <h1 className="font-display text-[24px] font-semibold">Рабочее место аналитика</h1>
-      <p className="text-[15px] text-muted">Очередь заявок и карточка с проверками и скорингом появятся в следующем раунде.</p>
-      <button onClick={signOut} className="h-11 w-fit rounded-xl bg-surface-2 px-5 text-[14px] font-semibold">Выйти</button>
-    </div>
-  )
-}
-
 // Фон отражает работу ИИ: думает — поле разгорается, пришёл новый план — вспышка
 function ShaderSync() {
   const { busy, messages, status } = useCabinet()
@@ -161,7 +143,7 @@ function Shell() {
   if (status === 'booting')
     return <div className="flex h-svh items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
   if (status === 'out') return <AuthLayout><Login /></AuthLayout>
-  if (user?.role === 'analyst') return <Centered><BankStub /></Centered>
+  if (user?.role === 'analyst') return <BankApp />
 
   return (
     <div className="flex h-svh">
