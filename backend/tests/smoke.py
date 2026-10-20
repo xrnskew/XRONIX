@@ -52,12 +52,12 @@ def run():
                         assert client.get('/api/chats', headers=headers).json()[0]['id'] == cid
                         path = f'/api/chats/{cid}/messages'
                         assert client.post(path, headers=headers, json={'text': 'Хочу кофейню'}).json()['type'] == 'questions'
-                        response = client.post(path, headers=headers, json={'text': 'Москва, 500 тысяч, новичок', 'answers': [{'question_id': 'budget', 'answer': '500 тысяч'}]})
+                        response = client.post(path, headers=headers, json={'text': 'Москва, 500 тысяч, новичок', 'answers': [{'question_id': 'budget', 'answer': '500 тыс – 2 млн'}]})
                         assert response.status_code == 200, response.text
                         reply = response.json()
                         pid = reply['plan_id']
                         assert reply['plan']['credit']['monthly_payment_rub'] == 51878
-                        replay = client.post(path, headers=headers, json={'text': 'Москва, 500 тысяч, новичок', 'answers': [{'question_id': 'budget', 'answer': '500 тысяч'}]})
+                        replay = client.post(path, headers=headers, json={'text': 'Москва, 500 тысяч, новичок', 'answers': [{'question_id': 'budget', 'answer': '500 тыс – 2 млн'}]})
                         assert replay.json() == reply
                         assert len(client.get('/api/plans', headers=headers).json()) == 1
                         second = client.post('/api/auth/register', json={'name':'Second', 'email':'second@example.com', 'password':'second-password'}).json()

@@ -4,14 +4,38 @@
   "title": "Error",
   "type": "object",
   "additionalProperties": false,
-  "required": ["error"],
+  "required": [
+    "error"
+  ],
   "properties": {
     "error": {
-      "type": "object", "additionalProperties": false,
-      "required": ["code", "message"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
       "properties": {
-        "code": { "enum": ["VALIDATION_ERROR", "UNAUTHORIZED", "INVALID_CREDENTIALS", "EMAIL_TAKEN", "NOT_FOUND", "RATE_LIMITED", "AI_UNAVAILABLE", "AI_BAD_RESPONSE", "INTERNAL"] },
-        "message": { "type": "string", "minLength": 1, "description": "Текст для пользователя, по-русски, без технических деталей" }
+        "code": {
+          "enum": [
+            "VALIDATION_ERROR",
+            "UNAUTHORIZED",
+            "INVALID_CREDENTIALS",
+            "EMAIL_TAKEN",
+            "NOT_FOUND",
+            "RATE_LIMITED",
+            "AI_UNAVAILABLE",
+            "AI_BAD_RESPONSE",
+            "INTERNAL",
+            "RECOVERY_UNAVAILABLE",
+            "RESET_TOKEN_INVALID"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Текст для пользователя, по-русски, без технических деталей"
+        }
       }
     }
   }

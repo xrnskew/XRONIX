@@ -108,7 +108,7 @@ def test_full_flow_and_isolation(client):
     assert q.status_code == 200
     assert q.json()['type'] == 'questions'
     CONTRACTS.validate('reply', q.json())
-    p = send(client, h, cid, text='500 тысяч, опыта нет, Москва', answers=[{'question_id':'budget','answer':'500 тысяч'}])
+    p = send(client, h, cid, text='500 тысяч, опыта нет, Москва', answers=[{'question_id':'budget','answer':'500 тыс – 2 млн'}])
     assert p.status_code == 200, p.text
     CONTRACTS.validate('reply', p.json())
     assert p.json()['type'] == 'plan'
@@ -129,7 +129,7 @@ def test_full_flow_and_isolation(client):
     with client.app.app.state.sessions() as s:
         assert s.scalar(select(User).where(User.email=='ilya@example.com')).memory
         stored = s.scalars(select(Message).where(Message.chat_id==cid).order_by(Message.seq)).all()
-        assert stored[2].answers == [{'question_id':'budget','answer':'500 тысяч'}]
+        assert stored[2].answers == [{'question_id':'budget','answer':'500 тыс – 2 млн'}]
     for path in [f'/api/chats/{cid}', f'/api/plans/{pid}']:
         error(client.get(path, headers=other), 'NOT_FOUND')
     error(send(client, other, cid), 'NOT_FOUND')
@@ -348,15 +348,16 @@ def test_context_history_answers_and_summary(settings):
             return httpx.Response(200,json=CONTRACTS.example('reply.plan.ai.json'))
         return httpx.Response(200,json=CONTRACTS.example('reply.message.json'))
     with live_client(settings,handler) as c:
-        h=register(c); cid=chat(c,h)
+        h=register(c)
         c.patch('/api/me',headers=h,json={'city':'Казань','budget_rub':123,'tags':['пользователь']})
+        cid=chat(c,h)
         for i in range(7):
-            assert send(c,h,cid,str(i),answers=[{'question_id':'budget','answer':'NEVER_PASS_THIS'}]).status_code==200
+            assert send(c,h,cid,str(i)).status_code==200
         last=requests[-1][1]
         assert len(last['history'])==10
         assert last['history'][0]['content']=='1'
         assert last['message']=='6'
-        assert 'answers' not in last
+        assert last['chat_context']['answers'] == []
         assert 'NEVER_PASS_THIS' not in json.dumps(last)
         assert last['user_context']['profile']['city']=='Казань'
         assert last['user_context']['tags']==['пользователь']

@@ -21,8 +21,10 @@ from starlette.exceptions import HTTPException
 
 from .ai import AI, history
 from .config import Settings
-from .db import Base, Chat, Message, Plan, RateBucket, User, database, now, uid
+from .db import Base, Chat, Generation, Message, Plan, RateBucket, User, database, now, uid
 from .errors import ApiError
+from .chat_context import bound_answers, context_payload, profile_facts, updated_facts
+from . import generations, account_security
 from .limits import consume, sqlite_busy
 from .maintenance import backup_loop
 from .migrations import CURRENT_VERSION, running_database
@@ -84,13 +86,13 @@ class ProfilePatch(Body):
 
 
 class Answer(Body):
-    question_id: str
-    answer: str
+    question_id: str = Field(min_length=1, max_length=31, pattern=r'^[a-z][a-z0-9_]*$')
+    answer: str = Field(min_length=1, max_length=1000)
 
 
 class SendMessage(Body):
     text: str = Field(min_length=1, max_length=4000)
-    answers: list[Answer] = Field(default_factory=list)
+    answers: list[Answer] = Field(default_factory=list, max_length=6)
 
 
 def profile(user):
@@ -112,9 +114,12 @@ def create_app(settings=None, ai_transport=None):
                 async with httpx.AsyncClient(transport=ai_transport) as client:
                     app.state.ai = AI(settings, contracts, client)
                     task = asyncio.create_task(backup_loop(settings)) if settings.backup_enabled else None
+                    worker = asyncio.create_task(app.state.generation_worker())
                     try:
                         yield
                     finally:
+                        worker.cancel()
+                        await asyncio.gather(worker, return_exceptions=True)
                         if task:
                             task.cancel()
                             try:
@@ -186,7 +191,7 @@ def create_app(settings=None, ai_transport=None):
         if session.get(RateBucket, revocation_key(token)) is not None:
             raise ApiError('UNAUTHORIZED')
         user = session.get(User, payload['sub'])
-        if user is None:
+        if user is None or payload.get('ver', 0) != user.auth_version:
             raise ApiError('UNAUTHORIZED')
         return user
 
@@ -309,14 +314,14 @@ def create_app(settings=None, ai_transport=None):
 
     @app.post('/api/chats', status_code=201)
     def create_chat(user: User = Depends(authenticated), session: Session = Depends(db)):
-        chat = Chat(user_id=user.id)
+        chat = Chat(user_id=user.id, facts=profile_facts(user))
         session.add(chat)
         session.commit()
         return {'chat_id': chat.id}
 
     @app.get('/api/chats/{chat_id}')
     def get_chat(chat_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
-        owned_chat(session, chat_id, user.id)
+        chat = owned_chat(session, chat_id, user.id)
         messages = session.scalars(select(Message).where(Message.chat_id == chat_id).order_by(Message.seq)).all()
         result = []
         for index, m in enumerate(messages):
@@ -324,8 +329,8 @@ def create_app(settings=None, ai_transport=None):
             if reply['type'] == 'plan':
                 context = {'history': history(messages[:index]), 'message': ''}
                 reply = {**reply, 'plan': apply_preferences(recalculate(reply['plan']), context)}
-            result.append({'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': reply})
-        return {'id': chat_id, 'messages': result}
+            result.append({'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': reply, 'answers': m.answers or []})
+        return {'id': chat_id, 'messages': result, 'facts': chat.facts, 'generation': generations.latest(session, chat_id)}
 
     @app.delete('/api/chats/{chat_id}', status_code=204)
     def delete_chat(chat_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
@@ -333,16 +338,16 @@ def create_app(settings=None, ai_transport=None):
         # cannot acquire it between our check and deletion, even across workers.
         session.execute(update(Chat).where(Chat.id == chat_id, Chat.user_id == user.id).values(busy_until=Chat.busy_until))
         chat = owned_chat(session, chat_id, user.id)
-        if chat.busy_until > time.time():
+        if chat.busy_until > time.time() or session.scalar(select(Generation.id).where(Generation.chat_id == chat_id, Generation.status.in_(generations.ACTIVE)).limit(1)):
             raise ApiError('RATE_LIMITED')
+        session.execute(delete(Generation).where(Generation.chat_id == chat_id))
         session.execute(delete(Plan).where(Plan.chat_id == chat_id))
         session.execute(delete(Message).where(Message.chat_id == chat_id))
         session.execute(delete(Chat).where(Chat.id == chat_id, Chat.user_id == user.id))
         session.commit()
         return Response(status_code=204)
 
-    @app.post('/api/chats/{chat_id}/messages')
-    async def send_message(chat_id: str, body: SendMessage, background: BackgroundTasks, user: User = Depends(authenticated), session: Session = Depends(db)):
+    async def process_message(chat_id, body, background, user, session, generation_id=None):
         chat = owned_chat(session, chat_id, user.id)
         cached = completed_plan_replay(session, chat_id, body)
         if cached is not None:
@@ -352,6 +357,8 @@ def create_app(settings=None, ai_transport=None):
         try:
             acquired = session.execute(update(Chat).where(Chat.id == chat_id, Chat.busy_until < stamp).values(busy_until=lease)).rowcount
             if not acquired:
+                raise ApiError('RATE_LIMITED')
+            if generation_id is None and session.scalar(select(Generation.id).where(Generation.user_id == user.id, Generation.status.in_(generations.ACTIVE)).limit(1)):
                 raise ApiError('RATE_LIMITED')
             active = Chat.busy_until > stamp
             user_active = session.scalar(select(func.count()).select_from(Chat).where(active, Chat.user_id == user.id))
@@ -371,10 +378,22 @@ def create_app(settings=None, ai_transport=None):
                 return cached
             consume(session, 'ai-user', user.id, settings.ai_requests_per_minute)
             consume(session, 'ai-global', 'all', settings.ai_global_per_minute)
-            payload = {'mode': 'chat', 'user_context': {'profile': {k: getattr(user, k) for k in ('name', 'city', 'experience', 'budget_rub')}, 'tags': user.tags, 'memory': ''}, 'history': history(recent(session, chat_id, 10)), 'message': body.text}
+            previous = recent(session, chat_id, 10)
+            question_message = next((m for m in reversed(previous) if m.role == 'assistant'), None)
+            answers = bound_answers(body, question_message)
+            reused = (previous[-1] if previous and previous[-1].role == 'user'
+                      and previous[-1].reply.get('text') == body.text
+                      and (previous[-1].answers or []) == [a.model_dump() for a in body.answers] else None)
+            message_id = reused.id if reused else uid()
+            facts = updated_facts(chat, user, message_id, body.text, answers)
+            payload = {'mode': 'chat', 'user_context': context_payload(user, facts),
+                       'chat_context': {'facts': facts, 'answers': answers},
+                       'history': history(previous[:-1] if reused else previous), 'message': body.text}
+            chat.facts = facts
             if not session.scalar(select(Message.id).where(Message.chat_id == chat_id).limit(1)):
                 chat.title = body.text[:60]
-            session.add(Message(chat_id=chat_id, role='user', reply={'type': 'message', 'text': body.text}, answers=[a.model_dump() for a in body.answers]))
+            if reused is None:
+                session.add(Message(id=message_id, chat_id=chat_id, role='user', reply={'type': 'message', 'text': body.text}, answers=[a.model_dump() for a in body.answers]))
             chat.updated_at = now()
             session.commit()  # User message survives an unavailable AI service.
             clarification = location_clarification(payload)
@@ -392,6 +411,9 @@ def create_app(settings=None, ai_transport=None):
             chat.updated_at = now()
             if settings.mock_ai and not clarification:
                 chat.mock_stage += 1
+            if generation_id:
+                session.execute(update(Generation).where(Generation.id == generation_id, Generation.status == 'running')
+                                .values(status='succeeded', reply=reply, updated_at=now(), lease_until=0))
             session.commit()
             if reply['type'] == 'plan':
                 background.add_task(summarize, user.id, chat_id)
@@ -404,6 +426,13 @@ def create_app(settings=None, ai_transport=None):
             except SQLAlchemyError as exc:
                 session.rollback()
                 logger.warning('Chat lease release skipped: %s', type(exc).__name__)
+
+    @app.post('/api/chats/{chat_id}/messages')
+    async def send_message(chat_id: str, body: SendMessage, background: BackgroundTasks, user: User = Depends(authenticated), session: Session = Depends(db)):
+        return await process_message(chat_id, body, background, user, session)
+
+    generations.install(app, sessions, authenticated, db, owned_chat, SendMessage, process_message)
+    account_security.install(app, settings, authenticated, db, cookie_name)
 
     @app.get('/api/plans')
     def list_plans(user: User = Depends(authenticated), session: Session = Depends(db)):

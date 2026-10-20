@@ -15,7 +15,7 @@ load_dotenv(ROOT / '.env')
 @dataclass
 class Settings:
     database_url: str = field(default_factory=lambda: os.getenv('DATABASE_URL', f'sqlite:///{ROOT / "data/xronix.db"}'))
-    jwt_secret: str = field(default_factory=lambda: os.getenv('JWT_SECRET', ''))
+    jwt_secret: str = field(default_factory=lambda: os.getenv('JWT_SECRET', ''), repr=False)
     jwt_expire_minutes: int = field(default_factory=lambda: int(os.getenv('JWT_EXPIRE_MINUTES', '1440')))
     mock_ai: bool = field(default_factory=lambda: os.getenv('MOCK_AI', 'true').lower() == 'true')
     ai_service_url: str = field(default_factory=lambda: os.getenv('AI_SERVICE_URL', 'http://localhost:8001').rstrip('/'))
@@ -34,6 +34,17 @@ class Settings:
     backup_timeout_seconds: int = field(default_factory=lambda: int(os.getenv('BACKUP_TIMEOUT_SECONDS', '30')))
     db_min_free_mb: int = field(default_factory=lambda: int(os.getenv('DB_MIN_FREE_MB', '100')))
 
+    smtp_host: str = field(default_factory=lambda: os.getenv('SMTP_HOST', ''))
+    smtp_port: int = field(default_factory=lambda: int(os.getenv('SMTP_PORT', '587')))
+    smtp_user: str = field(default_factory=lambda: os.getenv('SMTP_USER', ''))
+    smtp_password: str = field(default_factory=lambda: os.getenv('SMTP_PASSWORD', ''), repr=False)
+    mail_from: str = field(default_factory=lambda: os.getenv('MAIL_FROM', ''))
+    public_app_url: str = field(default_factory=lambda: os.getenv('PUBLIC_APP_URL', 'https://xronix.ru/app'))
+
+    @property
+    def smtp_ready(self):
+        return all((self.smtp_host, self.smtp_user, self.smtp_password, self.mail_from))
+
     @property
     def db_min_free_bytes(self):
         return self.db_min_free_mb * 1024 * 1024
@@ -46,6 +57,14 @@ class Settings:
             raise ValueError('Limits and token lifetime must be positive')
         if self.backup_retention_count < 1 or self.backup_timeout_seconds < 1 or self.db_min_free_mb < 0:
             raise ValueError('Invalid database maintenance limits')
+        if self.smtp_port not in (465, 587):
+            raise ValueError('SMTP must use verified TLS on port 465 or 587')
+        from urllib.parse import urlsplit
+        app_url = urlsplit(self.public_app_url)
+        if app_url.scheme != 'https' or not app_url.netloc or app_url.fragment or app_url.query:
+            raise ValueError('Trusted HTTPS application URL required')
+        if any(c in self.mail_from for c in '\r\n'):
+            raise ValueError('Invalid mail sender')
         if not self.cors_origins or '*' in self.cors_origins:
             raise ValueError('Explicit CORS origins required')
 
