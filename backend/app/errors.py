@@ -1,4 +1,9 @@
 MESSAGES = {
+    'INVALID_INN': (400, 'ИНН не прошёл контрольную сумму.'),
+    'INVALID_TRANSITION': (409, 'Действие недоступно в текущем статусе или для этой роли.'),
+    'VERSION_CONFLICT': (409, 'Заявка уже изменена. Обновите её и повторите действие.'),
+    'INCOMPLETE_APPLICATION': (422, 'Заполните обязательные поля заявки.'),
+    'INTEGRATION_UNAVAILABLE': (503, 'Реестр временно недоступен.'),
     'VALIDATION_ERROR': (400, 'Проверьте введённые данные.'),
     'UNAUTHORIZED': (401, 'Войдите в аккаунт заново.'),
     'INVALID_CREDENTIALS': (401, 'Неверная почта или пароль.'),
@@ -14,9 +19,11 @@ MESSAGES = {
 
 
 class ApiError(Exception):
-    def __init__(self, code):
+    def __init__(self, code, message=None):
         self.code = code
         self.status, self.message = MESSAGES[code]
+        if message:
+            self.message = message
 
     def body(self):
         return {'error': {'code': self.code, 'message': self.message}}

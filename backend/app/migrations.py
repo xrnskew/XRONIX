@@ -37,8 +37,11 @@ FEATURES = (
     'CREATE TABLE IF NOT EXISTS password_reset_tokens (digest VARCHAR PRIMARY KEY NOT NULL, user_id VARCHAR NOT NULL REFERENCES users(id), expires_at FLOAT NOT NULL, password_binding VARCHAR NOT NULL)',
     'CREATE INDEX IF NOT EXISTS ix_password_reset_tokens_user_id ON password_reset_tokens(user_id)',
 )
+from .conveyor_migration import CONVEYOR
+
 MIGRATIONS = ((1, 'baseline', BASELINE), (2, 'chat_state_and_limits', (*ADDITIONS, *LIMITS)),
-              (3, 'facts_generations_and_auth_version', FEATURES))
+              (3, 'facts_generations_and_auth_version', FEATURES),
+              (4, 'conveyor_v2', CONVEYOR))
 CURRENT_VERSION = MIGRATIONS[-1][0]
 REQUIRED = {
     'users': {'id', 'email', 'password_hash', 'name', 'city', 'experience', 'budget_rub', 'tags', 'memory'},
@@ -86,6 +89,12 @@ def validate_schema(connection, allow_legacy=False):
             'password_reset_tokens': {'digest', 'user_id', 'expires_at', 'password_binding'},
         }.items():
             if not fields <= {r[1] for r in connection.execute(f'PRAGMA table_info({table})')}:
+                raise StorageError('DATABASE_SCHEMA_MISMATCH')
+    if current >= 4:
+        if 'role' not in {r[1] for r in connection.execute('PRAGMA table_info(users)')}:
+            raise StorageError('DATABASE_SCHEMA_MISMATCH')
+        for table in ('companies', 'company_members', 'applications', 'application_events', 'check_results', 'scoring_results', 'offers', 'documents', 'feed_items'):
+            if not connection.execute(f'PRAGMA table_info({table})').fetchall():
                 raise StorageError('DATABASE_SCHEMA_MISMATCH')
     return current
 

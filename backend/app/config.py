@@ -22,6 +22,8 @@ class Settings:
     cors_origins: list[str] = field(default_factory=lambda: [v.strip() for v in os.getenv('CORS_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173').split(',') if v.strip()])
     contracts_dir: Path = field(default_factory=lambda: Path(os.getenv('CONTRACTS_DIR', str(ROOT.parent / 'contracts'))))
 
+    integrations_url: str = field(default_factory=lambda: os.getenv('INTEGRATIONS_URL', 'http://localhost:8002').rstrip('/'))
+
     ai_requests_per_minute: int = field(default_factory=lambda: int(os.getenv('AI_REQUESTS_PER_MINUTE', '6')))
     ai_global_per_minute: int = field(default_factory=lambda: int(os.getenv('AI_GLOBAL_PER_MINUTE', '30')))
     ai_max_concurrent: int = field(default_factory=lambda: int(os.getenv('AI_MAX_CONCURRENT', '4')))
