@@ -22,6 +22,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = 'users'
     id: Mapped[str] = mapped_column(String, primary_key=True, default=uid)
+    role: Mapped[str] = mapped_column(String, default='client')
     email: Mapped[str] = mapped_column(String, unique=True)
     password_hash: Mapped[str] = mapped_column(Text)
     name: Mapped[str] = mapped_column(String)

@@ -11,6 +11,7 @@ import httpx
 import jwt
 from fastapi import BackgroundTasks, Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.security import HTTPBearer
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -24,7 +25,9 @@ from .config import Settings
 from .db import Base, Chat, Generation, Message, Plan, RateBucket, User, database, now, uid
 from .errors import ApiError
 from .chat_context import bound_answers, context_payload, profile_facts, updated_facts
-from . import generations, account_security
+from . import generations, account_security, conveyor
+from .integrations import Integrations
+from .conveyor_models import Application
 from .limits import consume, sqlite_busy
 from .maintenance import backup_loop
 from .migrations import CURRENT_VERSION, running_database
@@ -96,10 +99,10 @@ class SendMessage(Body):
 
 
 def profile(user):
-    return {key: getattr(user, key) for key in ('id', 'name', 'email', 'city', 'experience', 'budget_rub', 'tags')}
+    return {key: getattr(user, key) for key in ('id', 'name', 'email', 'city', 'experience', 'budget_rub', 'tags', 'role')}
 
 
-def create_app(settings=None, ai_transport=None):
+def create_app(settings=None, ai_transport=None, integrations_transport=None):
     settings = settings or Settings()
     key = settings.signing_key()
     engine, sessions = database(settings.database_url)
@@ -111,15 +114,18 @@ def create_app(settings=None, ai_transport=None):
             with running_database(settings):
                 if settings.backup_enabled:
                     private_directory(backup_directory(settings))
-                async with httpx.AsyncClient(transport=ai_transport) as client:
+                async with httpx.AsyncClient(transport=ai_transport) as client, httpx.AsyncClient(transport=integrations_transport) as integrations_client:
                     app.state.ai = AI(settings, contracts, client)
+                    app.state.integrations = Integrations(settings.integrations_url, contracts, integrations_client)
+                    conveyor_worker = asyncio.create_task(app.state.conveyor.worker(app))
                     task = asyncio.create_task(backup_loop(settings)) if settings.backup_enabled else None
                     worker = asyncio.create_task(app.state.generation_worker())
                     try:
                         yield
                     finally:
                         worker.cancel()
-                        await asyncio.gather(worker, return_exceptions=True)
+                        conveyor_worker.cancel()
+                        await asyncio.gather(worker, conveyor_worker, return_exceptions=True)
                         if task:
                             task.cancel()
                             try:
@@ -176,7 +182,7 @@ def create_app(settings=None, ai_transport=None):
     def revocation_key(token):
         return 'revoked:' + hashlib.sha256(token.encode()).hexdigest()
 
-    def authenticated(request: Request, session: Session = Depends(db)):
+    def authenticated(request: Request, session: Session = Depends(db), bearer=Depends(HTTPBearer(auto_error=False))):
         token = request_token(request)
         if not token:
             raise ApiError('UNAUTHORIZED')
@@ -340,6 +346,8 @@ def create_app(settings=None, ai_transport=None):
         chat = owned_chat(session, chat_id, user.id)
         if chat.busy_until > time.time() or session.scalar(select(Generation.id).where(Generation.chat_id == chat_id, Generation.status.in_(generations.ACTIVE)).limit(1)):
             raise ApiError('RATE_LIMITED')
+        if session.scalar(select(Application.id).join(Plan, Application.data['plan_id'].as_string() == Plan.id).where(Plan.chat_id == chat_id).limit(1)):
+            raise ApiError('INVALID_TRANSITION')
         session.execute(delete(Generation).where(Generation.chat_id == chat_id))
         session.execute(delete(Plan).where(Plan.chat_id == chat_id))
         session.execute(delete(Message).where(Message.chat_id == chat_id))
@@ -453,6 +461,8 @@ def create_app(settings=None, ai_transport=None):
         # Repair derived figures on read; keep the historical database record intact.
         view = apply_preferences(recalculate(plan.body), {'history': history(before), 'message': ''})
         return {'plan_id': plan.id, 'chat_id': plan.chat_id, 'created_at': plan.created_at, 'plan': view}
+
+    conveyor.install(app, settings, contracts, sessions, authenticated, db)
 
     # Wrap the whole app so even INTERNAL responses include CORS headers.
     return ApiCORS(app, settings, sessions)

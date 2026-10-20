@@ -1,0 +1,78 @@
+{
+  "7715881399": {
+    "purpose": "equipment",
+    "product_id": "fast",
+    "amount_rub": 1500000,
+    "term_months": 24,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 24000000,
+      "expenses_12m_rub": 19200000,
+      "loan_payments_monthly_rub": 40000
+    }
+  },
+  "777309114120": {
+    "purpose": "new_location",
+    "product_id": "fast",
+    "amount_rub": 2000000,
+    "term_months": 24,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 14400000,
+      "expenses_12m_rub": 10600000,
+      "loan_payments_monthly_rub": 85000
+    }
+  },
+  "7768151886": {
+    "purpose": "equipment",
+    "product_id": "secured",
+    "amount_rub": 12000000,
+    "term_months": 60,
+    "collateral": {
+      "kind": "vehicle",
+      "description": "Три грузовика 2022 года",
+      "value_rub": 15000000
+    },
+    "financials": {
+      "revenue_12m_rub": 120000000,
+      "expenses_12m_rub": 100000000,
+      "loan_payments_monthly_rub": 150000
+    }
+  },
+  "7755761690": {
+    "purpose": "working_capital",
+    "product_id": "fast",
+    "amount_rub": 1000000,
+    "term_months": 24,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 15000000,
+      "expenses_12m_rub": 13500000,
+      "loan_payments_monthly_rub": 60000
+    }
+  },
+  "776846978815": {
+    "purpose": "equipment",
+    "product_id": "fast",
+    "amount_rub": 600000,
+    "term_months": 24,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 1800000,
+      "expenses_12m_rub": 1300000,
+      "loan_payments_monthly_rub": 0
+    }
+  },
+  "7772731777": {
+    "purpose": "working_capital",
+    "product_id": "fast",
+    "amount_rub": 900000,
+    "term_months": 24,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 18000000,
+      "expenses_12m_rub": 15000000,
+      "loan_payments_monthly_rub": 0
+    }
+  }
+}

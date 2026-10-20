@@ -61,17 +61,20 @@ class ApiCORS(CORSMiddleware):
             except ApiError as exc:
                 return await self.failure(exc.code, origin)(scope, receive, send)
             if scope['method'] in ('POST', 'PATCH'):
+                multipart = headers.get('content-type', '').lower().startswith('multipart/form-data;')
+                upload_path = scope['path'].startswith('/api/') and scope['path'].endswith(('/authority', '/documents'))
+                max_bytes = 5*1024*1024+65536 if multipart and upload_path else self.settings.max_body_bytes
                 body = bytearray()
                 while True:
                     event = await receive()
                     if event['type'] == 'http.disconnect':
                         return
                     body.extend(event.get('body', b''))
-                    if len(body) > self.settings.max_body_bytes:
+                    if len(body) > max_bytes:
                         return await self.failure('VALIDATION_ERROR', origin)(scope, receive, send)
                     if not event.get('more_body', False):
                         break
-                if body:
+                if body and not multipart:
                     try:
                         def reject_constant(value):
                             raise ValueError('Non-finite JSON number')
