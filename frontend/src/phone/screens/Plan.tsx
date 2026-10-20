@@ -1,3 +1,4 @@
+import type { BudgetItem } from '../../types/plan'
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -53,6 +54,15 @@ export default function PlanScreen() {
         </div>
       </div>
 
+      <Card span={12}>
+        <SectionTitle>Из чего складывается бюджет</SectionTitle>
+        <p className="mb-4 text-[13px] text-muted">Предварительная оценка ИИ. Допущения указаны под каждой статьёй; перед запуском уточните цены у арендодателя и поставщиков. Суммы в шагах запуска уже входят в смету.</p>
+        <div className="grid gap-6 min-[900px]:grid-cols-2">
+          <Budget title="На запуск, разово" items={p.finance.startup_items} total={p.finance.startup_cost_rub} />
+          <Budget title="Расходы в месяц" items={p.finance.monthly_items} total={p.finance.monthly_expenses_rub} />
+        </div>
+      </Card>
+
       <Card delay={1} span={12}>
         <SectionTitle>Выручка и расходы за первый год</SectionTitle>
         <div className="mb-2 flex gap-4 text-[12px] text-muted"><Legend c="bg-accent" t="Выручка" /><Legend c="bg-[#5a5a63]" t="Расходы" /></div>
@@ -71,7 +81,7 @@ export default function PlanScreen() {
 
       <Card id="plan-steps" delay={2} span={7} tall>
         <SectionTitle>Шаги запуска</SectionTitle>
-        <p className="mb-4 text-[13px] text-muted">Разовые затраты по шагам: {rub(knownCosts)}. {unallocated > 0 && <>Бюджет сверх указанных статей: {rub(unallocated)} — уточните его назначение до запуска. </>}Итого на старт: {rub(p.finance.startup_cost_rub)}.{p.steps.some((step) => step.cost_rub == null) && ' Часть статей пока не оценена.'}</p>
+        <p className="mb-4 text-[13px] text-muted">{p.finance.startup_items ? <>Стоимость действий уже учтена в смете выше.</> : <>Разовые затраты по шагам: {rub(knownCosts)}. {unallocated > 0 && <>Бюджет сверх указанных статей: {rub(unallocated)} — уточните его назначение до запуска. </>}Итого на старт: {rub(p.finance.startup_cost_rub)}.{p.steps.some((step) => step.cost_rub == null) && ' Часть статей пока не оценена.'}</>}</p>
         <ol className="relative">
           <span className="absolute bottom-3 left-[13px] top-3 w-px bg-line" aria-hidden />
           {p.steps.map((s) => (
@@ -124,4 +134,15 @@ const Big = ({ label, value, unit, tone, wide }: { label: string; value: string;
       <div className={`mt-2 leading-tight text-text/70 ${wide ? 'text-[14px]' : 'text-[12px]'}`}>{label}</div>
     </div>
   )
+}
+
+function Budget({ title, items, total }: { title: string; items?: BudgetItem[]; total: number }) {
+  return <section>
+    <h3 className="mb-3 text-[16px] font-semibold">{title}</h3>
+    {items?.length ? <dl className="space-y-3">{items.map((item, index) => <div key={index}>
+      <div className="flex items-start justify-between gap-4 text-[14px]"><dt>{item.title}</dt><dd className="shrink-0 font-semibold tabular-nums">{rub(item.amount_rub)}</dd></div>
+      <p className="mt-1 text-[12px] leading-snug text-muted">{item.assumption}</p>
+    </div>)}</dl> : <p className="text-[13px] text-muted">В этом плане подробная смета не сохранена. Попросите в чате пересчитать план с расшифровкой расходов.</p>}
+    <div className="mt-4 flex justify-between gap-4 border-t border-line pt-3 text-[15px] font-semibold"><span>Итого</span><span>{rub(total)}</span></div>
+  </section>
 }

@@ -2,6 +2,8 @@
 export type RiskLevel = 'low' | 'medium' | 'high'
 export type CreditVerdict = 'ok' | 'risky' | 'not_recommended'
 
+export interface BudgetItem { title: string; amount_rub: number; assumption: string }
+
 export interface Plan {
   title: string
   summary: string
@@ -10,6 +12,8 @@ export interface Plan {
   opportunities: { title: string; description: string }[]
   risks: { title: string; level: RiskLevel; mitigation: string }[]
   finance: {
+    startup_items?: BudgetItem[]
+    monthly_items?: BudgetItem[]
     startup_cost_rub: number
     own_funds_rub: number
     funding_gap_rub: number
