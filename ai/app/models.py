@@ -26,7 +26,26 @@ class HistoryItem(BaseModel):
     content: str
 
 
+class ChatFact(BaseModel):
+    value: Annotated[str, Field(max_length=1000)] | int
+    source: Literal["profile", "user_message", "answer"]
+    message_id: Optional[str] = None
+    question_id: Optional[str] = None
+
+
+class BoundAnswer(BaseModel):
+    question_id: Annotated[str, Field(max_length=31)]
+    question: Annotated[str, Field(max_length=200)]
+    answer: Annotated[str, Field(max_length=1000)]
+
+
+class ChatContext(BaseModel):
+    facts: Annotated[dict[str, ChatFact], Field(max_length=32)] = {}
+    answers: Annotated[List[BoundAnswer], Field(max_length=6)] = []
+
+
 class RespondRequest(BaseModel):
+    chat_context: ChatContext = Field(default_factory=ChatContext)
     mode: Literal["chat"]
     user_context: UserContext
     history: Annotated[List[HistoryItem], Field(max_length=10)] = []

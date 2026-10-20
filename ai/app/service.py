@@ -168,6 +168,9 @@ async def respond(llm: LLM, req: RespondRequest) -> dict:
     if GREETING.match(req.message):
         return MessageReply(text=GREETING_REPLY).model_dump()
     followup, options = questionnaire_context(req)
+    if req.chat_context.answers:
+        followup = True
+        options = [*options, *(item.answer for item in req.chat_context.answers)]
     reason = scope_reason(req.message, followup=followup, options=options)
     if reason:
         # Log a bounded rule identifier only; no private user text or secrets.

@@ -206,6 +206,10 @@ def sanitize_request(req):
     clean.user_context.tags = [t for t in clean.user_context.tags
                                if len(t) <= 30 and not unsafe_reason(t)]
     clean.user_context.memory = ''
+    clean.chat_context.facts = {key: fact for key, fact in clean.chat_context.facts.items()
+                                if not unsafe_reason(str(fact.value))}
+    clean.chat_context.answers = [item for item in clean.chat_context.answers
+                                  if not unsafe_reason(item.answer) and not unsafe_reason(item.question)]
     clean.history = []
     for index, item in enumerate(req.history):
         if unsafe_reason(item.content):
