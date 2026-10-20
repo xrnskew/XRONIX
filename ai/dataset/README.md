@@ -17,6 +17,8 @@ python -m dataset.evaluate --task parse_need --predictor dataset.baseline:parse_
 python -m unittest tests.test_dataset -v               # проверка, что валидатор ловит ошибки
 ```
 
+Правиловая система сервиса (`app/rules`): `--predictor dataset.predictors:rules_consult` и `dataset.predictors:rules_parse_need`. Её результаты лежат в `results/rules.{train,holdout}.*.json`.
+
 Оценить модель: `--predictor пакет.модуль:функция` (функция `request -> response`) или `--predictions файл.jsonl` со строками `{"id": ..., "response": {...}}`. Результат: `dataset/results/<name>.<task>.json`, в нём метрики, задержка (среднее и p95) и 10 ошибок.
 
 ## Размеры

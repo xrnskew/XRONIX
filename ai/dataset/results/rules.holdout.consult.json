@@ -1,0 +1,191 @@
+{
+  "name": "rules.holdout",
+  "task": "consult",
+  "split": "holdout",
+  "metrics": {
+    "n": 298,
+    "schema_valid": 1.0,
+    "type_accuracy": 1.0,
+    "state.sphere_accuracy": 1.0,
+    "state.city_accuracy": 0.9966,
+    "state.own_funds_rub_accuracy": 0.9899,
+    "state.answers_accuracy": 1.0,
+    "state_exact": 0.9866,
+    "type_and_state_exact": 0.9866,
+    "answers_pairs": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "invented_amounts_rate": 0.0,
+    "credit_promise_rate": 0.0,
+    "message_keeps_state": 1.0,
+    "by_scenario": {
+      "answer_core": 0.946,
+      "answer_template": 1.0,
+      "confirm_nearest": 1.0,
+      "correction": 1.0,
+      "credit_promise": 1.0,
+      "first_all_answers": 1.0,
+      "first_full": 0.969,
+      "first_partial": 1.0,
+      "first_vague": 1.0,
+      "greeting": 1.0,
+      "mixed_attack": 1.0,
+      "nearest": 0.933,
+      "no_near": 1.0,
+      "offtopic": 1.0,
+      "ready_direct": 1.0,
+      "role_change": 1.0,
+      "sums_question": 1.0
+    },
+    "by_rule": {
+      "R1_correction": 1.0,
+      "R1_keep_state": 0.99,
+      "R2_nearest": 0.967,
+      "R2_no_near": 1.0,
+      "R2_sphere_code": 0.968,
+      "R3_answers_ids": 1.0,
+      "R3_choice_value": 1.0,
+      "R3_range": 1.0,
+      "R3_unsaid": 1.0,
+      "R4_one_round": 0.982,
+      "R4_ready": 0.984,
+      "R5_question_format": 0.966,
+      "R6_offtopic": 1.0,
+      "R6_role_change": 1.0,
+      "R7_no_credit_promise": 1.0,
+      "R_no_sums": 1.0,
+      "R_profile_city": 1.0,
+      "R_zero_funds": 0.778
+    },
+    "unseen_phrasing": {
+      "n": 101,
+      "type_accuracy": 1.0,
+      "state_exact": 0.9802,
+      "type_and_state_exact": 0.9802
+    },
+    "latency_ms": {
+      "mean": 6.37,
+      "p95": 4.44
+    }
+  },
+  "errors": [
+    {
+      "id": "consult.holdout.00031",
+      "scenario": "answer_core",
+      "message": "кояржма, нет",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Коряжма",
+          "own_funds_rub": 0,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": 0,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.holdout.00044",
+      "scenario": "first_full",
+      "message": "есть идея окрыть пвз маркетплейса в Екатеринбурге, еть 600000",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "pickup_point",
+          "city": "Екатеринбург",
+          "own_funds_rub": 600000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "pickup_point",
+          "city": "Екатеринбург",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.holdout.00085",
+      "scenario": "nearest",
+      "message": "Хочу открыть тату-салон в гроде Ростов-на-Дону, свохи 200 тыс",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Ростов-на-Дону",
+          "own_funds_rub": 200000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Ростов-на-Дону",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.holdout.00289",
+      "scenario": "answer_core",
+      "message": "В каком городе открываетесь? Печора\nСколько своих денег готовы вложить в запуск? Если своих нет, напишите «нет». 0",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Печора",
+          "own_funds_rub": 0,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Печора",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    }
+  ]
+}
