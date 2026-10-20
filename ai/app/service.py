@@ -240,7 +240,7 @@ async def generate_plan(llm: LLM, req: RespondRequest, deadline: float) -> dict:
             break
         try:
             async with asyncio.timeout(left):
-                data = await llm.json_chat(messages, Plan, max_tokens=6500)
+                data = await llm.json_chat(messages, Plan, max_tokens=10000)
         except (LLMUnavailable, TimeoutError) as e:
             logger.warning("plan attempt %d: GigaChat недоступен: %r", attempt, e)
             last_error = "AI_UNAVAILABLE"
