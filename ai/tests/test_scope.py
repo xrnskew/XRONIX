@@ -104,7 +104,7 @@ class ScopeTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn(BUSINESS_SCOPE_RULES, messages[0][1])
             self.assertNotIn('UNTRUSTED_', messages[0][1])
             self.assertIn('UNTRUSTED_NAME', messages[-1][1])
-            self.assertIn('UNTRUSTED_MEMORY', messages[-1][1])
+            self.assertNotIn('UNTRUSTED_MEMORY', str(messages))
             self.assertEqual(messages[-1][0], 'user')
 
     async def test_summary_does_not_persist_known_role_overrides(self):

@@ -50,8 +50,8 @@ def needs_redirect(text: str) -> bool:
 # No model (including a separate AI classifier) is used to admit a request.
 # Patterns are deliberately explicit; unfamiliar topics request clarification.
 BUSINESS_TERMS = re.compile(
-    r'бизнес|предприним|реклам|слоган|маркетинг|клиент|бренд|стартап|'
-    r'кофе|пекар|магазин|салон|автомой|барбершоп|кафе|ресторан|кондитер|'
+    r'бизнес|предприним|реклам|слоган|маркетинг|клиент|бренд|стартап|\bтег[аиоу]?\b|\btags?\b|'
+    r'общепит|кофе|пекар|магазин|салон|автомой|барбершоп|кафе|ресторан|кондитер|'
     r'парикмахер|маникюр|шиномонтаж|автосервис|мастерск|производств|'
     r'ферм[ауые]|теплиц|доставк|пункт выдачи|пвз\b|маркетплейс|озон|wildberries|'
     r'открыть|открыти[еяю]|запуск|продаж|выручк|прибыл|расход|доход|затрат|'
@@ -204,9 +204,8 @@ def sanitize_request(req):
         if value and (len(value) > 160 or unsafe_reason(value) or re.search(r'инструкц|промпт|выполн|игнор|обяз|system|prompt|obey|follow', normalized(value)) or not re.fullmatch(r'[\w .,()/—–-]+', value)):
             setattr(profile, field, None)
     clean.user_context.tags = [t for t in clean.user_context.tags
-                               if len(t) <= 60 and not scope_reason(t)]
-    clean.user_context.memory = '\n'.join(
-        line for line in clean.user_context.memory.splitlines() if not scope_reason(line))[:800]
+                               if len(t) <= 30 and not unsafe_reason(t)]
+    clean.user_context.memory = ''
     clean.history = []
     for index, item in enumerate(req.history):
         if unsafe_reason(item.content):
