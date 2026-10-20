@@ -8,7 +8,7 @@ import { mockConveyor } from './mockConveyor'
 export interface ConveyorApi {
   registry(inn: string): Promise<RegistryCompany>
   listCompanies(): Promise<Company[]>
-  addCompany(inn: string, member_role: MemberRole): Promise<Company>
+  addCompany(inn: string, member_role: MemberRole, future?: boolean): Promise<Company> // future: будущий ИП по личному ИНН
   uploadAuthority(companyId: string, file: File): Promise<Company>
   parseNeed(text: string): Promise<ParsedNeed>
   templates(): Promise<Template[]>
@@ -34,7 +34,7 @@ const form = (fields: Record<string, string | File>) => {
 const realConveyor: ConveyorApi = {
   registry: (inn) => request('GET', `/registry/${inn}`),
   listCompanies: () => request('GET', '/companies'),
-  addCompany: (inn, member_role) => request('POST', '/companies', { inn, member_role }),
+  addCompany: (inn, member_role, future) => request('POST', '/companies', future ? { inn, member_role, future } : { inn, member_role }),
   uploadAuthority: (id, file) => request('POST', `/companies/${id}/authority`, form({ file })),
   parseNeed: (text) => request('POST', '/needs/parse', { text }, 15_000),
   templates: () => request('GET', '/templates'),

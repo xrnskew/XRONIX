@@ -10,15 +10,16 @@ import ProfileScreen from '../phone/screens/Profile'
 import NewApplication from '../phone/conveyor/NewApplication'
 import ApplicationView from '../phone/conveyor/ApplicationView'
 import { Applications, Feed } from '../phone/conveyor/Applications'
-import { Logo, Wide } from '../phone/ui'
+import { Conveyor, Logo, Wide } from '../phone/ui'
 import { useMediaQuery } from '../landing/useSlides'
 import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 
 // Рабочая версия (/app): кредитный конвейер на весь экран, без слайдов (docs/CONVEYOR.md).
 // Экраны общие с телефоном, своё здесь только обрамление: боковая панель с разделами.
-// Чат v1 убран из меню, но доступен по адресу #/chat, план и финансы — по #/plan и #/finance.
+// Чат подбора бизнеса ведёт модель Дани (/ai/consult), цифры плана считает бэкенд по шаблонам. План и финансы — по #/plan и #/finance.
 
 const tabs = [
+  { to: '/chat', label: 'Подбор бизнеса', d: 'M4 5h16v11H9l-5 4z' },
   { to: '/applications', label: 'Заявки', d: 'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7' },
   { to: '/new', label: 'Новая заявка', d: 'M12 5v14M5 12h14' },
   { to: '/feed', label: 'Лента', d: 'M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4' },
@@ -181,7 +182,7 @@ function Shell() {
           </Routes>
         </main>
         {/* узкий экран: боковой панели нет, разделы внизу, как в телефоне */}
-        <nav className="mx-3 mb-4 grid grid-cols-4 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
+        <nav className="mx-3 mb-4 grid grid-cols-5 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
           {tabs.map((t) => (
             <NavLink key={t.to} to={t.to} className={({ isActive }) => `flex min-h-[50px] flex-col items-center justify-center gap-0.5 rounded-[20px] text-[11px] font-medium transition-colors ${isActive ? 'bg-fill text-white' : 'text-muted'}`}>
               <Icon d={t.d} size={21} />{t.label}
@@ -197,7 +198,7 @@ export default function DesktopApp() {
   useEffect(() => { document.title = 'XRONIX — кабинет предпринимателя' }, [])
   const wide = useMediaQuery('(min-width: 768px)') // как md: с этой ширины диалоги в боковой панели
   return (
-    <Wide.Provider value={wide}>
+    <Wide.Provider value={wide}><Conveyor.Provider value>
       <div className="relative min-h-svh text-text">
         <AppShader />
         <HashRouter>
@@ -207,6 +208,6 @@ export default function DesktopApp() {
           </CabinetProvider>
         </HashRouter>
       </div>
-    </Wide.Provider>
+    </Conveyor.Provider></Wide.Provider>
   )
 }

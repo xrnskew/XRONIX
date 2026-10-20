@@ -2,15 +2,15 @@ import type { ConveyorApi } from './conveyor'
 import type { AppDocument, Application, ApplicationDraft, Company, FeedItem, InfoRequestKind, MemberRole, ParsedNeed, Purpose, Sphere, Status, TimelineItem } from '../types/conveyor'
 import dict from '../data/dictionaries.json'
 import rules from '../data/credit_rules.v1.json'
-import { cities, normalizeCity } from '../data/cities'
 import { alfaProducts } from '../data/alfaProducts'
 import { validInn } from '../lib/inn'
 import { businessMonths, decide, declineText, matchProducts, payment, rateFor, schedule, score, stopFactors, type Input } from '../lib/creditRules'
-import { external } from './mockData'
+import { external, personExternal } from './mockData'
+import { parseNeedText } from '../lib/parseText'
 import { CalcError, calculatePlan, templates } from '../lib/projectCalc'
 import type { Plan } from '../types/plan'
 import { ApiError } from './client'
-import { registerMockPlan } from './mock'
+import { findMockPlan, mockUserName, registerMockPlan } from './mock'
 
 // Мок конвейера в памяти: те же вызовы и ответы, что в /contracts/conveyor.md. Заявка проходит этапы сама по таймеру.
 // Ручное рассмотрение в моке завершает «демо-аналитик» через несколько секунд: настоящего рабочего места банка здесь нет.
@@ -32,9 +32,12 @@ const notFound = () => new ApiError('NOT_FOUND', 'Заявка не найден
 const conflict = () => new ApiError('VERSION_CONFLICT', 'Заявку уже изменили. Показываем актуальную версию.', 409)
 const invalid = () => new ApiError('INVALID_TRANSITION', 'Это действие недоступно в текущем статусе заявки.', 409)
 
+const isPerson = (r: Rec) => companies.get(r.company_id)?.registry.kind === 'person'
 function missing(r: Rec): string[] {
   const m: string[] = []
-  for (const k of ['revenue_12m_rub', 'expenses_12m_rub', 'loan_payments_monthly_rub'] as const) if (r.financials[k] == null) m.push(`financials.${k}`)
+  // у будущего ИП бизнеса ещё нет: из финансов нужны только личные платежи по кредитам
+  const fields = isPerson(r) ? (['loan_payments_monthly_rub'] as const) : (['revenue_12m_rub', 'expenses_12m_rub', 'loan_payments_monthly_rub'] as const)
+  for (const k of fields) if (r.financials[k] == null) m.push(`financials.${k}`)
   if (alfaProducts.find((p) => p.id === r.product_id)?.collateral && !r.collateral) m.push('collateral')
   if (!r.consent_bki) m.push('consent_bki')
   return m
@@ -60,10 +63,14 @@ function move(r: Rec, to: Status, actor: TimelineItem['actor'], text = clientTex
   }
 }
 
+const brief = (id: string | null) => {
+  const f = id ? (plans.get(id) ?? findMockPlan(id))?.finance : null
+  return f ? { startup_cost_rub: f.startup_cost_rub, own_funds_rub: f.own_funds_rub, monthly_profit_rub: f.monthly_profit_rub, monthly_revenue_rub: f.monthly_revenue_rub } : null
+}
 function input(r: Rec): Input {
-  const e = external(companies.get(r.company_id)!.registry.inn)
-  const plan = r.plan_id ? plans.get(r.plan_id) : null
-  return { ...e, financials: r.financials, product_id: r.product_id, amount_rub: r.amount_rub, term_months: r.term_months, collateral: r.collateral, plan_profit_rub: plan?.finance.monthly_profit_rub ?? null }
+  const c = companies.get(r.company_id)!, person = c.registry.kind === 'person'
+  const e = person ? { ...personExternal(c.registry.inn, c.registry.head_name), registry: c.registry } : external(c.registry.inn)
+  return { ...e, financials: r.financials, product_id: r.product_id, amount_rub: r.amount_rub, term_months: r.term_months, collateral: r.collateral, plan: brief(r.plan_id), person }
 }
 
 function offerFor(r: Rec, kind: 'approve' | 'counter', amount: number, months: number, rate: number, explanation: string[]) {
@@ -103,29 +110,6 @@ function runPipeline(id: string) {
   })
 }
 
-// ---- разбор текста: простые правила вместо модели, чтобы мастер заполнялся и без сервера ----
-const PURPOSE_WORDS: [Purpose, RegExp][] = [
-  ['new_location', /втор(ую|ой|ое)|ещё одн|еще одн|нов(ую|ой) точк|открыть|филиал/i], ['equipment', /оборудован|станок|кофемашин|печь|техник/i],
-  ['real_estate', /помещени|недвижим|купить офис|склад в собственность/i], ['refinance', /рефинанс|перекредит/i],
-  ['new_direction', /нов(ое|ый) направлени|запустить доставк|новый продукт/i], ['working_capital', /оборот|закупк|товар|зарплат/i],
-]
-const SPHERE_WORDS: [Sphere, RegExp][] = [['coffee', /кофе/i], ['bakery', /пекарн|выпечк|хлеб/i], ['car_wash', /мойк/i], ['clothing_store', /одежд|шоурум/i], ['beauty_salon', /салон|парикмахер|маникюр|барбер/i], ['pickup_point', /пункт выдачи|пвз/i]]
-const byPopulation = [...cities].sort((a, b) => b.population - a.population)
-function parseAmount(t: string): number | null {
-  const s = t.toLowerCase().replace(/\s+/g, ' ')
-  if (/полтора (ляма|млн|миллиона)/.test(s)) return 1_500_000
-  const m = s.match(/(\d+(?:[.,]\d+)?)\s*(млн|миллион\w*|лям\w*|тыс\w*|к(?![а-яё])|т\.р)/)
-  if (m) return Math.round(parseFloat(m[1].replace(',', '.')) * (/^(млн|милл|лям)/.test(m[2]) ? 1_000_000 : 1000))
-  const n = s.match(/(\d[\d ]{4,})\s*(₽|руб)/)
-  return n ? Number(n[1].replace(/ /g, '')) : null
-}
-function parseTerm(t: string): number | null {
-  const m = t.toLowerCase().match(/(\d+|год|два|три|пять)\s*(год|года|лет|мес)/)
-  if (!m) return /на год(?![а-яё])/i.test(t) ? 12 : null
-  const n = ({ год: 1, два: 2, три: 3, пять: 5 } as Record<string, number>)[m[1]] ?? Number(m[1])
-  return m[2].startsWith('мес') ? n : n * 12
-}
-
 export const mockConveyor: ConveyorApi = {
   async registry(inn) {
     await delay(500)
@@ -133,13 +117,21 @@ export const mockConveyor: ConveyorApi = {
     return structuredClone(external(inn).registry)
   },
   async listCompanies() { await delay(200); return structuredClone([...companies.values()]) },
-  async addCompany(inn, member_role) {
+  async addCompany(inn, member_role, future) {
     await delay(400)
     if (!validInn(inn)) throw new ApiError('INVALID_INN', 'ИНН с ошибкой: проверьте цифры.', 400)
+    if (future) {
+      if (inn.length !== 12) throw new ApiError('VALIDATION_ERROR', 'Личный ИНН состоит из 12 цифр.', 400)
+      const same = [...companies.values()].find((c) => c.registry.inn === inn && c.registry.kind === 'person')
+      if (same) return structuredClone(same)
+      const c: Company = { id: uid(), registry: personExternal(inn, mockUserName()).registry, member_role: 'owner', authority_confirmed: true, business_months: 0 }
+      companies.set(c.id, c)
+      return structuredClone(c)
+    }
     const existing = [...companies.values()].find((c) => c.registry.inn === inn)
     if (existing) { existing.member_role = member_role; existing.authority_confirmed ||= !roles[member_role].needs_authority; return structuredClone(existing) }
     const registry = external(inn).registry
-    const c: Company = { id: uid(), registry, member_role, authority_confirmed: !roles[member_role].needs_authority, business_months: businessMonths(registry.registered_at) }
+    const c: Company = { id: uid(), registry, member_role, authority_confirmed: !roles[member_role].needs_authority, business_months: registry.registered_at ? businessMonths(registry.registered_at) : 0 }
     companies.set(c.id, c)
     return structuredClone(c)
   },
@@ -149,19 +141,7 @@ export const mockConveyor: ConveyorApi = {
     c.authority_confirmed = true
     return structuredClone(c)
   },
-  async parseNeed(text) {
-    await delay(700)
-    const r: ParsedNeed = { purpose: null, sphere: null, city: null, amount_rub: null, term_months: null, has_collateral: null, confidence: {} }
-    const words = ' ' + normalizeCity(text) + ' '
-    const p = PURPOSE_WORDS.find(([, re]) => re.test(text)); if (p) { r.purpose = p[0]; r.confidence.purpose = 0.75 }
-    const s = SPHERE_WORDS.find(([, re]) => re.test(text)); if (s) { r.sphere = s[0]; r.confidence.sphere = 0.9 }
-    // «в Казани» → «Казань»: ищем основу названия с начала слова, крупные города первыми
-    const city = byPopulation.find((c) => c.name.length > 4 && words.includes(' ' + normalizeCity(c.name).slice(0, -1))); if (city) { r.city = city.name; r.confidence.city = 0.85 }
-    r.amount_rub = parseAmount(text); if (r.amount_rub) r.confidence.amount_rub = 0.8
-    r.term_months = parseTerm(text); if (r.term_months) r.confidence.term_months = 0.65
-    if (/без залога/i.test(text)) { r.has_collateral = false; r.confidence.has_collateral = 0.9 } else if (/залог/i.test(text)) { r.has_collateral = true; r.confidence.has_collateral = 0.6 }
-    return r
-  },
+  async parseNeed(text) { await delay(700); return parseNeedText(text) },
   async templates() { await delay(200); return templates() },
   async calculatePlan(b) {
     await delay(600)
@@ -174,7 +154,7 @@ export const mockConveyor: ConveyorApi = {
   async match(b) {
     await delay(450)
     const c = b.company_id ? companies.get(b.company_id) : null
-    return { items: matchProducts(b, c ? c.business_months : null) }
+    return { items: matchProducts(b, c ? c.business_months : null, { person: c?.registry.kind === 'person', plan: brief(b.plan_id ?? null) }) }
   },
   async createApplication(b) {
     await delay(300)

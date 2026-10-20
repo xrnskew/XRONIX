@@ -4,7 +4,7 @@ import { conveyor } from '../../api/conveyor'
 import type { ApplicationListItem, FeedItem } from '../../types/conveyor'
 import { rub } from '../../lib/format'
 import { Card, Screen, Skeleton } from '../ui'
-import { ErrorText, StatusBadge, dateRu, primaryBtn, productNames } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames } from './parts'
 
 export function Applications() {
   const [items, setItems] = useState<ApplicationListItem[] | null>(null)
@@ -23,8 +23,11 @@ export function Applications() {
       {items?.length === 0 && (
         <Card span={12}>
           <p className="text-[16px] font-semibold">Заявок пока нет</p>
-          <p className="mt-1 text-[14px] text-muted">Укажите ИНН компании, расскажите, на что нужны деньги, — подберём кредит и отправим заявку в банк.</p>
-          <Link to="/new" className={`${primaryBtn} mt-4 inline-flex items-center`}>Новая заявка</Link>
+          <p className="mt-1 text-[14px] text-muted">Ещё выбираете бизнес — расскажите об идее в чате, посчитаем план и подберём кредит. Бизнес уже есть — укажите ИНН компании и подайте заявку.</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link to="/chat" className={`${primaryBtn} inline-flex items-center`}>Подобрать бизнес</Link>
+            <Link to="/new" className={`${ghostBtn} inline-flex items-center`}>Новая заявка</Link>
+          </div>
         </Card>
       )}
       {items?.map((a) => (

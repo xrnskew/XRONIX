@@ -3,6 +3,9 @@ import { createContext, useContext, type ReactNode } from 'react'
 // true в рабочей версии на компьютере (/app): там диалоги в боковой панели, а экраны шире телефона
 export const Wide = createContext(false)
 
+// true в рабочей версии (/app): под планом в чате есть «Подобрать кредит», мастер заявки доступен
+export const Conveyor = createContext(false)
+
 // delay: порядковый номер для каскадного появления карточек при открытии экрана.
 // span: ширина карточки в сетке рабочей версии (из 12 колонок), tall: карточка на две строки сетки. В телефоне не влияют.
 export const Card = ({ children, className = '', id, delay, span, tall }: { children: ReactNode; className?: string; id?: string; delay?: number; span?: 5 | 6 | 7 | 12; tall?: boolean }) => (

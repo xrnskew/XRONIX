@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ApiError } from '../../api'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ApiError, api } from '../../api'
 import { conveyor } from '../../api/conveyor'
 import type { Company, MatchItem, MemberRole, ParsedNeed, Purpose, RegistryCompany, Sphere } from '../../types/conveyor'
 import type { Plan } from '../../types/plan'
 import type { Template } from '../../lib/projectCalc'
 import CityPicker from '../components/CityPicker'
-import { useCabinet } from '../CabinetContext'
 import { innHint } from '../../lib/inn'
 import { plural, rub } from '../../lib/format'
 import { Card, Chip, Screen, SectionTitle, Stat } from '../ui'
@@ -18,39 +17,48 @@ type Path = 'current' | 'new_point' | 'no_business'
 const PATHS: Record<Path, string[]> = {
   current: ['Цель', 'Компания', 'Что нужно', 'Продукт', 'Заявка'],
   new_point: ['Цель', 'Компания', 'Проект', 'Что нужно', 'Продукт', 'Заявка'],
-  no_business: ['Цель', 'Проект', 'Итог'],
+  no_business: ['Цель', 'Проект', 'Основатель', 'Что нужно', 'Продукт', 'Заявка'],
 }
 
 export interface Need { purpose: Purpose | null; amount_rub: number | null; term_months: number | null; has_collateral: boolean }
 export interface CalculatedPlan { plan_id: string; plan: Plan }
 
 // Три пути (docs/CONVEYOR.md, раздел 3): кредит текущему бизнесу; новая точка или направление — сначала расчёт проекта;
-// бизнеса пока нет — только расчёт проекта, кредиты Альфы доступны после 9 месяцев работы.
+// бизнеса пока нет — расчёт проекта, заявка как будущий ИП на демо-продукт «Старт».
+// ?plan=<id> — пришли из чата подбора бизнеса с готовым планом: шаг «Проект» пропускаем.
 export default function NewApplication() {
+  const planParam = new URLSearchParams(useLocation().search).get('plan')
   const [path, setPath] = useState<Path>('current')
   const [step, setStep] = useState(0)
   const [company, setCompany] = useState<Company | null>(null)
   const [project, setProject] = useState<CalculatedPlan | null>(null)
+  const [preset, setPreset] = useState<CalculatedPlan | null>(null)
+  const [presetError, setPresetError] = useState('')
+  useEffect(() => {
+    if (!planParam) return
+    api.getPlan(planParam).then((r) => setPreset({ plan_id: r.plan_id, plan: r.plan })).catch(() => setPresetError('Не удалось открыть план из чата. Можно посчитать проект заново.'))
+  }, [planParam])
   const [need, setNeed] = useState<Need>({ purpose: null, amount_rub: null, term_months: 24, has_collateral: false })
   const [appId, setAppId] = useState<string | null>(null)
   const nav = useNavigate()
-  const steps = PATHS[path], name = steps[step]
+  const steps = preset && path !== 'current' ? PATHS[path].filter((s) => s !== 'Проект') : PATHS[path], name = steps[step]
   const next = () => setStep(step + 1), back = () => setStep(step - 1)
 
-  const fromPlan = (c: CalculatedPlan) => {
+  const usePlan = (c: CalculatedPlan) => {
     setProject(c)
     const credit = c.plan.credit
     setNeed({ purpose: need.purpose === 'new_direction' ? 'new_direction' : 'new_location', amount_rub: credit.amount_rub ?? (c.plan.finance.funding_gap_rub || null), term_months: credit.recommended_term_months ?? 36, has_collateral: false })
-    next()
   }
+  const fromPlan = (c: CalculatedPlan) => { usePlan(c); next() }
 
   return (
     <Screen title="Новая заявка">
       <div data-span={12}><Steps items={steps} current={step} /></div>
-      {name === 'Цель' && <GoalStep onPick={(p) => { setPath(p); setProject(null); setStep(1) }} />}
+      {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
+      {name === 'Цель' && <GoalStep preset={preset} onPick={(p) => { setPath(p); if (preset && p !== 'current') usePlan(preset); else setProject(null); setStep(1) }} />}
       {name === 'Компания' && <CompanyStep onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Проект' && <ProjectStep company={company} noBusiness={path === 'no_business'} initial={project} onBack={back} onDone={fromPlan} />}
-      {name === 'Итог' && project && <NoBusinessResult project={project} onBack={back} />}
+      {name === 'Основатель' && <FounderStep onBack={back} onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Что нужно' && company && <NeedStep company={company} need={need} setNeed={setNeed} project={project} onBack={back} onDone={next} />}
       {name === 'Продукт' && company && <ProductStep company={company} need={need} planId={project?.plan_id ?? null} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
       {name === 'Заявка' && appId && <ApplicationForm id={appId} onSubmitted={() => nav(`/applications/${appId}`)} />}
@@ -62,12 +70,23 @@ export default function NewApplication() {
 const GOALS: { path: Path; title: string; text: string }[] = [
   { path: 'current', title: 'Кредит для текущего бизнеса', text: 'Оборот, оборудование, недвижимость или рефинансирование. Сразу к подбору кредита.' },
   { path: 'new_point', title: 'Открыть новую точку или направление', text: 'Сначала посчитаем проект: вложения, расходы, прибыль. Сумма из расчёта попадёт в заявку.' },
-  { path: 'no_business', title: 'У меня пока нет бизнеса', text: 'Посчитаем, сколько стоит запуск и когда окупится. Подскажем, как получить финансирование.' },
+  { path: 'no_business', title: 'У меня пока нет бизнеса', text: 'Посчитаем запуск и подадим заявку как будущий ИП на демо-продукт «Старт».' },
 ]
-function GoalStep({ onPick }: { onPick: (p: Path) => void }) {
+function GoalStep({ preset, onPick }: { preset: CalculatedPlan | null; onPick: (p: Path) => void }) {
+  const goals = preset ? [
+    { path: 'new_point' as Path, title: 'У меня есть бизнес — это будет новая точка', text: 'Выберите компанию: сумма и срок кредита придут из плана.' },
+    { path: 'no_business' as Path, title: 'Бизнеса пока нет', text: 'Заявка как будущий ИП на демо-продукт «Старт»: нужен залог или поручитель и не меньше 20% своих денег.' },
+  ] : GOALS
   return (
     <>
-      {GOALS.map((g) => (
+      {preset && (
+        <Card span={12} className="hero-card">
+          <div className="text-[13px] text-text/60">План из чата</div>
+          <div className="mt-1 text-[18px] font-semibold">{preset.plan.title}</div>
+          <p className="mt-1 text-[14px] text-text/80">Запуск {rub(preset.plan.finance.startup_cost_rub)}, своих {rub(preset.plan.finance.own_funds_rub)}, не хватает {rub(preset.plan.finance.funding_gap_rub)}. Как будете запускать?</p>
+        </Card>
+      )}
+      {goals.map((g) => (
         <button key={g.path} onClick={() => onPick(g.path)} data-span={12} className="card-ring block w-full rounded-[22px] bg-surface p-5 text-left transition-colors hover:bg-surface-2 lg:p-6">
           <div className="text-[18px] font-semibold">{g.title}</div>
           <div className="mt-1 text-[14px] leading-snug text-muted">{g.text}</div>
@@ -87,7 +106,7 @@ function CompanyStep({ onDone }: { onDone: (c: Company) => void }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => { conveyor.listCompanies().then(setList).catch(() => setList([])) }, [])
+  useEffect(() => { conveyor.listCompanies().then((l) => setList(l.filter((c) => c.registry.kind !== 'person'))).catch(() => setList([])) }, [])
   const clean = inn.replace(/\D/g, '')
   const hint = innHint(inn, blurred)
   const canSearch = (clean.length === 10 || clean.length === 12) && !innHint(clean, true)
@@ -139,9 +158,9 @@ function CompanyStep({ onDone }: { onDone: (c: Company) => void }) {
             </div>
             <dl className="mt-3 grid gap-x-6 gap-y-2 text-[14px] sm:grid-cols-2">
               <div><dt className="text-[12px] text-muted">{found.kind === 'ip' ? 'ОГРНИП' : 'ОГРН'}</dt><dd className="tabular-nums">{found.ogrn}</dd></div>
-              <div><dt className="text-[12px] text-muted">Зарегистрирована</dt><dd>{new Date(found.registered_at).toLocaleDateString('ru-RU')}</dd></div>
+              <div><dt className="text-[12px] text-muted">Зарегистрирована</dt><dd>{found.registered_at ? new Date(found.registered_at).toLocaleDateString('ru-RU') : '—'}</dd></div>
               <div><dt className="text-[12px] text-muted">{found.kind === 'ip' ? 'Предприниматель' : 'Руководитель'}</dt><dd>{found.head_name}</dd></div>
-              <div><dt className="text-[12px] text-muted">Основной ОКВЭД</dt><dd>{found.okved.code} · {found.okved.name}</dd></div>
+              <div><dt className="text-[12px] text-muted">Основной ОКВЭД</dt><dd>{found.okved ? `${found.okved.code} · ${found.okved.name}` : '—'}</dd></div>
             </dl>
             <p className="mt-2 text-[12px] text-muted">Источник: {found.source}</p>
             <div className="mt-4 text-[14px] font-medium">Кто вы в компании?</div>
@@ -220,9 +239,9 @@ function NeedStep({ company, need, setNeed, project, onBack, onDone }: { company
         <div className="mt-5 text-[14px] font-medium">Есть что предложить в залог?</div>
         <div className="mt-2 flex gap-2">
           <Chip active={!need.has_collateral} onClick={() => set({ has_collateral: false })}>Нет</Chip>
-          <Chip active={need.has_collateral} onClick={() => set({ has_collateral: true })}>Да: недвижимость, оборудование, транспорт</Chip>
+          <Chip active={need.has_collateral} onClick={() => set({ has_collateral: true })}>{company.registry.kind === 'person' ? 'Да: залог или поручитель' : 'Да: недвижимость, оборудование, транспорт'}</Chip>
         </div>
-        {company.business_months < 9 && <p className="mt-4 text-[13px] leading-snug text-warn">Бизнесу {company.business_months} мес. Кредиты Альфа-Банка для бизнеса требуют от 9 месяцев работы — на следующем шаге покажем, что доступно.</p>}
+        {company.registry.kind !== 'person' && company.business_months < 9 && <p className="mt-4 text-[13px] leading-snug text-warn">Бизнесу {company.business_months} мес. Кредиты Альфа-Банка для бизнеса требуют от 9 месяцев работы — на следующем шаге покажем, что доступно.</p>}
         <div className="mt-6 flex gap-3">
           <button onClick={onBack} className={ghostBtn}>Назад</button>
           <button onClick={onDone} disabled={!ready} className={primaryBtn}>Подобрать кредит</button>
@@ -263,7 +282,10 @@ function ProductStep({ company, need, planId, onBack, onDone }: { company: Compa
       {items?.map((m) => (
         <Card key={m.product_id} span={6} className={m.eligible && m.can_apply ? '' : 'opacity-75'}>
           <div className="flex items-start justify-between gap-3">
-            <div className="text-[16px] font-semibold leading-snug">{m.name}</div>
+            <div className="min-w-0">
+              <div className="text-[16px] font-semibold leading-snug">{m.name}</div>
+              {m.demo && <span className="mt-1 inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] text-muted">Демо-продукт XRONIX, не продукт Альфа-Банка</span>}
+            </div>
             <span className={`shrink-0 text-[13px] font-medium ${m.eligible && m.can_apply ? 'text-ok' : 'text-muted'}`}>{m.eligible && m.can_apply ? 'Подходит' : 'Не подходит'}</span>
           </div>
           <div className="mt-3 flex gap-6 text-[14px]">
@@ -273,7 +295,7 @@ function ProductStep({ company, need, planId, onBack, onDone }: { company: Compa
           {m.reasons.length > 0 && <ul className="mt-3 space-y-1 text-[13px] leading-snug text-muted">{m.reasons.map((r) => <li key={r}>• {r}</li>)}</ul>}
           <div className="mt-4 flex flex-wrap items-center gap-3">
             {m.eligible && m.can_apply && <button onClick={() => apply(m)} disabled={!!creating} className={primaryBtn}>{creating === m.product_id ? 'Создаём…' : 'Подать заявку'}</button>}
-            <a href={m.url} target="_blank" rel="noreferrer" className="text-[13px] text-muted underline-offset-2 hover:text-text hover:underline">Условия на сайте банка</a>
+            {m.url && <a href={m.url} target="_blank" rel="noreferrer" className="text-[13px] text-muted underline-offset-2 hover:text-text hover:underline">Условия на сайте банка</a>}
           </div>
         </Card>
       ))}
@@ -338,7 +360,7 @@ function ProjectStep({ company, noBusiness, initial, onBack, onDone }: { company
       {result && <PlanSummary plan={result.plan} />}
       {result && (
         <div data-span={12} className="flex flex-wrap gap-3">
-          <button onClick={() => onDone(result)} className={primaryBtn}>{noBusiness ? 'Дальше: как профинансировать' : result.plan.credit.needed ? 'Дальше: кредит на запуск' : 'Дальше'}</button>
+          <button onClick={() => onDone(result)} className={primaryBtn}>{noBusiness ? 'Дальше: заявка как будущий ИП' : result.plan.credit.needed ? 'Дальше: кредит на запуск' : 'Дальше'}</button>
         </div>
       )}
     </>
@@ -384,29 +406,42 @@ function PlanSummary({ plan }: { plan: Plan }) {
   )
 }
 
-function NoBusinessResult({ project, onBack }: { project: CalculatedPlan; onBack: () => void }) {
-  const { openPlan } = useCabinet()
-  const nav = useNavigate()
-  const f = project.plan.finance
-  const open = async () => { await openPlan(project.plan_id, project.plan); nav(`/plan?plan=${encodeURIComponent(project.plan_id)}`) }
+// ---- Основатель: бизнеса ещё нет, заявка как будущий ИП по личному ИНН ----
+function FounderStep({ onBack, onDone }: { onBack: () => void; onDone: (c: Company) => void }) {
+  const [list, setList] = useState<Company[]>([])
+  const [inn, setInn] = useState('')
+  const [blurred, setBlurred] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  useEffect(() => { conveyor.listCompanies().then((l) => setList(l.filter((c) => c.registry.kind === 'person'))).catch(() => {}) }, [])
+  const clean = inn.replace(/\D/g, '')
+  const hint = clean && clean.length !== 12 && blurred ? 'Личный ИНН — 12 цифр' : innHint(inn, blurred)
+  const ok = clean.length === 12 && !innHint(clean, true)
+  const go = async () => {
+    setBusy(true); setError('')
+    try { onDone(await conveyor.addCompany(clean, 'owner', true)) } catch (e) { setError(errText(e)) } finally { setBusy(false) }
+  }
   return (
-    <>
-      <Card span={12}>
-        <SectionTitle>Почему пока без кредита</SectionTitle>
-        <p className="text-[15px] leading-snug">Кредиты Альфа-Банка для бизнеса выдают компаниям и ИП, которые работают не меньше 9 месяцев. Поэтому подать заявку на запуск с нуля пока нельзя. Расчёт сохранён — к нему можно вернуться.</p>
-      </Card>
-      <Card span={12}>
-        <SectionTitle>Что можно сделать сейчас</SectionTitle>
-        <ol className="space-y-3 text-[15px] leading-snug">
-          <li><b>Начать на свои средства.</b> Запуск — {rub(f.startup_cost_rub)}, у вас {rub(f.own_funds_rub)}. {f.funding_gap_rub ? `Не хватает ${rub(f.funding_gap_rub)}: уменьшите площадь или вложения в оборудование и пересчитайте.` : 'Своих средств хватает.'}</li>
-          <li><b>Узнать о поддержке малого бизнеса</b> в вашем регионе: для начинающих бывают гранты и льготные микрозаймы.</li>
-          <li><b>Зарегистрировать ИП или ООО и вернуться через 9 месяцев работы.</b> Тогда здесь же можно будет подобрать кредит на развитие и подать заявку.</li>
-        </ol>
-      </Card>
-      <div data-span={12} className="flex flex-wrap gap-3">
-        <button onClick={open} className={primaryBtn}>Открыть полный план</button>
-        <button onClick={onBack} className={ghostBtn}>Посчитать другой вариант</button>
-      </div>
-    </>
+    <Card span={12}>
+      <SectionTitle>Заявка как будущий ИП</SectionTitle>
+      <p className="mb-4 text-[14px] leading-snug text-muted">Бизнеса ещё нет — кредит оформим на вас, а ИП нужно будет зарегистрировать до подписания договора. Для проверки кредитной истории нужен личный ИНН: 12 цифр, есть в Госуслугах и в налоговой.</p>
+      {list.map((c) => (
+        <button key={c.id} onClick={() => onDone(c)} className="mb-3 block w-full rounded-xl bg-surface-2 p-3.5 text-left hover:bg-surface-3">
+          <div className="font-semibold">{c.registry.name}</div><div className="text-[13px] text-muted">ИНН {c.registry.inn}</div>
+        </button>
+      ))}
+      <form className="flex flex-col gap-3 sm:flex-row sm:items-start" onSubmit={(e) => { e.preventDefault(); if (ok) go() }}>
+        <div className="flex-1">
+          <Label text="Личный ИНН">
+            <input id="person-inn" className={`${input} tabular-nums`} inputMode="numeric" autoComplete="off" value={inn} maxLength={14} placeholder="12 цифр"
+              onChange={(e) => { setInn(e.target.value); setBlurred(false) }} onBlur={() => setBlurred(true)} aria-invalid={!!hint} aria-describedby="person-inn-hint" />
+          </Label>
+          <p id="person-inn-hint" className="mt-1 min-h-[18px] text-[12px] text-accent">{hint}</p>
+        </div>
+        <button className={`${primaryBtn} sm:mt-[22px]`} disabled={!ok || busy}>{busy ? 'Сохраняем…' : 'Продолжить'}</button>
+      </form>
+      <ErrorText>{error}</ErrorText>
+      <button onClick={onBack} className={`${ghostBtn} mt-2`}>Назад</button>
+    </Card>
   )
 }

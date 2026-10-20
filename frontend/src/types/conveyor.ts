@@ -3,17 +3,17 @@
 export type Purpose = 'working_capital' | 'equipment' | 'new_location' | 'new_direction' | 'real_estate' | 'refinance'
 export type Sphere = 'coffee' | 'bakery' | 'car_wash' | 'clothing_store' | 'beauty_salon' | 'pickup_point' | 'other'
 export type MemberRole = 'owner' | 'director' | 'cfo' | 'accountant' | 'employee'
-export type CollateralKind = 'real_estate' | 'equipment' | 'vehicle' | 'goods'
-export type ProductId = 'fast' | 'secured' | 'mortgage' | 'revolving'
+export type CollateralKind = 'real_estate' | 'equipment' | 'vehicle' | 'goods' | 'guarantor'
+export type ProductId = 'fast' | 'secured' | 'mortgage' | 'revolving' | 'start' // start — демо-продукт XRONIX
 export type Status = 'draft' | 'submitted' | 'checking' | 'info_requested' | 'scoring' | 'manual_review' | 'approved' | 'counter_offer' | 'signing' | 'funded' | 'declined' | 'withdrawn' | 'cancelled'
 export type Actor = 'client' | 'system' | 'analyst'
 export type InfoRequestKind = 'authority_document' | 'financials' | 'collateral' | 'other'
-export type DeclineReason = 'company_inactive' | 'business_too_young' | 'overdue_90' | 'tax_debt' | 'head_disqualified' | 'low_score' | 'high_debt_load' | 'analyst_decision'
-export type CompanyStatus = 'active' | 'liquidating' | 'liquidated' | 'bankrupt'
+export type DeclineReason = 'company_inactive' | 'business_too_young' | 'overdue_90' | 'tax_debt' | 'head_disqualified' | 'low_score' | 'high_debt_load' | 'analyst_decision' | 'own_funds_low' | 'plan_required'
+export type CompanyStatus = 'active' | 'liquidating' | 'liquidated' | 'bankrupt' | 'not_registered'
 
 export interface RegistryCompany {
-  inn: string; ogrn: string; name: string; kind: 'ip' | 'ul'; status: CompanyStatus
-  registered_at: string; okved: { code: string; name: string }; address: string; head_name: string; source: string
+  inn: string; ogrn: string | null; name: string; kind: 'ip' | 'ul' | 'person'; status: CompanyStatus // person — будущий ИП
+  registered_at: string | null; okved: { code: string; name: string } | null; address: string; head_name: string; source: string
 }
 export interface Company { id: string; registry: RegistryCompany; member_role: MemberRole; authority_confirmed: boolean; business_months: number }
 
@@ -25,8 +25,8 @@ export interface ParsedNeed {
 
 export interface MatchRequest { purpose: Purpose; amount_rub: number; term_months: number; has_collateral: boolean; company_id?: string | null; plan_id?: string | null }
 export interface MatchItem {
-  product_id: ProductId; name: string; eligible: boolean; can_apply: boolean; reasons: string[]
-  rate_from_percent: number | null; monthly_payment_rub: number | null; url: string
+  product_id: ProductId; name: string; demo: boolean; eligible: boolean; can_apply: boolean; reasons: string[]
+  rate_from_percent: number | null; monthly_payment_rub: number | null; url: string | null
 }
 
 export interface Financials { revenue_12m_rub: number | null; expenses_12m_rub: number | null; loan_payments_monthly_rub: number | null }

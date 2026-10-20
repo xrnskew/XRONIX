@@ -120,3 +120,43 @@ test('прибыль новой точки учитывается в нагру�
   const without = score(base).debt_load_percent, withPlan = score({ ...base, plan_profit_rub: 200_000 }).debt_load_percent
   assert.ok(withPlan < without, `${withPlan} < ${without}`)
 })
+
+// ---- демо-продукт «Старт» и будущий ИП (contracts/conveyor.md) ----
+import { personExternal, DEMO_FOUNDER_INN } from '../src/api/mockData.ts'
+import { parseNeedText } from '../src/lib/parseText.ts'
+
+test('«Старт»: будущий ИП с планом и 20%+ своих — одобрение с условием регистрации', () => {
+  assert.ok(validInn(DEMO_FOUNDER_INN))
+  const plan = calculatePlan({ sphere: 'coffee', city: 'Казань', own_funds_rub: 500_000, answers: {} })
+  const brief = { startup_cost_rub: plan.finance.startup_cost_rub, own_funds_rub: plan.finance.own_funds_rub, monthly_profit_rub: plan.finance.monthly_profit_rub, monthly_revenue_rub: plan.finance.monthly_revenue_rub }
+  const ext = personExternal(DEMO_FOUNDER_INN, 'Мария Новикова')
+  const i = { ...ext, financials: { revenue_12m_rub: null, expenses_12m_rub: null, loan_payments_monthly_rub: 0 }, product_id: 'start', amount_rub: plan.credit.amount_rub, term_months: 36, collateral: { kind: 'guarantor', description: 'Поручитель — супруг', value_rub: 1_000_000 }, plan: brief, person: true, now: NOW }
+  assert.deepEqual(stopFactors(i), [])
+  const sc = score(i), d = decide(i, sc)
+  assert.ok(sc.factors.some((f) => f.code === 'own_share') && !sc.factors.some((f) => f.code === 'business_age'))
+  assert.equal(d.kind, 'approve', JSON.stringify(sc))
+  assert.match(d.explanation.at(-1), /зарегистрировать ИП/)
+  assert.equal(d.rate_percent, 27)
+})
+
+test('«Старт»: без плана и с малой долей своих — стоп-факторы', () => {
+  const ext = personExternal(DEMO_FOUNDER_INN, 'Мария')
+  const base = { ...ext, financials: { revenue_12m_rub: null, expenses_12m_rub: null, loan_payments_monthly_rub: 0 }, product_id: 'start', amount_rub: 1_000_000, term_months: 36, collateral: null, person: true, now: NOW }
+  assert.deepEqual(stopFactors({ ...base, plan: null }).map((s) => s.code), ['plan_required'])
+  assert.deepEqual(stopFactors({ ...base, plan: { startup_cost_rub: 1_400_000, own_funds_rub: 100_000, monthly_profit_rub: 200_000, monthly_revenue_rub: 800_000 } }).map((s) => s.code), ['own_funds_low'])
+})
+
+test('подбор для будущего ИП: продукты Альфы недоступны, «Старт» с пометкой демо', () => {
+  const plan = { startup_cost_rub: 1_400_000, own_funds_rub: 500_000, monthly_profit_rub: 200_000, monthly_revenue_rub: 800_000 }
+  const items = matchProducts({ purpose: 'new_location', amount_rub: 900_000, term_months: 36, has_collateral: true }, 0, { person: true, plan })
+  assert.equal(items[0].product_id, 'start'); assert.ok(items[0].eligible && items[0].demo)
+  assert.ok(items.filter((i) => i.product_id !== 'start').every((i) => !i.eligible && !i.demo))
+  const noPlan = matchProducts({ purpose: 'new_location', amount_rub: 900_000, term_months: 36, has_collateral: true }, 0, { person: true, plan: null })
+  assert.ok(!noPlan.find((i) => i.product_id === 'start').eligible)
+})
+
+test('разбор текста: сфера, город, сумма, срок, залог', () => {
+  const r = parseNeedText('Хочу открыть вторую пекарню в Казани, нужно 1,5 млн на два года, без залога')
+  assert.deepEqual([r.purpose, r.sphere, r.city, r.amount_rub, r.term_months, r.has_collateral], ['new_location', 'bakery', 'Казань', 1_500_000, 24, false])
+  assert.equal(parseNeedText('пополнить оборот на 900к').amount_rub, 900_000)
+})

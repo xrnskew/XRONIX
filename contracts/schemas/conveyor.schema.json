@@ -10,13 +10,13 @@
       "required": ["inn", "ogrn", "name", "kind", "status", "registered_at", "okved", "address", "head_name", "source"],
       "properties": {
         "inn": { "$ref": "common.schema.json#/definitions/inn" },
-        "ogrn": { "type": "string", "pattern": "^([0-9]{13}|[0-9]{15})$" },
+        "ogrn": { "type": ["string", "null"], "pattern": "^([0-9]{13}|[0-9]{15})$", "description": "null у будущего ИП" },
         "name": { "type": "string" },
         "kind": { "$ref": "common.schema.json#/definitions/company_kind" },
         "status": { "$ref": "common.schema.json#/definitions/company_status" },
-        "registered_at": { "$ref": "common.schema.json#/definitions/date" },
+        "registered_at": { "anyOf": [{ "$ref": "common.schema.json#/definitions/date" }, { "type": "null" }], "description": "null у будущего ИП" },
         "okved": {
-          "type": "object", "additionalProperties": false, "required": ["code", "name"],
+          "type": ["object", "null"], "additionalProperties": false, "required": ["code", "name"],
           "properties": { "code": { "type": "string" }, "name": { "type": "string" } }
         },
         "address": { "type": "string" },
@@ -42,7 +42,8 @@
       "required": ["inn", "member_role"],
       "properties": {
         "inn": { "$ref": "common.schema.json#/definitions/inn" },
-        "member_role": { "$ref": "common.schema.json#/definitions/member_role" }
+        "member_role": { "$ref": "common.schema.json#/definitions/member_role" },
+        "future": { "type": "boolean", "description": "true: бизнеса ещё нет, inn — личный ИНН (12 цифр). Создаётся компания kind=person, status=not_registered, member_role=owner" }
       }
     },
     "collateral": {
@@ -71,16 +72,17 @@
     "match_item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["product_id", "name", "eligible", "can_apply", "reasons", "rate_from_percent", "monthly_payment_rub", "url"],
+      "required": ["product_id", "name", "demo", "eligible", "can_apply", "reasons", "rate_from_percent", "monthly_payment_rub", "url"],
       "properties": {
         "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
         "name": { "type": "string" },
+        "demo": { "type": "boolean", "description": "true — демо-продукт XRONIX (start), не продукт Альфа-Банка" },
         "eligible": { "type": "boolean", "description": "Подходит по сумме, сроку, залогу и стажу" },
-        "can_apply": { "type": "boolean", "description": "Заявку в MVP можно подать только на fast и secured" },
+        "can_apply": { "type": "boolean", "description": "Заявку в MVP можно подать на fast, secured и start" },
         "reasons": { "type": "array", "items": { "type": "string" }, "description": "Почему не подходит, понятным языком. Пусто, если подходит" },
         "rate_from_percent": { "type": ["number", "null"] },
         "monthly_payment_rub": { "$ref": "common.schema.json#/definitions/rub_or_null" },
-        "url": { "type": "string", "format": "uri" }
+        "url": { "type": ["string", "null"], "format": "uri", "description": "null у демо-продукта" }
       }
     },
     "match_response": {

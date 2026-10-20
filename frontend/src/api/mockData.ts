@@ -57,3 +57,13 @@ export function generated(inn: string): External {
 }
 
 export const external = (inn: string): External => SCENARIOS[inn] ?? generated(inn)
+
+// Будущий ИП: регистрации нет, ЕГРЮЛ не проверяется, кредитная история — личная (по личному ИНН).
+export const DEMO_FOUNDER_INN = '772519083310' // чистая личная история 24 мес. — для сценария «Старт» в README
+export function personExternal(inn: string, name: string): External {
+  const bkiData = inn === DEMO_FOUNDER_INN ? bki(24, 0) : generated(inn).bki
+  return {
+    registry: { inn, ogrn: null, name: `${name} (будущий ИП)`, kind: 'person', status: 'not_registered', registered_at: null, okved: null, address: '', head_name: name, source: 'xronix' },
+    fns: clean, bki: bkiData,
+  }
+}

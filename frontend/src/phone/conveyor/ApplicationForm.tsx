@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError, USE_MOCKS } from '../../api'
 import { conveyor } from '../../api/conveyor'
-import { demoFinancials } from '../../api/mockData'
+import { DEMO_FOUNDER_INN, demoFinancials } from '../../api/mockData'
 import type { Application, ApplicationDraft, Collateral, CollateralKind, Financials } from '../../types/conveyor'
 import { rub } from '../../lib/format'
 import { Card, Chip, SectionTitle, Skeleton } from '../ui'
@@ -11,7 +11,7 @@ const FIELD_TEXT: Record<string, string> = {
   'financials.revenue_12m_rub': 'выручка за 12 месяцев',
   'financials.expenses_12m_rub': 'расходы за 12 месяцев',
   'financials.loan_payments_monthly_rub': 'платежи по текущим кредитам (0, если кредитов нет)',
-  collateral: 'залог',
+  collateral: 'залог или поручитель',
   consent_bki: 'согласие на запрос кредитной истории',
 }
 
@@ -52,8 +52,10 @@ export default function ApplicationForm({ id, onSubmitted }: { id: string; onSub
   const edit = <T,>(setter: (v: T) => void) => (v: T) => { dirty.current = true; setter(v) }
 
   if (!app) return error ? <ErrorText>{error}</ErrorText> : <Skeleton />
-  const needsCollateral = app.product_id === 'secured'
-  const example = USE_MOCKS ? demoFinancials[app.company.registry.inn] : undefined
+  const needsCollateral = app.product_id === 'secured' || app.product_id === 'start'
+  const person = app.company.registry.kind === 'person' // будущий ИП: бизнеса и его финансов ещё нет
+  const founderExample = { financials: { revenue_12m_rub: null, expenses_12m_rub: null, loan_payments_monthly_rub: 0 }, collateral: { kind: 'guarantor' as const, description: 'Поручитель — супруг, официальный доход', value_rub: 1_000_000 } }
+  const example = USE_MOCKS ? (app.company.registry.inn === DEMO_FOUNDER_INN ? founderExample : demoFinancials[app.company.registry.inn]) : undefined
 
   const submit = async () => {
     setSubmitting(true); setError('')
@@ -83,24 +85,25 @@ export default function ApplicationForm({ id, onSubmitted }: { id: string; onSub
       </Card>
 
       <Card span={needsCollateral ? 6 : 12}>
-        <SectionTitle>Финансы за последние 12 месяцев</SectionTitle>
-        <div className={`grid gap-4 ${needsCollateral ? '' : 'sm:grid-cols-3'}`}>
-          <Label text="Выручка"><MoneyInput id="revenue" value={fin.revenue_12m_rub} onChange={edit((v) => setFin({ ...fin, revenue_12m_rub: v }))} /></Label>
-          <Label text="Расходы"><MoneyInput id="expenses" value={fin.expenses_12m_rub} onChange={edit((v) => setFin({ ...fin, expenses_12m_rub: v }))} /></Label>
-          <Label text="Платежи по кредитам в месяц" hint="Все текущие кредиты и лизинг. Нет кредитов — 0."><MoneyInput id="loans" value={fin.loan_payments_monthly_rub} onChange={edit((v) => setFin({ ...fin, loan_payments_monthly_rub: v }))} /></Label>
+        <SectionTitle>{person ? 'Ваши кредиты' : 'Финансы за последние 12 месяцев'}</SectionTitle>
+        {person && <p className="mb-3 text-[14px] leading-snug text-muted">Бизнеса ещё нет, поэтому выручку и прибыль банк возьмёт из расчёта проекта.</p>}
+        <div className={`grid gap-4 ${needsCollateral || person ? '' : 'sm:grid-cols-3'}`}>
+          {!person && <Label text="Выручка"><MoneyInput id="revenue" value={fin.revenue_12m_rub} onChange={edit((v) => setFin({ ...fin, revenue_12m_rub: v }))} /></Label>}
+          {!person && <Label text="Расходы"><MoneyInput id="expenses" value={fin.expenses_12m_rub} onChange={edit((v) => setFin({ ...fin, expenses_12m_rub: v }))} /></Label>}
+          <Label text={person ? 'Личные платежи по кредитам в месяц' : 'Платежи по кредитам в месяц'} hint="Все текущие кредиты и лизинг. Нет кредитов — 0."><MoneyInput id="loans" value={fin.loan_payments_monthly_rub} onChange={edit((v) => setFin({ ...fin, loan_payments_monthly_rub: v }))} /></Label>
         </div>
       </Card>
 
       {needsCollateral && (
         <Card span={6}>
-          <SectionTitle>Залог</SectionTitle>
+          <SectionTitle>{app.product_id === 'start' ? 'Залог или поручитель' : 'Залог'}</SectionTitle>
           <div className="flex flex-wrap gap-2">
-            {Object.entries(collateralKinds).map(([k, c]) => <Chip key={k} active={col?.kind === k} onClick={() => edit(setCol)({ kind: k as CollateralKind, description: col?.description ?? '', value_rub: col?.value_rub ?? 0 })}>{c.title}</Chip>)}
+            {Object.entries(collateralKinds).filter(([k]) => app.product_id === 'start' || k !== 'guarantor').map(([k, c]) => <Chip key={k} active={col?.kind === k} onClick={() => edit(setCol)({ kind: k as CollateralKind, description: col?.description ?? '', value_rub: col?.value_rub ?? 0 })}>{c.title}</Chip>)}
           </div>
           {col && (
             <div className="mt-4 grid gap-4">
-              <Label text="Что именно"><input id="col-desc" className={input} maxLength={300} value={col.description} onChange={(e) => edit(setCol)({ ...col, description: e.target.value })} placeholder="Например: два грузовика 2022 года" /></Label>
-              <Label text="Оценочная стоимость"><MoneyInput id="col-value" value={col.value_rub || null} onChange={edit((v) => setCol({ ...col, value_rub: v ?? 0 }))} /></Label>
+              <Label text={col.kind === 'guarantor' ? 'Кто поручитель' : 'Что именно'}><input id="col-desc" className={input} maxLength={300} value={col.description} onChange={(e) => edit(setCol)({ ...col, description: e.target.value })} placeholder={col.kind === 'guarantor' ? 'Например: супруг, официальный доход' : 'Например: два грузовика 2022 года'} /></Label>
+              <Label text={col.kind === 'guarantor' ? 'Сумма поручительства' : 'Оценочная стоимость'}><MoneyInput id="col-value" value={col.value_rub || null} onChange={edit((v) => setCol({ ...col, value_rub: v ?? 0 }))} /></Label>
             </div>
           )}
         </Card>

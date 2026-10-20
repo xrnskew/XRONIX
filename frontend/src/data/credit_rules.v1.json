@@ -1,7 +1,7 @@
 {
   "version": "credit_rules.v1",
   "comment": "Все значения синтетические, для демонстрации логики конвейера. Описание: docs/CONVEYOR.md, раздел 6.",
-  "applicable_products": ["fast", "secured"],
+  "applicable_products": ["fast", "secured", "start"],
   "checks": {
     "max_amount_to_revenue": 2.0,
     "stage_delay_seconds": { "min": 2, "max": 4 }
@@ -73,5 +73,18 @@
     "rate_premium_by_grade": { "A": 0, "B": 1.5, "C": 3, "D": null },
     "counter_offer_grades": ["A", "B"],
     "amount_round_to_rub": 10000
+  },
+  "start": {
+    "comment": "Демо-продукт XRONIX для нового бизнеса и будущих ИП (contracts/products.demo.json). Не продукт Альфа-Банка. Значения синтетические.",
+    "plan_required": true,
+    "min_own_share": 0.2,
+    "own_share": [
+      { "min_share": 0.4, "points": 15, "label": "40% и больше" },
+      { "min_share": 0.3, "points": 8, "label": "30–40%" },
+      { "min_share": 0.2, "points": 0, "label": "20–30%" }
+    ],
+    "collateral_or_guarantor_required": true,
+    "plan_profit_share": 0.5,
+    "condition_text": "Условие: зарегистрировать ИП или ООО до подписания договора."
   }
 }

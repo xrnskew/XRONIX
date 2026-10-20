@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
 import type { AiReply, Answer, ChatSummary, Question } from '../../types/plan'
-import { Chip, Logo, Wide } from '../ui'
+import { Chip, Conveyor, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
@@ -29,6 +29,7 @@ export default function Chat() {
   const list = useRef<HTMLDivElement>(null)
   const nav = useNavigate()
   const wide = useContext(Wide)
+  const conveyorOn = useContext(Conveyor)
 
   useEffect(() => { setAnswers({}); setText('') }, [chatId])
 
@@ -100,7 +101,7 @@ export default function Chat() {
               m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
-              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} />}
+              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} onCredit={conveyorOn && m.reply?.type === 'plan' ? () => nav(`/new?plan=${encodeURIComponent((m.reply as { plan_id: string }).plan_id)}`) : undefined} />}
               {m.error && canRetry && m === last && (
                 <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
               )}
@@ -216,13 +217,14 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
   )
 }
 
-function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen }: {
+function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit }: {
   reply: AiReply
   active: boolean
   answers: Record<string, string>
   setAnswers: (a: Record<string, string>) => void
   onSubmit: (q: Question[]) => void
   onOpen: () => void
+  onCredit?: () => void // рабочая версия: перейти к заявке на кредит по этому плану
 }) {
   if (reply.type === 'message') return <>{reply.text}</>
   if (reply.type === 'plan')
@@ -234,7 +236,8 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen }: {
           <div><div className="text-[12px] text-muted">Нужно на старт</div><div className="font-semibold tabular-nums">{rub(reply.plan.finance.startup_cost_rub)}</div></div>
           <div><div className="text-[12px] text-muted">Окупаемость</div><div className="font-semibold">{reply.plan.finance.payback_months ?? '—'} мес.</div></div>
         </div>
-        <button onClick={onOpen} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Открыть план</button>
+        <button onClick={onOpen} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${onCredit ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Открыть план</button>
+        {onCredit && <button onClick={onCredit} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Подобрать кредит</button>}
       </div>
     )
   const done = reply.questions.every((q) => answers[q.id]?.trim())

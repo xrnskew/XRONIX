@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/consult.schema.json",
+  "title": "POST /ai/consult",
+  "description": "Модель Дани ведёт диалог подбора бизнеса и заполняет анкету шаблона (templates/spheres.v1.json). Деньги не считает: план по анкете строит бэкенд (templates.md).",
+  "definitions": {
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sphere", "city", "own_funds_rub", "answers"],
+      "properties": {
+        "sphere": { "anyOf": [{ "$ref": "common.schema.json#/definitions/sphere" }, { "type": "null" }], "description": "other не подходит для расчёта: модель предлагает ближайшую сферу из шаблонов" },
+        "city": { "type": ["string", "null"], "maxLength": 60, "description": "Именительный падеж, как в cities.json" },
+        "own_funds_rub": { "type": ["integer", "null"], "minimum": 0 },
+        "answers": { "type": "object", "description": "id вопроса шаблона → значение. Только id из шаблона выбранной сферы, числа в пределах min–max, варианты из options", "additionalProperties": { "type": ["number", "string"] } }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["history", "message", "state"],
+      "properties": {
+        "history": {
+          "type": "array", "maxItems": 20,
+          "items": { "type": "object", "additionalProperties": false, "required": ["role", "content"], "properties": { "role": { "enum": ["user", "assistant"] }, "content": { "type": "string", "maxLength": 4000 } } }
+        },
+        "message": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "state": { "$ref": "#/definitions/state" }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "text", "state"],
+      "properties": {
+        "type": { "enum": ["questions", "message", "ready"], "description": "ready — данных хватает для расчёта: заполнены sphere (не other), city и own_funds_rub" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "questions": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "$ref": "reply.schema.json#/definitions/question" }, "description": "Только при type=questions" },
+        "state": { "$ref": "#/definitions/state" }
+      },
+      "if": { "properties": { "type": { "const": "questions" } } },
+      "then": { "required": ["questions"] },
+      "else": { "not": { "required": ["questions"] } }
+    }
+  }
+}

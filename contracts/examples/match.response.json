@@ -8,7 +8,8 @@
       "reasons": [],
       "rate_from_percent": 23.5,
       "monthly_payment_rub": 78933,
-      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+      "url": "https://alfabank.ru/sme/profits/businesscredit/",
+      "demo": false
     },
     {
       "product_id": "secured",
@@ -20,7 +21,8 @@
       ],
       "rate_from_percent": 21.5,
       "monthly_payment_rub": 77447,
-      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+      "url": "https://alfabank.ru/sme/profits/businesscredit/",
+      "demo": false
     },
     {
       "product_id": "mortgage",
@@ -33,7 +35,8 @@
       ],
       "rate_from_percent": 23,
       "monthly_payment_rub": null,
-      "url": "https://alfabank.ru/sme/profits/businessipoteka/"
+      "url": "https://alfabank.ru/sme/profits/businessipoteka/",
+      "demo": false
     },
     {
       "product_id": "revolving",
@@ -46,7 +49,8 @@
       ],
       "rate_from_percent": null,
       "monthly_payment_rub": null,
-      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+      "url": "https://alfabank.ru/sme/profits/businesscredit/",
+      "demo": false
     }
   ]
 }
