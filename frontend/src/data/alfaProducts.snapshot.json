@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-10-19",
+  "method": "official-page-review",
+  "products": [
+    {
+      "id": "fast",
+      "name": "Кредит одной суммой без залога",
+      "short": "На развитие бизнеса и оборотные средства",
+      "rateFrom": 23.5,
+      "discountRateFrom": 14,
+      "amountMin": 300000,
+      "amountMax": 30000000,
+      "termMin": 12,
+      "termMax": 60,
+      "collateral": false,
+      "minBusinessMonths": 9,
+      "note": "Ставка от 23,5%; от 14% — при оформлении Защиты бизнеса и Подписки. Их стоимость уточняйте в банке.",
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    },
+    {
+      "id": "secured",
+      "name": "Кредит одной суммой с залогом",
+      "short": "Крупная сумма под обеспечение",
+      "rateFrom": 21.5,
+      "discountRateFrom": 14,
+      "amountMin": 500000,
+      "amountMax": 150000000,
+      "termMin": 12,
+      "termMax": 120,
+      "collateral": true,
+      "minBusinessMonths": 9,
+      "note": "Ставка от 21,5%; от 14% — с Защитой бизнеса и Подпиской. Требуются залог и оценка банка.",
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    },
+    {
+      "id": "mortgage",
+      "name": "Бизнес-ипотека",
+      "short": "На покупку коммерческой или жилой недвижимости",
+      "rateFrom": 23,
+      "discountRateFrom": null,
+      "amountMin": null,
+      "amountMax": 150000000,
+      "termMin": null,
+      "termMax": 120,
+      "collateral": true,
+      "minBusinessMonths": 9,
+      "note": "Под залог покупаемой недвижимости. Возможность финансирования и условия сделки определяет банк.",
+      "url": "https://alfabank.ru/sme/profits/businessipoteka/"
+    },
+    {
+      "id": "revolving",
+      "name": "Возобновляемая кредитная линия с залогом",
+      "short": "Для пополнения оборотных средств",
+      "rateFrom": null,
+      "discountRateFrom": null,
+      "amountMin": 500000,
+      "amountMax": 60000000,
+      "termMin": null,
+      "termMax": 60,
+      "collateral": true,
+      "minBusinessMonths": 9,
+      "note": "Проценты зависят от использованной суммы. Ставку и график траншей уточняйте в банке; аннуитетный расчёт к линии не применяется.",
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    }
+  ]
+}

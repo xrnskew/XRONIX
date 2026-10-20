@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Onest Variable", system-ui, sans-serif;
+  --font-display: "Unbounded Variable", "Onest Variable", sans-serif;
+
+  /* Презентация (светлая) */
+  --color-paper: #ffffff;
+  --color-ink: #16161a;
+  --color-mist: #f2f2f4;
+  --color-brand: #ef3124;
+  --color-brand-deep: #c9231a;
+  --color-fill: #e02a1e; /* заливка кнопок под белый текст: контраст 4.65, у brand 4.09 */
+
+  /* Кабинет (тёмный) */
+  --color-bg: #0e0e10;
+  --color-surface: #19191c;
+  --color-surface-2: #232327;
+  --color-line: #2c2c31;
+  --color-text: #f5f5f6;
+  --color-muted: #8d8d95;
+  --color-accent: #ff4538;
+  --color-ok: #3ddc84;
+  --color-warn: #ffb020;
+}
+
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: var(--font-sans); color: var(--color-ink); background: #070708; -webkit-font-smoothing: antialiased; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .25s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .rise { animation: none; } * { scroll-behavior: auto !important; } }
+
+:root { --color-surface-3: #2d2d33; }
+
+.panel-red {
+  background:
+    radial-gradient(90% 60% at 50% 0%, #ff5d4f 0%, rgba(255,93,79,0) 70%),
+    radial-gradient(80% 60% at 50% 110%, #a91a12 0%, rgba(169,26,18,0) 70%),
+    #ef3124;
+}
+.card-ring { box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
+.hero-card { background: linear-gradient(145deg, #3a1613 0%, #1d1214 55%, #19191c 100%); }
+
+@keyframes dot { 0%, 80%, 100% { opacity: .25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-2px); } }
+.dot { animation: dot 1.1s infinite ease-in-out; }
+.dot:nth-child(2) { animation-delay: .15s; }
+.dot:nth-child(3) { animation-delay: .3s; }
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; opacity: .6; } }
+
+input[type="range"] { height: 4px; }
+
+/* Листание по слайдам делает landing/useSlides.ts (useSlideScroll). scroll-snap не используем:
+   он тянул короткие прокрутки обратно к началу слайда, и колесо казалось медленным. */
+
+@keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.caret { animation: caret 1s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+
+/* Мягкая подложка слайда: радиальный градиент гаснет раньше краёв, поэтому границ нет */
+.tint { background: radial-gradient(75% 55% at 30% 50%, rgba(0,0,0,.4), rgba(0,0,0,0) 72%); }
+
+/* Шапка без резких краёв: фон и размытие растворяются вниз и вправо */
+.header-fade {
+  /* без backdrop-filter: под шапкой анимированный фон, размытие пересчитывалось бы каждый кадр */
+  background: linear-gradient(to bottom, rgba(7,7,8,.94), rgba(7,7,8,.7) 55%, rgba(7,7,8,0));
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent), linear-gradient(to right, #000 78%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, #000 45%, transparent), linear-gradient(to right, #000 78%, transparent);
+  mask-composite: intersect;
+}
+
+/* Карточки вокруг телефона: плавают, появляются и гаснут при смене слайда */
+@keyframes sat-float { 0%, 100% { transform: translateY(-6px); } 50% { transform: translateY(6px); } }
+.sat-float { animation: sat-float 6s ease-in-out infinite; }
+@keyframes sat-in { from { opacity: 0; transform: scale(.82) translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes sat-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(.9); } }
+.sat { opacity: 0; }
+.sat-in { animation: sat-in .6s cubic-bezier(.2,.75,.2,1) both; }
+.sat-out { animation: sat-out .3s ease both; }
+
+/* Орбиты за телефоном */
+@keyframes spin { to { transform: rotate(360deg); } }
+.orbit { animation: spin linear infinite; }
+.orbits-mask {
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent);
+  mask-image: radial-gradient(closest-side, #000 72%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sat-float, .orbit { animation: none; }
+  .sat, .sat-in, .sat-out { opacity: 1; animation: none; }
+}
+
+/* Пульсирующая точка в подсказке «Живой кабинет» */
+@keyframes ping { 75%, 100% { transform: scale(2.4); opacity: 0; } }
+.ping { animation: ping 1.6s cubic-bezier(0, 0, .2, 1) infinite; }
+@media (prefers-reduced-motion: reduce) { .ping { animation: none; } }
+
+/* Рабочая версия (/app) на компьютере */
+.app-bg {
+  background:
+    radial-gradient(55% 45% at 100% 0%, rgba(239,49,36,.13), rgba(239,49,36,0) 70%),
+    radial-gradient(35% 35% at 20% 100%, rgba(239,49,36,.05), rgba(239,49,36,0) 70%),
+    var(--color-bg);
+}
+.thin-scroll { scrollbar-width: thin; scrollbar-color: #2c2c31 transparent; }
+/* Сетка карточек: по умолчанию на всю ширину, с 1100px карточки встают рядом по data-span */
+.wide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-content: start; }
+.wide-grid > * { grid-column: span 12; }
+.wide-grid > .card-ring:not(.hero-card) { padding: 22px; background: rgba(25,25,28,.9); }
+@media (min-width: 1100px) {
+  .wide-grid > [data-span="5"] { grid-column: span 5; }
+  .wide-grid > [data-span="6"] { grid-column: span 6; }
+  .wide-grid > [data-span="7"] { grid-column: span 7; }
+  .wide-grid > [data-tall] { grid-row: span 2; }
+}

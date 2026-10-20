@@ -1,0 +1,63 @@
+import { useState } from 'react'
+import { Button, Chip, Logo } from '../ui'
+import { useCabinet } from '../CabinetContext'
+import { ApiError } from '../../api'
+import CityPicker from '../components/CityPicker'
+
+const experience = ['Новичок', '1–3 года', 'Больше 3 лет']
+const budgets: [string, number][] = [['до 500 тыс', 300_000], ['500 тыс – 2 млн', 1_000_000], ['больше 2 млн', 3_000_000]]
+
+export default function Onboarding() {
+  const { user, saveProfile, skipOnboarding } = useCabinet()
+  const [city, setCity] = useState(user?.city ?? '')
+  const [exp, setExp] = useState<string | null>(null)
+  const [budget, setBudget] = useState<number | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!city.trim()) return setError('Укажите город: от него зависят аренда и спрос.')
+    setBusy(true); setError(null)
+    try {
+      await saveProfile({
+        city: city.trim(),
+        experience: exp,
+        budget_rub: budget,
+      })
+      skipOnboarding()
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Не удалось сохранить. Попробуйте ещё раз.')
+      setBusy(false)
+    }
+  }
+
+  return (
+    <form className="no-scrollbar flex h-full flex-col overflow-y-auto overscroll-contain px-6 pb-8 pt-4" onSubmit={submit}>
+      <Logo size={44} />
+      <h1 className="mt-4 text-[26px] font-bold leading-tight tracking-tight">Расскажите о себе</h1>
+      <p className="mt-1 text-[14px] leading-snug text-muted">ИИ учтёт город, опыт и бюджет. Сферу бизнеса обсудим в чате. Всё можно изменить в профиле.</p>
+
+      <div className="mt-5 space-y-5">
+        <CityPicker value={city} onChange={setCity} />
+        <Group title="Опыт в бизнесе" items={experience.map((s) => [s, s === exp])} onPick={(s) => setExp(s === exp ? null : s)} />
+        <Group title="Стартовый бюджет" items={budgets.map(([l, v]) => [l, v === budget])} onPick={(l) => { const v = budgets.find(([x]) => x === l)![1]; setBudget(v === budget ? null : v) }} />
+      </div>
+
+      <div className="mt-auto space-y-2 pt-6">
+        {error && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error}</p>}
+        <Button disabled={busy}>{busy ? 'Сохраняем…' : 'Продолжить'}</Button>
+        <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={skipOnboarding}>Пропустить</button>
+      </div>
+    </form>
+  )
+}
+
+function Group({ title, items, onPick }: { title: string; items: [string, boolean][]; onPick: (s: string) => void }) {
+  return (
+    <div role="group" aria-label={title}>
+      <div className="mb-1.5 text-[14px] font-semibold">{title}</div>
+      <div className="flex flex-wrap gap-1.5">{items.map(([s, on]) => <Chip key={s} active={on} onClick={() => onPick(s)}>{s}</Chip>)}</div>
+    </div>
+  )
+}
