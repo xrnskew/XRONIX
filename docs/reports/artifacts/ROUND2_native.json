@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "at": "2026-10-20T12:45:48.364702+00:00",
+  "url": "http://127.0.0.1:18000",
+  "checks": [
+    "both_demo_logins",
+    "analyst_vector_and_lebedev_c_client_offers",
+    "client_feed",
+    "parse_need_live_rules_service",
+    "chat_questions_to_backend_template_plan",
+    "chat_plan_start_approval_registration_condition",
+    "analyst_linked_plan_access"
+  ],
+  "application_id": "f2e61ace-3809-4438-97ea-31f4a14405df",
+  "plan_id": "00055d95-b58a-4810-bc84-af49b58ad83c",
+  "start_status": "approved",
+  "stats": {
+    "by_status": {
+      "funded": 1,
+      "declined": 1,
+      "counter_offer": 1,
+      "info_requested": 1,
+      "approved": 4
+    },
+    "auto_decision_share": 0.71,
+    "avg_minutes_to_decision": 10.1
+  }
+}

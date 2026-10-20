@@ -1,0 +1,17 @@
+{
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "results": {
+    "consult": {
+      "n": 50,
+      "mean_ms": 2.55,
+      "p95_ms": 4.06,
+      "sampling": "first 50 distinct holdout requests; latency only"
+    },
+    "parse-need": {
+      "n": 50,
+      "mean_ms": 1.4,
+      "p95_ms": 2.15,
+      "sampling": "first 50 distinct holdout requests; latency only"
+    }
+  }
+}
