@@ -1,4 +1,5 @@
 import type { AiReply, Plan, Profile } from '../types/plan'
+import { DEMO_CLIENT } from '../api/demoAccounts'
 
 export const mockPlan: Plan = {
   title: 'Кофейня у метро',
@@ -69,8 +70,8 @@ export const mockPlan: Plan = {
 }
 
 export const mockProfile: Profile = {
-  name: 'Александр',
-  email: 'demo@xronix.ru',
+  name: DEMO_CLIENT.name,
+  email: DEMO_CLIENT.email,
   city: 'Москва',
   experience: 'Новичок',
   budget_rub: 500000,

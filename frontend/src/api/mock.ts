@@ -5,6 +5,7 @@ import { calculatePlan, templates } from '../lib/projectCalc'
 import { SPHERE_WORDS, findCity, parseAmount } from '../lib/parseText'
 import type { Sphere } from '../types/conveyor'
 import { ApiError, setToken } from './client'
+import { DEMO_ANALYST, DEMO_CLIENT, demoAccount } from './demoAccounts'
 
 // Мок-бэкенд в памяти: те же вызовы и формы ответов, что в /contracts/api.md.
 // Подсказка для демо: сообщение со словом «!ошибка» вернёт ошибку ИИ, чтобы показать экран ошибки.
@@ -32,10 +33,14 @@ export const mockApi: Api = {
     user = { id: uid(), name, email, city: null, experience: null, budget_rub: null, tags: [] }
     return session()
   },
-  async login({ email }) {
+  // Демо-учётки проверяют пароль, как бэкенд; любая другая почта входит с любым паролем
+  async login({ email, password }) {
     await delay()
-    user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
-    if (email.startsWith('analyst@')) user = { ...user, name: 'Ольга Смирнова', role: 'analyst' } // в моке аналитик — любой адрес analyst@…
+    const demo = demoAccount(email, password)
+    if (demo === 'wrong') throw new ApiError('INVALID_CREDENTIALS', 'Неверная почта или пароль.', 401)
+    if (demo === DEMO_CLIENT) user = { ...mockProfile, id: 'u_demo', role: 'client' }
+    else if (demo === DEMO_ANALYST) user = { id: 'u_analyst', email: demo.email, name: demo.name, role: 'analyst', city: null, experience: null, budget_rub: null, tags: [] }
+    else user = { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
     return session()
   },
   async logout() { setToken(null) },
