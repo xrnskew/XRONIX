@@ -1,4 +1,6 @@
 import type { AppDocument, Application, ApplicationDraft, ApplicationListItem, Company, FeedItem, InfoRequestKind, MatchItem, MatchRequest, MemberRole, ParsedNeed, RegistryCompany } from '../types/conveyor'
+import type { Plan } from '../types/plan'
+import type { CalcRequest, Template } from '../lib/projectCalc'
 import { USE_MOCKS, request } from './client'
 import { mockConveyor } from './mockConveyor'
 
@@ -9,6 +11,8 @@ export interface ConveyorApi {
   addCompany(inn: string, member_role: MemberRole): Promise<Company>
   uploadAuthority(companyId: string, file: File): Promise<Company>
   parseNeed(text: string): Promise<ParsedNeed>
+  templates(): Promise<Template[]>
+  calculatePlan(b: CalcRequest): Promise<{ plan_id: string; plan: Plan }>
   match(b: MatchRequest): Promise<{ items: MatchItem[] }>
   createApplication(b: ApplicationDraft): Promise<Application>
   patchApplication(id: string, b: ApplicationDraft & { version: number }): Promise<Application>
@@ -33,6 +37,8 @@ const realConveyor: ConveyorApi = {
   addCompany: (inn, member_role) => request('POST', '/companies', { inn, member_role }),
   uploadAuthority: (id, file) => request('POST', `/companies/${id}/authority`, form({ file })),
   parseNeed: (text) => request('POST', '/needs/parse', { text }, 15_000),
+  templates: () => request('GET', '/templates'),
+  calculatePlan: (b) => request('POST', '/plans/calculate', b),
   match: (b) => request('POST', '/products/match', b),
   createApplication: (b) => request('POST', '/applications', b),
   patchApplication: (id, b) => request('PATCH', `/applications/${id}`, b),

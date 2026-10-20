@@ -8,6 +8,7 @@
 | [conveyor.md](conveyor.md) | **v2.** Frontend ↔ Backend: компании, подбор, заявки, лента, рабочее место аналитика |
 | [integrations.md](integrations.md) | **v2.** Backend ↔ integrations-mock (ЕГРЮЛ/ЕГРИП, ФНС, БКИ) |
 | [ai.md](ai.md) | Backend ↔ AI-сервис (v2: своя модель, `/ai/parse-need`) |
+| [templates.md](templates.md) | **v2.** Расчёт проекта без ИИ: шаблоны сфер [`templates/spheres.v1.json`](templates/spheres.v1.json) и формулы |
 | [dictionaries.json](dictionaries.json) | **v2.** Коды и тексты: цели, сферы, статусы, причины отказа |
 | [rules/credit_rules.v1.json](rules/credit_rules.v1.json) | **v2.** Правила скоринга и решения |
 | `schemas/*.json` | JSON Schema (draft-07) для всех тел запросов и ответов |

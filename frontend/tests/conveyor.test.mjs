@@ -74,3 +74,49 @@ test('сгенерированные компании детерминирова
   assert.ok(validOgrn(a.registry.ogrn))
   assert.equal(businessMonths('2022-03-15', NOW), 55)
 })
+
+// ---- расчёт проекта (contracts/templates.md) ----
+import { calculatePlan, templates, cityK, CalcError } from '../src/lib/projectCalc.ts'
+
+const planRules = (p) => {
+  const f = p.finance, c = p.credit, e = []
+  const sum = (l) => l.reduce((s, r) => s + r.amount_rub, 0)
+  if (sum(f.startup_items) !== f.startup_cost_rub) e.push('startup_items')
+  if (sum(f.monthly_items) !== f.monthly_expenses_rub) e.push('monthly_items')
+  if (f.funding_gap_rub !== Math.max(0, f.startup_cost_rub - f.own_funds_rub)) e.push('gap')
+  if (f.monthly_profit_rub !== f.monthly_revenue_rub - f.monthly_expenses_rub) e.push('profit')
+  if (f.payback_months !== (f.monthly_profit_rub > 0 ? Math.ceil(f.startup_cost_rub / f.monthly_profit_rub) : null)) e.push('payback')
+  if (f.revenue_forecast.map((m) => m.month).join() !== '1,2,3,4,5,6,7,8,9,10,11,12') e.push('forecast')
+  if (p.steps.some((s, i) => s.order !== i + 1)) e.push('steps')
+  for (const k of ['amount_rub', 'recommended_term_months', 'estimated_rate_percent', 'monthly_payment_rub', 'debt_load_percent', 'verdict']) if ((c[k] === null) === c.needed) e.push(`credit.${k}`)
+  if (c.needed && (c.amount_rub < f.funding_gap_rub || c.monthly_payment_rub !== payment(c.amount_rub, c.estimated_rate_percent, c.recommended_term_months))) e.push('credit')
+  if (!p.summary.includes(p.finance.payback_months ? `около ${p.finance.payback_months} мес` : 'не окупается')) e.push('summary')
+  return e
+}
+
+test('шаблоны совпадают с контрактом, пример расчёта воспроизводится', () => {
+  assert.deepEqual(JSON.parse(readFileSync(new URL('../src/data/spheres.v1.json', import.meta.url))), contract('templates/spheres.v1.json'))
+  const req = contract('examples/plan.calc.request.json')
+  assert.deepEqual(calculatePlan(req), contract('examples/plan.calc.response.json').plan)
+  assert.deepEqual(templates().find((t) => t.sphere === 'coffee'), contract('examples/template.coffee.json'))
+})
+
+test('каждая сфера в любом городе даёт план по всем правилам', () => {
+  for (const t of templates()) for (const city of ['Москва', 'Казань', 'Абаза', 'Несуществующий'])
+    for (const own of [0, 500_000, 50_000_000]) {
+      const p = calculatePlan({ sphere: t.sphere, city, own_funds_rub: own, answers: {} })
+      assert.deepEqual(planRules(p), [], `${t.sphere} ${city} ${own}`)
+    }
+  assert.equal(cityK('Москва'), 1); assert.equal(cityK('Казань'), 0.55); assert.equal(cityK('Нигдебург'), 0.45)
+})
+
+test('ответ вне диапазона и неизвестный вариант отклоняются', () => {
+  assert.throws(() => calculatePlan({ sphere: 'coffee', city: 'Москва', own_funds_rub: 0, answers: { area_m2: 1 } }), CalcError)
+  assert.throws(() => calculatePlan({ sphere: 'coffee', city: 'Москва', own_funds_rub: 0, answers: { format: 'yacht' } }), CalcError)
+})
+
+test('прибыль новой точки учитывается в нагрузке наполовину', () => {
+  const base = { registry: SCENARIOS['777309114120'].registry, fns: SCENARIOS['777309114120'].fns, bki: SCENARIOS['777309114120'].bki, ...demoFinancials['777309114120'], now: NOW }
+  const without = score(base).debt_load_percent, withPlan = score({ ...base, plan_profit_rub: 200_000 }).debt_load_percent
+  assert.ok(withPlan < without, `${withPlan} < ${without}`)
+})

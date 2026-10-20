@@ -12,6 +12,8 @@ const now = () => new Date().toISOString()
 interface MockChat extends ChatSummary { messages: ChatMessageDto[]; step: number }
 const chats = new Map<string, MockChat>()
 const plans = new Map<string, PlanRecord>()
+// Планы из расчёта проекта (mockConveyor) открываются тем же экраном плана
+export const registerMockPlan = (plan_id: string, plan: PlanRecord['plan']) => plans.set(plan_id, { plan_id, chat_id: '', created_at: now(), plan })
 let user: Profile = { id: 'u_mock', name: '', email: '', city: null, experience: null, budget_rub: null, tags: [] }
 
 const session = () => { setToken('mock-token'); return { token: 'mock-token', user } }

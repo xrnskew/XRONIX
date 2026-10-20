@@ -7,7 +7,10 @@ import { alfaProducts } from '../data/alfaProducts'
 import { validInn } from '../lib/inn'
 import { businessMonths, decide, declineText, matchProducts, payment, rateFor, schedule, score, stopFactors, type Input } from '../lib/creditRules'
 import { external } from './mockData'
+import { CalcError, calculatePlan, templates } from '../lib/projectCalc'
+import type { Plan } from '../types/plan'
 import { ApiError } from './client'
+import { registerMockPlan } from './mock'
 
 // Мок конвейера в памяти: те же вызовы и ответы, что в /contracts/conveyor.md. Заявка проходит этапы сама по таймеру.
 // Ручное рассмотрение в моке завершает «демо-аналитик» через несколько секунд: настоящего рабочего места банка здесь нет.
@@ -22,6 +25,7 @@ type Rec = Omit<Application, 'status_info' | 'company' | 'missing_fields'> & { c
 const companies = new Map<string, Company>()
 const apps = new Map<string, Rec>()
 const feed: FeedItem[] = []
+const plans = new Map<string, Plan>()
 let counter = 100
 
 const notFound = () => new ApiError('NOT_FOUND', 'Заявка не найдена.', 404)
@@ -58,7 +62,8 @@ function move(r: Rec, to: Status, actor: TimelineItem['actor'], text = clientTex
 
 function input(r: Rec): Input {
   const e = external(companies.get(r.company_id)!.registry.inn)
-  return { ...e, financials: r.financials, product_id: r.product_id, amount_rub: r.amount_rub, term_months: r.term_months, collateral: r.collateral }
+  const plan = r.plan_id ? plans.get(r.plan_id) : null
+  return { ...e, financials: r.financials, product_id: r.product_id, amount_rub: r.amount_rub, term_months: r.term_months, collateral: r.collateral, plan_profit_rub: plan?.finance.monthly_profit_rub ?? null }
 }
 
 function offerFor(r: Rec, kind: 'approve' | 'counter', amount: number, months: number, rate: number, explanation: string[]) {
@@ -156,6 +161,15 @@ export const mockConveyor: ConveyorApi = {
     r.term_months = parseTerm(text); if (r.term_months) r.confidence.term_months = 0.65
     if (/без залога/i.test(text)) { r.has_collateral = false; r.confidence.has_collateral = 0.9 } else if (/залог/i.test(text)) { r.has_collateral = true; r.confidence.has_collateral = 0.6 }
     return r
+  },
+  async templates() { await delay(200); return templates() },
+  async calculatePlan(b) {
+    await delay(600)
+    try {
+      const plan = calculatePlan(b), plan_id = uid()
+      plans.set(plan_id, plan); registerMockPlan(plan_id, structuredClone(plan))
+      return { plan_id, plan: structuredClone(plan) }
+    } catch (e) { throw e instanceof CalcError ? new ApiError('VALIDATION_ERROR', e.message, 400) : e }
   },
   async match(b) {
     await delay(450)

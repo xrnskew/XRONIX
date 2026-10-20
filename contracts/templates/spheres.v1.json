@@ -1,0 +1,905 @@
+{
+  "version": "spheres.v1",
+  "comment": "Шаблоны расчёта проекта без ИИ. Все цены синтетические, ориентир — Москва, остальные города через коэффициент. Формулы: contracts/templates.md",
+  "city_tiers": [
+    {
+      "min_population": 10000000,
+      "k": 1.0,
+      "label": "Москва"
+    },
+    {
+      "min_population": 3000000,
+      "k": 0.8,
+      "label": "Санкт-Петербург"
+    },
+    {
+      "min_population": 1000000,
+      "k": 0.55,
+      "label": "город-миллионник"
+    },
+    {
+      "min_population": 250000,
+      "k": 0.45,
+      "label": "крупный город"
+    },
+    {
+      "min_population": 0,
+      "k": 0.35,
+      "label": "небольшой город"
+    }
+  ],
+  "unknown_city_k": 0.45,
+  "tax_percent": 6,
+  "credit": {
+    "product_id": "fast",
+    "fallback_product_id": "secured",
+    "term_months": 36,
+    "round_to_rub": 10000
+  },
+  "spheres": {
+    "coffee": {
+      "title": "Кофейня",
+      "sphere_label": "Общепит",
+      "questions": [
+        {
+          "id": "format",
+          "text": "Формат",
+          "kind": "choice",
+          "default": "to_go",
+          "options": [
+            {
+              "value": "to_go",
+              "label": "Кофе с собой"
+            },
+            {
+              "value": "cafe",
+              "label": "Кафе с посадкой"
+            }
+          ]
+        },
+        {
+          "id": "area_m2",
+          "text": "Площадь помещения",
+          "kind": "number",
+          "unit": "м²",
+          "default": 15,
+          "min": 6,
+          "max": 200
+        },
+        {
+          "id": "customers_per_day",
+          "text": "Гостей в день на плановом уровне",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 110,
+          "min": 10,
+          "max": 2000
+        },
+        {
+          "id": "avg_check_rub",
+          "text": "Средний чек",
+          "kind": "number",
+          "unit": "₽",
+          "default": 250,
+          "min": 100,
+          "max": 5000
+        },
+        {
+          "id": "staff",
+          "text": "Сотрудников",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 3,
+          "min": 1,
+          "max": 30
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация, касса и разрешения",
+          "kind": "fixed",
+          "rub": 30000,
+          "days": 7,
+          "assumption": "Регистрация, онлайн-касса, уведомление в Роспотребнадзор"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 21,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт и вывеска",
+          "kind": "per_m2",
+          "rub": 25000,
+          "days": 21,
+          "assumption": "Отделка, стойка, свет, вывеска — {rub} ₽ за м²"
+        },
+        {
+          "title": "Оборудование",
+          "kind": "fixed",
+          "rub": 650000,
+          "days": 14,
+          "assumption": "Кофемашина, кофемолка, холодильник, посуда"
+        },
+        {
+          "title": "Первая закупка",
+          "kind": "fixed",
+          "rub": 120000,
+          "days": 5,
+          "assumption": "Зерно, молоко, стаканы, выпечка на первые недели"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 80000,
+          "days": 14,
+          "assumption": "Вывеска-штендер, карты, промо первых недель"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 6000,
+        "salary_per_staff": 55000,
+        "cogs_percent": 33,
+        "other_rub": 55000,
+        "cogs_title": "Закупка зерна, молока, упаковки"
+      },
+      "revenue": {
+        "qty": "customers_per_day",
+        "price": "avg_check_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.45,
+        0.6,
+        0.75,
+        0.85,
+        0.95,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Утренний поток",
+          "description": "Основная выручка — с 7:30 до 10:00, если точка на пути к работе или учёбе."
+        },
+        {
+          "title": "Небольшой старт",
+          "description": "Маленькая площадь и одна касса: запуск быстрее и дешевле, чем у кафе."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Рост аренды",
+          "level": "high",
+          "mitigation": "Договор на 2–3 года с фиксированной ставкой."
+        },
+        {
+          "title": "Летний спад горячих напитков",
+          "level": "medium",
+          "mitigation": "Холодные напитки и десерты в меню."
+        },
+        {
+          "title": "Текучка бариста",
+          "level": "low",
+          "mitigation": "Обучение и процент от выручки."
+        }
+      ]
+    },
+    "bakery": {
+      "title": "Пекарня",
+      "sphere_label": "Общепит",
+      "questions": [
+        {
+          "id": "area_m2",
+          "text": "Площадь помещения",
+          "kind": "number",
+          "unit": "м²",
+          "default": 40,
+          "min": 15,
+          "max": 300
+        },
+        {
+          "id": "customers_per_day",
+          "text": "Покупателей в день на плановом уровне",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 170,
+          "min": 20,
+          "max": 3000
+        },
+        {
+          "id": "avg_check_rub",
+          "text": "Средний чек",
+          "kind": "number",
+          "unit": "₽",
+          "default": 320,
+          "min": 100,
+          "max": 5000
+        },
+        {
+          "id": "staff",
+          "text": "Сотрудников",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 5,
+          "min": 1,
+          "max": 40
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация, касса и разрешения",
+          "kind": "fixed",
+          "rub": 30000,
+          "days": 7,
+          "assumption": "Регистрация, касса, санитарные требования к производству"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 21,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт и вентиляция",
+          "kind": "per_m2",
+          "rub": 20000,
+          "days": 30,
+          "assumption": "Отделка, вентиляция, зона продаж — {rub} ₽ за м²"
+        },
+        {
+          "title": "Оборудование",
+          "kind": "fixed",
+          "rub": 1800000,
+          "days": 21,
+          "assumption": "Печь, тестомес, расстойка, витрина"
+        },
+        {
+          "title": "Первая закупка",
+          "kind": "fixed",
+          "rub": 150000,
+          "days": 5,
+          "assumption": "Мука, масло, начинки, упаковка"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 80000,
+          "days": 14,
+          "assumption": "Дегустации, карты, промо первых недель"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 4500,
+        "salary_per_staff": 60000,
+        "cogs_percent": 38,
+        "other_rub": 90000,
+        "cogs_title": "Сырьё и упаковка"
+      },
+      "revenue": {
+        "qty": "customers_per_day",
+        "price": "avg_check_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.5,
+        0.65,
+        0.8,
+        0.9,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Повторные покупки",
+          "description": "Хлеб покупают каждый день: постоянные клиенты из ближайших домов."
+        },
+        {
+          "title": "Опт для кафе",
+          "description": "Излишки производства можно продавать соседним кафе и офисам."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Рост цен на муку и масло",
+          "level": "medium",
+          "mitigation": "Договоры с поставщиками на квартал вперёд."
+        },
+        {
+          "title": "Списания нераспроданной выпечки",
+          "level": "medium",
+          "mitigation": "Вечерние скидки и выпечка партиями по спросу."
+        },
+        {
+          "title": "Поломка печи",
+          "level": "low",
+          "mitigation": "Сервисный договор и запас ключевых деталей."
+        }
+      ]
+    },
+    "car_wash": {
+      "title": "Автомойка",
+      "sphere_label": "Автоуслуги",
+      "questions": [
+        {
+          "id": "posts",
+          "text": "Моечных постов",
+          "kind": "number",
+          "unit": "шт.",
+          "default": 3,
+          "min": 1,
+          "max": 12
+        },
+        {
+          "id": "area_m2",
+          "text": "Площадь помещения",
+          "kind": "number",
+          "unit": "м²",
+          "default": 200,
+          "min": 60,
+          "max": 1500
+        },
+        {
+          "id": "cars_per_day",
+          "text": "Машин в день на плановом уровне",
+          "kind": "number",
+          "unit": "шт.",
+          "default": 35,
+          "min": 5,
+          "max": 500
+        },
+        {
+          "id": "avg_check_rub",
+          "text": "Средний чек",
+          "kind": "number",
+          "unit": "₽",
+          "default": 950,
+          "min": 300,
+          "max": 10000
+        },
+        {
+          "id": "staff",
+          "text": "Сотрудников",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 4,
+          "min": 1,
+          "max": 40
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация и разрешения",
+          "kind": "fixed",
+          "rub": 30000,
+          "days": 14,
+          "assumption": "Регистрация, касса, согласование очистных"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 30,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Подготовка помещения",
+          "kind": "per_m2",
+          "rub": 8000,
+          "days": 30,
+          "assumption": "Полы, водоотвод, свет, вентиляция — {rub} ₽ за м²"
+        },
+        {
+          "title": "Оборудование постов",
+          "kind": "per_answer",
+          "answer": "posts",
+          "rub": 450000,
+          "days": 21,
+          "assumption": "Аппарат высокого давления, пылесос, очистка воды — {rub} ₽ на пост"
+        },
+        {
+          "title": "Химия и расходники",
+          "kind": "fixed",
+          "rub": 80000,
+          "days": 3,
+          "assumption": "Запас химии и расходников на первые недели"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 60000,
+          "days": 14,
+          "assumption": "Указатели, карты, скидка на первую мойку"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 1200,
+        "salary_per_staff": 55000,
+        "cogs_percent": 14,
+        "other_rub": 90000,
+        "cogs_title": "Химия, вода, расходники"
+      },
+      "revenue": {
+        "qty": "cars_per_day",
+        "price": "avg_check_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.4,
+        0.55,
+        0.7,
+        0.85,
+        0.95,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Детейлинг",
+          "description": "Полировка и химчистка салона дают чек в разы выше обычной мойки."
+        },
+        {
+          "title": "Абонементы для таксопарков",
+          "description": "Договор с парком даёт стабильную загрузку в будние дни."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Сезонность",
+          "level": "high",
+          "mitigation": "Абонементы и детейлинг для зимы и сухого лета."
+        },
+        {
+          "title": "Требования к очистным",
+          "level": "medium",
+          "mitigation": "Система оборотной воды с первого дня."
+        },
+        {
+          "title": "Конкуренция самомоек",
+          "level": "medium",
+          "mitigation": "Качество ручной мойки и запись онлайн."
+        }
+      ]
+    },
+    "clothing_store": {
+      "title": "Магазин одежды",
+      "sphere_label": "Розничная торговля",
+      "questions": [
+        {
+          "id": "area_m2",
+          "text": "Площадь магазина",
+          "kind": "number",
+          "unit": "м²",
+          "default": 50,
+          "min": 10,
+          "max": 500
+        },
+        {
+          "id": "customers_per_day",
+          "text": "Покупателей в день на плановом уровне",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 18,
+          "min": 3,
+          "max": 500
+        },
+        {
+          "id": "avg_check_rub",
+          "text": "Средний чек",
+          "kind": "number",
+          "unit": "₽",
+          "default": 3800,
+          "min": 500,
+          "max": 50000
+        },
+        {
+          "id": "staff",
+          "text": "Продавцов",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 3,
+          "min": 1,
+          "max": 20
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация, касса и маркировка",
+          "kind": "fixed",
+          "rub": 30000,
+          "days": 7,
+          "assumption": "Регистрация, касса, подключение к «Честному знаку»"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 21,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт и примерочные",
+          "kind": "per_m2",
+          "rub": 12000,
+          "days": 21,
+          "assumption": "Отделка, свет, примерочные — {rub} ₽ за м²"
+        },
+        {
+          "title": "Торговое оборудование",
+          "kind": "per_m2",
+          "rub": 6000,
+          "days": 14,
+          "assumption": "Стойки, зеркала, кассовая зона — {rub} ₽ за м²"
+        },
+        {
+          "title": "Первая коллекция",
+          "kind": "fixed",
+          "rub": 1200000,
+          "days": 30,
+          "assumption": "Товар на первые два месяца продаж"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 100000,
+          "days": 14,
+          "assumption": "Соцсети, блогеры, промо открытия"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 5000,
+        "salary_per_staff": 55000,
+        "cogs_percent": 52,
+        "other_rub": 80000,
+        "cogs_title": "Закупка товара"
+      },
+      "revenue": {
+        "qty": "customers_per_day",
+        "price": "avg_check_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.4,
+        0.55,
+        0.7,
+        0.85,
+        0.95,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Продажи через маркетплейсы",
+          "description": "Тот же товар можно продавать онлайн без новой аренды."
+        },
+        {
+          "title": "Своя марка",
+          "description": "Пошив под своей маркой повышает наценку."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Неликвидные остатки",
+          "level": "high",
+          "mitigation": "Небольшие партии и сезонные распродажи."
+        },
+        {
+          "title": "Сезонность",
+          "level": "medium",
+          "mitigation": "План закупок под сезоны и предзаказ."
+        },
+        {
+          "title": "Конкуренция маркетплейсов",
+          "level": "medium",
+          "mitigation": "Примерка, стилист и сервис в магазине."
+        }
+      ]
+    },
+    "beauty_salon": {
+      "title": "Салон красоты",
+      "sphere_label": "Бытовые услуги",
+      "questions": [
+        {
+          "id": "work_places",
+          "text": "Рабочих мест",
+          "kind": "number",
+          "unit": "шт.",
+          "default": 4,
+          "min": 1,
+          "max": 30
+        },
+        {
+          "id": "area_m2",
+          "text": "Площадь помещения",
+          "kind": "number",
+          "unit": "м²",
+          "default": 45,
+          "min": 15,
+          "max": 400
+        },
+        {
+          "id": "customers_per_day",
+          "text": "Клиентов в день на плановом уровне",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 14,
+          "min": 2,
+          "max": 300
+        },
+        {
+          "id": "avg_check_rub",
+          "text": "Средний чек",
+          "kind": "number",
+          "unit": "₽",
+          "default": 2300,
+          "min": 300,
+          "max": 30000
+        },
+        {
+          "id": "staff",
+          "text": "Сотрудников",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 5,
+          "min": 1,
+          "max": 40
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация, касса и разрешения",
+          "kind": "fixed",
+          "rub": 40000,
+          "days": 7,
+          "assumption": "Регистрация, касса, уведомление о начале деятельности"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 21,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт",
+          "kind": "per_m2",
+          "rub": 22000,
+          "days": 30,
+          "assumption": "Отделка, свет, вода к рабочим местам — {rub} ₽ за м²"
+        },
+        {
+          "title": "Оборудование рабочих мест",
+          "kind": "per_answer",
+          "answer": "work_places",
+          "rub": 180000,
+          "days": 14,
+          "assumption": "Кресло, зеркало, инструмент, стерилизатор — {rub} ₽ на место"
+        },
+        {
+          "title": "Материалы",
+          "kind": "fixed",
+          "rub": 120000,
+          "days": 5,
+          "assumption": "Краски, уход, расходники на первые недели"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 100000,
+          "days": 14,
+          "assumption": "Карты, соцсети, скидка на первый визит"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 4000,
+        "salary_per_staff": 50000,
+        "cogs_percent": 18,
+        "other_rub": 55000,
+        "cogs_title": "Материалы"
+      },
+      "revenue": {
+        "qty": "customers_per_day",
+        "price": "avg_check_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.4,
+        0.55,
+        0.7,
+        0.85,
+        0.95,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Постоянные клиенты",
+          "description": "Стрижку и маникюр повторяют каждые 3–6 недель."
+        },
+        {
+          "title": "Продажа ухода",
+          "description": "Профессиональная косметика с наценкой без дополнительной площади."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Уход мастеров вместе с клиентами",
+          "level": "high",
+          "mitigation": "Онлайн-запись на салон, а не на мастера, и процент от выручки."
+        },
+        {
+          "title": "Неполная загрузка в будни",
+          "level": "medium",
+          "mitigation": "Скидки в дневные часы будних дней."
+        },
+        {
+          "title": "Жалобы клиентов",
+          "level": "low",
+          "mitigation": "Стандарты услуг и обратная связь после визита."
+        }
+      ]
+    },
+    "pickup_point": {
+      "title": "Пункт выдачи заказов",
+      "sphere_label": "Логистика",
+      "questions": [
+        {
+          "id": "area_m2",
+          "text": "Площадь помещения",
+          "kind": "number",
+          "unit": "м²",
+          "default": 40,
+          "min": 15,
+          "max": 200
+        },
+        {
+          "id": "orders_per_day",
+          "text": "Заказов в день на плановом уровне",
+          "kind": "number",
+          "unit": "шт.",
+          "default": 300,
+          "min": 20,
+          "max": 3000
+        },
+        {
+          "id": "fee_per_order_rub",
+          "text": "Доход с заказа",
+          "kind": "number",
+          "unit": "₽",
+          "default": 38,
+          "min": 5,
+          "max": 300
+        },
+        {
+          "id": "staff",
+          "text": "Сотрудников",
+          "kind": "number",
+          "unit": "чел.",
+          "default": 2,
+          "min": 1,
+          "max": 10
+        }
+      ],
+      "startup": [
+        {
+          "title": "Регистрация и договор с маркетплейсом",
+          "kind": "fixed",
+          "rub": 20000,
+          "days": 14,
+          "assumption": "Регистрация и подключение к маркетплейсу"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "kind": "rent_months",
+          "months": 2,
+          "days": 21,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт по брендбуку",
+          "kind": "per_m2",
+          "rub": 12000,
+          "days": 21,
+          "assumption": "Отделка по требованиям маркетплейса — {rub} ₽ за м²"
+        },
+        {
+          "title": "Оборудование",
+          "kind": "fixed",
+          "rub": 250000,
+          "days": 7,
+          "assumption": "Стеллажи, примерочная, компьютер, сканер"
+        },
+        {
+          "title": "Реклама открытия",
+          "kind": "fixed",
+          "rub": 20000,
+          "days": 7,
+          "assumption": "Указатели и листовки в соседних домах"
+        }
+      ],
+      "monthly": {
+        "rent_per_m2": 2500,
+        "salary_per_staff": 45000,
+        "cogs_percent": 0,
+        "other_rub": 35000,
+        "cogs_title": "Расходники"
+      },
+      "revenue": {
+        "qty": "orders_per_day",
+        "price": "fee_per_order_rub",
+        "days_per_month": 30
+      },
+      "ramp": [
+        0.35,
+        0.5,
+        0.65,
+        0.8,
+        0.9,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "opportunities": [
+        {
+          "title": "Второй маркетплейс",
+          "description": "Подключение второй площадки на той же площади увеличивает поток."
+        },
+        {
+          "title": "Сопутствующие услуги",
+          "description": "Упаковка, печать, приём возвратов за отдельную плату."
+        }
+      ],
+      "risks": [
+        {
+          "title": "Изменение тарифов маркетплейса",
+          "level": "high",
+          "mitigation": "Работа с двумя площадками и запас по расходам."
+        },
+        {
+          "title": "Штрафы за потерю заказов",
+          "level": "medium",
+          "mitigation": "Видеонаблюдение и учёт каждой выдачи."
+        },
+        {
+          "title": "Конкуренция соседних пунктов",
+          "level": "medium",
+          "mitigation": "Удобное место и часы работы."
+        }
+      ]
+    }
+  },
+  "payroll_tax_percent": 30
+}

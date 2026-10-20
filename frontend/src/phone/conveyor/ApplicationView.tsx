@@ -60,6 +60,7 @@ export default function ApplicationView() {
           <div><div className="text-[12px] uppercase tracking-wide text-muted">Что сейчас происходит</div><p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p></div>
           <div><div className="text-[12px] uppercase tracking-wide text-muted">Что нужно от вас</div><p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p></div>
         </div>
+        {app.plan_id && <Link to={`/plan?plan=${encodeURIComponent(app.plan_id)}`} className="mt-4 inline-block text-[14px] font-medium text-text underline underline-offset-2">Расчёт проекта, на который нужен кредит</Link>}
         <div className="mt-4"><ErrorText>{error}</ErrorText></div>
       </Card>
 

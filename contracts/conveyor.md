@@ -36,7 +36,7 @@
 
 ### `GET /api/templates` → `[conveyor#/template]`
 ### `POST /api/plans/calculate` → `conveyor#/plan_calc_response` (201)
-Тело `conveyor#/plan_calc_request`. Считает план по шаблону сферы и формулам, сохраняет, возвращает `plan_id` и план в формате [plan.schema.json](schemas/plan.schema.json). Старый `GET /api/plans/{id}` работает и для таких планов.
+Тело `conveyor#/plan_calc_request`. Считает план по шаблону сферы и формулам из [templates.md](templates.md), сохраняет, возвращает `plan_id` и план в формате [plan.schema.json](schemas/plan.schema.json). Старый `GET /api/plans/{id}` работает и для таких планов. Ответ вне диапазона вопроса или неизвестный вариант — `VALIDATION_ERROR` с понятным `message`.
 
 ## Разбор текста
 

@@ -56,7 +56,7 @@ export default function PlanScreen() {
 
       <Card span={12}>
         <SectionTitle>Из чего складывается бюджет</SectionTitle>
-        <p className="mb-4 text-[13px] text-muted">Предварительная оценка ИИ. Допущения указаны под каждой статьёй; перед запуском уточните цены у арендодателя и поставщиков. Суммы в шагах запуска уже входят в смету.</p>
+        <p className="mb-4 text-[13px] text-muted">Предварительная оценка. Допущения указаны под каждой статьёй; перед запуском уточните цены у арендодателя и поставщиков. Суммы в шагах запуска уже входят в смету.</p>
         <div className="grid gap-6 min-[900px]:grid-cols-2">
           <Budget title="На запуск, разово" items={p.finance.startup_items} total={p.finance.startup_cost_rub} />
           <Budget title="Расходы в месяц" items={p.finance.monthly_items} total={p.finance.monthly_expenses_rub} />

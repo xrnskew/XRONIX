@@ -5,8 +5,8 @@
   "answers": {
     "format": "to_go",
     "area_m2": 15,
-    "guests_per_day": 180,
-    "avg_check_rub": 280,
+    "customers_per_day": 120,
+    "avg_check_rub": 250,
     "staff": 3
   }
 }

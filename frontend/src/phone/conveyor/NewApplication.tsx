@@ -2,33 +2,78 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../../api'
 import { conveyor } from '../../api/conveyor'
-import type { Company, MatchItem, MemberRole, ParsedNeed, Purpose, RegistryCompany } from '../../types/conveyor'
+import type { Company, MatchItem, MemberRole, ParsedNeed, Purpose, RegistryCompany, Sphere } from '../../types/conveyor'
+import type { Plan } from '../../types/plan'
+import type { Template } from '../../lib/projectCalc'
+import CityPicker from '../components/CityPicker'
+import { useCabinet } from '../CabinetContext'
 import { innHint } from '../../lib/inn'
 import { plural, rub } from '../../lib/format'
-import { Card, Chip, Screen, SectionTitle } from '../ui'
+import { Card, Chip, Screen, SectionTitle, Stat } from '../ui'
 import { ErrorText, Label, MoneyInput, Steps, ghostBtn, input, memberRoles, primaryBtn, purposes } from './parts'
 import ApplicationForm from './ApplicationForm'
 
 const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
-const STEPS = ['Компания', 'Что нужно', 'Продукт', 'Заявка']
+type Path = 'current' | 'new_point' | 'no_business'
+const PATHS: Record<Path, string[]> = {
+  current: ['Цель', 'Компания', 'Что нужно', 'Продукт', 'Заявка'],
+  new_point: ['Цель', 'Компания', 'Проект', 'Что нужно', 'Продукт', 'Заявка'],
+  no_business: ['Цель', 'Проект', 'Итог'],
+}
 
 export interface Need { purpose: Purpose | null; amount_rub: number | null; term_months: number | null; has_collateral: boolean }
+export interface CalculatedPlan { plan_id: string; plan: Plan }
 
+// Три пути (docs/CONVEYOR.md, раздел 3): кредит текущему бизнесу; новая точка или направление — сначала расчёт проекта;
+// бизнеса пока нет — только расчёт проекта, кредиты Альфы доступны после 9 месяцев работы.
 export default function NewApplication() {
+  const [path, setPath] = useState<Path>('current')
   const [step, setStep] = useState(0)
   const [company, setCompany] = useState<Company | null>(null)
+  const [project, setProject] = useState<CalculatedPlan | null>(null)
   const [need, setNeed] = useState<Need>({ purpose: null, amount_rub: null, term_months: 24, has_collateral: false })
   const [appId, setAppId] = useState<string | null>(null)
   const nav = useNavigate()
+  const steps = PATHS[path], name = steps[step]
+  const next = () => setStep(step + 1), back = () => setStep(step - 1)
+
+  const fromPlan = (c: CalculatedPlan) => {
+    setProject(c)
+    const credit = c.plan.credit
+    setNeed({ purpose: need.purpose === 'new_direction' ? 'new_direction' : 'new_location', amount_rub: credit.amount_rub ?? (c.plan.finance.funding_gap_rub || null), term_months: credit.recommended_term_months ?? 36, has_collateral: false })
+    next()
+  }
 
   return (
     <Screen title="Новая заявка">
-      <div data-span={12}><Steps items={STEPS} current={step} /></div>
-      {step === 0 && <CompanyStep onDone={(c) => { setCompany(c); setStep(1) }} />}
-      {step === 1 && company && <NeedStep company={company} need={need} setNeed={setNeed} onBack={() => setStep(0)} onDone={() => setStep(2)} />}
-      {step === 2 && company && <ProductStep company={company} need={need} onBack={() => setStep(1)} onDone={(id) => { setAppId(id); setStep(3) }} />}
-      {step === 3 && appId && <ApplicationForm id={appId} onSubmitted={() => nav(`/applications/${appId}`)} />}
+      <div data-span={12}><Steps items={steps} current={step} /></div>
+      {name === 'Цель' && <GoalStep onPick={(p) => { setPath(p); setProject(null); setStep(1) }} />}
+      {name === 'Компания' && <CompanyStep onDone={(c) => { setCompany(c); next() }} />}
+      {name === 'Проект' && <ProjectStep company={company} noBusiness={path === 'no_business'} initial={project} onBack={back} onDone={fromPlan} />}
+      {name === 'Итог' && project && <NoBusinessResult project={project} onBack={back} />}
+      {name === 'Что нужно' && company && <NeedStep company={company} need={need} setNeed={setNeed} project={project} onBack={back} onDone={next} />}
+      {name === 'Продукт' && company && <ProductStep company={company} need={need} planId={project?.plan_id ?? null} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
+      {name === 'Заявка' && appId && <ApplicationForm id={appId} onSubmitted={() => nav(`/applications/${appId}`)} />}
     </Screen>
+  )
+}
+
+// ---- 0. Цель ----
+const GOALS: { path: Path; title: string; text: string }[] = [
+  { path: 'current', title: 'Кредит для текущего бизнеса', text: 'Оборот, оборудование, недвижимость или рефинансирование. Сразу к подбору кредита.' },
+  { path: 'new_point', title: 'Открыть новую точку или направление', text: 'Сначала посчитаем проект: вложения, расходы, прибыль. Сумма из расчёта попадёт в заявку.' },
+  { path: 'no_business', title: 'У меня пока нет бизнеса', text: 'Посчитаем, сколько стоит запуск и когда окупится. Подскажем, как получить финансирование.' },
+]
+function GoalStep({ onPick }: { onPick: (p: Path) => void }) {
+  return (
+    <>
+      {GOALS.map((g) => (
+        <button key={g.path} onClick={() => onPick(g.path)} data-span={12} className="card-ring block w-full rounded-[22px] bg-surface p-5 text-left transition-colors hover:bg-surface-2 lg:p-6">
+          <div className="text-[18px] font-semibold">{g.title}</div>
+          <div className="mt-1 text-[14px] leading-snug text-muted">{g.text}</div>
+        </button>
+      ))}
+    </>
   )
 }
 
@@ -113,7 +158,7 @@ function CompanyStep({ onDone }: { onDone: (c: Company) => void }) {
 }
 
 // ---- 2. Потребность ----
-function NeedStep({ company, need, setNeed, onBack, onDone }: { company: Company; need: Need; setNeed: (n: Need) => void; onBack: () => void; onDone: () => void }) {
+function NeedStep({ company, need, setNeed, project, onBack, onDone }: { company: Company; need: Need; setNeed: (n: Need) => void; project: CalculatedPlan | null; onBack: () => void; onDone: () => void }) {
   const [text, setText] = useState('')
   const [parsing, setParsing] = useState(false)
   const [parsed, setParsed] = useState<ParsedNeed | null>(null)
@@ -140,6 +185,11 @@ function NeedStep({ company, need, setNeed, onBack, onDone }: { company: Company
   const ready = need.purpose && need.amount_rub && need.amount_rub >= 10_000 && need.term_months && need.term_months >= 1
   return (
     <>
+      {project ? (
+        <Card span={12}>
+          <p className="text-[15px] leading-snug">Сумма и срок — из расчёта «{project.plan.title}»: не хватает своих средств {rub(project.plan.finance.funding_gap_rub)}. Можно поправить.</p>
+        </Card>
+      ) : (
       <Card span={12}>
         <SectionTitle>Опишите своими словами</SectionTitle>
         <p className="mb-3 text-[14px] text-muted">Например: «Хочу открыть вторую пекарню, нужно около полутора миллионов на оборудование, лет на два». Можно пропустить и заполнить поля вручную.</p>
@@ -149,6 +199,7 @@ function NeedStep({ company, need, setNeed, onBack, onDone }: { company: Company
           {note && <p role="status" className="text-[14px] text-muted">{note}</p>}
         </div>
       </Card>
+      )}
       <Card span={12}>
         <SectionTitle>На что нужны деньги</SectionTitle>
         <div className={`grid gap-2 rounded-xl sm:grid-cols-2 lg:grid-cols-3 ${unsure('purpose') ? 'ring-2 ring-warn/60 p-1' : ''}`}>
@@ -182,20 +233,20 @@ function NeedStep({ company, need, setNeed, onBack, onDone }: { company: Company
 }
 
 // ---- 3. Подбор продукта ----
-function ProductStep({ company, need, onBack, onDone }: { company: Company; need: Need; onBack: () => void; onDone: (applicationId: string) => void }) {
+function ProductStep({ company, need, planId, onBack, onDone }: { company: Company; need: Need; planId: string | null; onBack: () => void; onDone: (applicationId: string) => void }) {
   const [items, setItems] = useState<MatchItem[] | null>(null)
   const [error, setError] = useState('')
   const [creating, setCreating] = useState<string | null>(null)
 
   useEffect(() => {
-    conveyor.match({ purpose: need.purpose!, amount_rub: need.amount_rub!, term_months: need.term_months!, has_collateral: need.has_collateral, company_id: company.id })
+    conveyor.match({ purpose: need.purpose!, amount_rub: need.amount_rub!, term_months: need.term_months!, has_collateral: need.has_collateral, company_id: company.id, plan_id: planId })
       .then((r) => setItems(r.items)).catch((e) => setError(errText(e)))
-  }, [company.id, need])
+  }, [company.id, need, planId])
 
   const apply = async (m: MatchItem) => {
     setCreating(m.product_id); setError('')
     try {
-      const a = await conveyor.createApplication({ company_id: company.id, product_id: m.product_id, purpose: need.purpose!, amount_rub: need.amount_rub!, term_months: need.term_months! })
+      const a = await conveyor.createApplication({ company_id: company.id, product_id: m.product_id, purpose: need.purpose!, amount_rub: need.amount_rub!, term_months: need.term_months!, plan_id: planId })
       onDone(a.id)
     } catch (e) { setError(errText(e)); setCreating(null) }
   }
@@ -228,6 +279,134 @@ function ProductStep({ company, need, onBack, onDone }: { company: Company; need
       ))}
       <div data-span={12}><button onClick={onBack} className={ghostBtn}>Назад</button></div>
       <p data-span={12} className="text-[12px] leading-snug text-muted">Платёж — предварительный, по минимальной ставке продукта. Точные условия банк определит после проверки заявки.</p>
+    </>
+  )
+}
+
+// ---- Проект: расчёт по шаблону сферы (contracts/templates.md) ----
+const cityFromAddress = (address?: string) => address?.match(/г\.\s*([^,]+)/)?.[1]?.trim() ?? ''
+
+function ProjectStep({ company, noBusiness, initial, onBack, onDone }: { company: Company | null; noBusiness: boolean; initial: CalculatedPlan | null; onBack: () => void; onDone: (c: CalculatedPlan) => void }) {
+  const [list, setList] = useState<Template[] | null>(null)
+  const [sphere, setSphere] = useState<Sphere | null>(null)
+  const [city, setCity] = useState(initial?.plan.business.city ?? cityFromAddress(company?.registry.address))
+  const [own, setOwn] = useState<number | null>(initial?.plan.finance.own_funds_rub ?? null)
+  const [answers, setAnswers] = useState<Record<string, number | string>>({})
+  const [result, setResult] = useState<CalculatedPlan | null>(initial)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => { conveyor.templates().then(setList).catch(() => setError('Не удалось загрузить шаблоны расчёта.')) }, [])
+  const tpl = list?.find((t) => t.sphere === sphere)
+  const pick = (t: Template) => { setSphere(t.sphere); setAnswers(Object.fromEntries(t.questions.map((q) => [q.id, q.default]))); setResult(null) }
+  const set = (id: string, v: number | string) => { setAnswers({ ...answers, [id]: v }); setResult(null) }
+
+  const calc = async () => {
+    if (!sphere) return
+    setBusy(true); setError('')
+    try { setResult(await conveyor.calculatePlan({ sphere, city: city.trim(), own_funds_rub: own ?? 0, answers })) } catch (e) { setError(errText(e)) } finally { setBusy(false) }
+  }
+
+  return (
+    <>
+      <Card span={12}>
+        <SectionTitle>Какой бизнес считаем</SectionTitle>
+        {!list && !error && <div className="h-12 animate-pulse rounded-xl bg-surface-2" />}
+        <div className="flex flex-wrap gap-2">{list?.map((t) => <Chip key={t.sphere} active={sphere === t.sphere} onClick={() => pick(t)}>{t.title}</Chip>)}</div>
+        <p className="mt-2 text-[13px] text-muted">Другой сферы пока нет в шаблонах. Цены в расчёте — оценка, их можно поправить ниже.</p>
+        {tpl && (
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <CityPicker value={city} onChange={(v) => { setCity(v); setResult(null) }} />
+            <Label text="Свои деньги на запуск"><MoneyInput id="own" value={own} onChange={(v) => { setOwn(v); setResult(null) }} placeholder="0" /></Label>
+            {tpl.questions.map((q) => q.kind === 'choice' ? (
+              <div key={q.id} className="text-[13px] text-muted">{q.text}
+                <div className="mt-1.5 flex flex-wrap gap-2">{q.options?.map((o) => <Chip key={o.value} active={answers[q.id] === o.value} onClick={() => set(q.id, o.value)}>{o.label}</Chip>)}</div>
+              </div>
+            ) : (
+              <Label key={q.id} text={`${q.text}${q.unit ? `, ${q.unit}` : ''}`} hint={`от ${q.min} до ${q.max}`}>
+                <input id={`q-${q.id}`} className={`${input} tabular-nums`} inputMode="numeric" value={answers[q.id] ?? ''} onChange={(e) => set(q.id, Number(e.target.value.replace(/\D/g, '').slice(0, 7)) || 0)} />
+              </Label>
+            ))}
+          </div>
+        )}
+        <div className="mt-4"><ErrorText>{error}</ErrorText></div>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button onClick={onBack} className={ghostBtn}>Назад</button>
+          {tpl && <button onClick={calc} disabled={busy || !city.trim()} className={result ? ghostBtn : primaryBtn}>{busy ? 'Считаем…' : result ? 'Пересчитать' : 'Рассчитать'}</button>}
+        </div>
+      </Card>
+      {result && <PlanSummary plan={result.plan} />}
+      {result && (
+        <div data-span={12} className="flex flex-wrap gap-3">
+          <button onClick={() => onDone(result)} className={primaryBtn}>{noBusiness ? 'Дальше: как профинансировать' : result.plan.credit.needed ? 'Дальше: кредит на запуск' : 'Дальше'}</button>
+        </div>
+      )}
+    </>
+  )
+}
+
+const verdictTone = { ok: 'ok', risky: 'warn', not_recommended: 'bad' } as const
+function PlanSummary({ plan }: { plan: Plan }) {
+  const f = plan.finance, c = plan.credit
+  return (
+    <>
+      <Card span={12} className="hero-card">
+        <div className="text-[13px] text-text/60">{plan.business.sphere} · {plan.business.city}</div>
+        <div className="mt-1 text-[20px] font-semibold">{plan.title}</div>
+        <p className="mt-1 text-[14px] leading-snug text-text/80">{plan.summary}</p>
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <Stat label="Запуск" value={rub(f.startup_cost_rub)} />
+          <Stat label="Прибыль в месяц" value={rub(f.monthly_profit_rub)} tone={f.monthly_profit_rub > 0 ? 'ok' : 'bad'} />
+          <Stat label="Окупаемость" value={f.payback_months ? `${f.payback_months} мес.` : 'не окупается'} tone={f.payback_months ? undefined : 'bad'} />
+          <Stat label="Не хватает своих" value={rub(f.funding_gap_rub)} tone={f.funding_gap_rub ? 'warn' : 'ok'} />
+        </div>
+      </Card>
+      {[['Запуск, разово', f.startup_items], ['Расходы в месяц', f.monthly_items]].map(([title, items]) => (
+        <Card key={title as string} span={6}>
+          <SectionTitle>{title as string}</SectionTitle>
+          <ul className="space-y-2 text-[14px]">
+            {(items as Plan['finance']['startup_items'])?.map((i) => (
+              <li key={i.title} className="flex justify-between gap-3"><span className="min-w-0"><span className="block">{i.title}</span><span className="block text-[12px] leading-snug text-muted">{i.assumption}</span></span><span className="shrink-0 tabular-nums">{rub(i.amount_rub)}</span></li>
+            ))}
+          </ul>
+        </Card>
+      ))}
+      {c.needed && c.verdict && (
+        <Card span={12}>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <SectionTitle>Кредит на запуск</SectionTitle>
+            <span className={`text-[14px] font-medium ${verdictTone[c.verdict] === 'ok' ? 'text-ok' : verdictTone[c.verdict] === 'warn' ? 'text-warn' : 'text-accent'}`}>Нагрузка {c.debt_load_percent}% прибыли</span>
+          </div>
+          <p className="text-[14px] leading-snug">{rub(c.amount_rub)} на {c.recommended_term_months} мес., платёж около {rub(c.monthly_payment_rub)} в месяц. {c.comment}</p>
+        </Card>
+      )}
+    </>
+  )
+}
+
+function NoBusinessResult({ project, onBack }: { project: CalculatedPlan; onBack: () => void }) {
+  const { openPlan } = useCabinet()
+  const nav = useNavigate()
+  const f = project.plan.finance
+  const open = async () => { await openPlan(project.plan_id, project.plan); nav(`/plan?plan=${encodeURIComponent(project.plan_id)}`) }
+  return (
+    <>
+      <Card span={12}>
+        <SectionTitle>Почему пока без кредита</SectionTitle>
+        <p className="text-[15px] leading-snug">Кредиты Альфа-Банка для бизнеса выдают компаниям и ИП, которые работают не меньше 9 месяцев. Поэтому подать заявку на запуск с нуля пока нельзя. Расчёт сохранён — к нему можно вернуться.</p>
+      </Card>
+      <Card span={12}>
+        <SectionTitle>Что можно сделать сейчас</SectionTitle>
+        <ol className="space-y-3 text-[15px] leading-snug">
+          <li><b>Начать на свои средства.</b> Запуск — {rub(f.startup_cost_rub)}, у вас {rub(f.own_funds_rub)}. {f.funding_gap_rub ? `Не хватает ${rub(f.funding_gap_rub)}: уменьшите площадь или вложения в оборудование и пересчитайте.` : 'Своих средств хватает.'}</li>
+          <li><b>Узнать о поддержке малого бизнеса</b> в вашем регионе: для начинающих бывают гранты и льготные микрозаймы.</li>
+          <li><b>Зарегистрировать ИП или ООО и вернуться через 9 месяцев работы.</b> Тогда здесь же можно будет подобрать кредит на развитие и подать заявку.</li>
+        </ol>
+      </Card>
+      <div data-span={12} className="flex flex-wrap gap-3">
+        <button onClick={open} className={primaryBtn}>Открыть полный план</button>
+        <button onClick={onBack} className={ghostBtn}>Посчитать другой вариант</button>
+      </div>
     </>
   )
 }

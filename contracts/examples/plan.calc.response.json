@@ -1,0 +1,229 @@
+{
+  "plan_id": "p-calc-1",
+  "plan": {
+    "title": "Кофейня, Казань",
+    "summary": "Кофе с собой: запуск — 1,4 млн ₽, на плановом уровне прибыль 269 тыс ₽ в месяц, окупаемость — около 6 мес. Расчёт по шаблону, цены — оценка.",
+    "business": {
+      "sphere": "Общепит",
+      "format": "Кофе с собой",
+      "city": "Казань"
+    },
+    "steps": [
+      {
+        "order": 1,
+        "title": "Регистрация, касса и разрешения",
+        "description": "Регистрация, онлайн-касса, уведомление в Роспотребнадзор",
+        "duration_days": 7,
+        "cost_rub": 30000
+      },
+      {
+        "order": 2,
+        "title": "Поиск помещения и депозит аренды",
+        "description": "Депозит и первый месяц аренды",
+        "duration_days": 21,
+        "cost_rub": 99000
+      },
+      {
+        "order": 3,
+        "title": "Ремонт и вывеска",
+        "description": "Отделка, стойка, свет, вывеска — 25 000 ₽ за м²",
+        "duration_days": 21,
+        "cost_rub": 375000
+      },
+      {
+        "order": 4,
+        "title": "Оборудование",
+        "description": "Кофемашина, кофемолка, холодильник, посуда",
+        "duration_days": 14,
+        "cost_rub": 650000
+      },
+      {
+        "order": 5,
+        "title": "Первая закупка",
+        "description": "Зерно, молоко, стаканы, выпечка на первые недели",
+        "duration_days": 5,
+        "cost_rub": 120000
+      },
+      {
+        "order": 6,
+        "title": "Реклама открытия",
+        "description": "Вывеска-штендер, карты, промо первых недель",
+        "duration_days": 14,
+        "cost_rub": 80000
+      }
+    ],
+    "opportunities": [
+      {
+        "title": "Утренний поток",
+        "description": "Основная выручка — с 7:30 до 10:00, если точка на пути к работе или учёбе."
+      },
+      {
+        "title": "Небольшой старт",
+        "description": "Маленькая площадь и одна касса: запуск быстрее и дешевле, чем у кафе."
+      }
+    ],
+    "risks": [
+      {
+        "title": "Рост аренды",
+        "level": "high",
+        "mitigation": "Договор на 2–3 года с фиксированной ставкой."
+      },
+      {
+        "title": "Летний спад горячих напитков",
+        "level": "medium",
+        "mitigation": "Холодные напитки и десерты в меню."
+      },
+      {
+        "title": "Текучка бариста",
+        "level": "low",
+        "mitigation": "Обучение и процент от выручки."
+      }
+    ],
+    "finance": {
+      "startup_cost_rub": 1354000,
+      "own_funds_rub": 500000,
+      "funding_gap_rub": 854000,
+      "monthly_revenue_rub": 900000,
+      "monthly_expenses_rub": 631390,
+      "monthly_profit_rub": 268610,
+      "payback_months": 6,
+      "revenue_forecast": [
+        {
+          "month": 1,
+          "revenue_rub": 405000,
+          "expenses_rub": 438340
+        },
+        {
+          "month": 2,
+          "revenue_rub": 540000,
+          "expenses_rub": 490990
+        },
+        {
+          "month": 3,
+          "revenue_rub": 675000,
+          "expenses_rub": 543640
+        },
+        {
+          "month": 4,
+          "revenue_rub": 765000,
+          "expenses_rub": 578740
+        },
+        {
+          "month": 5,
+          "revenue_rub": 855000,
+          "expenses_rub": 613840
+        },
+        {
+          "month": 6,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 7,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 8,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 9,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 10,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 11,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        },
+        {
+          "month": 12,
+          "revenue_rub": 900000,
+          "expenses_rub": 631390
+        }
+      ],
+      "startup_items": [
+        {
+          "title": "Регистрация, касса и разрешения",
+          "amount_rub": 30000,
+          "assumption": "Регистрация, онлайн-касса, уведомление в Роспотребнадзор"
+        },
+        {
+          "title": "Поиск помещения и депозит аренды",
+          "amount_rub": 99000,
+          "assumption": "Депозит и первый месяц аренды"
+        },
+        {
+          "title": "Ремонт и вывеска",
+          "amount_rub": 375000,
+          "assumption": "Отделка, стойка, свет, вывеска — 25 000 ₽ за м²"
+        },
+        {
+          "title": "Оборудование",
+          "amount_rub": 650000,
+          "assumption": "Кофемашина, кофемолка, холодильник, посуда"
+        },
+        {
+          "title": "Первая закупка",
+          "amount_rub": 120000,
+          "assumption": "Зерно, молоко, стаканы, выпечка на первые недели"
+        },
+        {
+          "title": "Реклама открытия",
+          "amount_rub": 80000,
+          "assumption": "Вывеска-штендер, карты, промо первых недель"
+        }
+      ],
+      "monthly_items": [
+        {
+          "title": "Аренда",
+          "amount_rub": 49500,
+          "assumption": "6 000 ₽ за м² в Москве × 15 м² × коэффициент города 0.55"
+        },
+        {
+          "title": "Зарплаты",
+          "amount_rub": 175890,
+          "assumption": "3 чел., с учётом уровня зарплат в городе и страховых взносов 30%"
+        },
+        {
+          "title": "Закупка зерна, молока, упаковки",
+          "amount_rub": 297000,
+          "assumption": "33% выручки"
+        },
+        {
+          "title": "Налог УСН 6%",
+          "amount_rub": 54000,
+          "assumption": "УСН «доходы»"
+        },
+        {
+          "title": "Прочие расходы",
+          "amount_rub": 55000,
+          "assumption": "Коммунальные услуги, связь, эквайринг, бухгалтерия"
+        }
+      ]
+    },
+    "credit": {
+      "needed": true,
+      "amount_rub": 860000,
+      "purpose": "Запуск: оборудование, ремонт и вывеска",
+      "recommended_term_months": 36,
+      "estimated_rate_percent": 23.5,
+      "monthly_payment_rub": 33515,
+      "debt_load_percent": 12,
+      "verdict": "ok",
+      "recommended_product_id": "fast",
+      "comment": "Платёж — около 12% плановой прибыли: нагрузка умеренная."
+    },
+    "tags_update": [
+      "общепит",
+      "Казань"
+    ]
+  }
+}

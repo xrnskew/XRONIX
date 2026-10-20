@@ -80,6 +80,7 @@ cases.push(
   ['application.info_requested.json', def('conveyor', 'application')],
   ['template.coffee.json', def('conveyor', 'template')],
   ['plan.calc.request.json', def('conveyor', 'plan_calc_request')],
+  ['plan.calc.response.json', def('conveyor', 'plan_calc_response')],
   ['bank.application.json', def('bank', 'bank_application')],
   ['decision.counter.json', def('bank', 'decision_request')],
   ['decision.request_info.json', def('bank', 'decision_request')],
@@ -150,8 +151,11 @@ for (const [file, schema] of cases) {
 for (const [file, schema] of negative) {
   if (ajv.validate(schema, read(`./examples/${file}`))) { bad++; console.error(`FAIL ${file} не должен проходить ${schema}`) } else console.log(`ok   ${file} отклонён ${schema.split('/').pop()}`)
 }
-for (const file of ['plan.coffee.json', 'plan.no-credit.json']) {
-  const errs = checkPlan(read(`./examples/${file}`))
+for (const file of ['plan.coffee.json', 'plan.no-credit.json', 'plan.calc.response.json']) {
+  const v = read(`./examples/${file}`), plan = v.plan ?? v
+  const errs = checkPlan(plan)
+  for (const [items, total] of [['startup_items', 'startup_cost_rub'], ['monthly_items', 'monthly_expenses_rub']])
+    if (plan.finance[items] && plan.finance[items].reduce((s, r) => s + r.amount_rub, 0) !== plan.finance[total]) errs.push(`${items} не сходится с ${total}`)
   if (errs.length) { bad++; console.error(`FAIL смысл ${file}:`, errs) } else console.log(`ok   смысл ${file}`)
 }
 const c = read('./examples/plan.coffee.json').credit
