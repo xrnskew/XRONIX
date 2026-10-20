@@ -21,7 +21,8 @@ from .models import (Decision, MessageReply, PlanReply, Question, QuestionsReply
 from .plan import Plan, check_plan
 from .prompts import decide_messages, plan_messages
 from .repair import repair_plan
-from .scope import BUSINESS_REDIRECT, needs_redirect
+from .scope import (BUSINESS_REDIRECT, needs_redirect, questionnaire_context,
+                    sanitize_request, scope_reason)
 
 logger = logging.getLogger(__name__)
 
@@ -164,10 +165,15 @@ def questions_reply(questions: list, req: RespondRequest, rounds: int) -> dict:
 
 
 async def respond(llm: LLM, req: RespondRequest) -> dict:
-    if needs_redirect(req.message):
-        return MessageReply(text=BUSINESS_REDIRECT).model_dump()
-    if not req.history and GREETING.match(req.message):
+    if GREETING.match(req.message):
         return MessageReply(text=GREETING_REPLY).model_dump()
+    followup, options = questionnaire_context(req)
+    reason = scope_reason(req.message, followup=followup, options=options)
+    if reason:
+        # Log a bounded rule identifier only; no private user text or secrets.
+        logger.info("scope_guard: blocked reason=%s model_calls=0", reason)
+        return MessageReply(text=BUSINESS_REDIRECT).model_dump()
+    req = sanitize_request(req)
 
     loop = asyncio.get_running_loop()
     deadline = loop.time() + config.DEADLINE_SEC

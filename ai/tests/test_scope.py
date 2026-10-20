@@ -85,8 +85,8 @@ class ScopeTests(unittest.IsolatedAsyncioTestCase):
         model = MessageModel(BUSINESS_REDIRECT)
         result = await respond(model, request('Какая погода завтра на Марсе?', two_rounds()))
         self.assertEqual(result['type'], 'message')
-        self.assertEqual(len(model.calls), 1)
-        self.assertIn('Два раунда', model.calls[0][0][1])
+        self.assertEqual(len(model.calls), 0)
+        self.assertEqual(result['text'], BUSINESS_REDIRECT)
 
     async def test_business_marketing_request_reaches_model(self):
         model = MessageModel('Слоган для вашей пекарни: «Тёплое начало дня».')
