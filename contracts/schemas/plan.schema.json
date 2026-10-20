@@ -5,80 +5,280 @@
   "description": "Бизнес-план. Деньги: целые рубли. Если данных нет, поле null, а не выдумка.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["title", "summary", "business", "steps", "opportunities", "risks", "finance", "credit", "tags_update"],
+  "required": [
+    "title",
+    "summary",
+    "business",
+    "steps",
+    "opportunities",
+    "risks",
+    "finance",
+    "credit",
+    "tags_update"
+  ],
   "definitions": {
-    "rub": { "type": "integer", "minimum": 0 },
-    "rubOrNull": { "type": ["integer", "null"], "minimum": 0 }
+    "rub": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "rubOrNull": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    }
   },
   "properties": {
-    "title": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "summary": { "type": "string", "minLength": 1, "maxLength": 400 },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 400
+    },
     "business": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sphere", "format", "city"],
+      "required": [
+        "sphere",
+        "format",
+        "city"
+      ],
       "properties": {
-        "sphere": { "type": "string", "minLength": 1 },
-        "format": { "type": "string", "minLength": 1 },
-        "city": { "type": "string", "minLength": 1 }
+        "sphere": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "minLength": 1
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "steps": {
-      "type": "array", "minItems": 3, "maxItems": 10,
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["order", "title", "description", "duration_days", "cost_rub"],
+        "required": [
+          "order",
+          "title",
+          "description",
+          "duration_days",
+          "cost_rub"
+        ],
         "properties": {
-          "order": { "type": "integer", "minimum": 1 },
-          "title": { "type": "string", "minLength": 1 },
-          "description": { "type": "string" },
-          "duration_days": { "type": ["integer", "null"], "minimum": 0 },
-          "cost_rub": { "$ref": "#/definitions/rubOrNull" }
+          "order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
+          "duration_days": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "cost_rub": {
+            "$ref": "#/definitions/rubOrNull"
+          }
         }
       }
     },
     "opportunities": {
-      "type": "array", "minItems": 1, "maxItems": 6,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["title", "description"],
-        "properties": { "title": { "type": "string", "minLength": 1 }, "description": { "type": "string" } }
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          }
+        }
       }
     },
     "risks": {
-      "type": "array", "minItems": 1, "maxItems": 8,
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["title", "level", "mitigation"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "level",
+          "mitigation"
+        ],
         "properties": {
-          "title": { "type": "string", "minLength": 1 },
-          "level": { "enum": ["low", "medium", "high"] },
-          "mitigation": { "type": "string" }
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "mitigation": {
+            "type": "string"
+          }
         }
       }
     },
     "finance": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["startup_cost_rub", "own_funds_rub", "funding_gap_rub", "monthly_revenue_rub", "monthly_expenses_rub", "monthly_profit_rub", "payback_months", "revenue_forecast"],
+      "required": [
+        "startup_cost_rub",
+        "own_funds_rub",
+        "funding_gap_rub",
+        "monthly_revenue_rub",
+        "monthly_expenses_rub",
+        "monthly_profit_rub",
+        "payback_months",
+        "revenue_forecast"
+      ],
       "properties": {
-        "startup_cost_rub": { "$ref": "#/definitions/rub" },
-        "own_funds_rub": { "$ref": "#/definitions/rub" },
-        "funding_gap_rub": { "$ref": "#/definitions/rub" },
-        "monthly_revenue_rub": { "$ref": "#/definitions/rub" },
-        "monthly_expenses_rub": { "$ref": "#/definitions/rub" },
-        "monthly_profit_rub": { "type": "integer", "description": "Может быть отрицательной" },
-        "payback_months": { "type": ["integer", "null"], "minimum": 0, "description": "null, если бизнес не окупается" },
+        "startup_cost_rub": {
+          "$ref": "#/definitions/rub"
+        },
+        "own_funds_rub": {
+          "$ref": "#/definitions/rub"
+        },
+        "funding_gap_rub": {
+          "$ref": "#/definitions/rub"
+        },
+        "monthly_revenue_rub": {
+          "$ref": "#/definitions/rub"
+        },
+        "monthly_expenses_rub": {
+          "$ref": "#/definitions/rub"
+        },
+        "monthly_profit_rub": {
+          "type": "integer",
+          "description": "Может быть отрицательной"
+        },
+        "payback_months": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null, если бизнес не окупается"
+        },
         "revenue_forecast": {
-          "type": "array", "minItems": 12, "maxItems": 12,
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
           "items": {
-            "type": "object", "additionalProperties": false,
-            "required": ["month", "revenue_rub", "expenses_rub"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "month",
+              "revenue_rub",
+              "expenses_rub"
+            ],
             "properties": {
-              "month": { "type": "integer", "minimum": 1, "maximum": 12 },
-              "revenue_rub": { "$ref": "#/definitions/rub" },
-              "expenses_rub": { "$ref": "#/definitions/rub" }
+              "month": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "revenue_rub": {
+                "$ref": "#/definitions/rub"
+              },
+              "expenses_rub": {
+                "$ref": "#/definitions/rub"
+              }
+            }
+          }
+        },
+        "startup_items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "amount_rub",
+              "assumption"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "amount_rub": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "assumption": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          }
+        },
+        "monthly_items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "title",
+              "amount_rub",
+              "assumption"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "amount_rub": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "assumption": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
             }
           }
         }
@@ -87,27 +287,88 @@
     "credit": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["needed", "amount_rub", "purpose", "recommended_term_months", "estimated_rate_percent", "monthly_payment_rub", "debt_load_percent", "verdict", "comment"],
+      "required": [
+        "needed",
+        "amount_rub",
+        "purpose",
+        "recommended_term_months",
+        "estimated_rate_percent",
+        "monthly_payment_rub",
+        "debt_load_percent",
+        "verdict",
+        "comment"
+      ],
       "description": "Если needed=false, amount_rub, recommended_term_months, estimated_rate_percent, monthly_payment_rub, debt_load_percent, verdict равны null, а comment объясняет, почему кредит не нужен.",
       "properties": {
-        "needed": { "type": "boolean" },
-        "amount_rub": { "$ref": "#/definitions/rubOrNull" },
-        "purpose": { "type": ["string", "null"] },
-        "recommended_term_months": { "type": ["integer", "null"], "minimum": 1, "maximum": 120 },
-        "estimated_rate_percent": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
-        "monthly_payment_rub": { "$ref": "#/definitions/rubOrNull" },
-        "debt_load_percent": { "type": ["integer", "null"], "minimum": 0 },
-        "verdict": { "enum": ["ok", "risky", "not_recommended", null] },
+        "needed": {
+          "type": "boolean"
+        },
+        "amount_rub": {
+          "$ref": "#/definitions/rubOrNull"
+        },
+        "purpose": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "recommended_term_months": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 120
+        },
+        "estimated_rate_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "monthly_payment_rub": {
+          "$ref": "#/definitions/rubOrNull"
+        },
+        "debt_load_percent": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "verdict": {
+          "enum": [
+            "ok",
+            "risky",
+            "not_recommended",
+            null
+          ]
+        },
         "recommended_product_id": {
-          "enum": ["fast", "secured", "mortgage", "revolving", null],
+          "enum": [
+            "fast",
+            "secured",
+            "mortgage",
+            "revolving",
+            null
+          ],
           "description": "Необязательное. Ставит только бэкенд по правилам, не ИИ. Идентификаторы продуктов Альфа-Банка из frontend/src/data/alfaProducts.ts."
         },
-        "comment": { "type": "string" }
+        "comment": {
+          "type": "string"
+        }
       }
     },
     "tags_update": {
-      "type": "array", "maxItems": 12,
-      "items": { "type": "string", "minLength": 1, "maxLength": 30 }
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 30
+      }
     }
   }
 }

@@ -27,6 +27,9 @@ class Contracts:
 
 def check_plan(plan):
     f, c = plan['finance'], plan['credit']
+    for items, total in (('startup_items', 'startup_cost_rub'), ('monthly_items', 'monthly_expenses_rub')):
+        if items in f and sum(row['amount_rub'] for row in f[items]) != f[total]:
+            raise ValueError(f'{items} total mismatch')
     if f['funding_gap_rub'] != max(0, f['startup_cost_rub'] - f['own_funds_rub']):
         raise ValueError('funding_gap_rub')
     if f['monthly_profit_rub'] != f['monthly_revenue_rub'] - f['monthly_expenses_rub']:
@@ -62,7 +65,12 @@ def recalculate(plan):
     plan = copy.deepcopy(plan)
     f, c = plan['finance'], plan['credit']
     # The total must cover all known launch costs.
-    f['startup_cost_rub'] = max(f['startup_cost_rub'], sum(s['cost_rub'] or 0 for s in plan['steps']))
+    if 'startup_items' in f:
+        f['startup_cost_rub'] = sum(row['amount_rub'] for row in f['startup_items'])
+    else:
+        f['startup_cost_rub'] = max(f['startup_cost_rub'], sum(s['cost_rub'] or 0 for s in plan['steps']))
+    if 'monthly_items' in f:
+        f['monthly_expenses_rub'] = sum(row['amount_rub'] for row in f['monthly_items'])
     f['funding_gap_rub'] = max(0, f['startup_cost_rub'] - f['own_funds_rub'])
     f['monthly_profit_rub'] = f['monthly_revenue_rub'] - f['monthly_expenses_rub']
     f['payback_months'] = ((f['startup_cost_rub'] + f['monthly_profit_rub'] - 1) // f['monthly_profit_rub']
