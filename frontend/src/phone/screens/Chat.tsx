@@ -244,21 +244,23 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit 
   return (
     <fieldset disabled={!active} className="space-y-4 border-0 p-0 disabled:opacity-60">
       <legend className="mb-3 p-0">{reply.text}</legend>
-      {reply.questions.map((q) => (
-        <div key={q.id} className="space-y-2">
-          <div className="text-[14px] font-semibold">{q.text}</div>
+      {reply.questions.map((q) => {
+        // У выбора города подпись своя — у CityPicker, без неё вопрос выводился дважды
+        const city = q.kind !== 'choice' && (/city|location|town/i.test(q.id) || /город|насел[её]нн.{0,5}пункт/i.test(q.text))
+        return <div key={q.id} className="space-y-2">
+          {!city && <div className="text-[14px] font-semibold">{q.text}</div>}
           {q.kind === 'choice' ? (
             <div className="flex flex-wrap gap-1.5">
               {q.options?.map((o) => <Chip key={o} active={answers[q.id] === o} onClick={() => setAnswers({ ...answers, [q.id]: o })}>{o}</Chip>)}
             </div>
-          ) : /city|location|town/i.test(q.id) || /город|насел[её]нн.{0,5}пункт/i.test(q.text) ? (
+          ) : city ? (
             <CityPicker label={q.text} value={answers[q.id] ?? ''} onChange={(value) => setAnswers({ ...answers, [q.id]: value })} />
           ) : (
             <input aria-label={q.text} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
               className="h-11 w-full rounded-xl bg-surface-2 px-3 text-[15px] outline-none focus:ring-2 focus:ring-accent" placeholder="Ваш ответ" />
           )}
         </div>
-      ))}
+      })}
       {active && <button disabled={!done} onClick={() => onSubmit(reply.questions)} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white transition-opacity disabled:opacity-35">Ответить</button>}
     </fieldset>
   )
