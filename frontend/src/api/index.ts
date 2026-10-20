@@ -1,6 +1,7 @@
 import type { AiReply, Answer, AuthResult, ChatDetail, ChatSummary, Generation, PlanRecord, PlanSummary, Profile } from '../types/plan'
 import { ApiError, USE_MOCKS, request, setToken } from './client'
 import { mockApi } from './mock'
+import { uid } from '../lib/uid'
 
 export { ApiError, USE_MOCKS, getToken, onUnauthorized, setToken } from './client'
 
@@ -57,7 +58,7 @@ const realApi: Api = {
   createChat: () => request('POST', '/chats'),
   getChat: (id) => request('GET', `/chats/${id}`),
   deleteChat: (id) => request('DELETE', `/chats/${id}`),
-  async sendMessage(chatId, text, answers, requestId = crypto.randomUUID()) {
+  async sendMessage(chatId, text, answers, requestId = uid()) {
     const job = await request<Generation>('POST', `/chats/${chatId}/generations`, { text, answers: answers ?? [], request_id: requestId })
     if (job.status === 'succeeded' && job.reply) return job.reply
     if (job.status === 'failed') throw new ApiError(job.error_code ?? 'AI_UNAVAILABLE', 'Запрос завершился с ошибкой. Повторите отправку.')

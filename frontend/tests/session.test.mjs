@@ -161,3 +161,16 @@ test('retry after a confirmed server failure creates a new attempt', async () =>
   await s.send('idea'); await s.retry()
   assert.notEqual(keys[0], keys[1])
 })
+
+test('uid works without crypto.randomUUID (plain http on a LAN address is not a secure context)', async () => {
+  const { uid } = await import('../src/lib/uid.ts')
+  const original = crypto.randomUUID
+  try {
+    Object.defineProperty(crypto, 'randomUUID', { value: undefined, configurable: true })
+    const ids = new Set(Array.from({ length: 50 }, uid))
+    assert.equal(ids.size, 50)
+    for (const id of ids) assert.match(id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
+  } finally {
+    Object.defineProperty(crypto, 'randomUUID', { value: original, configurable: true })
+  }
+})

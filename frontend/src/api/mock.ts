@@ -5,12 +5,12 @@ import { calculatePlan, templates } from '../lib/projectCalc'
 import { SPHERE_WORDS, findCity, parseAmount } from '../lib/parseText'
 import type { Sphere } from '../types/conveyor'
 import { ApiError, setToken } from './client'
+import { uid } from '../lib/uid'
 import { DEMO_ANALYST, DEMO_CLIENT, demoAccount } from './demoAccounts'
 
 // Мок-бэкенд в памяти: те же вызовы и формы ответов, что в /contracts/api.md.
 // Подсказка для демо: сообщение со словом «!ошибка» вернёт ошибку ИИ, чтобы показать экран ошибки.
 const delay = (ms = 600) => new Promise((r) => setTimeout(r, ms))
-const uid = () => crypto.randomUUID()
 const now = () => new Date().toISOString()
 
 interface ConsultState { sphere: Sphere | null; city: string | null; own_funds_rub: number | null }

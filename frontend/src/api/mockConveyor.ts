@@ -4,6 +4,7 @@ import type { AppDocument, Application, ApplicationDraft, BankEvent, Check, Comp
 import dict from '../data/dictionaries.json'
 import rules from '../data/credit_rules.v1.json'
 import { validInn } from '../lib/inn'
+import { uid } from '../lib/uid'
 import { allProducts, businessMonths, decide, declineText, matchProducts, payment, rateFor, schedule, score, stopFactors, type Input } from '../lib/creditRules'
 import { DEMO_CLIENT } from './demoAccounts'
 import { DEMO_FOUNDER_INN, demoFinancials, external, personExternal } from './mockData'
@@ -16,7 +17,6 @@ import { findMockPlan, mockUser, mockUserName, registerMockPlan } from './mock'
 // Мок конвейера в памяти: те же вызовы и ответы, что в /contracts/conveyor.md. Заявка проходит этапы сама по таймеру,
 // ручное рассмотрение ждёт решения аналитика в /bank. При запуске очередь засеяна заявками во всех статусах (раздел 12 CONVEYOR.md).
 const delay = (ms = 350) => new Promise((r) => setTimeout(r, ms))
-const uid = () => crypto.randomUUID()
 let clockShift = 0 // засев «в прошлом»: у засеянных заявок реалистичное время ожидания
 const now = () => new Date(Date.now() - clockShift).toISOString()
 let instant = false

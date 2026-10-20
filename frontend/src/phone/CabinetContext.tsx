@@ -3,6 +3,7 @@ import type { AiReply, Answer, ChatMessage, Plan, Profile } from '../types/plan'
 import { ApiError, api, USE_MOCKS, getToken, onUnauthorized, setToken } from '../api'
 import { mockPlan, mockProfile, mockQuestions } from '../mocks/data'
 import { CabinetSession } from './session'
+import { uid } from '../lib/uid'
 
 type Status = 'booting' | 'out' | 'in'
 type ProfilePatch = Partial<Pick<Profile, 'name' | 'city' | 'experience' | 'budget_rub' | 'tags'>>
@@ -55,7 +56,6 @@ const skipKey = (id?: string) => `xronix_onboarding_skipped_${id ?? ''}`
 const wasSkipped = (id?: string) => { try { return localStorage.getItem(skipKey(id)) === '1' } catch { return false } }
 
 const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
-const uid = () => crypto.randomUUID()
 
 export function CabinetProvider({ children, restoreSession = true }: { children: ReactNode; restoreSession?: boolean }) {
   const [status, setStatus] = useState<Status>(restoreSession && (!USE_MOCKS || getToken()) ? 'booting' : 'out')
