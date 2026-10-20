@@ -19,7 +19,7 @@ const tone: Record<Status, 'ok' | 'warn' | 'bad' | 'muted'> = {
   info_requested: 'warn', approved: 'ok', counter_offer: 'warn', signing: 'ok', funded: 'ok',
   declined: 'bad', withdrawn: 'muted', cancelled: 'muted',
 }
-export const StatusBadge = ({ status, title }: { status: Status; title: string }) => <Badge tone={tone[status]}>{title}</Badge>
+export const StatusBadge = ({ status, title }: { status: Status; title: string }) => <span className="whitespace-nowrap"><Badge tone={tone[status]}>{title}</Badge></span>
 
 export function Label({ text, hint, children, warn }: { text: string; hint?: string; children: ReactNode; warn?: boolean }) {
   return (

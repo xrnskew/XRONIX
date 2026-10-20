@@ -122,6 +122,8 @@
 
 ### `GET /api/bank/applications/{id}` → `bank#/bank_application`
 
+Если у заявки есть `plan_id`, аналитику доступен и `GET /api/plans/{plan_id}` из [api.md](api.md): план клиента открывается из карточки.
+
 ### `POST /api/bank/applications/{id}/decision` → `bank#/bank_application`
 Тело `bank#/decision_request`. Только из `manual_review`.
 

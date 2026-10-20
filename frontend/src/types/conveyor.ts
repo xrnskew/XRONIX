@@ -62,3 +62,15 @@ export interface FeedItem { id: string; kind: 'status_change' | 'info_request' |
 // Статусы, в которых заявка движется сама: экран опрашивает сервер
 export const AUTO_STATUSES: Status[] = ['submitted', 'checking', 'scoring']
 export const FINAL_STATUSES: Status[] = ['funded', 'declined', 'withdrawn', 'cancelled']
+
+// ---- рабочее место аналитика: /contracts/schemas/bank.schema.json ----
+export type Grade = 'A' | 'B' | 'C' | 'D'
+export type DecisionKind = 'approve' | 'counter' | 'decline' | 'request_info'
+export interface Check { kind: 'completeness' | 'egrul' | 'fns' | 'bki'; result: 'ok' | 'warn' | 'fail' | 'error'; summary: string; details: Record<string, unknown>; source: string; checked_at: string }
+export interface Scoring { score: number; grade: Grade; factors: { code: string; name: string; value_text: string; points: number }[]; debt_load_percent: number | null; rules_version: string }
+export interface Recommendation { kind: DecisionKind; text: string; amount_rub?: number | null; term_months?: number | null; rate_percent?: number | null }
+export interface BankEvent { id: string; from_status: Status | null; to_status: Status; actor: Actor; actor_name: string; reason: string | null; at: string }
+export interface QueueItem { id: string; number: string; status: Status; company_name: string; inn: string; product_id: ProductId; amount_rub: number; term_months: number; grade: Grade | null; submitted_at: string | null; waiting_minutes: number }
+export interface BankApplication { application: Application; applicant: { name: string; email: string; member_role: MemberRole }; checks: Check[]; scoring: Scoring | null; recommendation: Recommendation | null; events: BankEvent[] }
+export interface DecisionRequest { kind: DecisionKind; version: number; amount_rub?: number; term_months?: number; rate_percent?: number; decline_reasons?: DeclineReason[]; info_items?: { kind: InfoRequestKind; text: string }[]; comment: string }
+export interface BankStats { by_status: Partial<Record<Status, number>>; auto_decision_share: number; avg_minutes_to_decision: number | null }

@@ -76,6 +76,7 @@ export default function Login() {
         </button>
         {!reg && <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={() => setForgot(true)}>Забыли пароль?</button>}
         {USE_MOCKS && !reg && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
+        {USE_MOCKS && !reg && wide && <button type="button" disabled={busy} onClick={() => { setBusy(true); signIn('analyst@xronix.demo', 'demo12345').catch(() => setBusy(false)) }} className="h-10 w-full text-[14px] text-muted underline underline-offset-2 hover:text-text">Войти как аналитик банка (демо)</button>}
       </div>
     </form>
   )
