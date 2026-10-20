@@ -169,7 +169,7 @@ export function Memory() {
   return (
     <Section id="memory" tint>
       <SplitText text="ИИ учитывает ваш профиль" className={h2} />
-      <Reveal delay={450}><p className={leadCls}>Город, опыт, бюджет и ваши теги помогают в консультации. Теги вы добавляете сами; идею нового бизнеса ИИ уточняет в текущем чате.</p></Reveal>
+      <Reveal delay={450}><p className={leadCls}>Город, опыт, бюджет и ваши теги помогают в консультации. Теги вы добавляете сами и просите ИИ учесть их в чате. Идею нового бизнеса ИИ уточняет отдельно.</p></Reveal>
       <Reveal delay={600} className="mt-10 max-w-[600px] border-l-2 border-brand pl-6">
         <FadeWords delay={800} className="text-[19px] leading-relaxed text-white/90" text="«Москва, начинающий предприниматель, бюджет 500 тыс ₽. Интересы: общепит. Конкретную идею обсудим в чате.»" />
         <div className="mt-3 text-[13px] text-white/50">Пример данных профиля и ручных тегов</div>

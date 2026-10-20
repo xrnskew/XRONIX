@@ -68,7 +68,7 @@ export default function ProfileScreen() {
 
       <Card id="profile-tags" delay={1} span={5} className="self-start">
         <SectionTitle>Ваши теги</SectionTitle>
-        <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Добавляйте интересы и предпочтения для консультаций. ИИ видит эти теги; менять их можете только вы. Нажмите на тег, чтобы удалить.</p>
+        <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Добавляйте интересы и предпочтения для консультаций. Попросите ИИ учесть ваши теги в чате. Менять их можете только вы. Нажмите на тег, чтобы удалить.</p>
         {user.tags.length === 0 && <p className="mb-3 text-[13px] text-muted">Тегов пока нет. При желании добавьте их вручную.</p>}
         <div className="flex flex-wrap gap-1.5">
           {user.tags.map((t) => (
