@@ -1,0 +1,262 @@
+{
+  "name": "baseline",
+  "task": "parse_need",
+  "split": "holdout",
+  "metrics": {
+    "n": 296,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 0.9561,
+    "sphere_accuracy": 0.8682,
+    "city_accuracy": 0.8514,
+    "amount_rub_accuracy": 0.9459,
+    "term_months_accuracy": 0.9764,
+    "has_collateral_accuracy": 0.9797,
+    "all_fields_exact": 0.6554,
+    "recall_when_present": {
+      "purpose": 0.9435,
+      "sphere": 0.805,
+      "city": 0.8408,
+      "amount_rub": 0.908,
+      "term_months": 0.9397,
+      "has_collateral": 0.9167
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 0.9561,
+        "pass": true
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 0.8682,
+        "pass": false
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 0.9459,
+        "pass": true
+      },
+      "city": {
+        "need": 0.95,
+        "got": 0.8514,
+        "pass": false
+      }
+    },
+    "unseen_phrasing": {
+      "n": 196,
+      "purpose_accuracy": 0.9592,
+      "sphere_accuracy": 0.8571,
+      "city_accuracy": 0.8316,
+      "amount_rub_accuracy": 0.9286,
+      "term_months_accuracy": 0.9643,
+      "has_collateral_accuracy": 0.9796,
+      "all_fields_exact": 0.6224
+    },
+    "latency_ms": {
+      "mean": 1.15,
+      "p95": 1.82
+    }
+  },
+  "errors": [
+    {
+      "id": "parse_need.holdout.00000",
+      "text": "Планирую купить помещеение под бизнес. я из Ветлуги",
+      "gold": {
+        "purpose": "real_estate",
+        "sphere": null,
+        "city": "Ветлуга",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": "Ветлуга",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00007",
+      "text": "Планирую купить новое оборудование для IT-студии, могу оставить в залог машину",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.holdout.00011",
+      "text": "подскажите, Планирую рефинансировать кредиты салона красоты, я из Новосибисрка, нужен креыит на 750 000 ₽",
+      "gold": {
+        "purpose": "refinance",
+        "sphere": "beauty_salon",
+        "city": "Новосибирск",
+        "amount_rub": 750000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "refinance",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 750000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00017",
+      "text": "короче, Нужно запустить доставку в автошколе. я из Краснодара. нужно четыре миллиона",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": "other",
+        "city": "Краснодар",
+        "amount_rub": 4000000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_direction",
+        "sphere": null,
+        "city": "Краснодар",
+        "amount_rub": 4000000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00018",
+      "text": "Обновить оборудование в ветклинике, в Коркине, примерно один лям, хочу вернуть за 4 года, залог дать не могу",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": "other",
+        "city": "Коркино",
+        "amount_rub": 1000000,
+        "term_months": 48,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": "Коркино",
+        "amount_rub": 1000000,
+        "term_months": 48,
+        "has_collateral": false
+      }
+    },
+    {
+      "id": "parse_need.holdout.00030",
+      "text": "Добрый день. Хочу запустить доставку в ногтевй студи, нужен кредит на 2.5 млн, залг дать не могу, я из Омска",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": "beauty_salon",
+        "city": "Омск",
+        "amount_rub": 2500000,
+        "term_months": null,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": "new_direction",
+        "sphere": "beauty_salon",
+        "city": "Омск",
+        "amount_rub": 2500000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00033",
+      "text": "привет. Планирую перекредитоваться, закрыть дорогие кредиты магазина одежды, в Воронбже, около 1800000",
+      "gold": {
+        "purpose": "refinance",
+        "sphere": "clothing_store",
+        "city": "Воронеж",
+        "amount_rub": 1800000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "refinance",
+        "sphere": "clothing_store",
+        "city": null,
+        "amount_rub": 1800000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00034",
+      "text": "Короче, Планирую выкупить помещенже, где сейчас барбершоп. хочу взять 1.8 млн. залчг дать не могу",
+      "gold": {
+        "purpose": "real_estate",
+        "sphere": "beauty_salon",
+        "city": null,
+        "amount_rub": 1800000,
+        "term_months": null,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "beauty_salon",
+        "city": "Короча",
+        "amount_rub": 1800000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00036",
+      "text": "короче, хочу открыть фитнес-клуб; около сто пятьдесят тысяч; отдавать 3 мес",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": 150000,
+        "term_months": 3,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Короча",
+        "amount_rub": null,
+        "term_months": 3,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00039",
+      "text": "подскажите, выкупить помещение, где сейчас кофейный островок; около 1 500 000 ₽; на 36 месяцев",
+      "gold": {
+        "purpose": "real_estate",
+        "sphere": "coffee",
+        "city": null,
+        "amount_rub": 1500000,
+        "term_months": 36,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "real_estate",
+        "sphere": "coffee",
+        "city": "Остров",
+        "amount_rub": 1500000,
+        "term_months": 36,
+        "has_collateral": null
+      }
+    }
+  ]
+}
