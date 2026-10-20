@@ -95,3 +95,30 @@ CORS: в разрешённые методы нужно добавить `DELETE
 - `credit.verdict` и `debt_load_percent` приходят уже пересчитанными бэкендом, фронт им доверяет. Калькулятор на экране только оценка «что если», итог всегда за сервером.
 - `credit.recommended_product_id` необязателен. Если есть, фронт подсвечивает этот продукт в списке банка.
 - Неизвестные поля в ответах игнорируются, обязательные поля фронт не проверяет повторно.
+
+## Дополнение: контекст чата и сохраняемая генерация
+
+GET /api/chats/{id} дополнительно возвращает `facts` и `generation` (null или последняя задача).
+Элементы `messages` включают `answers: [{question_id, answer}]` для восстановления анкеты.
+Факты: `{ключ: {value: string|integer, source: profile|user_message|answer, message_id: string|null, question_id?: string}}`.
+Профиль копируется при создании чата; ответы меняют только факты этого чата.
+`answers` в отправке сообщения должны соответствовать последней анкете: IDs уникальны,
+для choice значение совпадает с options. Невалидные ответы дают VALIDATION_ERROR.
+
+POST /api/chats/{id}/generations → 202, тело `{text, answers?: [], request_id}`.
+Ключ request_id: 16–80 символов `[a-zA-Z0-9_-]`, уникален в рамках пользователя.
+Повтор идентичного запроса возвращает ту же задачу; подмена тела/чата с тем же ключом даёт VALIDATION_ERROR.
+GET /api/generations/{id} возвращает `{id,chat_id,request_id,status,reply,error_code,created_at,updated_at,request}`.
+`request` содержит исходные text и answers; `reply` и error_code могут быть null.
+Статусы: queued/running/succeeded/failed. Чужая задача — NOT_FOUND.
+Незавершённая задача блокирует удаление чата и вторую генерацию пользователя.
+
+## Дополнение: пароль и сеансы
+
+- POST /api/auth/logout-all → 204; требует входа, отзывает все сеансы, включая текущий.
+- POST /api/auth/change-password `{current_password,new_password}` → 204; требует входа и текущего пароля, отзывает сеансы. Новый пароль: 8–1024 символа.
+- POST /api/auth/forgot-password `{email}` → 202 `{message}` одинакового вида для существующего и отсутствующего аккаунта. Без SMTP — 503 RECOVERY_UNAVAILABLE.
+- POST /api/auth/reset-password `{token,new_password}` → 204; одноразовый токен 43 символа, срок 15 минут. Неверный/просроченный — 400 RESET_TOKEN_INVALID. После сброса нужен обычный вход.
+
+Подтверждение email при регистрации не требуется. Новые коды ошибок добавлены в error.schema.json.
+Теги профиля меняются только через явный PATCH /api/me; результаты планов/сводок их не меняют.

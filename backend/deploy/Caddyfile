@@ -1,0 +1,23 @@
+api.xronix.ru {
+    encode gzip
+    header {
+        -Server
+        X-Content-Type-Options nosniff
+        Strict-Transport-Security "max-age=31536000"
+    }
+    reverse_proxy backend:8000 {
+        # Caddy is the only public entry point. Replace untrusted incoming XFF.
+        header_up X-Forwarded-For {remote_host}
+        transport http {
+            dial_timeout 3s
+            response_header_timeout 180s
+        }
+    }
+    handle_errors {
+        @frontend header Origin https://xronix.ru https://www.xronix.ru http://localhost:5173
+        header @frontend Access-Control-Allow-Origin {http.request.header.Origin}
+        header Vary Origin
+        header Content-Type application/json
+        respond `{"error":{"code":"INTERNAL","message":"Сервис временно недоступен. Попробуйте позже."}}` 500
+    }
+}

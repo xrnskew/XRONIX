@@ -5,35 +5,178 @@
   "description": "Вход POST /ai/respond. Собирает бэкенд.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["mode", "user_context", "history", "message"],
+  "required": [
+    "mode",
+    "user_context",
+    "history",
+    "message"
+  ],
   "properties": {
-    "mode": { "enum": ["chat"] },
+    "mode": {
+      "enum": [
+        "chat"
+      ]
+    },
     "user_context": {
-      "type": "object", "additionalProperties": false,
-      "required": ["profile", "tags", "memory"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "tags",
+        "memory"
+      ],
       "properties": {
         "profile": {
-          "type": "object", "additionalProperties": false,
-          "required": ["name", "city", "experience", "budget_rub"],
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "city",
+            "experience",
+            "budget_rub"
+          ],
           "properties": {
-            "name": { "type": "string" },
-            "city": { "type": ["string", "null"] },
-            "experience": { "type": ["string", "null"] },
-            "budget_rub": { "type": ["integer", "null"], "minimum": 0 }
+            "name": {
+              "type": "string"
+            },
+            "city": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "experience": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "budget_rub": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           }
         },
-        "tags": { "type": "array", "maxItems": 12, "items": { "type": "string" } },
-        "memory": { "type": "string", "maxLength": 800, "description": "Пустая строка, если памяти ещё нет" }
+        "tags": {
+          "type": "array",
+          "maxItems": 12,
+          "items": {
+            "type": "string"
+          }
+        },
+        "memory": {
+          "type": "string",
+          "maxLength": 800,
+          "description": "Пустая строка, если памяти ещё нет"
+        }
       }
     },
     "history": {
-      "type": "array", "maxItems": 10,
+      "type": "array",
+      "maxItems": 10,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["role", "content"],
-        "properties": { "role": { "enum": ["user", "assistant"] }, "content": { "type": "string" } }
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "content"
+        ],
+        "properties": {
+          "role": {
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "content": {
+            "type": "string"
+          }
+        }
       }
     },
-    "message": { "type": "string", "minLength": 1, "maxLength": 4000 }
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "chat_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facts",
+        "answers"
+      ],
+      "properties": {
+        "facts": {
+          "type": "object",
+          "maxProperties": 32,
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "value",
+              "source",
+              "message_id"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "string",
+                  "integer"
+                ],
+                "maxLength": 1000
+              },
+              "source": {
+                "enum": [
+                  "profile",
+                  "user_message",
+                  "answer"
+                ]
+              },
+              "message_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "question_id": {
+                "type": "string",
+                "maxLength": 31
+              }
+            }
+          }
+        },
+        "answers": {
+          "type": "array",
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "question_id",
+              "question",
+              "answer"
+            ],
+            "properties": {
+              "question_id": {
+                "type": "string",
+                "maxLength": 31
+              },
+              "question": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "answer": {
+                "type": "string",
+                "maxLength": 1000
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
