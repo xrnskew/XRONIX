@@ -1,0 +1,34 @@
+# AI-сервис на той же ВМ, что и бэкенд. Наружу порт не открываем:
+# бэкенд ходит сюда по сети xronix_ai как http://ai:8001.
+# Сеть xronix_ai создаёт compose бэкенда (backend/deploy/compose.yaml), поэтому бэкенд поднимается первым.
+# Запуск из папки ai: sudo docker compose up -d --build. Подробно: DEPLOY.md.
+name: xronix-ai
+services:
+  ai:
+    build: .
+    env_file: .env
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    networks:
+      ai:
+        aliases: [ai]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/ai/health', timeout=3)"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    mem_limit: 512m
+    pids_limit: 100
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+networks:
+  ai:
+    name: xronix_ai
+    external: true
