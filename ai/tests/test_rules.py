@@ -25,6 +25,13 @@ EXAMPLES = Path(__file__).resolve().parents[2] / "contracts" / "examples"
 EMPTY = {"sphere": None, "city": None, "own_funds_rub": None, "answers": {}}
 
 
+def seen(resp: dict) -> str:
+    """Реплика ассистента в history — как её увидел человек: текст, вопросы и варианты (ревью раунда 1)."""
+    lines = [resp["text"]] + [q["text"] + (f" Варианты: {' / '.join(q['options'])}" if q.get("options") else "")
+                              for q in resp.get("questions", [])]
+    return "\n".join(lines)
+
+
 def example(name):
     return json.loads((EXAMPLES / name).read_text(encoding="utf-8"))
 
@@ -84,7 +91,7 @@ class ConsultDialog(Api):
         def turn(msg):
             nonlocal state
             r = self.consult(msg, state, hist)
-            hist.extend([{"role": "user", "content": msg}, {"role": "assistant", "content": r["text"]}])
+            hist.extend([{"role": "user", "content": msg}, {"role": "assistant", "content": seen(r)}])
             state = r["state"]
             return r
 
@@ -109,7 +116,8 @@ class ConsultDialog(Api):
 
     def test_template_answers_free_text_and_qa(self):
         full = {"sphere": "car_wash", "city": "Уфа", "own_funds_rub": 2_000_000, "answers": {}}
-        hist = [{"role": "user", "content": "Хочу автомойку в Уфе, есть 2 млн"}, {"role": "assistant", "content": "Уточню детали."}]
+        hist = [{"role": "user", "content": "Хочу автомойку в Уфе, есть 2 млн"},
+                {"role": "assistant", "content": seen(self.consult("Хочу автомойку в Уфе, есть 2 млн"))}]
         r = self.consult("3 поста, примерно 40 машин в день, средний чек 900 рублей, работать будут 4 человека", full, hist)
         self.assertEqual((r["type"], r["state"]["answers"]), ("ready", {"posts": 3, "cars_per_day": 40, "avg_check_rub": 900, "staff": 4}))
         coffee = {"sphere": "coffee", "city": "Казань", "own_funds_rub": 300_000, "answers": {}}
@@ -118,7 +126,8 @@ class ConsultDialog(Api):
 
     def test_corrections(self):
         full = {"sphere": "coffee", "city": "Казань", "own_funds_rub": 300_000, "answers": {"format": "to_go"}}
-        hist = [{"role": "user", "content": "Кофейня в Казани, есть 300к"}, {"role": "assistant", "content": "Уточню детали."}]
+        hist = [{"role": "user", "content": "Кофейня в Казани, есть 300к"},
+                {"role": "assistant", "content": seen(self.consult("Кофейня в Казани, есть 300к"))}]
         self.assertEqual(self.consult("Ой, не Казань, а Самара", full, hist)["state"]["city"], "Самара")
         self.assertEqual(self.consult("Поправлю: своих 500 тысяч", full, hist)["state"]["own_funds_rub"], 500_000)
         r = self.consult("Передумал, лучше пекарню", full, hist)

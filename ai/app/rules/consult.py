@@ -76,7 +76,7 @@ CORE_STRIP = [norm(q["text"]) for q in CORE_QUESTIONS.values()]
 def asked_context(prev: dict, history: list) -> dict:
     """По последней реплике консультанта: какие основные вопросы задавали, был ли раунд анкеты, какую сферу предлагали."""
     last = next((h["content"] for h in reversed(history) if h["role"] == "assistant"), None)
-    ctx = {"core": set(), "template": False, "proposal": None, "proposed": False}
+    ctx = {"core": set(), "template": False, "template_last": False, "proposal": None, "proposed": False}
     if last is None:
         return ctx
     a = norm(last)
@@ -94,14 +94,13 @@ def asked_context(prev: dict, history: list) -> dict:
         ctx["core"].add("city")
     if "своих денег" in a:
         ctx["core"].add("own_funds")
-    if any(norm(t)[:-1] in a for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())):
-        ctx["template"] = True
-    if not ctx["core"] and not ctx["template"] and not ctx["proposed"]:
-        # В истории только вступительный текст: восстанавливаем по state, что тогда спрашивали.
-        if complete(prev):
-            ctx["template"] = True
-        else:
-            ctx["core"] = {k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub")) if prev.get(f) is None}
+    # Анкету уже спрашивали, если её вопросы есть в любой реплике ассистента. Полный state этого не доказывает.
+    template_texts = [norm(t)[:-1] for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())]
+    ctx["template_last"] = any(t in a for t in template_texts)
+    ctx["template"] = any(t in norm(h["content"]) for h in history if h["role"] == "assistant" for t in template_texts)
+    if not ctx["core"] and not ctx["template_last"] and not ctx["proposed"] and not complete(prev):
+        # В последней реплике нет наших вопросов (бэкенд передал только текст): недостающее основное и спрашивали.
+        ctx["core"] = {k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub")) if prev.get(f) is None}
     return ctx
 
 
@@ -132,6 +131,10 @@ def respond(request: dict) -> dict:
     message = ex.fix_typos(request["message"])  # «етсь 250 тыс» -> «есть 250 тыс»; переводы строк сохраняются
     raw = norm(message)
     ctx = asked_context(prev, history)
+    # Человек отвечает строками «Какой формат? Кофе с собой» — значит, вопросы анкеты он видел (пример контракта
+    # consult.request.answers.json), даже если бэкенд положил в history только вступительный текст.
+    if any(norm(t) in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())):
+        ctx["template"] = ctx["template_last"] = True
 
     if ex.ROLE_CHANGE.search(raw):
         return _message("role", prev)
@@ -168,7 +171,7 @@ def respond(request: dict) -> dict:
 
     # Ответ «Вопрос? Ответ» на наш вопрос анкеты — тоже по делу, даже если ответ «затрудняюсь».
     # В раунде анкеты число с единицей («30 кв.м») — ответ, даже если вне min–max и не записан.
-    answers_our_question = ctx["template"] and (
+    answers_our_question = ctx["template_last"] and (
         any(norm(t)[:-1] in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values()))
         or bool(re.search(r"\d|" + "|".join(a for a, _ in ex.ANSWER_CUES.values()), body)))
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
@@ -210,7 +213,8 @@ def respond(request: dict) -> dict:
         text = TEXTS["sums"] if ex.SUMS_QUESTION.search(body) else TEXTS["core"]
         return {"type": "questions", "text": text, "questions": [CORE_QUESTIONS[k] for k in missing], "state": state}
 
-    if not complete(prev):
+    if not ctx["template"]:
+        # Анкету ещё не спрашивали (по истории): один раунд, если есть неотвеченные вопросы, иначе сразу ready.
         pending = [q for q in ex.templates()[state["sphere"]]["questions"] if q["id"] not in state["answers"]]
         if pending:
             return {"type": "questions", "text": TEXTS["template"],

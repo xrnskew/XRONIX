@@ -53,8 +53,8 @@
       "all_fields_exact": 0.9439
     },
     "latency_ms": {
-      "mean": 5.79,
-      "p95": 4.05
+      "mean": 5.98,
+      "p95": 4.34
     }
   },
   "errors": [

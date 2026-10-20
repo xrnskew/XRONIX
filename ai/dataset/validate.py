@@ -18,6 +18,11 @@ def load(name):
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def _template_texts(sphere) -> list:
+    from .consult import question_for
+    return [question_for(sphere, q)["text"] for q in TEMPLATES[sphere]["questions"]]
+
+
 def check_consult(ex) -> list:
     errs = schema_errors("consult", "request", ex["request"]) + schema_errors("consult", "response", ex["response"])
     req, resp = ex["request"], ex["response"]
@@ -66,6 +71,20 @@ def check_consult(ex) -> list:
         errs.append(f"own_funds_rub={st['own_funds_rub']} человек не называл")
     if resp["type"] == "questions" and len(resp["questions"]) > 4:
         errs.append("больше 4 вопросов")
+    # История — то, что видел человек: у каждой реплики ассистента есть вопросы (и варианты у choice).
+    assistant = [h["content"] for h in req["history"] if h["role"] == "assistant"]
+    if any("?" not in a for a in assistant):
+        errs.append("в history реплика ассистента без вопросов")
+    # Нельзя «подтвердить» сферу, которую никто не предлагал: предложение должно быть в запросе.
+    if before["sphere"] is None and st["sphere"] and ex.get("scenario") == "confirm_nearest" \
+            and not any("Ближе всего по расчёту" in a for a in assistant):
+        errs.append("подтверждение сферы без предложения в history")
+    # Анкету — не больше одного раунда: если её вопросы уже есть в истории, второй раз не спрашиваем.
+    if sphere in TEMPLATES and resp["type"] == "questions":
+        ids = {q["id"] for q in TEMPLATES[sphere]["questions"]}
+        asked_before = any(qid_text in a for a in assistant for qid_text in _template_texts(sphere))
+        if asked_before and any(q["id"] in ids for q in resp["questions"]):
+            errs.append("второй раунд анкеты")
     if len({q["id"] for q in resp.get("questions", [])}) != len(resp.get("questions", [])):
         errs.append("повтор id вопроса")
     return errs

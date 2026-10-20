@@ -14,13 +14,13 @@ parse_need: точность каждого поля (null тоже значен
 import argparse
 import importlib
 import json
-import re
 import statistics
 import sys
 import time
 from collections import Counter, defaultdict
 
-from .baseline import parse_amount
+from app.rules.text import amounts
+
 from .common import RESULTS_DIR, schema_errors
 from .validate import PROMISE, load
 
@@ -52,25 +52,52 @@ def run_predictions(rows, predictor=None, predictions=None):
     return preds, latency
 
 
+def visible_texts(pred) -> list:
+    """Всё, что увидит человек: текст ответа, тексты вопросов и варианты. Мусор вместо ответа — пустой список."""
+    if not isinstance(pred, dict):
+        return []
+    out = [pred["text"]] if isinstance(pred.get("text"), str) else []
+    questions = pred.get("questions")
+    for q in questions if isinstance(questions, list) else []:
+        if isinstance(q, dict):
+            out += [q["text"]] if isinstance(q.get("text"), str) else []
+            out += [o for o in q.get("options") or [] if isinstance(o, str)] if isinstance(q.get("options"), list) else []
+    return out
+
+
+def money_in(text: str) -> list:
+    """Денежные суммы в тексте: цифрами («1 500 000», «500 ₽»), сокращениями («800к», «1,5 млн») и словами
+    («восемьсот тысяч рублей»). Площадь, люди, машины, сроки и проценты деньгами не считаются (app/rules/text.amounts)."""
+    return [value for value, _, _, _ in amounts(text)]
+
+
 def invented_amounts(ex, pred) -> list:
-    """Суммы в ответе, которых человек не называл: в своих деньгах state и в тексте ответа."""
+    """Суммы в ответе, которых человек не называл: свои деньги и денежные ответы анкеты в state, суммы во всех
+    видимых текстах. Повторить сумму человека можно, назвать новую — нет."""
     allowed = set(ex["meta"]["user_amounts"])
     if ex["request"]["state"]["own_funds_rub"] is not None:
         allowed.add(ex["request"]["state"]["own_funds_rub"])
+    allowed |= {v for k, v in ex["request"]["state"]["answers"].items() if k.endswith("_rub")}
     found = []
-    own = pred.get("state", {}).get("own_funds_rub")
-    if own is not None and own not in allowed:
+    state = pred.get("state") if isinstance(pred, dict) and isinstance(pred.get("state"), dict) else {}
+    own = state.get("own_funds_rub")
+    if isinstance(own, (int, float)) and not isinstance(own, bool) and own not in allowed:
         found.append(own)
-    texts = [pred.get("text", "")] + [q.get("text", "") for q in pred.get("questions", []) or []]
-    for t in texts:
-        amount = parse_amount(t)
-        if amount is not None and amount not in allowed:
-            found.append(amount)
-        for n in re.findall(r"\d[\d ]{3,}", t):
-            v = int(n.replace(" ", ""))
-            if v >= 1000 and v not in allowed and v not in found:
-                found.append(v)
+    answers = state.get("answers") if isinstance(state.get("answers"), dict) else {}
+    found += [v for k, v in answers.items() if k.endswith("_rub") and isinstance(v, (int, float)) and v not in allowed]
+    for t in visible_texts(pred):
+        found += [v for v in money_in(t) if v not in allowed and v not in found]
     return found
+
+
+def promises_credit(pred) -> bool:
+    return any(PROMISE.search(t) for t in visible_texts(pred))
+
+
+def usable(pred, schema_file):
+    """Ответ годится для сравнения полей, только если это объект без ошибки и он проходит схему контракта.
+    None, число, строка, список, {}, кривой вложенный state — ошибка схемы и всех полей, прогон не падает."""
+    return isinstance(pred, dict) and "__error__" not in pred and not schema_errors(schema_file, "response", pred)
 
 
 def eval_consult(rows, preds):
@@ -82,8 +109,8 @@ def eval_consult(rows, preds):
     by_rule = defaultdict(lambda: [0, 0])
     errors = []
     for ex in rows:
-        gold, pred = ex["response"], preds.get(ex["id"], {})
-        valid = "__error__" not in pred and not schema_errors("consult", "response", pred)
+        gold, pred = ex["response"], preds.get(ex["id"])
+        valid = usable(pred, "consult")
         invalid += not valid
         pst = pred.get("state", {}) if valid else {}
         gst = gold["state"]
@@ -100,9 +127,9 @@ def eval_consult(rows, preds):
         kv_tp += len(g_kv & p_kv)
         kv_fp += len(p_kv - g_kv)
         kv_fn += len(g_kv - p_kv)
-        if valid and invented_amounts(ex, pred):
+        if invented_amounts(ex, pred):  # и в невалидном ответе: человек увидит текст в любом случае
             invented += 1
-        if valid and any(PROMISE.search(t) for t in [pred.get("text", "")]):
+        if promises_credit(pred):
             promises += 1
         if gold["type"] == "message":
             msg_total += 1
@@ -116,7 +143,7 @@ def eval_consult(rows, preds):
         if not good and len(errors) < 10:
             errors.append({"id": ex["id"], "scenario": ex["scenario"], "message": ex["request"]["message"][:300],
                            "state_in": ex["request"]["state"], "gold": {"type": gold["type"], "state": gst},
-                           "pred": {"type": pred.get("type"), "state": pst} if valid else pred})
+                           "pred": {"type": pred.get("type"), "state": pst} if valid else repr(pred)[:300]})
     p = kv_tp / (kv_tp + kv_fp) if kv_tp + kv_fp else 1.0
     r = kv_tp / (kv_tp + kv_fn) if kv_tp + kv_fn else 1.0
     metrics = {
@@ -140,8 +167,8 @@ def eval_need(rows, preds):
     present_ok = Counter()
     errors = []
     for ex in rows:
-        gold, pred = ex["response"], preds.get(ex["id"], {})
-        valid = "__error__" not in pred and not schema_errors("parse-need", "response", pred)
+        gold, pred = ex["response"], preds.get(ex["id"])
+        valid = usable(pred, "parse-need")
         invalid += not valid
         all_ok = True
         for f in NEED_FIELDS:
@@ -155,7 +182,7 @@ def eval_need(rows, preds):
         if not all_ok and len(errors) < 10:
             errors.append({"id": ex["id"], "text": ex["request"]["text"],
                            "gold": {f: gold[f] for f in NEED_FIELDS},
-                           "pred": {f: pred.get(f) for f in NEED_FIELDS} if valid else pred})
+                           "pred": {f: pred.get(f) for f in NEED_FIELDS} if valid else repr(pred)[:300]})
     acc = {f: round(ok[f] / n, 4) for f in NEED_FIELDS}
     metrics = {
         "n": n, "schema_valid": round(1 - invalid / n, 4),

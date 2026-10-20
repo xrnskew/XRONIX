@@ -160,10 +160,12 @@ def complete(state: dict) -> bool:
 # ---------- Ожидаемый ответ по правилам ----------
 
 def expected(prev: dict, facts: dict, flag: str = None, rng: random.Random = None, proposal: str = None,
-             unknown_sphere: bool = False, sums_question: bool = False) -> dict:
+             unknown_sphere: bool = False, sums_question: bool = False, template_asked: bool = False) -> dict:
     """prev — state до сообщения; facts — что человек сообщил: sphere/city/own_funds_rub/answers (поправки тоже).
     flag: offtopic | greeting | role | credit — ответ message, state без изменений.
     proposal: код ближайшей сферы, которую надо предложить (бизнес не из списка).
+    template_asked: в history уже есть вопросы анкеты шаблона. Определяется по истории, а не по полноте state:
+    полный state сам по себе не значит, что анкету уже спрашивали.
     unknown_sphere: бизнес ни на что не похож — просим выбрать из списка."""
     rng = rng or random.Random(0)
     if flag:
@@ -201,8 +203,8 @@ def expected(prev: dict, facts: dict, flag: str = None, rng: random.Random = Non
         text = rng.choice(TEXTS["sums_incomplete"] if sums_question else TEXTS["core"])
         return {"type": "questions", "text": text, "questions": [CORE_QUESTIONS[k] for k in missing], "state": state}
 
-    if not complete(prev):
-        # Основное стало известно только сейчас: один раунд вопросов анкеты.
+    if not template_asked:
+        # Анкету ещё не спрашивали (по истории): один раунд вопросов. Он необязателен — если всё уже известно, сразу ready.
         pending = [q for q in template_questions(state["sphere"]) if q["id"] not in state["answers"]]
         if pending:
             return {"type": "questions", "text": rng.choice(TEXTS["template"]),
@@ -278,12 +280,13 @@ def pick_answer_value(q: dict, rng, out_of_range: bool = False):
     return min(max(v, lo), hi)
 
 
-def render_assistant(resp: dict, rng) -> str:
-    """Как ответ ассистента лежит в history: текст, иногда с вопросами списком."""
-    text = resp["text"]
-    if resp.get("questions") and rng.random() < 0.5:
-        text += "\n" + "\n".join(q["text"] for q in resp["questions"])
-    return text
+def render_assistant(resp: dict) -> str:
+    """Ответ ассистента в history — ровно то, что видел человек: текст, затем каждый вопрос и его варианты
+    в исходном порядке. Без вопросов в истории нельзя понять, на что человек отвечает «да» или «20»."""
+    lines = [resp["text"]]
+    for q in resp.get("questions") or []:
+        lines.append(q["text"] + (f" Варианты: {' / '.join(q['options'])}" if q.get("options") else ""))
+    return "\n".join(lines)
 
 
 def qa_message(pairs: list) -> str:
@@ -635,7 +638,7 @@ class Seed:
         return expected(self.prev, self.facts, flag=flag, rng=rng,
                         proposal=self.proposal if self.scenario == "nearest" else None,
                         unknown_sphere=self.scenario == "no_near" or (self.scenario == "confirm_nearest" and not self.yes),
-                        sums_question=getattr(self, "sums", False))
+                        sums_question=getattr(self, "sums", False), template_asked=self.history_kind == "template")
 
     def _history(self, rng) -> list:
         """Правдоподобная история, согласованная с prev: что человек говорил и что спрашивал консультант."""
@@ -659,7 +662,7 @@ class Seed:
         else:
             prior = {"type": "questions", "text": rng.choice(TEXTS["template"]),
                      "questions": [question_for(prev["sphere"], q) for q in self.asked]}
-        hist = [{"role": "user", "content": surface(first, rng)}, {"role": "assistant", "content": render_assistant(prior, rng)}]
+        hist = [{"role": "user", "content": surface(first, rng)}, {"role": "assistant", "content": render_assistant(prior)}]
         self.prior_questions = prior.get("questions", [])
         return hist
 
@@ -714,7 +717,10 @@ class Seed:
                 elif key == "city":
                     ph = rng.choice([self.facts["city"], city_phrase(self.facts["city"], rng, "in"), city_phrase(self.facts["city"], rng, "plain")])
                 else:
-                    ph, p = funds_answer(self.facts["own_funds_rub"], rng)
+                    # В строке «Вопрос? Ответ» сумма может быть голой; в свободном тексте — только с «своих / есть»,
+                    # иначе непонятно, что это свои деньги.
+                    in_pair = qa and "own_funds" in asked
+                    ph, p = funds_answer(self.facts["own_funds_rub"], rng) if in_pair else funds_phrase(self.facts["own_funds_rub"], rng)
                     prot += p
                 qid = {"sphere": "sphere", "city": "city", "own_funds_rub": "own_funds"}[key]
                 if qa and qid in asked:
