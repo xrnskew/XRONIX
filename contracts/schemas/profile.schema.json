@@ -12,6 +12,7 @@
     "city": { "type": ["string", "null"], "maxLength": 60 },
     "experience": { "type": ["string", "null"], "maxLength": 60 },
     "budget_rub": { "type": ["integer", "null"], "minimum": 0 },
-    "tags": { "type": "array", "maxItems": 12, "items": { "type": "string", "minLength": 1, "maxLength": 30 } }
+    "tags": { "type": "array", "maxItems": 12, "items": { "type": "string", "minLength": 1, "maxLength": 30 } },
+    "role": { "enum": ["client", "analyst"], "description": "v2. Нет поля = client (старые записи)" }
   }
 }

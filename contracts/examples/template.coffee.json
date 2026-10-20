@@ -1,0 +1,58 @@
+{
+  "sphere": "coffee",
+  "title": "Кофейня",
+  "questions": [
+    {
+      "id": "format",
+      "text": "Формат",
+      "kind": "choice",
+      "default": "to_go",
+      "options": [
+        {
+          "value": "to_go",
+          "label": "Кофе с собой"
+        },
+        {
+          "value": "cafe",
+          "label": "Кафе с посадкой"
+        }
+      ]
+    },
+    {
+      "id": "area_m2",
+      "text": "Площадь помещения",
+      "kind": "number",
+      "unit": "м²",
+      "default": 15,
+      "min": 6,
+      "max": 200
+    },
+    {
+      "id": "guests_per_day",
+      "text": "Гостей в день, когда точка раскрутится",
+      "kind": "number",
+      "unit": "чел.",
+      "default": 180,
+      "min": 20,
+      "max": 2000
+    },
+    {
+      "id": "avg_check_rub",
+      "text": "Средний чек",
+      "kind": "number",
+      "unit": "₽",
+      "default": 280,
+      "min": 100,
+      "max": 3000
+    },
+    {
+      "id": "staff",
+      "text": "Сотрудников",
+      "kind": "number",
+      "unit": "чел.",
+      "default": 3,
+      "min": 1,
+      "max": 30
+    }
+  ]
+}

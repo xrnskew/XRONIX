@@ -1,0 +1,267 @@
+{
+  "id": "a-1",
+  "number": "Z-2026-000101",
+  "status": "approved",
+  "status_info": {
+    "title": "Одобрено",
+    "now": "Банк готов выдать кредит на условиях ниже.",
+    "action": "Проверьте условия и примите их или откажитесь."
+  },
+  "version": 6,
+  "created_at": "2026-10-20T18:00:00Z",
+  "updated_at": "2026-10-20T18:06:00Z",
+  "company": {
+    "id": "c-north",
+    "registry": {
+      "inn": "7715881399",
+      "ogrn": "1227798698797",
+      "name": "ООО «Северная выпечка»",
+      "kind": "ul",
+      "status": "active",
+      "registered_at": "2022-03-15",
+      "okved": {
+        "code": "10.71",
+        "name": "Производство хлеба и хлебобулочных изделий недлительного хранения"
+      },
+      "address": "г. Москва, ул. Синтетическая, д. 1",
+      "head_name": "Орлова Елена Викторовна",
+      "source": "mock-egrul v1"
+    },
+    "member_role": "director",
+    "authority_confirmed": true,
+    "business_months": 55
+  },
+  "product_id": "fast",
+  "purpose": "equipment",
+  "amount_rub": 1500000,
+  "term_months": 24,
+  "plan_id": null,
+  "financials": {
+    "revenue_12m_rub": 24000000,
+    "expenses_12m_rub": 19200000,
+    "loan_payments_monthly_rub": 40000
+  },
+  "collateral": null,
+  "consent_bki": true,
+  "documents": [],
+  "missing_fields": [],
+  "info_request": null,
+  "offer": {
+    "id": "o-1",
+    "kind": "approve",
+    "product_id": "fast",
+    "amount_rub": 1500000,
+    "term_months": 24,
+    "rate_percent": 23.5,
+    "monthly_payment_rub": 78933,
+    "total_payment_rub": 1894385,
+    "explanation": [
+      "Заявка одобрена на запрошенных условиях.",
+      "Ставка — базовая для продукта: кредитная оценка высокая."
+    ],
+    "schedule": [
+      {
+        "month": 1,
+        "payment_rub": 78933,
+        "principal_rub": 49558,
+        "interest_rub": 29375,
+        "balance_rub": 1450442
+      },
+      {
+        "month": 2,
+        "payment_rub": 78933,
+        "principal_rub": 50529,
+        "interest_rub": 28404,
+        "balance_rub": 1399913
+      },
+      {
+        "month": 3,
+        "payment_rub": 78933,
+        "principal_rub": 51518,
+        "interest_rub": 27415,
+        "balance_rub": 1348395
+      },
+      {
+        "month": 4,
+        "payment_rub": 78933,
+        "principal_rub": 52527,
+        "interest_rub": 26406,
+        "balance_rub": 1295868
+      },
+      {
+        "month": 5,
+        "payment_rub": 78933,
+        "principal_rub": 53556,
+        "interest_rub": 25377,
+        "balance_rub": 1242312
+      },
+      {
+        "month": 6,
+        "payment_rub": 78933,
+        "principal_rub": 54604,
+        "interest_rub": 24329,
+        "balance_rub": 1187708
+      },
+      {
+        "month": 7,
+        "payment_rub": 78933,
+        "principal_rub": 55674,
+        "interest_rub": 23259,
+        "balance_rub": 1132034
+      },
+      {
+        "month": 8,
+        "payment_rub": 78933,
+        "principal_rub": 56764,
+        "interest_rub": 22169,
+        "balance_rub": 1075270
+      },
+      {
+        "month": 9,
+        "payment_rub": 78933,
+        "principal_rub": 57876,
+        "interest_rub": 21057,
+        "balance_rub": 1017394
+      },
+      {
+        "month": 10,
+        "payment_rub": 78933,
+        "principal_rub": 59009,
+        "interest_rub": 19924,
+        "balance_rub": 958385
+      },
+      {
+        "month": 11,
+        "payment_rub": 78933,
+        "principal_rub": 60165,
+        "interest_rub": 18768,
+        "balance_rub": 898220
+      },
+      {
+        "month": 12,
+        "payment_rub": 78933,
+        "principal_rub": 61343,
+        "interest_rub": 17590,
+        "balance_rub": 836877
+      },
+      {
+        "month": 13,
+        "payment_rub": 78933,
+        "principal_rub": 62544,
+        "interest_rub": 16389,
+        "balance_rub": 774333
+      },
+      {
+        "month": 14,
+        "payment_rub": 78933,
+        "principal_rub": 63769,
+        "interest_rub": 15164,
+        "balance_rub": 710564
+      },
+      {
+        "month": 15,
+        "payment_rub": 78933,
+        "principal_rub": 65018,
+        "interest_rub": 13915,
+        "balance_rub": 645546
+      },
+      {
+        "month": 16,
+        "payment_rub": 78933,
+        "principal_rub": 66291,
+        "interest_rub": 12642,
+        "balance_rub": 579255
+      },
+      {
+        "month": 17,
+        "payment_rub": 78933,
+        "principal_rub": 67589,
+        "interest_rub": 11344,
+        "balance_rub": 511666
+      },
+      {
+        "month": 18,
+        "payment_rub": 78933,
+        "principal_rub": 68913,
+        "interest_rub": 10020,
+        "balance_rub": 442753
+      },
+      {
+        "month": 19,
+        "payment_rub": 78933,
+        "principal_rub": 70262,
+        "interest_rub": 8671,
+        "balance_rub": 372491
+      },
+      {
+        "month": 20,
+        "payment_rub": 78933,
+        "principal_rub": 71638,
+        "interest_rub": 7295,
+        "balance_rub": 300853
+      },
+      {
+        "month": 21,
+        "payment_rub": 78933,
+        "principal_rub": 73041,
+        "interest_rub": 5892,
+        "balance_rub": 227812
+      },
+      {
+        "month": 22,
+        "payment_rub": 78933,
+        "principal_rub": 74472,
+        "interest_rub": 4461,
+        "balance_rub": 153340
+      },
+      {
+        "month": 23,
+        "payment_rub": 78933,
+        "principal_rub": 75930,
+        "interest_rub": 3003,
+        "balance_rub": 77410
+      },
+      {
+        "month": 24,
+        "payment_rub": 78926,
+        "principal_rub": 77410,
+        "interest_rub": 1516,
+        "balance_rub": 0
+      }
+    ],
+    "status": "pending"
+  },
+  "decline": null,
+  "timeline": [
+    {
+      "status": "draft",
+      "at": "2026-10-20T18:00:00Z",
+      "actor": "client",
+      "text": "Создан черновик"
+    },
+    {
+      "status": "submitted",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "client",
+      "text": "Заявка подана"
+    },
+    {
+      "status": "checking",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "system",
+      "text": "Проверяем данные компании"
+    },
+    {
+      "status": "scoring",
+      "at": "2026-10-20T18:06:00Z",
+      "actor": "system",
+      "text": "Проверки пройдены"
+    },
+    {
+      "status": "approved",
+      "at": "2026-10-20T18:06:00Z",
+      "actor": "system",
+      "text": "Заявка одобрена"
+    }
+  ]
+}

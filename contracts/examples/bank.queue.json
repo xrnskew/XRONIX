@@ -1,0 +1,15 @@
+[
+  {
+    "id": "a-9",
+    "number": "Z-2026-000109",
+    "status": "manual_review",
+    "company_name": "ООО «Вектор Логистик»",
+    "inn": "7768151886",
+    "product_id": "secured",
+    "amount_rub": 12000000,
+    "term_months": 60,
+    "grade": "A",
+    "submitted_at": "2026-10-20T18:02:00Z",
+    "waiting_minutes": 47
+  }
+]

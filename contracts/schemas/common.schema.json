@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/common.schema.json",
+  "title": "Общие типы конвейера v2",
+  "description": "Справочники кодов. Тексты к ним лежат в dictionaries.json.",
+  "definitions": {
+    "rub": { "type": "integer", "minimum": 0 },
+    "rub_or_null": { "type": ["integer", "null"], "minimum": 0 },
+    "uuid": { "type": "string", "minLength": 1 },
+    "datetime": { "type": "string", "format": "date-time" },
+    "date": { "type": "string", "format": "date" },
+    "inn": { "type": "string", "pattern": "^([0-9]{10}|[0-9]{12})$" },
+    "purpose": { "enum": ["working_capital", "equipment", "new_location", "new_direction", "real_estate", "refinance"] },
+    "sphere": { "enum": ["coffee", "bakery", "car_wash", "clothing_store", "beauty_salon", "pickup_point", "other"] },
+    "member_role": { "enum": ["owner", "director", "cfo", "accountant", "employee"] },
+    "collateral_kind": { "enum": ["real_estate", "equipment", "vehicle", "goods"] },
+    "product_id": { "enum": ["fast", "secured", "mortgage", "revolving"] },
+    "status": { "enum": ["draft", "submitted", "checking", "info_requested", "scoring", "manual_review", "approved", "counter_offer", "signing", "funded", "declined", "withdrawn", "cancelled"] },
+    "actor": { "enum": ["client", "system", "analyst"] },
+    "check_kind": { "enum": ["completeness", "egrul", "fns", "bki"] },
+    "check_result": { "enum": ["ok", "warn", "fail", "error"] },
+    "grade": { "enum": ["A", "B", "C", "D"] },
+    "decision_kind": { "enum": ["approve", "counter", "decline", "request_info"] },
+    "info_request_kind": { "enum": ["authority_document", "financials", "collateral", "other"] },
+    "decline_reason": { "enum": ["company_inactive", "business_too_young", "overdue_90", "tax_debt", "head_disqualified", "low_score", "high_debt_load", "analyst_decision"] },
+    "company_status": { "enum": ["active", "liquidating", "liquidated", "bankrupt"] },
+    "company_kind": { "enum": ["ip", "ul"] }
+  }
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "a-1",
+    "number": "Z-2026-000101",
+    "status": "approved",
+    "status_title": "Одобрено",
+    "company_name": "ООО «Северная выпечка»",
+    "product_id": "fast",
+    "amount_rub": 1500000,
+    "updated_at": "2026-10-20T18:06:00Z"
+  },
+  {
+    "id": "a-2",
+    "number": "Z-2026-000102",
+    "status": "draft",
+    "status_title": "Черновик",
+    "company_name": "ООО «Северная выпечка»",
+    "product_id": "fast",
+    "amount_rub": 1500000,
+    "updated_at": "2026-10-20T18:00:00Z"
+  },
+  {
+    "id": "a-3",
+    "number": "Z-2026-000103",
+    "status": "declined",
+    "status_title": "Отказ",
+    "company_name": "ИП Соколова Мария Игоревна",
+    "product_id": "fast",
+    "amount_rub": 600000,
+    "updated_at": "2026-10-20T18:06:00Z"
+  },
+  {
+    "id": "a-4",
+    "number": "Z-2026-000104",
+    "status": "info_requested",
+    "status_title": "Нужны данные",
+    "company_name": "ООО «Альфа-Сервис Плюс»",
+    "product_id": "fast",
+    "amount_rub": 900000,
+    "updated_at": "2026-10-20T18:06:00Z"
+  }
+]

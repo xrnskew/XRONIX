@@ -413,7 +413,7 @@ flowchart LR
   "city": "Казань",
   "amount_rub": 1500000,
   "term_months": null,
-  "collateral": null,
+  "has_collateral": null,
   "confidence": { "purpose": 0.94, "sphere": 0.97, "city": 0.99, "amount_rub": 0.9 }
 }
 ```

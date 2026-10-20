@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/integrations.schema.json",
+  "title": "Backend ↔ integrations-mock",
+  "description": "Смоделированные внешние системы. Описание: integrations.md",
+  "definitions": {
+    "egrul": { "$ref": "conveyor.schema.json#/definitions/registry_company" },
+    "fns": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inn", "mass_address", "tax_debt_rub", "head_disqualified", "source"],
+      "properties": {
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "mass_address": { "type": "boolean" },
+        "tax_debt_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "head_disqualified": { "type": "boolean" },
+        "source": { "type": "string" }
+      }
+    },
+    "bki_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inn", "consent"],
+      "properties": {
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "consent": { "const": true }
+      }
+    },
+    "bki_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inn", "has_history", "history_months", "loans", "overdue_30_24m", "overdue_90_12m", "source"],
+      "properties": {
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "has_history": { "type": "boolean" },
+        "history_months": { "type": "integer", "minimum": 0 },
+        "loans": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["lender", "monthly_payment_rub", "balance_rub"],
+            "properties": {
+              "lender": { "type": "string" },
+              "monthly_payment_rub": { "$ref": "common.schema.json#/definitions/rub" },
+              "balance_rub": { "$ref": "common.schema.json#/definitions/rub" }
+            }
+          }
+        },
+        "overdue_30_24m": { "type": "integer", "minimum": 0, "description": "Сколько раз была просрочка 30+ дней за 24 мес." },
+        "overdue_90_12m": { "type": "integer", "minimum": 0, "description": "Сколько раз была просрочка 90+ дней за 12 мес." },
+        "source": { "type": "string" }
+      }
+    }
+  }
+}

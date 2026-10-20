@@ -1,0 +1,15 @@
+{
+  "inn": "7715881399",
+  "has_history": true,
+  "history_months": 36,
+  "loans": [
+    {
+      "lender": "Синтетический банк",
+      "monthly_payment_rub": 40000,
+      "balance_rub": 620000
+    }
+  ],
+  "overdue_30_24m": 0,
+  "overdue_90_12m": 0,
+  "source": "mock-bki v1"
+}

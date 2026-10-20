@@ -1,0 +1,11 @@
+{
+  "kind": "request_info",
+  "version": 7,
+  "info_items": [
+    {
+      "kind": "collateral",
+      "text": "Уточните оценочную стоимость грузовиков в залоге."
+    }
+  ],
+  "comment": ""
+}

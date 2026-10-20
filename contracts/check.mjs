@@ -61,9 +61,90 @@ const negative = [
   ['reply.plan.ai.json', id('reply')],
 ]
 
+// ---- v2: конвейер ----
+const def = (file, d) => `https://xronix/schemas/${file}.schema.json#/definitions/${d}`
+cases.push(
+  ['need.request.json', def('parse-need', 'request')],
+  ['need.response.json', def('parse-need', 'response')],
+  ['need.empty.json', def('parse-need', 'response')],
+  ['registry.company.json', def('conveyor', 'registry_company')],
+  ['company.json', def('conveyor', 'company')],
+  ['company.create.json', def('conveyor', 'company_create')],
+  ['match.request.json', def('conveyor', 'match_request')],
+  ['match.response.json', def('conveyor', 'match_response')],
+  ['application.create.json', def('conveyor', 'application_draft')],
+  ['application.patch.json', def('conveyor', 'application_draft')],
+  ['application.draft.json', def('conveyor', 'application')],
+  ['application.approved.json', def('conveyor', 'application')],
+  ['application.declined.json', def('conveyor', 'application')],
+  ['application.info_requested.json', def('conveyor', 'application')],
+  ['template.coffee.json', def('conveyor', 'template')],
+  ['plan.calc.request.json', def('conveyor', 'plan_calc_request')],
+  ['bank.application.json', def('bank', 'bank_application')],
+  ['decision.counter.json', def('bank', 'decision_request')],
+  ['decision.request_info.json', def('bank', 'decision_request')],
+  ['bank.stats.json', def('bank', 'stats')],
+  ['fns.json', def('integrations', 'fns')],
+  ['bki.request.json', def('integrations', 'bki_request')],
+  ['bki.report.json', def('integrations', 'bki_report')],
+)
+for (const [file, d] of [['application.list.json', def('conveyor', 'application_list_item')], ['feed.json', def('conveyor', 'feed_item')], ['bank.queue.json', def('bank', 'queue_item')]])
+  read(`./examples/${file}`).forEach((_, i) => cases.push([`${file}#${i}`, d]))
+
+// Контрольные суммы ИНН и ОГРН по алгоритму ФНС. Бэкенд и мок проверяют так же.
+export function validInn(inn) {
+  const d = [...inn].map(Number)
+  const sum = (w, n) => w.reduce((s, k, i) => s + k * d[i], 0) % 11 % 10
+  if (d.length === 10) return sum([2, 4, 10, 3, 5, 9, 4, 6, 8], 9) === d[9]
+  if (d.length === 12) return sum([7, 2, 4, 10, 3, 5, 9, 4, 6, 8]) === d[10] && sum([3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8]) === d[11]
+  return false
+}
+export function validOgrn(ogrn) {
+  if (ogrn.length === 13) return Number(BigInt(ogrn.slice(0, 12)) % 11n % 10n) === Number(ogrn[12])
+  if (ogrn.length === 15) return Number(BigInt(ogrn.slice(0, 14)) % 13n % 10n) === Number(ogrn[14])
+  return false
+}
+
+// График аннуитета: платёж по формуле, последний платёж закрывает остаток, итог = сумма платежей.
+export function checkOffer(o) {
+  const e = []
+  if (annuity(o.amount_rub, o.rate_percent, o.term_months) !== o.monthly_payment_rub) e.push('monthly_payment_rub не по формуле аннуитета')
+  if (o.schedule.length !== o.term_months) e.push('в графике не term_months строк')
+  if (o.schedule.reduce((s, r) => s + r.principal_rub, 0) !== o.amount_rub) e.push('сумма principal_rub != amount_rub')
+  if (o.schedule.at(-1)?.balance_rub !== 0) e.push('остаток после последнего платежа не 0')
+  if (o.schedule.reduce((s, r) => s + r.payment_rub, 0) !== o.total_payment_rub) e.push('total_payment_rub != сумма платежей')
+  o.schedule.forEach((r, i) => { if (r.payment_rub !== r.principal_rub + r.interest_rub) e.push(`schedule[${i}]: payment != principal + interest`) })
+  return e
+}
+
 let bad = 0
+const fail = (msg) => { bad++; console.error(`FAIL ${msg}`) }
+const inns = []
+const walk = (v) => { if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === 'object') { if (typeof v.inn === 'string') inns.push(v); Object.values(v).forEach(walk) } }
+for (const f of readdirSync(new URL('./examples/', import.meta.url))) walk(read(`./examples/${f}`))
+for (const c of inns) {
+  if (!validInn(c.inn)) fail(`ИНН ${c.inn} не проходит контрольную сумму`)
+  if (c.ogrn && !validOgrn(c.ogrn)) fail(`ОГРН ${c.ogrn} не проходит контрольную сумму`)
+}
+console.log(`ok   контрольные суммы: ${inns.length} записей с ИНН`)
+for (const f of ['application.approved.json']) { const errs = checkOffer(read(`./examples/${f}`).offer); if (errs.length) fail(`${f}: ${errs}`); else console.log(`ok   график ${f}`) }
+const sc = read('./examples/bank.application.json').scoring
+if (sc.score !== Math.min(100, Math.max(0, 50 + sc.factors.reduce((s, f) => s + f.points, 0)))) fail('scoring.score != 50 + сумма факторов (в рамках 0–100)')
+else console.log('ok   скоринг в примере')
+const dict = read('./dictionaries.json'), common = read('./schemas/common.schema.json').definitions
+for (const [k, enumName] of [['statuses', 'status'], ['purposes', 'purpose'], ['spheres', 'sphere'], ['member_roles', 'member_role'], ['collateral_kinds', 'collateral_kind'], ['info_request_kinds', 'info_request_kind'], ['decline_reasons', 'decline_reason']]) {
+  const a = Object.keys(dict[k]).sort().join(), b = [...common[enumName].enum].sort().join()
+  if (a !== b) fail(`dictionaries.${k} не совпадает с common.${enumName}`)
+}
+console.log('ok   справочники совпадают со схемами')
+for (const f of ['need.response.json', 'need.empty.json']) {
+  const n = read(`./examples/${f}`)
+  for (const k of Object.keys(n.confidence)) if (n[k] === null) fail(`${f}: confidence.${k} при значении null`)
+}
+
+const example = (name) => { const [file, i] = name.split('#'); const v = read(`./examples/${file}`); return i === undefined ? v : v[Number(i)] }
 for (const [file, schema] of cases) {
-  const ok = ajv.validate(schema, read(`./examples/${file}`))
+  const ok = ajv.validate(schema, example(file))
   if (!ok) { bad++; console.error(`FAIL ${file} -> ${schema}\n`, ajv.errors) } else console.log(`ok   ${file}`)
 }
 for (const [file, schema] of negative) {

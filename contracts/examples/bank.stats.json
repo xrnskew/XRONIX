@@ -1,0 +1,10 @@
+{
+  "by_status": {
+    "manual_review": 3,
+    "approved": 4,
+    "declined": 2,
+    "funded": 5
+  },
+  "auto_decision_share": 0.71,
+  "avg_minutes_to_decision": 38.5
+}

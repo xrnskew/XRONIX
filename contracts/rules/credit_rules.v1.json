@@ -1,0 +1,77 @@
+{
+  "version": "credit_rules.v1",
+  "comment": "Все значения синтетические, для демонстрации логики конвейера. Описание: docs/CONVEYOR.md, раздел 6.",
+  "applicable_products": ["fast", "secured"],
+  "checks": {
+    "max_amount_to_revenue": 2.0,
+    "stage_delay_seconds": { "min": 2, "max": 4 }
+  },
+  "stop_factors": {
+    "inactive_statuses": ["liquidating", "liquidated", "bankrupt"],
+    "min_business_months_from_product": true,
+    "overdue_90_12m_max": 0,
+    "tax_debt_max_rub": 100000,
+    "head_disqualified": true
+  },
+  "scoring": {
+    "base": 50,
+    "min": 0,
+    "max": 100,
+    "business_age": [
+      { "max_months": 11, "points": 0, "label": "9–12 мес." },
+      { "max_months": 35, "points": 8, "label": "1–3 года" },
+      { "max_months": null, "points": 15, "label": "больше 3 лет" }
+    ],
+    "debt_load": [
+      { "max_percent": 30, "points": 15 },
+      { "max_percent": 50, "points": 5 },
+      { "max_percent": 70, "points": -10 },
+      { "max_percent": null, "points": -25 }
+    ],
+    "debt_load_no_profit_points": -25,
+    "new_project_profit_share": 0.5,
+    "credit_history": {
+      "clean_min_months": 12,
+      "clean": 15,
+      "no_history": 0,
+      "overdue_30": -15,
+      "short_clean": 0
+    },
+    "amount_to_revenue": [
+      { "max_ratio": 0.25, "points": 5 },
+      { "max_ratio": 0.5, "points": 0 },
+      { "max_ratio": 1.0, "points": -5 },
+      { "max_ratio": null, "points": -15 }
+    ],
+    "collateral": { "full_coverage": 10, "partial": 5, "none": 0 },
+    "mass_address": -10,
+    "small_tax_debt": -10,
+    "industry": {
+      "default": 0,
+      "by_okved_prefix": {
+        "56": -5,
+        "47": -5,
+        "96": -5,
+        "45": 0,
+        "49": 0,
+        "52": 0,
+        "10": 0,
+        "62": 5,
+        "86": 5
+      }
+    },
+    "grades": [
+      { "grade": "A", "min_score": 75 },
+      { "grade": "B", "min_score": 60 },
+      { "grade": "C", "min_score": 45 },
+      { "grade": "D", "min_score": 0 }
+    ]
+  },
+  "decision": {
+    "auto_approve_max_amount_rub": 5000000,
+    "max_debt_load_percent": 50,
+    "rate_premium_by_grade": { "A": 0, "B": 1.5, "C": 3, "D": null },
+    "counter_offer_grades": ["A", "B"],
+    "amount_round_to_rub": 10000
+  }
+}

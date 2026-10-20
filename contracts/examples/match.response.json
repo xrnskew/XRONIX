@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "product_id": "fast",
+      "name": "Кредит одной суммой без залога",
+      "eligible": true,
+      "can_apply": true,
+      "reasons": [],
+      "rate_from_percent": 23.5,
+      "monthly_payment_rub": 78933,
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    },
+    {
+      "product_id": "secured",
+      "name": "Кредит одной суммой с залогом",
+      "eligible": false,
+      "can_apply": true,
+      "reasons": [
+        "Нужен залог: недвижимость, оборудование или транспорт."
+      ],
+      "rate_from_percent": 21.5,
+      "monthly_payment_rub": 77447,
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    },
+    {
+      "product_id": "mortgage",
+      "name": "Бизнес-ипотека",
+      "eligible": false,
+      "can_apply": false,
+      "reasons": [
+        "Подходит только для покупки недвижимости.",
+        "Заявку на этот продукт в демо оформляет менеджер банка."
+      ],
+      "rate_from_percent": 23,
+      "monthly_payment_rub": null,
+      "url": "https://alfabank.ru/sme/profits/businessipoteka/"
+    },
+    {
+      "product_id": "revolving",
+      "name": "Возобновляемая кредитная линия с залогом",
+      "eligible": false,
+      "can_apply": false,
+      "reasons": [
+        "Нужен залог.",
+        "Линия для пополнения оборота, а не для покупки оборудования."
+      ],
+      "rate_from_percent": null,
+      "monthly_payment_rub": null,
+      "url": "https://alfabank.ru/sme/profits/businesscredit/"
+    }
+  ]
+}

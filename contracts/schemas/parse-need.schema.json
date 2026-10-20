@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/parse-need.schema.json",
+  "title": "POST /ai/parse-need",
+  "description": "Модель Дани разбирает свободный текст предпринимателя в поля мастера потребности. Решения не принимает, деньги не считает.",
+  "definitions": {
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1, "maxLength": 2000 }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "sphere", "city", "amount_rub", "term_months", "has_collateral", "confidence"],
+      "properties": {
+        "purpose": { "anyOf": [{ "$ref": "common.schema.json#/definitions/purpose" }, { "type": "null" }] },
+        "sphere": { "anyOf": [{ "$ref": "common.schema.json#/definitions/sphere" }, { "type": "null" }] },
+        "city": { "type": ["string", "null"], "maxLength": 60, "description": "Как в cities.json фронта, в именительном падеже" },
+        "amount_rub": { "type": ["integer", "null"], "minimum": 1000, "maximum": 1000000000 },
+        "term_months": { "type": ["integer", "null"], "minimum": 1, "maximum": 360 },
+        "has_collateral": { "type": ["boolean", "null"] },
+        "confidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Уверенность 0..1 только для полей, которые не null",
+          "properties": {
+            "purpose": { "type": "number", "minimum": 0, "maximum": 1 },
+            "sphere": { "type": "number", "minimum": 0, "maximum": 1 },
+            "city": { "type": "number", "minimum": 0, "maximum": 1 },
+            "amount_rub": { "type": "number", "minimum": 0, "maximum": 1 },
+            "term_months": { "type": "number", "minimum": 0, "maximum": 1 },
+            "has_collateral": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "purpose": "new_location",
+  "sphere": "bakery",
+  "city": "Казань",
+  "amount_rub": 1500000,
+  "term_months": 24,
+  "has_collateral": null,
+  "confidence": {
+    "purpose": 0.93,
+    "sphere": 0.97,
+    "city": 0.99,
+    "amount_rub": 0.88,
+    "term_months": 0.81
+  }
+}

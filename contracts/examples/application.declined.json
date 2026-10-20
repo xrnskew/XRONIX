@@ -1,0 +1,86 @@
+{
+  "id": "a-3",
+  "number": "Z-2026-000103",
+  "status": "declined",
+  "status_info": {
+    "title": "Отказ",
+    "now": "Банк не может выдать кредит по этой заявке.",
+    "action": "Посмотрите причины и что можно сделать."
+  },
+  "version": 4,
+  "created_at": "2026-10-20T18:00:00Z",
+  "updated_at": "2026-10-20T18:06:00Z",
+  "company": {
+    "id": "c-sok",
+    "registry": {
+      "inn": "776846978815",
+      "ogrn": "326770932081968",
+      "name": "ИП Соколова Мария Игоревна",
+      "kind": "ip",
+      "status": "active",
+      "registered_at": "2026-05-12",
+      "okved": {
+        "code": "96.02",
+        "name": "Предоставление услуг парикмахерскими и салонами красоты"
+      },
+      "address": "г. Москва",
+      "head_name": "Соколова Мария Игоревна",
+      "source": "mock-egrul v1"
+    },
+    "member_role": "owner",
+    "authority_confirmed": true,
+    "business_months": 5
+  },
+  "product_id": "fast",
+  "purpose": "equipment",
+  "amount_rub": 600000,
+  "term_months": 24,
+  "plan_id": null,
+  "financials": {
+    "revenue_12m_rub": 1800000,
+    "expenses_12m_rub": 1300000,
+    "loan_payments_monthly_rub": 0
+  },
+  "collateral": null,
+  "consent_bki": true,
+  "documents": [],
+  "missing_fields": [],
+  "info_request": null,
+  "offer": null,
+  "decline": {
+    "reasons": [
+      {
+        "code": "business_too_young",
+        "text": "Бизнес работает меньше 9 месяцев, а продукт требует не меньше.",
+        "advice": "Подайте заявку после 12.02.2027. Пока рассмотрите собственные средства или программы поддержки МСП."
+      }
+    ],
+    "comment": null
+  },
+  "timeline": [
+    {
+      "status": "draft",
+      "at": "2026-10-20T18:00:00Z",
+      "actor": "client",
+      "text": "Создан черновик"
+    },
+    {
+      "status": "submitted",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "client",
+      "text": "Заявка подана"
+    },
+    {
+      "status": "checking",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "system",
+      "text": "Проверяем данные компании"
+    },
+    {
+      "status": "declined",
+      "at": "2026-10-20T18:06:00Z",
+      "actor": "system",
+      "text": "Банк не может выдать кредит"
+    }
+  ]
+}

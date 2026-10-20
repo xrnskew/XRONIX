@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "financials": {
+    "revenue_12m_rub": 24000000,
+    "expenses_12m_rub": 19200000,
+    "loan_payments_monthly_rub": 40000
+  },
+  "consent_bki": true
+}

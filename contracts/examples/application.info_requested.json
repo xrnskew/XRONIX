@@ -1,0 +1,85 @@
+{
+  "id": "a-4",
+  "number": "Z-2026-000104",
+  "status": "info_requested",
+  "status_info": {
+    "title": "Нужны данные",
+    "now": "Для решения банку не хватает информации.",
+    "action": "Ответьте на запрос банка: что нужно, указано ниже."
+  },
+  "version": 4,
+  "created_at": "2026-10-20T18:00:00Z",
+  "updated_at": "2026-10-20T18:06:00Z",
+  "company": {
+    "id": "c-alfa",
+    "registry": {
+      "inn": "7772731777",
+      "ogrn": "1217784864880",
+      "name": "ООО «Альфа-Сервис Плюс»",
+      "kind": "ul",
+      "status": "active",
+      "registered_at": "2021-09-01",
+      "okved": {
+        "code": "82.99",
+        "name": "Деятельность по предоставлению прочих вспомогательных услуг для бизнеса"
+      },
+      "address": "г. Москва, ул. Массовая, д. 5",
+      "head_name": "Ким Олег Борисович",
+      "source": "mock-egrul v1"
+    },
+    "member_role": "accountant",
+    "authority_confirmed": false,
+    "business_months": 61
+  },
+  "product_id": "fast",
+  "purpose": "equipment",
+  "amount_rub": 900000,
+  "term_months": 24,
+  "plan_id": null,
+  "financials": {
+    "revenue_12m_rub": 24000000,
+    "expenses_12m_rub": 19200000,
+    "loan_payments_monthly_rub": 40000
+  },
+  "collateral": null,
+  "consent_bki": true,
+  "documents": [],
+  "missing_fields": [],
+  "info_request": {
+    "items": [
+      {
+        "kind": "authority_document",
+        "text": "Загрузите доверенность или приказ, который даёт вам право подавать заявку от имени компании."
+      }
+    ],
+    "comment": null
+  },
+  "offer": null,
+  "decline": null,
+  "timeline": [
+    {
+      "status": "draft",
+      "at": "2026-10-20T18:00:00Z",
+      "actor": "client",
+      "text": "Создан черновик"
+    },
+    {
+      "status": "submitted",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "client",
+      "text": "Заявка подана"
+    },
+    {
+      "status": "checking",
+      "at": "2026-10-20T18:05:00Z",
+      "actor": "system",
+      "text": "Проверяем данные компании"
+    },
+    {
+      "status": "info_requested",
+      "at": "2026-10-20T18:06:00Z",
+      "actor": "system",
+      "text": "Нужен документ о полномочиях"
+    }
+  ]
+}

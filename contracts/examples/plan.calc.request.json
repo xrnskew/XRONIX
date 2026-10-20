@@ -1,0 +1,12 @@
+{
+  "sphere": "coffee",
+  "city": "Казань",
+  "own_funds_rub": 500000,
+  "answers": {
+    "format": "to_go",
+    "area_m2": 15,
+    "guests_per_day": 180,
+    "avg_check_rub": 280,
+    "staff": 3
+  }
+}

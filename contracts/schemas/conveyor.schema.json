@@ -1,0 +1,313 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/conveyor.schema.json",
+  "title": "Конвейер v2: сторона клиента",
+  "description": "Тела запросов и ответов /api для клиента. Описание методов: conveyor.md",
+  "definitions": {
+    "registry_company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inn", "ogrn", "name", "kind", "status", "registered_at", "okved", "address", "head_name", "source"],
+      "properties": {
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "ogrn": { "type": "string", "pattern": "^([0-9]{13}|[0-9]{15})$" },
+        "name": { "type": "string" },
+        "kind": { "$ref": "common.schema.json#/definitions/company_kind" },
+        "status": { "$ref": "common.schema.json#/definitions/company_status" },
+        "registered_at": { "$ref": "common.schema.json#/definitions/date" },
+        "okved": {
+          "type": "object", "additionalProperties": false, "required": ["code", "name"],
+          "properties": { "code": { "type": "string" }, "name": { "type": "string" } }
+        },
+        "address": { "type": "string" },
+        "head_name": { "type": "string" },
+        "source": { "type": "string", "description": "Например mock-egrul v1" }
+      }
+    },
+    "company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "registry", "member_role", "authority_confirmed", "business_months"],
+      "properties": {
+        "id": { "$ref": "common.schema.json#/definitions/uuid" },
+        "registry": { "$ref": "#/definitions/registry_company" },
+        "member_role": { "$ref": "common.schema.json#/definitions/member_role" },
+        "authority_confirmed": { "type": "boolean", "description": "true для owner/director или после загрузки доверенности" },
+        "business_months": { "type": "integer", "minimum": 0, "description": "Полных месяцев с регистрации, считает бэкенд" }
+      }
+    },
+    "company_create": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inn", "member_role"],
+      "properties": {
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "member_role": { "$ref": "common.schema.json#/definitions/member_role" }
+      }
+    },
+    "collateral": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "description", "value_rub"],
+      "properties": {
+        "kind": { "$ref": "common.schema.json#/definitions/collateral_kind" },
+        "description": { "type": "string", "maxLength": 300 },
+        "value_rub": { "$ref": "common.schema.json#/definitions/rub" }
+      }
+    },
+    "match_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "amount_rub", "term_months", "has_collateral"],
+      "properties": {
+        "purpose": { "$ref": "common.schema.json#/definitions/purpose" },
+        "amount_rub": { "type": "integer", "minimum": 10000 },
+        "term_months": { "type": "integer", "minimum": 1, "maximum": 360 },
+        "has_collateral": { "type": "boolean" },
+        "company_id": { "type": ["string", "null"] },
+        "plan_id": { "type": ["string", "null"] }
+      }
+    },
+    "match_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product_id", "name", "eligible", "can_apply", "reasons", "rate_from_percent", "monthly_payment_rub", "url"],
+      "properties": {
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "name": { "type": "string" },
+        "eligible": { "type": "boolean", "description": "Подходит по сумме, сроку, залогу и стажу" },
+        "can_apply": { "type": "boolean", "description": "Заявку в MVP можно подать только на fast и secured" },
+        "reasons": { "type": "array", "items": { "type": "string" }, "description": "Почему не подходит, понятным языком. Пусто, если подходит" },
+        "rate_from_percent": { "type": ["number", "null"] },
+        "monthly_payment_rub": { "$ref": "common.schema.json#/definitions/rub_or_null" },
+        "url": { "type": "string", "format": "uri" }
+      }
+    },
+    "match_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items"],
+      "properties": { "items": { "type": "array", "items": { "$ref": "#/definitions/match_item" } } }
+    },
+    "financials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revenue_12m_rub", "expenses_12m_rub", "loan_payments_monthly_rub"],
+      "properties": {
+        "revenue_12m_rub": { "$ref": "common.schema.json#/definitions/rub_or_null" },
+        "expenses_12m_rub": { "$ref": "common.schema.json#/definitions/rub_or_null" },
+        "loan_payments_monthly_rub": { "$ref": "common.schema.json#/definitions/rub_or_null", "description": "Сумма платежей по текущим кредитам в месяц, со слов клиента" }
+      }
+    },
+    "application_draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "POST /api/applications (обязательны company_id и product_id) и PATCH /api/applications/{id} (любое подмножество + version)",
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "company_id": { "type": "string" },
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "purpose": { "$ref": "common.schema.json#/definitions/purpose" },
+        "amount_rub": { "type": "integer", "minimum": 10000 },
+        "term_months": { "type": "integer", "minimum": 1, "maximum": 360 },
+        "plan_id": { "type": ["string", "null"] },
+        "financials": { "$ref": "#/definitions/financials" },
+        "collateral": { "anyOf": [{ "$ref": "#/definitions/collateral" }, { "type": "null" }] },
+        "consent_bki": { "type": "boolean" },
+        "info_response": { "type": ["string", "null"], "maxLength": 2000, "description": "Ответ клиента на запрос данных, только в статусе info_requested" }
+      }
+    },
+    "schedule_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["month", "payment_rub", "principal_rub", "interest_rub", "balance_rub"],
+      "properties": {
+        "month": { "type": "integer", "minimum": 1 },
+        "payment_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "principal_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "interest_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "balance_rub": { "$ref": "common.schema.json#/definitions/rub" }
+      }
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "product_id", "amount_rub", "term_months", "rate_percent", "monthly_payment_rub", "total_payment_rub", "explanation", "schedule", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "enum": ["approve", "counter"] },
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "amount_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "term_months": { "type": "integer", "minimum": 1 },
+        "rate_percent": { "type": "number", "minimum": 0 },
+        "monthly_payment_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "total_payment_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "explanation": { "type": "array", "items": { "type": "string" }, "description": "Почему такие условия. Для counter обязательно объяснить, что изменилось" },
+        "schedule": { "type": "array", "items": { "$ref": "#/definitions/schedule_item" } },
+        "status": { "enum": ["pending", "accepted", "rejected"] }
+      }
+    },
+    "decline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reasons"],
+      "properties": {
+        "reasons": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["code", "text", "advice"],
+            "properties": {
+              "code": { "$ref": "common.schema.json#/definitions/decline_reason" },
+              "text": { "type": "string" },
+              "advice": { "type": "string" }
+            }
+          }
+        },
+        "comment": { "type": ["string", "null"], "description": "Комментарий аналитика, если отказ ручной" }
+      }
+    },
+    "info_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items", "comment"],
+      "properties": {
+        "items": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["kind", "text"],
+            "properties": { "kind": { "$ref": "common.schema.json#/definitions/info_request_kind" }, "text": { "type": "string" } }
+          }
+        },
+        "comment": { "type": ["string", "null"] }
+      }
+    },
+    "timeline_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "at", "actor", "text"],
+      "properties": {
+        "status": { "$ref": "common.schema.json#/definitions/status" },
+        "at": { "$ref": "common.schema.json#/definitions/datetime" },
+        "actor": { "$ref": "common.schema.json#/definitions/actor" },
+        "text": { "type": "string" }
+      }
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "filename", "uploaded_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "$ref": "common.schema.json#/definitions/info_request_kind" },
+        "filename": { "type": "string" },
+        "uploaded_at": { "$ref": "common.schema.json#/definitions/datetime" }
+      }
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "number", "status", "status_info", "version", "created_at", "updated_at", "company", "product_id", "purpose", "amount_rub", "term_months", "plan_id", "financials", "collateral", "consent_bki", "documents", "missing_fields", "info_request", "offer", "decline", "timeline"],
+      "properties": {
+        "id": { "type": "string" },
+        "number": { "type": "string", "pattern": "^Z-[0-9]{4}-[0-9]{6}$" },
+        "status": { "$ref": "common.schema.json#/definitions/status" },
+        "status_info": {
+          "type": "object", "additionalProperties": false, "required": ["title", "now", "action"],
+          "properties": { "title": { "type": "string" }, "now": { "type": "string" }, "action": { "type": ["string", "null"] } }
+        },
+        "version": { "type": "integer", "minimum": 1 },
+        "created_at": { "$ref": "common.schema.json#/definitions/datetime" },
+        "updated_at": { "$ref": "common.schema.json#/definitions/datetime" },
+        "company": { "$ref": "#/definitions/company" },
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "purpose": { "$ref": "common.schema.json#/definitions/purpose" },
+        "amount_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "term_months": { "type": "integer", "minimum": 1 },
+        "plan_id": { "type": ["string", "null"] },
+        "financials": { "$ref": "#/definitions/financials" },
+        "collateral": { "anyOf": [{ "$ref": "#/definitions/collateral" }, { "type": "null" }] },
+        "consent_bki": { "type": "boolean" },
+        "documents": { "type": "array", "items": { "$ref": "#/definitions/document" } },
+        "missing_fields": { "type": "array", "items": { "type": "string" }, "description": "Пути полей, без которых нельзя подать, например financials.revenue_12m_rub. Пусто вне draft" },
+        "info_request": { "anyOf": [{ "$ref": "#/definitions/info_request" }, { "type": "null" }], "description": "Не null только в info_requested" },
+        "offer": { "anyOf": [{ "$ref": "#/definitions/offer" }, { "type": "null" }], "description": "Текущие условия: approved, counter_offer, signing, funded" },
+        "decline": { "anyOf": [{ "$ref": "#/definitions/decline" }, { "type": "null" }] },
+        "timeline": { "type": "array", "items": { "$ref": "#/definitions/timeline_item" } }
+      }
+    },
+    "application_list_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "number", "status", "status_title", "company_name", "product_id", "amount_rub", "updated_at"],
+      "properties": {
+        "id": { "type": "string" },
+        "number": { "type": "string" },
+        "status": { "$ref": "common.schema.json#/definitions/status" },
+        "status_title": { "type": "string" },
+        "company_name": { "type": "string" },
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "amount_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "updated_at": { "$ref": "common.schema.json#/definitions/datetime" }
+      }
+    },
+    "feed_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "title", "text", "application_id", "created_at", "read"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "enum": ["status_change", "info_request", "offer", "tip"] },
+        "title": { "type": "string" },
+        "text": { "type": "string" },
+        "application_id": { "type": ["string", "null"] },
+        "created_at": { "$ref": "common.schema.json#/definitions/datetime" },
+        "read": { "type": "boolean" }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sphere", "title", "questions"],
+      "properties": {
+        "sphere": { "$ref": "common.schema.json#/definitions/sphere" },
+        "title": { "type": "string" },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "text", "kind", "default"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "text": { "type": "string" },
+              "kind": { "enum": ["number", "choice"] },
+              "unit": { "type": ["string", "null"] },
+              "default": { "type": ["number", "string"] },
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "options": { "type": "array", "items": { "type": "object", "required": ["value", "label"], "properties": { "value": { "type": "string" }, "label": { "type": "string" } } } }
+            }
+          }
+        }
+      }
+    },
+    "plan_calc_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sphere", "city", "own_funds_rub", "answers"],
+      "properties": {
+        "sphere": { "$ref": "common.schema.json#/definitions/sphere" },
+        "city": { "type": "string", "minLength": 1 },
+        "own_funds_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "answers": { "type": "object", "additionalProperties": { "type": ["number", "string"] } }
+      }
+    },
+    "plan_calc_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan_id", "plan"],
+      "properties": {
+        "plan_id": { "type": "string" },
+        "plan": { "$ref": "plan.schema.json" }
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xronix/schemas/bank.schema.json",
+  "title": "Конвейер v2: рабочее место аналитика",
+  "definitions": {
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "result", "summary", "details", "source", "checked_at"],
+      "properties": {
+        "kind": { "$ref": "common.schema.json#/definitions/check_kind" },
+        "result": { "$ref": "common.schema.json#/definitions/check_result" },
+        "summary": { "type": "string", "description": "Одна строка для аналитика: «Компания действует, 4 года»" },
+        "details": { "type": "object", "description": "Сырой ответ мока или список ошибок полноты" },
+        "source": { "type": "string" },
+        "checked_at": { "$ref": "common.schema.json#/definitions/datetime" }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "grade", "factors", "debt_load_percent", "rules_version"],
+      "properties": {
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "grade": { "$ref": "common.schema.json#/definitions/grade" },
+        "factors": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["code", "name", "value_text", "points"],
+            "properties": {
+              "code": { "type": "string" },
+              "name": { "type": "string" },
+              "value_text": { "type": "string" },
+              "points": { "type": "integer" }
+            }
+          }
+        },
+        "debt_load_percent": { "type": ["number", "null"] },
+        "rules_version": { "type": "string" }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "text"],
+      "properties": {
+        "kind": { "$ref": "common.schema.json#/definitions/decision_kind" },
+        "text": { "type": "string" },
+        "amount_rub": { "$ref": "common.schema.json#/definitions/rub_or_null" },
+        "term_months": { "type": ["integer", "null"] },
+        "rate_percent": { "type": ["number", "null"] }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "from_status", "to_status", "actor", "actor_name", "reason", "at"],
+      "properties": {
+        "id": { "type": "string" },
+        "from_status": { "anyOf": [{ "$ref": "common.schema.json#/definitions/status" }, { "type": "null" }] },
+        "to_status": { "$ref": "common.schema.json#/definitions/status" },
+        "actor": { "$ref": "common.schema.json#/definitions/actor" },
+        "actor_name": { "type": "string" },
+        "reason": { "type": ["string", "null"] },
+        "at": { "$ref": "common.schema.json#/definitions/datetime" }
+      }
+    },
+    "queue_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "number", "status", "company_name", "inn", "product_id", "amount_rub", "term_months", "grade", "submitted_at", "waiting_minutes"],
+      "properties": {
+        "id": { "type": "string" },
+        "number": { "type": "string" },
+        "status": { "$ref": "common.schema.json#/definitions/status" },
+        "company_name": { "type": "string" },
+        "inn": { "$ref": "common.schema.json#/definitions/inn" },
+        "product_id": { "$ref": "common.schema.json#/definitions/product_id" },
+        "amount_rub": { "$ref": "common.schema.json#/definitions/rub" },
+        "term_months": { "type": "integer" },
+        "grade": { "anyOf": [{ "$ref": "common.schema.json#/definitions/grade" }, { "type": "null" }] },
+        "submitted_at": { "anyOf": [{ "$ref": "common.schema.json#/definitions/datetime" }, { "type": "null" }] },
+        "waiting_minutes": { "type": "integer", "minimum": 0, "description": "Сколько заявка в текущем статусе" }
+      }
+    },
+    "bank_application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["application", "applicant", "checks", "scoring", "recommendation", "events"],
+      "properties": {
+        "application": { "$ref": "conveyor.schema.json#/definitions/application" },
+        "applicant": {
+          "type": "object", "additionalProperties": false, "required": ["name", "email", "member_role"],
+          "properties": { "name": { "type": "string" }, "email": { "type": "string" }, "member_role": { "$ref": "common.schema.json#/definitions/member_role" } }
+        },
+        "checks": { "type": "array", "items": { "$ref": "#/definitions/check" } },
+        "scoring": { "anyOf": [{ "$ref": "#/definitions/scoring" }, { "type": "null" }] },
+        "recommendation": { "anyOf": [{ "$ref": "#/definitions/recommendation" }, { "type": "null" }] },
+        "events": { "type": "array", "items": { "$ref": "#/definitions/event" } }
+      }
+    },
+    "decision_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "version", "comment"],
+      "properties": {
+        "kind": { "$ref": "common.schema.json#/definitions/decision_kind" },
+        "version": { "type": "integer", "minimum": 1 },
+        "amount_rub": { "type": "integer", "minimum": 10000, "description": "approve/counter; по умолчанию запрошенная сумма" },
+        "term_months": { "type": "integer", "minimum": 1 },
+        "rate_percent": { "type": "number", "minimum": 0, "description": "Не ниже rateFrom продукта" },
+        "decline_reasons": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/decline_reason" } },
+        "info_items": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["kind", "text"],
+            "properties": { "kind": { "$ref": "common.schema.json#/definitions/info_request_kind" }, "text": { "type": "string" } }
+          }
+        },
+        "comment": { "type": "string", "maxLength": 2000, "description": "Обязательно непустой для decline и counter" }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_status", "auto_decision_share", "avg_minutes_to_decision"],
+      "properties": {
+        "by_status": { "type": "object", "additionalProperties": { "type": "integer" } },
+        "auto_decision_share": { "type": "number", "minimum": 0, "maximum": 1 },
+        "avg_minutes_to_decision": { "type": ["number", "null"] }
+      }
+    }
+  }
+}
