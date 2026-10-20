@@ -69,6 +69,7 @@ export interface Profile {
   experience: string | null
   budget_rub: number | null
   tags: string[]
+  role?: 'client' | 'analyst' // v2, нет поля = client
 }
 
 export interface Answer {

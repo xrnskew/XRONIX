@@ -23,13 +23,14 @@ export async function request<T>(method: string, path: string, body?: unknown, t
   const ctl = new AbortController()
   const timer = setTimeout(() => ctl.abort(), timeoutMs)
   const version = authVersion
+  const form = body instanceof FormData // файлы: браузер сам ставит multipart с границей
   let res: Response
   try {
     res = await fetch(`${BASE}/api${path}`, {
       method,
-      headers: { 'Content-Type': 'application/json', 'X-Session-Mode': 'cookie' },
+      headers: form ? { 'X-Session-Mode': 'cookie' } : { 'Content-Type': 'application/json', 'X-Session-Mode': 'cookie' },
       credentials: 'include',
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined ? undefined : form ? body : JSON.stringify(body),
       signal: ctl.signal,
     })
   } catch (e) {

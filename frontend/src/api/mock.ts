@@ -25,6 +25,7 @@ export const mockApi: Api = {
   async login({ email }) {
     await delay()
     user = email === mockProfile.email ? { ...mockProfile, id: 'u_demo' } : { id: uid(), email, name: email.split('@')[0], city: null, experience: null, budget_rub: null, tags: [] }
+    if (email.startsWith('analyst@')) user = { ...user, role: 'analyst' } // в моке аналитик — любой адрес analyst@…
     return session()
   },
   async logout() { setToken(null) },
