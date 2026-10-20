@@ -4,7 +4,9 @@ import type { AppDocument, Application, ApplicationDraft, BankEvent, Check, Comp
 import dict from '../data/dictionaries.json'
 import rules from '../data/credit_rules.v1.json'
 import { validInn } from '../lib/inn'
+import { uid } from '../lib/uid'
 import { allProducts, businessMonths, decide, declineText, matchProducts, payment, rateFor, schedule, score, stopFactors, type Input } from '../lib/creditRules'
+import { DEMO_CLIENT } from './demoAccounts'
 import { DEMO_FOUNDER_INN, demoFinancials, external, personExternal } from './mockData'
 import { parseNeedText } from '../lib/parseText'
 import { CalcError, calculatePlan, templates } from '../lib/projectCalc'
@@ -15,7 +17,6 @@ import { findMockPlan, mockUser, mockUserName, registerMockPlan } from './mock'
 // Мок конвейера в памяти: те же вызовы и ответы, что в /contracts/conveyor.md. Заявка проходит этапы сама по таймеру,
 // ручное рассмотрение ждёт решения аналитика в /bank. При запуске очередь засеяна заявками во всех статусах (раздел 12 CONVEYOR.md).
 const delay = (ms = 350) => new Promise((r) => setTimeout(r, ms))
-const uid = () => crypto.randomUUID()
 let clockShift = 0 // засев «в прошлом»: у засеянных заявок реалистичное время ожидания
 const now = () => new Date(Date.now() - clockShift).toISOString()
 let instant = false
@@ -167,7 +168,7 @@ function newRec(b: ApplicationDraft & { company_id: string; product_id: Rec['pro
     collateral: b.collateral ?? null, consent_bki: b.consent_bki ?? false, documents: [], info_request: null, offer: null, decline: null, info_response: null,
     timeline: [{ status: 'draft', at: t, actor: 'client', text: 'Создан черновик' }],
     bank: {
-      applicant: { name: u.name || 'Клиент', email: u.email || 'client@xronix.demo', member_role: company.member_role },
+      applicant: { name: u.name || 'Клиент', email: u.email || DEMO_CLIENT.email, member_role: company.member_role },
       checks: [], scoring: null, recommendation: null, events: [{ id: uid(), from_status: null, to_status: 'draft', actor: 'client', actor_name: u.name || 'Клиент', reason: null, at: t }],
       submitted_at: null, decided_at: null, decided_by: null, status_since: t,
     },
@@ -197,8 +198,8 @@ function seed() {
     const c = addCompanySync(inn, role, future), d = demoFinancials[inn]
     const r = newRec({ company_id: c.id, product_id: d?.product_id ?? 'fast', purpose: d?.purpose, amount_rub: d?.amount_rub, term_months: d?.term_months, financials: d?.financials, collateral: d?.collateral, consent_bki: true })
     Object.assign(r, patch)
-    r.bank.applicant = { name: 'Александр', email: 'demo@xronix.ru', member_role: role }
-    r.bank.events[0].actor_name = 'Александр'
+    r.bank.applicant = { name: DEMO_CLIENT.name, email: DEMO_CLIENT.email, member_role: role }
+    r.bank.events[0].actor_name = DEMO_CLIENT.name
     apps.set(r.id, r)
     move(r, 'submitted', 'client'); runPipeline(r.id)
     after?.(r)
@@ -217,7 +218,7 @@ function seed() {
   clockShift = 9 * 60_000; instant = true; seeding = true
   const founder = addCompanySync(DEMO_FOUNDER_INN, 'owner', true, 'Мария Новикова')
   const fr = newRec({ company_id: founder.id, product_id: 'start', purpose: 'new_location', amount_rub: Math.min(3_000_000, plan.credit.amount_rub ?? 2_000_000), term_months: 36, plan_id: planId, financials: { revenue_12m_rub: null, expenses_12m_rub: null, loan_payments_monthly_rub: 0 }, collateral: { kind: 'guarantor', description: 'Поручитель — супруга, официальный доход', value_rub: 1_500_000 }, consent_bki: true })
-  fr.bank.applicant = { name: 'Мария Новикова', email: 'demo@xronix.ru', member_role: 'owner' }
+  fr.bank.applicant = { name: 'Мария Новикова', email: DEMO_CLIENT.email, member_role: 'owner' }
   fr.bank.events[0].actor_name = 'Мария Новикова'
   apps.set(fr.id, fr); move(fr, 'submitted', 'client'); runPipeline(fr.id)
   clockShift = 0; instant = wasInstant; seeding = false

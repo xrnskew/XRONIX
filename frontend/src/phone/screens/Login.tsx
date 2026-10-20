@@ -3,6 +3,7 @@ import { Button, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import ForgotPassword from './ForgotPassword'
 import { ApiError, USE_MOCKS } from '../../api'
+import { DEMO_ANALYST, DEMO_CLIENT, DEMO_PASSWORD } from '../../api/demoAccounts'
 
 const points = ['План запуска по вашей идее', 'Сколько нужно денег и откуда взять', 'Кредит, который бизнес потянет']
 const field = 'h-[52px] w-full rounded-2xl bg-surface px-4 text-[16px] text-text outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent'
@@ -12,8 +13,8 @@ export default function Login() {
   const wide = useContext(Wide)
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [name, setName] = useState('')
-  const [email, setEmail] = useState(USE_MOCKS ? 'demo@xronix.ru' : '')
-  const [pass, setPass] = useState(USE_MOCKS ? 'demo1234' : '')
+  const [email, setEmail] = useState(USE_MOCKS ? DEMO_CLIENT.email : '')
+  const [pass, setPass] = useState(USE_MOCKS ? DEMO_PASSWORD : '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [forgot, setForgot] = useState(false)
@@ -76,7 +77,7 @@ export default function Login() {
         </button>
         {!reg && <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={() => setForgot(true)}>Забыли пароль?</button>}
         {USE_MOCKS && !reg && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
-        {USE_MOCKS && !reg && wide && <button type="button" disabled={busy} onClick={() => { setBusy(true); signIn('analyst@xronix.demo', 'demo12345').catch(() => setBusy(false)) }} className="h-10 w-full text-[14px] text-muted underline underline-offset-2 hover:text-text">Войти как аналитик банка (демо)</button>}
+        {USE_MOCKS && !reg && wide && <button type="button" disabled={busy} onClick={() => { setBusy(true); signIn(DEMO_ANALYST.email, DEMO_PASSWORD).catch(() => setBusy(false)) }} className="h-10 w-full text-[14px] text-muted underline underline-offset-2 hover:text-text">Войти как аналитик банка (демо)</button>}
       </div>
     </form>
   )

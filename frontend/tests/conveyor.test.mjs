@@ -160,3 +160,14 @@ test('разбор текста: сфера, город, сумма, срок, �
   assert.deepEqual([r.purpose, r.sphere, r.city, r.amount_rub, r.term_months, r.has_collateral], ['new_location', 'bakery', 'Казань', 1_500_000, 24, false])
   assert.equal(parseNeedText('пополнить оборот на 900к').amount_rub, 900_000)
 })
+
+test('демо-учётки мока совпадают с засевом бэкенда и проверяют пароль', async () => {
+  const { demoAccount, DEMO_CLIENT, DEMO_ANALYST } = await import('../src/api/demoAccounts.ts')
+  assert.equal(demoAccount('client@xronix.demo', 'demo12345'), DEMO_CLIENT)
+  assert.equal(demoAccount(' Analyst@xronix.demo', 'demo12345'), DEMO_ANALYST)
+  assert.equal(DEMO_ANALYST.role, 'analyst')
+  assert.equal(demoAccount('client@xronix.demo', 'demo1234'), 'wrong')
+  assert.equal(demoAccount('analyst@other.ru', 'x'), null, 'аналитик — только демо-адрес, как на бэкенде')
+  assert.equal(contract('examples/user.json').email, DEMO_CLIENT.email)
+  assert.equal(contract('examples/bank.application.json').applicant.email, DEMO_CLIENT.email)
+})

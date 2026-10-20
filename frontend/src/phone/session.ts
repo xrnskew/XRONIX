@@ -1,4 +1,5 @@
 import type { AiReply, Answer, ChatDetail, ChatMessage, Plan, PlanRecord, PlanSummary } from '../types/plan'
+import { uid } from '../lib/uid.ts'
 
 export interface SessionApi {
   createChat(): Promise<{ chat_id: string }>
@@ -83,12 +84,12 @@ export class CabinetSession {
     this.update(patch)
   }
 
-  send = async (text: string, answers?: Answer[], retry = false, requestId: string = crypto.randomUUID()) => {
+  send = async (text: string, answers?: Answer[], retry = false, requestId: string = uid()) => {
     const conversation = this.active
     if (conversation.busy || !text.trim()) return
     const generation = this.generation
     if (retry) conversation.messages = conversation.messages.filter((m) => !m.error)
-    else conversation.messages = [...conversation.messages, { id: crypto.randomUUID(), role: 'user', text, answers }]
+    else conversation.messages = [...conversation.messages, { id: uid(), role: 'user', text, answers }]
     conversation.failed = null
     conversation.busy = true
     this.update()
@@ -100,7 +101,7 @@ export class CabinetSession {
       }
       const reply = await this.api.sendMessage(conversation.id, text, answers, requestId)
       if (!this.current(generation)) return
-      conversation.messages = [...conversation.messages, { id: crypto.randomUUID(), role: 'assistant', reply }]
+      conversation.messages = [...conversation.messages, { id: uid(), role: 'assistant', reply }]
       if (this.active === conversation) {
         if (reply.type === 'plan') { this.planRequest++; this.planChatId = conversation.id; this.update({ plan: reply.plan, planId: reply.plan_id, planLoading: false, planError: null }) }
         else this.update()
@@ -108,7 +109,7 @@ export class CabinetSession {
     } catch (e) {
       if (!this.current(generation)) return
       conversation.failed = { text, answers, requestId: e instanceof Error && ['NETWORK', 'TIMEOUT'].includes((e as Error & { code?: string }).code ?? '') ? requestId : undefined }
-      conversation.messages = [...conversation.messages, { id: crypto.randomUUID(), role: 'assistant', text: this.errorText(e), error: true }]
+      conversation.messages = [...conversation.messages, { id: uid(), role: 'assistant', text: this.errorText(e), error: true }]
     } finally {
       if (this.current(generation)) {
         conversation.busy = false
