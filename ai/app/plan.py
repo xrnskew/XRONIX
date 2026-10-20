@@ -104,6 +104,9 @@ def check_plan(p: Plan) -> List[str]:
     for items, total in ((f.startup_items, f.startup_cost_rub), (f.monthly_items, f.monthly_expenses_rub)):
         if sum(row.amount_rub for row in items) != total:
             errors.append("Сумма статей сметы не совпадает с итогом")
+    # Preserve the existing conservative margin guard without fabricating expenses.
+    if f.monthly_revenue_rub > 0 and f.monthly_profit_rub * 100 > f.monthly_revenue_rub * 30:
+        errors.append("Прибыль выше 30% выручки: пересмотрите допущения и статьи расходов")
     gap = max(0, f.startup_cost_rub - f.own_funds_rub)
     if f.funding_gap_rub != gap:
         errors.append(f"funding_gap_rub={f.funding_gap_rub}, а должно быть startup-own={gap}")

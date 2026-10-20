@@ -25,3 +25,17 @@ class BudgetTests(unittest.TestCase):
         from app.plan import BudgetItem
         with self.assertRaises(ValidationError):
             BudgetItem(title='Аренда',amount_rub=-1,assumption='Оценка')
+
+    def test_optimistic_margin_is_rejected_without_fictitious_expenses(self):
+        from types import SimpleNamespace as NS
+        from app.plan import check_plan
+        f=NS(startup_items=[NS(amount_rub=100)],startup_cost_rub=100,
+             monthly_items=[NS(amount_rub=50)],monthly_expenses_rub=50,
+             monthly_revenue_rub=100,monthly_profit_rub=50,own_funds_rub=100,
+             funding_gap_rub=0,revenue_forecast=[NS(month=i) for i in range(1,13)])
+        c=NS(needed=False,amount_rub=None,recommended_term_months=None,estimated_rate_percent=None,
+             monthly_payment_rub=None,debt_load_percent=None,verdict=None,comment='Без кредита')
+        p=NS(finance=f,credit=c,steps=[NS(order=1)])
+        self.assertTrue(any('30%' in error for error in check_plan(p)))
+        f.monthly_revenue_rub=70;f.monthly_profit_rub=20
+        self.assertEqual(check_plan(p),[])
