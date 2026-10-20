@@ -1,0 +1,285 @@
+{
+ "version": "spheres.v1",
+ "spheres": {
+  "coffee": {
+   "title": "Кофейня",
+   "questions": [
+    {
+     "id": "format",
+     "text": "Формат",
+     "kind": "choice",
+     "default": "to_go",
+     "options": [
+      {
+       "value": "to_go",
+       "label": "Кофе с собой"
+      },
+      {
+       "value": "cafe",
+       "label": "Кафе с посадкой"
+      }
+     ]
+    },
+    {
+     "id": "area_m2",
+     "text": "Площадь помещения",
+     "kind": "number",
+     "unit": "м²",
+     "default": 15,
+     "min": 6,
+     "max": 200
+    },
+    {
+     "id": "customers_per_day",
+     "text": "Гостей в день на плановом уровне",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 110,
+     "min": 10,
+     "max": 2000
+    },
+    {
+     "id": "avg_check_rub",
+     "text": "Средний чек",
+     "kind": "number",
+     "unit": "₽",
+     "default": 250,
+     "min": 100,
+     "max": 5000
+    },
+    {
+     "id": "staff",
+     "text": "Сотрудников",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 3,
+     "min": 1,
+     "max": 30
+    }
+   ]
+  },
+  "bakery": {
+   "title": "Пекарня",
+   "questions": [
+    {
+     "id": "area_m2",
+     "text": "Площадь помещения",
+     "kind": "number",
+     "unit": "м²",
+     "default": 40,
+     "min": 15,
+     "max": 300
+    },
+    {
+     "id": "customers_per_day",
+     "text": "Покупателей в день на плановом уровне",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 170,
+     "min": 20,
+     "max": 3000
+    },
+    {
+     "id": "avg_check_rub",
+     "text": "Средний чек",
+     "kind": "number",
+     "unit": "₽",
+     "default": 320,
+     "min": 100,
+     "max": 5000
+    },
+    {
+     "id": "staff",
+     "text": "Сотрудников",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 5,
+     "min": 1,
+     "max": 40
+    }
+   ]
+  },
+  "car_wash": {
+   "title": "Автомойка",
+   "questions": [
+    {
+     "id": "posts",
+     "text": "Моечных постов",
+     "kind": "number",
+     "unit": "шт.",
+     "default": 3,
+     "min": 1,
+     "max": 12
+    },
+    {
+     "id": "area_m2",
+     "text": "Площадь помещения",
+     "kind": "number",
+     "unit": "м²",
+     "default": 200,
+     "min": 60,
+     "max": 1500
+    },
+    {
+     "id": "cars_per_day",
+     "text": "Машин в день на плановом уровне",
+     "kind": "number",
+     "unit": "шт.",
+     "default": 35,
+     "min": 5,
+     "max": 500
+    },
+    {
+     "id": "avg_check_rub",
+     "text": "Средний чек",
+     "kind": "number",
+     "unit": "₽",
+     "default": 950,
+     "min": 300,
+     "max": 10000
+    },
+    {
+     "id": "staff",
+     "text": "Сотрудников",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 4,
+     "min": 1,
+     "max": 40
+    }
+   ]
+  },
+  "clothing_store": {
+   "title": "Магазин одежды",
+   "questions": [
+    {
+     "id": "area_m2",
+     "text": "Площадь магазина",
+     "kind": "number",
+     "unit": "м²",
+     "default": 50,
+     "min": 10,
+     "max": 500
+    },
+    {
+     "id": "customers_per_day",
+     "text": "Покупателей в день на плановом уровне",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 18,
+     "min": 3,
+     "max": 500
+    },
+    {
+     "id": "avg_check_rub",
+     "text": "Средний чек",
+     "kind": "number",
+     "unit": "₽",
+     "default": 3800,
+     "min": 500,
+     "max": 50000
+    },
+    {
+     "id": "staff",
+     "text": "Продавцов",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 3,
+     "min": 1,
+     "max": 20
+    }
+   ]
+  },
+  "beauty_salon": {
+   "title": "Салон красоты",
+   "questions": [
+    {
+     "id": "work_places",
+     "text": "Рабочих мест",
+     "kind": "number",
+     "unit": "шт.",
+     "default": 4,
+     "min": 1,
+     "max": 30
+    },
+    {
+     "id": "area_m2",
+     "text": "Площадь помещения",
+     "kind": "number",
+     "unit": "м²",
+     "default": 45,
+     "min": 15,
+     "max": 400
+    },
+    {
+     "id": "customers_per_day",
+     "text": "Клиентов в день на плановом уровне",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 14,
+     "min": 2,
+     "max": 300
+    },
+    {
+     "id": "avg_check_rub",
+     "text": "Средний чек",
+     "kind": "number",
+     "unit": "₽",
+     "default": 2300,
+     "min": 300,
+     "max": 30000
+    },
+    {
+     "id": "staff",
+     "text": "Сотрудников",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 5,
+     "min": 1,
+     "max": 40
+    }
+   ]
+  },
+  "pickup_point": {
+   "title": "Пункт выдачи заказов",
+   "questions": [
+    {
+     "id": "area_m2",
+     "text": "Площадь помещения",
+     "kind": "number",
+     "unit": "м²",
+     "default": 40,
+     "min": 15,
+     "max": 200
+    },
+    {
+     "id": "orders_per_day",
+     "text": "Заказов в день на плановом уровне",
+     "kind": "number",
+     "unit": "шт.",
+     "default": 300,
+     "min": 20,
+     "max": 3000
+    },
+    {
+     "id": "fee_per_order_rub",
+     "text": "Доход с заказа",
+     "kind": "number",
+     "unit": "₽",
+     "default": 38,
+     "min": 5,
+     "max": 300
+    },
+    {
+     "id": "staff",
+     "text": "Сотрудников",
+     "kind": "number",
+     "unit": "чел.",
+     "default": 2,
+     "min": 1,
+     "max": 10
+    }
+   ]
+  }
+ }
+}

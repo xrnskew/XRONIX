@@ -7,6 +7,10 @@ FastAPI + GigaChat. Контракт: `contracts/ai.md` (пока в ветке 
 | GET | `/ai/health` | `{"status": "ok"}` |
 | POST | `/ai/respond` | GigaChat решает: уточняющие вопросы (3–6), ответ текстом (не по теме, вопрос по плану) или план. Не более 2 раундов вопросов; посторонняя тема возвращается к бизнесу на любом ходе |
 | POST | `/ai/summarize` | Мок: склеивает старую память и сообщения пользователя |
+| POST | `/ai/consult` | Чат подбора бизнеса на правилах, без моделей и ключей: [`app/rules/README.md`](app/rules/README.md) |
+| POST | `/ai/parse-need` | Разбор фразы в поля мастера на правилах, без моделей и ключей: [`app/rules/README.md`](app/rules/README.md) |
+
+Без `GIGACHAT_AUTH_KEY` сервис стартует: `/ai/consult` и `/ai/parse-need` работают, `/ai/respond` отвечает 503.
 
 Ошибки в формате `{"error": {"code", "message"}}`: 503 `AI_UNAVAILABLE`, 502 `AI_BAD_RESPONSE`, 422 `VALIDATION_ERROR`.
 

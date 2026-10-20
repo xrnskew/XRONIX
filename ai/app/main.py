@@ -10,9 +10,14 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from . import service
+from pydantic import ValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from . import config, service
 from .llm import LLM
 from .models import RespondRequest, SummarizeRequest
+from .rules import consult as rules_consult, parse_need as rules_parse_need
+from .rules.models import ConsultRequest, ConsultResponse, ParseNeedRequest, ParseNeedResponse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("ai")
@@ -20,10 +25,16 @@ logger = logging.getLogger("ai")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.llm = LLM()
-    await app.state.llm.warmup()
+    # /ai/consult и /ai/parse-need работают на правилах и не требуют GigaChat.
+    # Без ключа сервис стартует сразу, а v1-метод /ai/respond отвечает 503 AI_UNAVAILABLE.
+    app.state.llm = LLM() if config.AUTH_KEY else None
+    if app.state.llm:
+        await app.state.llm.warmup()
+    else:
+        logger.info("GIGACHAT_AUTH_KEY не задан: /ai/respond недоступен, правиловые методы работают")
     yield
-    await app.state.llm.aclose()
+    if app.state.llm:
+        await app.state.llm.aclose()
 
 
 app = FastAPI(title="XRONIX AI", lifespan=lifespan)
@@ -36,6 +47,14 @@ def error(status: int, code: str, message: str) -> JSONResponse:
 @app.exception_handler(service.AiError)
 async def ai_error(_: Request, exc: service.AiError):
     return error(exc.status, exc.code, exc.message)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_error(_: Request, exc: StarletteHTTPException):
+    # Тело не JSON / не UTF-8, неизвестный путь и т.п. — тоже в формате ошибок контракта.
+    code = {400: "VALIDATION_ERROR", 404: "NOT_FOUND", 405: "METHOD_NOT_ALLOWED"}.get(exc.status_code, "HTTP_ERROR")
+    message = "Некорректный запрос к AI-сервису" if exc.status_code == 400 else str(exc.detail)
+    return error(exc.status_code, code, message)
 
 
 @app.exception_handler(RequestValidationError)
@@ -57,7 +76,37 @@ async def health():
 
 @app.post("/ai/respond")
 async def respond(req: RespondRequest, request: Request):
+    if request.app.state.llm is None:
+        raise service.AiError("AI_UNAVAILABLE")
     return await service.respond(request.app.state.llm, req)
+
+
+def _checked(model, payload: dict) -> dict:
+    """Свой ответ тоже проверяем по контракту: лучше 502, чем невалидный JSON бэкенду."""
+    try:
+        out = model.model_validate(payload).model_dump()
+    except ValidationError as e:
+        logger.error("ответ не по контракту: %s", e.errors()[:3])
+        raise service.AiError("AI_BAD_RESPONSE")
+    if model is ConsultResponse:
+        if out.get("questions") is None:
+            out.pop("questions", None)  # state с null-полями оставляем как есть: схема их требует
+        for q in out.get("questions") or []:
+            if q.get("options") is None:
+                q.pop("options", None)  # у text-вопроса поля options быть не должно
+    return out
+
+
+@app.post("/ai/consult")
+async def consult(req: ConsultRequest):
+    return _checked(ConsultResponse, rules_consult.respond(req.model_dump()))
+
+
+@app.post("/ai/parse-need")
+async def parse_need(req: ParseNeedRequest):
+    out = _checked(ParseNeedResponse, rules_parse_need.parse(req.model_dump()))
+    out["confidence"] = {k: v for k, v in out["confidence"].items() if v is not None}
+    return out
 
 
 @app.post("/ai/summarize")

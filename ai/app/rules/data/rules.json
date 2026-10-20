@@ -1,0 +1,44 @@
+{
+ "version": "credit_rules.v1",
+ "start": {
+  "comment": "Демо-продукт XRONIX для нового бизнеса и будущих ИП (contracts/products.demo.json). Не продукт Альфа-Банка. Значения синтетические.",
+  "plan_required": true,
+  "min_own_share": 0.2,
+  "own_share": [
+   {
+    "min_share": 0.4,
+    "points": 15,
+    "label": "40% и больше"
+   },
+   {
+    "min_share": 0.3,
+    "points": 8,
+    "label": "30–40%"
+   },
+   {
+    "min_share": 0.2,
+    "points": 0,
+    "label": "20–30%"
+   }
+  ],
+  "collateral_or_guarantor_required": true,
+  "plan_profit_share": 0.5,
+  "condition_text": "Условие: зарегистрировать ИП или ООО до подписания договора."
+ },
+ "start_product": {
+  "id": "start",
+  "name": "Старт — кредит на запуск бизнеса",
+  "short": "Для нового бизнеса и будущих ИП по расчёту проекта",
+  "rateFrom": 27.0,
+  "discountRateFrom": null,
+  "amountMin": 100000,
+  "amountMax": 3000000,
+  "termMin": 6,
+  "termMax": 36,
+  "collateral": true,
+  "minBusinessMonths": null,
+  "demo": true,
+  "note": "Демо-продукт XRONIX, не продукт Альфа-Банка. Нужны расчёт проекта, не меньше 20% своих денег и залог или поручитель.",
+  "url": null
+ }
+}

@@ -1,0 +1,5 @@
+jsonschema==4.26.0
+referencing==0.37.0
+pymorphy3==2.0.6
+pymorphy3-dicts-ru==2.4.417150.4580142
+num2words==0.5.14
