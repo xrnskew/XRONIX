@@ -362,10 +362,11 @@ def test_context_history_answers_and_summary(settings):
         assert last['user_context']['tags']==['пользователь']
         assert send(c,h,cid,'план').json()['type']=='plan'
         assert send(c,h,cid,'дальше').status_code==200
-        assert requests[-1][1]['user_context']['memory']=='Факт из диалога'
+        assert requests[-1][1]['user_context']['memory']==''
         tags=requests[-1][1]['user_context']['tags']
         assert len(tags)==len(set(tags)) and len(tags)<=12
-        assert 'пользователь' in tags and 'новый' in tags
+        assert tags == ['пользователь']
+        assert c.get('/api/me', headers=h).json()['tags'] == ['пользователь']
 
 
 def test_no_credit_and_failed_summary_preserves_plan(settings):
@@ -490,3 +491,35 @@ def test_delete_chat_rejects_inflight_ai_across_workers(settings, monkeypatch):
             assert pending.result(timeout=5).status_code == 200
         assert len(sender.get(f'/api/chats/{cid}', headers=h).json()['messages']) == 2
         assert deleter.delete(f'/api/chats/{cid}', headers=h).status_code == 204
+
+
+@pytest.mark.parametrize('manual_tags', [[], ['ручной тег', 'Казань']])
+def test_ai_suggestions_never_edit_profile_tags(settings, manual_tags):
+    seen=[]
+    def handler(request):
+        data=json.loads(request.content)
+        if request.url.path.endswith('summarize'):
+            return httpx.Response(200,json={'memory':'Обсуждали пекарню','tags':['из сводки']})
+        seen.append(data)
+        reply=copy.deepcopy(CONTRACTS.example('reply.plan.ai.json'))
+        reply['plan']['tags_update']=['из плана']
+        return httpx.Response(200,json=reply)
+    with live_client(settings,handler) as c:
+        h=register(c)
+        c.patch('/api/me',headers=h,json={'tags':manual_tags})
+        with c.app.app.state.sessions() as session:
+            session.scalar(select(User)).memory='Пользователь хочет общепит из старого чата'
+            session.commit()
+        cid=chat(c,h)
+        result=send(c,h,cid).json()
+        assert result['type']=='plan' and result['plan']['tags_update']==['из плана']
+        assert seen[-1]['user_context']['tags']==manual_tags
+        assert seen[-1]['user_context']['memory']==''
+        assert c.get('/api/me',headers=h).json()['tags']==manual_tags
+        # A deleted tag stays deleted after another plan and summary.
+        assert c.patch('/api/me',headers=h,json={'tags':[]}).status_code==200
+        other=chat(c,h)
+        assert send(c,h,other).json()['type']=='plan'
+        assert c.get('/api/me',headers=h).json()['tags']==[]
+        # Explicit profile edits remain supported.
+        assert c.patch('/api/me',headers=h,json={'tags':['мой интерес']}).json()['tags']==['мой интерес']

@@ -97,10 +97,6 @@ def profile(user):
     return {key: getattr(user, key) for key in ('id', 'name', 'email', 'city', 'experience', 'budget_rub', 'tags')}
 
 
-def merge_tags(*groups):
-    return list(dict.fromkeys(tag for group in groups for tag in group))[:12]
-
-
 def create_app(settings=None, ai_transport=None):
     settings = settings or Settings()
     key = settings.signing_key()
@@ -235,7 +231,7 @@ def create_app(settings=None, ai_transport=None):
             with sessions() as session:
                 user = session.get(User, user_id)
                 session.execute(update(User).where(User.id == user_id, User.memory == payload['memory'], User.tags == user.tags).values(
-                    memory=result['memory'], tags=merge_tags(user.tags, result['tags'])))
+                    memory=result['memory']))
                 session.commit()
         except Exception as exc:
             logger.warning('Memory summary skipped: %s', type(exc).__name__)
@@ -375,7 +371,7 @@ def create_app(settings=None, ai_transport=None):
                 return cached
             consume(session, 'ai-user', user.id, settings.ai_requests_per_minute)
             consume(session, 'ai-global', 'all', settings.ai_global_per_minute)
-            payload = {'mode': 'chat', 'user_context': {'profile': {k: getattr(user, k) for k in ('name', 'city', 'experience', 'budget_rub')}, 'tags': user.tags, 'memory': user.memory}, 'history': history(recent(session, chat_id, 10)), 'message': body.text}
+            payload = {'mode': 'chat', 'user_context': {'profile': {k: getattr(user, k) for k in ('name', 'city', 'experience', 'budget_rub')}, 'tags': user.tags, 'memory': ''}, 'history': history(recent(session, chat_id, 10)), 'message': body.text}
             if not session.scalar(select(Message.id).where(Message.chat_id == chat_id).limit(1)):
                 chat.title = body.text[:60]
             session.add(Message(chat_id=chat_id, role='user', reply={'type': 'message', 'text': body.text}, answers=[a.model_dump() for a in body.answers]))
@@ -390,8 +386,7 @@ def create_app(settings=None, ai_transport=None):
                 session.add(Plan(id=plan_id, user_id=user.id, chat_id=chat.id, body=reply['plan']))
                 chat.plan_id = plan_id
                 chat.title = reply['plan']['title'][:60]
-                session.refresh(user)
-                user.tags = merge_tags(user.tags, reply['plan']['tags_update'])
+                # AI tag suggestions belong to the plan, never to the profile.
             contracts.validate('reply', reply)
             session.add(Message(chat_id=chat_id, role='assistant', reply=reply))
             chat.updated_at = now()
