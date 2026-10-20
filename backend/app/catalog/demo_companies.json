@@ -1,0 +1,224 @@
+{
+  "7715881399": {
+    "registry": {
+      "inn": "7715881399",
+      "ogrn": "1227798698797",
+      "name": "ООО «Северная выпечка»",
+      "registered_at": "2022-03-15",
+      "kind": "ul",
+      "status": "active",
+      "okved": {
+        "code": "10.71",
+        "name": "Производство хлеба и хлебобулочных изделий недлительного хранения"
+      },
+      "head_name": "Орлова Елена Викторовна",
+      "address": "г. Москва, ул. Синтетическая, д. 1",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "7715881399",
+      "mass_address": false,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "7715881399",
+      "has_history": true,
+      "history_months": 36,
+      "loans": [
+        {
+          "lender": "Синтетический банк",
+          "monthly_payment_rub": 40000,
+          "balance_rub": 600000
+        }
+      ],
+      "overdue_30_24m": 0,
+      "overdue_90_12m": 0,
+      "source": "mock-bki v1"
+    }
+  },
+  "777309114120": {
+    "registry": {
+      "inn": "777309114120",
+      "ogrn": "324777075364552",
+      "name": "ИП Лебедев Андрей Сергеевич",
+      "registered_at": "2024-06-10",
+      "kind": "ip",
+      "status": "active",
+      "okved": {
+        "code": "56.10",
+        "name": "Деятельность ресторанов и услуги по доставке продуктов питания"
+      },
+      "head_name": "Лебедев Андрей Сергеевич",
+      "address": "г. Казань",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "777309114120",
+      "mass_address": false,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "777309114120",
+      "has_history": true,
+      "history_months": 18,
+      "loans": [
+        {
+          "lender": "Синтетический банк",
+          "monthly_payment_rub": 85000,
+          "balance_rub": 1275000
+        }
+      ],
+      "overdue_30_24m": 0,
+      "overdue_90_12m": 0,
+      "source": "mock-bki v1"
+    }
+  },
+  "7768151886": {
+    "registry": {
+      "inn": "7768151886",
+      "ogrn": "1207744729400",
+      "name": "ООО «Вектор Логистик»",
+      "registered_at": "2020-02-01",
+      "kind": "ul",
+      "status": "active",
+      "okved": {
+        "code": "49.41",
+        "name": "Деятельность автомобильного грузового транспорта"
+      },
+      "head_name": "Зайцев Пётр Олегович",
+      "address": "г. Москва, ул. Синтетическая, д. 1",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "7768151886",
+      "mass_address": false,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "7768151886",
+      "has_history": true,
+      "history_months": 60,
+      "loans": [
+        {
+          "lender": "Синтетический банк",
+          "monthly_payment_rub": 150000,
+          "balance_rub": 2250000
+        }
+      ],
+      "overdue_30_24m": 0,
+      "overdue_90_12m": 0,
+      "source": "mock-bki v1"
+    }
+  },
+  "7755761690": {
+    "registry": {
+      "inn": "7755761690",
+      "ogrn": "1237787168970",
+      "name": "ООО «Ромашка Трейд»",
+      "registered_at": "2023-01-20",
+      "kind": "ul",
+      "status": "active",
+      "okved": {
+        "code": "47.19",
+        "name": "Торговля розничная прочая в неспециализированных магазинах"
+      },
+      "head_name": "Белов Игорь Андреевич",
+      "address": "г. Москва, ул. Синтетическая, д. 1",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "7755761690",
+      "mass_address": false,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "7755761690",
+      "has_history": true,
+      "history_months": 30,
+      "loans": [
+        {
+          "lender": "Синтетический банк",
+          "monthly_payment_rub": 60000,
+          "balance_rub": 900000
+        }
+      ],
+      "overdue_30_24m": 2,
+      "overdue_90_12m": 1,
+      "source": "mock-bki v1"
+    }
+  },
+  "776846978815": {
+    "registry": {
+      "inn": "776846978815",
+      "ogrn": "326770932081968",
+      "name": "ИП Соколова Мария Игоревна",
+      "registered_at": "2026-05-12",
+      "kind": "ip",
+      "status": "active",
+      "okved": {
+        "code": "96.02",
+        "name": "Предоставление услуг парикмахерскими и салонами красоты"
+      },
+      "head_name": "Соколова Мария Игоревна",
+      "address": "г. Москва, ул. Синтетическая, д. 1",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "776846978815",
+      "mass_address": false,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "776846978815",
+      "has_history": false,
+      "history_months": 0,
+      "loans": [],
+      "overdue_30_24m": 0,
+      "overdue_90_12m": 0,
+      "source": "mock-bki v1"
+    }
+  },
+  "7772731777": {
+    "registry": {
+      "inn": "7772731777",
+      "ogrn": "1217784864880",
+      "name": "ООО «Альфа-Сервис Плюс»",
+      "registered_at": "2021-09-01",
+      "kind": "ul",
+      "status": "active",
+      "okved": {
+        "code": "82.99",
+        "name": "Деятельность по предоставлению прочих вспомогательных услуг для бизнеса"
+      },
+      "head_name": "Ким Олег Борисович",
+      "address": "г. Москва, ул. Массовая, д. 5",
+      "source": "mock-egrul v1"
+    },
+    "fns": {
+      "inn": "7772731777",
+      "mass_address": true,
+      "tax_debt_rub": 0,
+      "head_disqualified": false,
+      "source": "mock-fns v1"
+    },
+    "bki": {
+      "inn": "7772731777",
+      "has_history": true,
+      "history_months": 24,
+      "loans": [],
+      "overdue_30_24m": 0,
+      "overdue_90_12m": 0,
+      "source": "mock-bki v1"
+    }
+  }
+}

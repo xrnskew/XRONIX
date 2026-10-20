@@ -41,7 +41,8 @@ from .conveyor_migration import CONVEYOR
 
 MIGRATIONS = ((1, 'baseline', BASELINE), (2, 'chat_state_and_limits', (*ADDITIONS, *LIMITS)),
               (3, 'facts_generations_and_auth_version', FEATURES),
-              (4, 'conveyor_v2', CONVEYOR))
+              (4, 'conveyor_v2', CONVEYOR),
+              (5, 'consult_state', (('chats', 'consult_state', "JSON NOT NULL DEFAULT '{}'"),)))
 CURRENT_VERSION = MIGRATIONS[-1][0]
 REQUIRED = {
     'users': {'id', 'email', 'password_hash', 'name', 'city', 'experience', 'budget_rub', 'tags', 'memory'},
@@ -96,6 +97,8 @@ def validate_schema(connection, allow_legacy=False):
         for table in ('companies', 'company_members', 'applications', 'application_events', 'check_results', 'scoring_results', 'offers', 'documents', 'feed_items'):
             if not connection.execute(f'PRAGMA table_info({table})').fetchall():
                 raise StorageError('DATABASE_SCHEMA_MISMATCH')
+    if current >= 5 and 'consult_state' not in {r[1] for r in connection.execute('PRAGMA table_info(chats)')}:
+        raise StorageError('DATABASE_SCHEMA_MISMATCH')
     return current
 
 

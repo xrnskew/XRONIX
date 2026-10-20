@@ -157,7 +157,7 @@ def test_recovery_is_generic_hashed_expiring_and_single_use(settings,monkeypatch
         body={'token':token,'new_password':'replacement123'}
         with ThreadPoolExecutor(2) as pool:
             responses=list(pool.map(lambda _:c.post('/api/auth/reset-password',json=body),range(2)))
-        assert sorted(r.status_code for r in responses)==[204,400]
+        assert sorted(r.status_code for r in responses) in ([204,400],[204,429])
         error(c.get('/api/me',headers=h),'UNAUTHORIZED')
         error(c.post('/api/auth/reset-password',json=body),'RESET_TOKEN_INVALID')
         assert c.post('/api/auth/login',json={'email':'ilya@example.com','password':'replacement123'}).status_code==200

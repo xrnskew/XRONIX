@@ -43,6 +43,7 @@ class Chat(Base):
     plan_id: Mapped[str | None] = mapped_column(String, nullable=True)
     mock_stage: Mapped[int] = mapped_column(Integer, default=0)
     busy_until: Mapped[float] = mapped_column(default=0.0)
+    consult_state: Mapped[dict] = mapped_column(JSON, default=dict)
     facts: Mapped[dict] = mapped_column(JSON, default=dict)
 
 

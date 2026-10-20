@@ -118,17 +118,19 @@ class Conveyor:
             raise ApiError('VERSION_CONFLICT') from None
 
     def decline(self,s,a,reasons):
-        a.data={**a.data,'decline':dict(reasons=[credit.decline_text(r,self.dict) for r in reasons])}
+        a.data={**a.data,'decline':dict(reasons=[credit.decline_text(r,self.dict) for r in reasons]),'recommendation':dict(kind='decline',text=' '.join(credit.decline_text(r,self.dict)['text'] for r in reasons))}
         self.move(s,a,'declined',reason=','.join(r['code'] for r in reasons))
 
     def input(self,s,a,external):
         return dict(**{k:a.data[k] for k in ('financials','product_id','amount_rub','term_months','collateral')},**external,
                     person=external['registry']['kind']=='person',plan=(self.plan(s,a.data['plan_id'],a.user_id) or {}).get('finance'))
 
-    async def step(self,integrations):
+    async def step(self,integrations,application_id=None):
         stamp=time.time()
         with self.sessions() as s:
-            a=s.scalar(select(Application).where(Application.status.in_(AUTO),Application.due_at<=stamp,Application.lease_until<stamp).order_by(Application.due_at,Application.seq).limit(1))
+            query=select(Application).where(Application.status.in_(AUTO),Application.lease_until<stamp)
+            query=query.where(Application.id==application_id) if application_id else query.where(Application.due_at<=stamp)
+            a=s.scalar(query.order_by(Application.due_at,Application.seq).limit(1))
             if a is None:
                 return False
             id,version,status=a.id,a.version,a.status
@@ -191,10 +193,14 @@ class Conveyor:
                 sc=credit.score(i,p,self.rules)
                 decision=credit.decide(i,sc,p,self.rules)
                 s.merge(ScoringResult(application_id=id,data=sc,rules_version=self.rules['version']))
+                rec_kind={'approve':'approve','counter':'counter','manual':('counter' if sc['grade']=='C' else 'approve'),'decline':'decline'}[decision['kind']]
+                recommendation=dict(kind=rec_kind,text=decision.get('recommendation') or (' '.join(decision['explanation']) if 'explanation' in decision else 'Рекомендуется отказ по кредитной оценке.'))
+                recommendation.update({k:decision[k] for k in ('amount_rub','term_months','rate_percent') if k in decision})
+                a.data={**a.data,'recommendation':recommendation}
                 if decision['kind']=='decline':
                     self.decline(s,a,decision['reasons'])
                 elif decision['kind']=='manual':
-                    a.data={**a.data,'recommendation':decision['recommendation']}
+                    a.data={**a.data,'recommendation':dict(kind='counter' if sc['grade']=='C' else 'approve',text=decision['recommendation'],amount_rub=i['amount_rub'],term_months=i['term_months'],rate_percent=credit.rate_for(p,sc['grade'],self.rules))}
                     self.move(s,a,'manual_review')
                 else:
                     offer_id=uid()

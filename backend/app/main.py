@@ -25,7 +25,8 @@ from .config import Settings
 from .db import Base, Chat, Generation, Message, Plan, RateBucket, User, database, now, uid
 from .errors import ApiError
 from .chat_context import bound_answers, context_payload, profile_facts, updated_facts
-from . import generations, account_security, conveyor
+from . import generations, account_security, conveyor, bank, seed
+from .consult import Consult
 from .integrations import Integrations
 from .conveyor_models import Application
 from .limits import consume, sqlite_busy
@@ -117,6 +118,8 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
                 async with httpx.AsyncClient(transport=ai_transport) as client, httpx.AsyncClient(transport=integrations_transport) as integrations_client:
                     app.state.ai = AI(settings, contracts, client)
                     app.state.integrations = Integrations(settings.integrations_url, contracts, integrations_client)
+                    if settings.seed_demo:
+                        await seed.seed(app)
                     conveyor_worker = asyncio.create_task(app.state.conveyor.worker(app))
                     task = asyncio.create_task(backup_loop(settings)) if settings.backup_enabled else None
                     worker = asyncio.create_task(app.state.generation_worker())
@@ -332,7 +335,7 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
         result = []
         for index, m in enumerate(messages):
             reply = m.reply
-            if reply['type'] == 'plan':
+            if reply['type'] == 'plan' and not chat.consult_state:
                 context = {'history': history(messages[:index]), 'message': ''}
                 reply = {**reply, 'plan': apply_preferences(recalculate(reply['plan']), context)}
             result.append({'id': m.id, 'role': m.role, 'created_at': m.created_at, 'reply': reply, 'answers': m.answers or []})
@@ -356,6 +359,8 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
         return Response(status_code=204)
 
     async def process_message(chat_id, body, background, user, session, generation_id=None):
+        if settings.consult_chat:
+            return await app.state.consult.process(chat_id, body, background, user, session, generation_id)
         chat = owned_chat(session, chat_id, user.id)
         cached = completed_plan_replay(session, chat_id, body)
         if cached is not None:
@@ -442,6 +447,21 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
     generations.install(app, sessions, authenticated, db, owned_chat, SendMessage, process_message)
     account_security.install(app, settings, authenticated, db, cookie_name)
 
+    @app.post('/api/needs/parse')
+    async def parse_need(body: dict, user: User = Depends(authenticated)):
+        from jsonschema import ValidationError
+        try:
+            contracts.validate('parse-need', body, 'request')
+        except ValidationError:
+            raise ApiError('VALIDATION_ERROR') from None
+        try:
+            result = await app.state.consult.call('parse-need', body)
+            if set(result['confidence']) != {k for k,v in result.items() if k!='confidence' and v is not None}:
+                raise ValueError('Invalid confidence')
+            return result
+        except (httpx.HTTPError, TimeoutError, ValueError, ValidationError, KeyError, TypeError):
+            return contracts.example('need.empty.json')
+
     @app.get('/api/plans')
     def list_plans(user: User = Depends(authenticated), session: Session = Depends(db)):
         plans = session.scalars(select(Plan).where(Plan.user_id == user.id).order_by(Plan.created_at.desc(), Plan.id.desc()))
@@ -449,7 +469,11 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
 
     @app.get('/api/plans/{plan_id}')
     def get_plan(plan_id: str, user: User = Depends(authenticated), session: Session = Depends(db)):
-        plan = session.scalar(select(Plan).where(Plan.id == plan_id, Plan.user_id == user.id))
+        allowed = Plan.user_id == user.id
+        if user.role == 'analyst':
+            linked = select(Application.seq).where(Application.data['plan_id'].as_string() == Plan.id, Application.status != 'draft').exists()
+            allowed = allowed | linked
+        plan = session.scalar(select(Plan).where(Plan.id == plan_id, allowed))
         if plan is None:
             raise ApiError('NOT_FOUND')
         messages = session.scalars(select(Message).where(Message.chat_id == plan.chat_id).order_by(Message.seq)).all()
@@ -459,10 +483,13 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
                 break
             before.append(message)
         # Repair derived figures on read; keep the historical database record intact.
-        view = apply_preferences(recalculate(plan.body), {'history': history(before), 'message': ''})
+        plan_chat = session.get(Chat, plan.chat_id)
+        view = plan.body if plan_chat and plan_chat.consult_state else apply_preferences(recalculate(plan.body), {'history': history(before), 'message': ''})
         return {'plan_id': plan.id, 'chat_id': plan.chat_id, 'created_at': plan.created_at, 'plan': view}
 
     conveyor.install(app, settings, contracts, sessions, authenticated, db)
+    bank.install(app, authenticated, db)
+    app.state.consult = Consult(app, settings, contracts, sessions)
 
     # Wrap the whole app so even INTERNAL responses include CORS headers.
     return ApiCORS(app, settings, sessions)

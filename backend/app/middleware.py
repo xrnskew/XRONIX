@@ -18,8 +18,8 @@ class ApiCORS(CORSMiddleware):
                          allow_headers=['Authorization', 'Content-Type', 'X-Session-Mode'], allow_credentials=True)
         self.settings, self.sessions = settings, sessions
 
-    def failure(self, code, origin=None):
-        error = ApiError(code)
+    def failure(self, code, origin=None, message=None):
+        error = ApiError(code,message)
         headers = {'Retry-After': '60'} if code == 'RATE_LIMITED' else {}
         if origin and self.is_allowed_origin(origin):
             headers.update({'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'})
@@ -50,7 +50,7 @@ class ApiCORS(CORSMiddleware):
         headers = Headers(scope=scope)
         origin = headers.get('origin')
         if origin and not self.is_allowed_origin(origin):
-            return await self.failure('VALIDATION_ERROR')(scope, receive, send)
+            return await self.failure('VALIDATION_ERROR',message='Адрес страницы не разрешён. Добавьте origin фронтенда в CORS_ORIGINS бэкенда.')(scope, receive, send)
         if scope['path'].startswith('/api/') and scope['method'] != 'OPTIONS':
             try:
                 peer = (scope.get('client') or ('unknown', 0))[0]

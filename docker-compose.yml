@@ -1,0 +1,56 @@
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_USE_MOCKS: "false"
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: sqlite:////srv/backend/data/xronix.db
+      INTEGRATIONS_URL: http://integrations-mock:8002
+      AI_SERVICE_URL: http://ai:8001
+      CONSULT_CHAT: "true"
+      MOCK_AI: "false"
+      SEED_DEMO: "${SEED_DEMO:-true}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}"
+    volumes:
+      - backend-data:/srv/backend/data
+    depends_on:
+      integrations-mock:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 90s
+    restart: unless-stopped
+  integrations-mock:
+    build: ./integrations-mock
+    environment:
+      FAIL_INN: "${FAIL_INN:-}"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health', timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+  ai:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    environment:
+      PORT: "8001"
+    restart: unless-stopped
+volumes:
+  backend-data:

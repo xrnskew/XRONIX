@@ -55,7 +55,7 @@ def match_products(req, months, products, rules, person=False, plan=None):
         elif person:
             reasons.append('Продукт Альфа-Банка для действующего бизнеса: нужны зарегистрированные ИП или компания.')
         elif months is not None and p['minBusinessMonths'] and months < p['minBusinessMonths']:
-            reasons.append(f"Бизнес должен работать не меньше {p['minBusinessMonths']} месяцев, у вас {age_text(months)}.")
+            reasons.append(f"Бизнес должен работать не меньше {p['minBusinessMonths']} месяцев, у вас {age_text(months).rstrip('.')}.")
         can = p['id'] in rules['applicable_products']
         if not can:
             reasons.append('Заявку на этот продукт в демо оформляет менеджер банка.')
