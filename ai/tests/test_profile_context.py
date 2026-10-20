@@ -29,7 +29,10 @@ class ProfileContextTests(unittest.IsolatedAsyncioTestCase):
         for messages in (decide_messages(req, 0), decide_messages(req, 2), plan_messages(req)):
             serialized = json.dumps(messages, ensure_ascii=False)
             self.assertNotIn('OLD_IDEA', serialized)
-            self.assertIn('общепит', messages[-1][1])
+            self.assertNotIn('общепит', messages[-1][1])
+            self.assertIn('tags_meta', messages[-1][1])
+            self.assertIn('\"available\": true', messages[-1][1])
+            self.assertIn('\"values_included\": false', messages[-1][1])
             self.assertIn('Текущую идею определяют только', messages[0][1])
             self.assertIn('Теги добавляет и удаляет только сам пользователь', messages[0][1])
             self.assertIn('не навязывай сферу из тегов', messages[0][1])
@@ -39,3 +42,16 @@ class ProfileContextTests(unittest.IsolatedAsyncioTestCase):
         spy = MessageModel('Какой бизнес вы хотите открыть?')
         await respond(spy, req)
         self.assertEqual(req.user_context.tags, ['IT'])
+
+
+    async def test_new_chat_does_not_expose_tag_values_for_idea_selection(self):
+        req = request('Хочу открыть бизнес, пока не выбрал сферу', context={
+            'profile': {'name': 'QA'}, 'tags': ['общепит', 'кофейня'], 'memory': 'Хочу пекарню'})
+        spy = MessageModel('Какой бизнес вы хотите открыть?')
+        await respond(spy, req)
+        outgoing = spy.calls[0][-1][1]
+        self.assertNotIn('общепит', outgoing)
+        self.assertNotIn('кофейня', outgoing)
+        self.assertNotIn('пекарню', outgoing)
+        self.assertIn('tags_meta', outgoing)
+        self.assertIn('"count": 2', outgoing)
