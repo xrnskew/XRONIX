@@ -28,6 +28,10 @@ export const mockApi: Api = {
     return session()
   },
   async logout() { setToken(null) },
+  async logoutAll() { setToken(null) },
+  async changePassword() { setToken(null) },
+  async forgotPassword() { return { message: 'В демо-режиме письма не отправляются.' } },
+  async resetPassword() { throw new ApiError('RESET_TOKEN_INVALID', 'Для восстановления откройте рабочую версию сайта.') },
   async getMe() { await delay(150); return user },
   async patchMe(patch) { await delay(250); user = { ...user, ...patch }; return user },
 

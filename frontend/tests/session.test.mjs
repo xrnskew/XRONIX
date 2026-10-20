@@ -107,3 +107,57 @@ test('saved questionnaires recover their selected answers without changing the A
   assert.deepEqual(submittedAnswers([question, { role: 'user', text: 'custom', answers: [{ question_id: 'credit', answer: 'Нет' }] }], 0), { credit: 'Нет' })
   assert.deepEqual(submittedAnswers([question], 0), {})
 })
+
+test('a refreshed session resumes a persisted job without sending it again', async () => {
+  const pending = deferred(); let finished = false, sends = 0
+  const questions = { id: 'questions', role: 'assistant', reply: { type: 'questions', questions: [{ id: 'place', text: 'Помещение?' }] } }
+  const user = { id: 'answer', role: 'user', reply: { type: 'message', text: 'Гараж' }, answers: [{ question_id: 'place', answer: 'Гараж' }] }
+  const s = create({
+    getChat: async (id) => ({ id, messages: finished ? [questions, user, ...detail(id).messages] : [questions, user], generation: finished ? null : { id: 'job', status: 'running', request_id: 'stable-request-id', request: { text: 'Гараж', answers: user.answers } } }),
+    waitGeneration: async () => { await pending.promise; finished = true; return planReply('resumed') },
+    sendMessage: async () => { sends++; return planReply('duplicate') },
+  })
+  await s.openChat('saved')
+  assert.equal(s.getSnapshot().busy, true)
+  assert.deepEqual(s.getSnapshot().messages.at(-1).answers, user.answers)
+  pending.resolve(); await tick(); await tick()
+  assert.equal(s.getSnapshot().busy, false)
+  assert.equal(s.getSnapshot().planId, 'saved')
+  assert.equal(sends, 0)
+  assert.equal(s.getSnapshot().messages.filter(m => m.role === 'user').length, 1)
+})
+
+test('a resumed job cannot publish into a new login or another visible chat', async () => {
+  const pending = deferred()
+  const s = create({ getChat: async (id) => ({ ...detail(id), generation: { id: 'job', status: 'running', request: { text: 'idea', answers: [] } } }), waitGeneration: () => pending.promise })
+  await s.openChat('old')
+  s.reset()
+  pending.resolve(planReply('private')); await tick(); await tick()
+  assert.equal(s.getSnapshot().chatId, null)
+  assert.equal(s.getSnapshot().plan, null)
+  assert.deepEqual(s.getSnapshot().messages, [greeting])
+})
+
+test('retry after an uncertain network result reuses its idempotency key', async () => {
+  const keys = []; let attempt = 0
+  const s = create({ sendMessage: async (id, text, answers, key) => {
+    keys.push(key)
+    if (!attempt++) throw Object.assign(Error('offline'), { code: 'NETWORK' })
+    return planReply('once')
+  } })
+  await s.send('idea'); await s.retry()
+  assert.equal(keys.length, 2)
+  assert.equal(keys[0], keys[1])
+  assert.equal(s.getSnapshot().planId, 'once')
+})
+
+test('retry after a confirmed server failure creates a new attempt', async () => {
+  const keys = []; let attempt = 0
+  const s = create({ sendMessage: async (id, text, answers, key) => {
+    keys.push(key)
+    if (!attempt++) throw Object.assign(Error('failed'), { code: 'AI_UNAVAILABLE' })
+    return planReply('retry')
+  } })
+  await s.send('idea'); await s.retry()
+  assert.notEqual(keys[0], keys[1])
+})

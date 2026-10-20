@@ -95,9 +95,12 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
   }, [reset])
 
   const enter = useCallback(async (u: Profile) => {
+    let savedChat: string | null = null
+    try { savedChat = sessionStorage.getItem(`xronix_chat_${u.id}`) } catch { /* storage unavailable */ }
     reset(); setUser(u); setNotice(null); setStatus('in')
     await reloadPlan()
-  }, [reset, reloadPlan])
+    if (savedChat) { try { await session.openChat(savedChat) } catch { /* removed chat */ } }
+  }, [reset, reloadPlan, session])
 
   useEffect(() => {
     onUnauthorized(() => { reset(); setNotice('Сессия истекла. Войдите снова.'); setStatus('out') })
@@ -115,6 +118,15 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     })
     return () => { mounted = false }
   }, [enter, restoreSession])
+
+  useEffect(() => {
+    if (!user?.id || demo || status !== 'in') return
+    try {
+      const key = `xronix_chat_${user.id}`
+      if (state.chatId) sessionStorage.setItem(key, state.chatId)
+      else sessionStorage.removeItem(key)
+    } catch { /* storage unavailable */ }
+  }, [user?.id, state.chatId, demo, status])
 
   const signIn: Ctx['signIn'] = async (email, password) => { await enter((await api.login({ email, password })).user) }
   const signUp: Ctx['signUp'] = async (name, email, password) => { await enter((await api.register({ name, email, password })).user) }

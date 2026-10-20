@@ -3,6 +3,7 @@ import { Card, Chip, Screen, SectionTitle, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError } from '../../api'
 import CityPicker from '../components/CityPicker'
+import AccountSecurity from './AccountSecurity'
 
 const field = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text outline-none ring-1 ring-white/5 focus:ring-2 focus:ring-accent'
 
@@ -80,6 +81,8 @@ export default function ProfileScreen() {
           <button className="h-12 shrink-0 rounded-xl bg-surface-2 px-5 text-[14px] font-semibold">Добавить</button>
         </form>
       </Card>
+
+      <AccountSecurity />
 
       {!wide && <button onClick={signOut} className="h-12 w-full rounded-2xl bg-surface-2 text-[15px] font-semibold text-accent active:bg-surface-3">Выйти</button>}
     </Screen>

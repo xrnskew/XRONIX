@@ -75,7 +75,15 @@ export interface Answer {
 // Ответы API (см. /contracts/api.md)
 export interface AuthResult { token: string; user: Profile }
 export interface ChatSummary { id: string; title: string; updated_at: string; plan_id: string | null }
-export interface ChatMessageDto { id: string; role: 'user' | 'assistant'; created_at: string; reply: AiReply }
-export interface ChatDetail { id: string; messages: ChatMessageDto[] }
+export interface ChatMessageDto { id: string; role: 'user' | 'assistant'; created_at: string; reply: AiReply; answers?: Answer[] }
+export interface ChatDetail { id: string; messages: ChatMessageDto[]; facts?: Record<string, ChatFact>; generation?: Generation | null }
 export interface PlanSummary { plan_id: string; chat_id: string; title: string; created_at: string }
 export interface PlanRecord { plan_id: string; chat_id: string; created_at: string; plan: Plan }
+
+export interface ChatFact { value: string | number; source: 'profile' | 'user_message' | 'answer'; message_id: string | null; question_id?: string }
+export interface Generation {
+  id: string; chat_id: string; request_id: string
+  status: 'queued' | 'running' | 'succeeded' | 'failed'
+  reply: AiReply | null; error_code: string | null
+  request: { text: string; answers: Answer[] }
+}

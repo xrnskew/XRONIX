@@ -4,7 +4,8 @@ export interface SessionApi {
   createChat(): Promise<{ chat_id: string }>
   getChat(id: string): Promise<ChatDetail>
   deleteChat(id: string): Promise<void>
-  sendMessage(id: string, text: string, answers?: Answer[]): Promise<AiReply>
+  sendMessage(id: string, text: string, answers?: Answer[], requestId?: string): Promise<AiReply>
+  waitGeneration?(id: string): Promise<AiReply>
   listPlans(): Promise<PlanSummary[]>
   getPlan(id: string): Promise<PlanRecord>
 }
@@ -12,7 +13,7 @@ interface Conversation {
   id: string | null
   messages: ChatMessage[]
   busy: boolean
-  failed: { text: string; answers?: Answer[] } | null
+  failed: { text: string; answers?: Answer[]; requestId?: string } | null
 }
 export interface SessionSnapshot {
   chatId: string | null
@@ -82,7 +83,7 @@ export class CabinetSession {
     this.update(patch)
   }
 
-  send = async (text: string, answers?: Answer[], retry = false) => {
+  send = async (text: string, answers?: Answer[], retry = false, requestId: string = crypto.randomUUID()) => {
     const conversation = this.active
     if (conversation.busy || !text.trim()) return
     const generation = this.generation
@@ -97,7 +98,7 @@ export class CabinetSession {
         if (!this.current(generation)) return
         if (this.active === conversation) this.update()
       }
-      const reply = await this.api.sendMessage(conversation.id, text, answers)
+      const reply = await this.api.sendMessage(conversation.id, text, answers, requestId)
       if (!this.current(generation)) return
       conversation.messages = [...conversation.messages, { id: crypto.randomUUID(), role: 'assistant', reply }]
       if (this.active === conversation) {
@@ -106,7 +107,7 @@ export class CabinetSession {
       }
     } catch (e) {
       if (!this.current(generation)) return
-      conversation.failed = { text, answers }
+      conversation.failed = { text, answers, requestId: e instanceof Error && ['NETWORK', 'TIMEOUT'].includes((e as Error & { code?: string }).code ?? '') ? requestId : undefined }
       conversation.messages = [...conversation.messages, { id: crypto.randomUUID(), role: 'assistant', text: this.errorText(e), error: true }]
     } finally {
       if (this.current(generation)) {
@@ -115,7 +116,7 @@ export class CabinetSession {
       }
     }
   }
-  retry = async () => { const failure = this.active.failed; if (failure) await this.send(failure.text, failure.answers, true) }
+  retry = async () => { const failure = this.active.failed; if (failure) await this.send(failure.text, failure.answers, true, failure.requestId) }
 
   openChat = async (id: string): Promise<boolean> => {
     const navigation = ++this.navigation
@@ -127,10 +128,41 @@ export class CabinetSession {
       const chat = await this.api.getChat(id)
       if (!this.current(generation) || navigation !== this.navigation) return false
       const messages: ChatMessage[] = [this.greeting, ...chat.messages.map((m): ChatMessage => m.role === 'user' && m.reply.type === 'message'
-        ? { id: m.id, role: 'user', text: m.reply.text }
+        ? { id: m.id, role: 'user', text: m.reply.text, answers: m.answers }
         : { id: m.id, role: m.role, reply: m.reply })]
       if (conversation) { conversation.messages = messages; conversation.failed = null }
       else { conversation = { id, messages, busy: false, failed: null }; this.conversations.add(conversation) }
+      const job = chat.generation
+      if (job?.status === 'failed') {
+        conversation.failed = { text: job.request.text, answers: job.request.answers }
+        conversation.messages.push({ id: `error-${job.id}`, role: 'assistant', text: 'Генерация завершилась с ошибкой. Можно повторить отправку.', error: true })
+      }
+      if (job && ['queued', 'running'].includes(job.status) && this.api.waitGeneration) {
+        const pending = conversation
+        const last = pending.messages.at(-1)
+        if (last?.role !== 'user' || last.text !== job.request.text) {
+          pending.messages.push({ id: `pending-${job.id}`, role: 'user', text: job.request.text, answers: job.request.answers })
+        }
+        pending.busy = true
+        void this.api.waitGeneration(job.id).then(async () => {
+          if (!this.current(generation)) return
+          const fresh = await this.api.getChat(id)
+          if (!this.current(generation)) return
+          pending.messages = [this.greeting, ...fresh.messages.map((m): ChatMessage => m.role === 'user' && m.reply.type === 'message'
+            ? { id: m.id, role: 'user', text: m.reply.text, answers: m.answers }
+            : { id: m.id, role: m.role, reply: m.reply })]
+          pending.failed = null
+        }).catch((e) => {
+          if (!this.current(generation)) return
+          pending.failed = { text: job.request.text, answers: job.request.answers,
+            requestId: ['NETWORK', 'TIMEOUT'].includes((e as { code?: string }).code ?? '') ? job.request_id : undefined }
+          pending.messages.push({ id: `error-${job.id}`, role: 'assistant', text: this.errorText(e), error: true })
+        }).finally(() => {
+          if (!this.current(generation)) return
+          pending.busy = false
+          if (this.active === pending) this.selectReply(pending)
+        })
+      }
     }
     if (!this.current(generation) || navigation !== this.navigation) return false
     this.active = conversation

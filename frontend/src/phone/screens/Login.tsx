@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { Button, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
+import ForgotPassword from './ForgotPassword'
 import { ApiError, USE_MOCKS } from '../../api'
 
 const points = ['План запуска по вашей идее', 'Сколько нужно денег и откуда взять', 'Кредит, который бизнес потянет']
@@ -15,6 +16,7 @@ export default function Login() {
   const [pass, setPass] = useState(USE_MOCKS ? 'demo1234' : '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [forgot, setForgot] = useState(false)
   const reg = mode === 'register'
 
   async function submit(e: React.FormEvent) {
@@ -32,6 +34,8 @@ export default function Login() {
       setBusy(false)
     }
   }
+
+  if (forgot) return <ForgotPassword onBack={() => setForgot(false)} />
 
   return (
     <form className={wide ? 'w-full' : 'relative flex h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
@@ -70,6 +74,7 @@ export default function Login() {
         <button type="button" className="h-10 w-full text-center text-[14px] text-muted" onClick={() => { setMode(reg ? 'login' : 'register'); setError(null) }}>
           {reg ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
         </button>
+        {!reg && <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={() => setForgot(true)}>Забыли пароль?</button>}
         {USE_MOCKS && !reg && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
       </div>
     </form>
