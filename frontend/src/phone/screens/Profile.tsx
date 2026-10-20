@@ -3,7 +3,6 @@ import { Card, Chip, Screen, SectionTitle, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { ApiError } from '../../api'
 import CityPicker from '../components/CityPicker'
-import { normalizeCity } from '../../data/cities'
 
 const field = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text outline-none ring-1 ring-white/5 focus:ring-2 focus:ring-accent'
 
@@ -28,10 +27,7 @@ export default function ProfileScreen() {
     if (budget && !/^\d+$/.test(budget)) return setState({ kind: 'error', text: 'Бюджет укажите числом в рублях, например 500000.' })
     if (!draft.name.trim()) return setState({ kind: 'error', text: 'Имя не может быть пустым.' })
     const city = draft.city.trim() || null
-    const tags = city !== user.city
-      ? [...new Set([...user.tags.filter((t) => !user.city || normalizeCity(t) !== normalizeCity(user.city)), ...(city ? [city] : [])])].slice(0, 12)
-      : user.tags
-    run({ name: draft.name.trim(), city, experience: draft.experience.trim() || null, budget_rub: budget ? Number(budget) : null, tags })
+    run({ name: draft.name.trim(), city, experience: draft.experience.trim() || null, budget_rub: budget ? Number(budget) : null })
   }
   const addTag = () => {
     const t = tag.trim().slice(0, 30)
@@ -39,8 +35,8 @@ export default function ProfileScreen() {
     if (t && !user.tags.includes(t) && user.tags.length < 12) run({ tags: [...user.tags, t] })
   }
 
-  const filled = [user.name, user.city, user.experience, user.budget_rub, user.tags.length].filter(Boolean).length
-  const pct = Math.round((filled / 5) * 100)
+  const filled = [user.name, user.city, user.experience, user.budget_rub].filter(Boolean).length
+  const pct = Math.round((filled / 4) * 100)
 
   return (
     <Screen title="Профиль" sub={wide ? 'Эти данные ИИ учитывает в каждом плане' : undefined}>
@@ -71,9 +67,9 @@ export default function ProfileScreen() {
       </Card>
 
       <Card id="profile-tags" delay={1} span={5} className="self-start">
-        <SectionTitle>Что ИИ знает о вас</SectionTitle>
-        <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Теги учитываются в каждом ответе. Нажмите на тег, чтобы удалить, или добавьте свой.</p>
-        {user.tags.length === 0 && <p className="mb-3 text-[13px] text-muted">Тегов пока нет. После первого плана ИИ добавит их сам.</p>}
+        <SectionTitle>Ваши теги</SectionTitle>
+        <p className="-mt-1.5 mb-3 text-[13px] leading-snug text-muted">Добавляйте интересы и предпочтения для консультаций. ИИ видит эти теги; менять их можете только вы. Нажмите на тег, чтобы удалить.</p>
+        {user.tags.length === 0 && <p className="mb-3 text-[13px] text-muted">Тегов пока нет. При желании добавьте их вручную.</p>}
         <div className="flex flex-wrap gap-1.5">
           {user.tags.map((t) => (
             <Chip key={t} onClick={() => run({ tags: user.tags.filter((x) => x !== t) })}>{t}<span className="ml-1.5 text-muted" aria-label="удалить">×</span></Chip>

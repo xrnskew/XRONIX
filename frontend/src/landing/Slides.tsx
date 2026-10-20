@@ -57,7 +57,7 @@ export function How({ activeStep }: { activeStep: number }) {
     ['Вы описываете идею', 'Одной фразой, как другу: «хочу кофейню у метро».'],
     ['ИИ уточняет', '3–6 вопросов, на часть можно ответить одним нажатием.'],
     ['Сервер проверяет', 'Ответ ИИ сверяется со схемой, платёж пересчитывается по формуле аннуитета.'],
-    ['Вы получаете план', 'Шаги, риски, финансовая модель и подходящий кредит. Теги и память обновляются.'],
+    ['Вы получаете план', 'Шаги, риски, финансовая модель и подходящий кредит. Теги профиля остаются под вашим контролем.'],
   ]
   const live = activeStep > 0
   return (
@@ -168,11 +168,11 @@ export function Credit() {
 export function Memory() {
   return (
     <Section id="memory" tint>
-      <SplitText text="ИИ помнит вас между диалогами" className={h2} />
-      <Reveal delay={450}><p className={leadCls}>Теги и короткая выжимка прошлых разговоров попадают в каждый запрос. Пользователь сам видит и правит теги в профиле.</p></Reveal>
+      <SplitText text="ИИ учитывает ваш профиль" className={h2} />
+      <Reveal delay={450}><p className={leadCls}>Город, опыт, бюджет и ваши теги помогают в консультации. Теги вы добавляете сами; идею нового бизнеса ИИ уточняет в текущем чате.</p></Reveal>
       <Reveal delay={600} className="mt-10 max-w-[600px] border-l-2 border-brand pl-6">
-        <FadeWords delay={800} className="text-[19px] leading-relaxed text-white/90" text="«Александр, Москва, новичок в общепите. Планирует кофейню у метро, свои средства 500 тыс ₽, нужен кредит около 1 млн ₽.»" />
-        <div className="mt-3 text-[13px] text-white/50">Так выглядит память после первого плана</div>
+        <FadeWords delay={800} className="text-[19px] leading-relaxed text-white/90" text="«Москва, начинающий предприниматель, бюджет 500 тыс ₽. Интересы: общепит. Конкретную идею обсудим в чате.»" />
+        <div className="mt-3 text-[13px] text-white/50">Пример данных профиля и ручных тегов</div>
       </Reveal>
       <ul className="mt-8 flex max-w-[600px] flex-wrap gap-2.5">
         {mockProfile.tags.map((t, i) => <Reveal key={t} as="li" delay={1900 + i * 130} y={10} className="rounded-full bg-white/[.07] px-4 py-2 text-[15px] font-medium ring-1 ring-white/15">{t}</Reveal>)}
