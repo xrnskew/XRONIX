@@ -35,6 +35,7 @@ _OVERRIDES = [
     r'\b(?:инструкции|правила|ограничения)\b.{0,50}(?:отменены|не действуют|не применяются)',
     r'\b(?:режим разработчика|developer mode|jailbreak|system override|do anything now)\b',
     r'\b(?:ты теперь|теперь ты|you are now|act as)\b.{0,40}\b(?:dan|поэт\w*|писател\w*|без ограничений|pirate|poet|unrestricted)\b',
+    r'\b(?:ты теперь|теперь ты|you are now|act as)\s+(?!(?:a\s+)?(?:бизнес|business|финансов|аналитик|consultant)\b)',
     r'\bты (?:больше )?не бизнес[ -]?консультант\b',
     r'(?:\[|<)(?:system|developer)(?:\]|>)|(?:^|\s)(?:system|developer)\s*:|###\s*(?:system|developer)\b',
     r'\b(?:покажи|раскрой|выведи|повтори|распечатай|show|reveal|print|repeat)\b.{0,90}(?:системн\w* (?:промпт|инструкц)|скрыт\w* инструкц|system prompt|developer message|gigachat_auth_key|jwt_secret)',
@@ -83,8 +84,9 @@ ENCODING_COMMAND = re.compile(
     r'(?<![а-я])(?:curl|wget|eval|exec)\s*[( ]|<script|javascript:', re.I)
 ROLE_MARKERS = re.compile(
     r'<\|(?:im_start|im_end|system|assistant|endoftext)[^>]*>|'
-    r'\[/?inst\]|<<\s*/?sys\s*>>|'
-    r'(?:(?:^|\n)\s*|#{2,}\s*)(?:assistant|developer|system|система|разработчик)\s*:', re.I)
+    r'\[/?inst\]|<<\s*/?sys\s*>>|<\s*(?:system|developer)\b[^>]*>|'
+    r'[\"\']role[\"\']\s*:\s*[\"\'](?:system|developer|assistant)[\"\']|'
+    r'(?:^|\s|#{2,})(?:assistant|developer|system|система|разработчик)\s*:', re.I)
 
 
 def text_variants(text: str) -> list[str]:
