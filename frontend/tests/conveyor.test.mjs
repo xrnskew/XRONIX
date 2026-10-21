@@ -171,3 +171,34 @@ test('демо-учётки мока совпадают с засевом бэк
   assert.equal(contract('examples/user.json').email, DEMO_CLIENT.email)
   assert.equal(contract('examples/bank.application.json').applicant.email, DEMO_CLIENT.email)
 })
+
+// ---- кредит с господдержкой (contracts/conveyor.md, «Кредит с господдержкой») ----
+test('кредит с господдержкой: подбор без залога до 50 млн, акция, реестр МСП, поручительство в скоринге', async () => {
+  const { GOV_TEXT } = await import('../src/lib/creditRules.ts')
+  assert.deepEqual(JSON.parse(readFileSync(new URL('../src/data/products.gov.json', import.meta.url))), contract('products.gov.json'))
+  const req = { purpose: 'equipment', amount_rub: 40_000_000, term_months: 36, has_collateral: false }
+  const byId = (items) => Object.fromEntries(items.map((m) => [m.product_id, m]))
+  const m = byId(matchProducts(req, 80, { now: NOW }))
+  assert.equal(m.gov_guarantee.eligible && m.gov_guarantee.can_apply, true, '40 млн без залога подходит только с господдержкой')
+  assert.equal(m.gov_guarantee.gov, true); assert.equal(m.gov_guarantee.valid_until, '2026-11-15')
+  assert.equal(m.fast.eligible, false); assert.equal(m.secured.eligible, false)
+  assert.equal(byId(matchProducts(req, null, { person: true, now: NOW })).gov_guarantee.eligible, false, 'будущему ИП не подходит')
+  const late = byId(matchProducts(req, 80, { now: new Date('2026-11-16T09:00:00Z') })).gov_guarantee
+  assert.equal(late.eligible, false); assert.ok(late.reasons.includes('Акция закончилась 15.11.2026.'))
+  assert.equal(byId(matchProducts(req, 80, { now: new Date('2026-11-15T09:00:00Z') })).gov_guarantee.eligible, true, 'последний день акции включительно')
+
+  const s = SCENARIOS['7715881399'], d = demoFinancials['7715881399']
+  const input = { registry: s.registry, fns: s.fns, bki: s.bki, financials: d.financials, product_id: 'gov_guarantee', amount_rub: 1_500_000, term_months: 24, collateral: null, now: NOW }
+  assert.deepEqual(stopFactors(input), [])
+  const big = stopFactors({ ...input, financials: { ...d.financials, revenue_12m_rub: 2_500_000_000 } })
+  assert.deepEqual(big.map((x) => x.code), ['not_msp']); assert.equal(big[0].params.limit_rub.replace(/\s/g, ''), '2000000000')
+  assert.deepEqual(stopFactors({ ...input, now: new Date('2026-11-20T09:00:00Z') }).map((x) => [x.code, x.params.valid_until]), [['offer_expired', '15.11.2026']])
+  const sc = score(input)
+  assert.equal(sc.factors.find((f) => f.code === 'collateral'), undefined)
+  const g = sc.factors.find((f) => f.code === 'state_guarantee')
+  assert.equal(g.points, 8); assert.equal(g.name, 'Поручительство Корпорации МСП')
+  const fastScore = score({ ...input, product_id: 'fast' }).score
+  assert.equal(sc.score, Math.min(100, fastScore + 8), 'поручительство даёт +8 к той же заявке без залога')
+  const dec = decide(input, sc)
+  assert.equal(dec.kind, 'approve'); assert.equal(dec.rate_percent, 24); assert.ok(dec.explanation.includes(GOV_TEXT))
+})

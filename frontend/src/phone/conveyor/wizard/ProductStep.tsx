@@ -35,6 +35,12 @@ export default function ProductStep({ company, need, planId, onBack, onDone }: {
         <div className="min-w-0">
           <div className="text-[16px] font-semibold leading-snug">{m.name}</div>
           {m.demo && <span className="mt-1 inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] text-muted">Демо-продукт XRONIX, не продукт Альфа-Банка</span>}
+          {m.gov && (
+            <span className="mt-2 block rounded-xl bg-steel/12 px-3 py-2 text-[12px] leading-snug text-steel">
+              <span className="block font-medium">Господдержка: половину риска берёт Корпорация МСП</span>
+              {m.valid_until && <span className="block text-steel/75">Акция до {new Date(`${m.valid_until}T00:00:00`).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</span>}
+            </span>
+          )}
         </div>
         {fit && <Badge tone="ok" dot>Подходит</Badge>}
       </div>

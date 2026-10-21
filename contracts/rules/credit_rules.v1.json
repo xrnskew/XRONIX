@@ -1,7 +1,7 @@
 {
   "version": "credit_rules.v1",
   "comment": "Все значения синтетические, для демонстрации логики конвейера. Описание: docs/CONVEYOR.md, раздел 6.",
-  "applicable_products": ["fast", "secured", "start"],
+  "applicable_products": ["fast", "secured", "start", "gov_guarantee"],
   "checks": {
     "max_amount_to_revenue": 2.0,
     "stage_delay_seconds": { "min": 2, "max": 4 }
@@ -86,5 +86,12 @@
     "collateral_or_guarantor_required": true,
     "plan_profit_share": 0.5,
     "condition_text": "Условие: зарегистрировать ИП или ООО до подписания договора."
+  },
+  "gov_guarantee": {
+    "comment": "Кредит Альфа-Банка с «зонтичным» поручительством Корпорации МСП (contracts/products.gov.json). Акция: после validUntil продукт не подходит, заявка отклоняется стоп-фактором offer_expired.",
+    "msp_max_revenue_rub": 2000000000,
+    "guarantee_share": 0.5,
+    "scoring_points": 8,
+    "scoring_label": "50% суммы, Корпорация МСП"
   }
 }
