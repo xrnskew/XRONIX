@@ -1,11 +1,11 @@
 {
   "date": "2026-10-21",
-  "code_commit": "1ef2c44",
+  "code_commit": "a466322",
   "merged_dev": "8fd34fb",
-  "merged_ai": "81d660b",
+  "merged_ai": "437c903",
   "backend": {
-    "passed": 314,
-    "seconds": 126.2
+    "passed": 316,
+    "seconds": 111.77
   },
   "ai": {
     "passed": 69,
@@ -34,5 +34,11 @@
     "human phrase review A2",
     "new Docker build",
     "deployment requires explicit user permission"
-  ]
+  ],
+  "encoding": {
+    "utf8_mode": 0,
+    "locale": "US-ASCII",
+    "regression_tests_passed": 2,
+    "native_windows_tested": false
+  }
 }
