@@ -1,0 +1,27 @@
+{
+  "comment": "Пример формата. Население — из справочника городов (arbaev/russia-cities, 2023). Зарплата и число заведений — условные значения для примера, не данные.",
+  "version": 1,
+  "generated_at": "2026-10-21",
+  "sources": [
+    { "id": "russia_cities", "title": "справочник городов России", "url": "https://github.com/arbaev/russia-cities", "license": "факты, без охраняемого текста", "retrieved_at": "2026-10-19" },
+    { "id": "rosstat_salary", "title": "Росстат", "url": "https://rosstat.gov.ru/labor_market_employment_salaries", "license": "открытые данные", "retrieved_at": "2026-10-21" },
+    { "id": "osm", "title": "OpenStreetMap", "url": "https://www.openstreetmap.org/copyright", "license": "ODbL 1.0", "retrieved_at": "2026-10-21" }
+  ],
+  "cities": [
+    {
+      "name": "Самара",
+      "region": "Самарская область",
+      "population": { "value": 1173299, "source": "russia_cities", "year": 2023, "scope": "city" },
+      "avg_salary_rub": { "value": 60000, "source": "rosstat_salary", "year": 2025, "scope": "region" },
+      "venues": {
+        "coffee": { "value": 300, "source": "osm", "scope": "city" },
+        "bakery": { "value": 100, "source": "osm", "scope": "city" }
+      }
+    },
+    {
+      "name": "Казань",
+      "region": "Республика Татарстан",
+      "population": { "value": 1308660, "source": "russia_cities", "year": 2023, "scope": "city" }
+    }
+  ]
+}

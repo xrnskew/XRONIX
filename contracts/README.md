@@ -7,7 +7,7 @@
 | [api.md](api.md) | Frontend ↔ Backend (REST, JWT) |
 | [conveyor.md](conveyor.md) | **v2.** Frontend ↔ Backend: компании, подбор, заявки, лента, рабочее место аналитика |
 | [integrations.md](integrations.md) | **v2.** Backend ↔ integrations-mock (ЕГРЮЛ/ЕГРИП, ФНС, БКИ) |
-| [ai.md](ai.md) | Backend ↔ AI-сервис (v2: своя модель — `/ai/consult` для чата подбора бизнеса, `/ai/parse-need` для мастера) |
+| [ai.md](ai.md) | Backend ↔ AI-сервис (v2: своя экспертная система на правилах — `/ai/consult` для чата подбора бизнеса, `/ai/parse-need` для мастера; база знаний и банк фраз) |
 | [templates.md](templates.md) | **v2.** Расчёт проекта без ИИ: шаблоны сфер [`templates/spheres.v1.json`](templates/spheres.v1.json) и формулы |
 | [products.demo.json](products.demo.json) | **v2.** Демо-продукт «Старт» для нового бизнеса (не продукт Альфа-Банка) |
 | [dictionaries.json](dictionaries.json) | **v2.** Коды и тексты: цели, сферы, статусы, причины отказа |

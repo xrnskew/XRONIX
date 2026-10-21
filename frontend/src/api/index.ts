@@ -44,8 +44,8 @@ async function waitGeneration(id: string): Promise<AiReply> {
 }
 
 const realApi: Api = {
-  async register(b) { const r = await request<AuthResult>('POST', '/auth/register', b); setToken(r.token); return r },
-  async login(b) { const r = await request<AuthResult>('POST', '/auth/login', b); setToken(r.token); return r },
+  async register(b) { const r = await request<AuthResult>('POST', '/auth/register', b); setToken(r.token ?? null); return r },
+  async login(b) { const r = await request<AuthResult>('POST', '/auth/login', b); setToken(r.token ?? null); return r },
   logout: () => request('POST', '/auth/logout'),
   logoutAll: () => request('POST', '/auth/logout-all'),
   changePassword: (current_password, new_password) => request('POST', '/auth/change-password', { current_password, new_password }),

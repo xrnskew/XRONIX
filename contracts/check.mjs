@@ -92,6 +92,8 @@ cases.push(
   ['fns.json', def('integrations', 'fns')],
   ['bki.request.json', def('integrations', 'bki_request')],
   ['bki.report.json', def('integrations', 'bki_report')],
+  ['knowledge.cities.json', def('knowledge', 'cities_file')],
+  ['knowledge.phrases.json', def('knowledge', 'phrases_file')],
 )
 for (const [file, d] of [['application.list.json', def('conveyor', 'application_list_item')], ['feed.json', def('conveyor', 'feed_item')], ['bank.queue.json', def('bank', 'queue_item')]])
   read(`./examples/${file}`).forEach((_, i) => cases.push([`${file}#${i}`, d]))
@@ -108,6 +110,30 @@ export function validOgrn(ogrn) {
   if (ogrn.length === 13) return Number(BigInt(ogrn.slice(0, 12)) % 11n % 10n) === Number(ogrn[12])
   if (ogrn.length === 15) return Number(BigInt(ogrn.slice(0, 14)) % 13n % 10n) === Number(ogrn[14])
   return false
+}
+
+// База знаний и банк фраз (ai.md, «База знаний и банк фраз»): то, что схема выразить не может.
+// Сервис ai может вызывать те же проверки при сборке своих данных.
+export const PHRASE_PLACEHOLDERS = ['city', 'in_city', 'sphere', 'sphere_many', 'population', 'salary', 'venues', 'own_funds', 'source']
+export function checkKnowledge(cities) {
+  const e = [], ids = new Set(cities.sources.map((s) => s.id)), names = new Set()
+  if (ids.size !== cities.sources.length) e.push('sources: повторяется id')
+  for (const c of cities.cities) {
+    if (names.has(c.name)) e.push(`город ${c.name} повторяется`); names.add(c.name)
+    const facts = [['population', c.population], ['avg_salary_rub', c.avg_salary_rub], ...Object.entries(c.venues ?? {}).map(([k, v]) => [`venues.${k}`, v])]
+    for (const [k, f] of facts) if (f && !ids.has(f.source)) e.push(`${c.name}.${k}: источник ${f.source} не описан в sources`)
+  }
+  return e
+}
+export function checkPhrases(phrases) {
+  const e = []
+  for (const [slot, s] of Object.entries(phrases.slots))
+    s.variants.forEach((v, i) => {
+      for (const [, name] of v.matchAll(/\{([^}]*)\}/g)) if (!PHRASE_PLACEHOLDERS.includes(name)) e.push(`${slot}[${i}]: неизвестная подстановка {${name}}`)
+      if (/[{}]/.test(v.replace(/\{[a-z_]+\}/g, ''))) e.push(`${slot}[${i}]: непарная фигурная скобка`)
+      if (/одобр|гарантир/i.test(v)) e.push(`${slot}[${i}]: обещание кредита запрещено (ai.md, правило 7)`)
+    })
+  return e
 }
 
 // График аннуитета: платёж по формуле, последний платёж закрывает остаток, итог = сумма платежей.
@@ -164,4 +190,11 @@ for (const file of ['plan.coffee.json', 'plan.no-credit.json', 'plan.calc.respon
 }
 const c = read('./examples/plan.coffee.json').credit
 if (annuity(c.amount_rub, c.estimated_rate_percent, c.recommended_term_months) !== c.monthly_payment_rub) { bad++; console.error('FAIL платёж в примере не совпадает с формулой аннуитета') } else console.log('ok   аннуитет в примере')
+{
+  const k = read('./examples/knowledge.cities.json'), ph = read('./examples/knowledge.phrases.json'), errs = [...checkKnowledge(k), ...checkPhrases(ph)]
+  const venueKeys = Object.keys(read('./schemas/knowledge.schema.json').definitions.city.properties.venues.properties).sort().join()
+  const spheres = read('./templates/spheres.v1.json').spheres, sphereKeys = (Array.isArray(spheres) ? spheres.map((x) => x.id) : Object.keys(spheres)).sort().join()
+  if (venueKeys !== sphereKeys) errs.push('knowledge venues: ключи не совпадают со сферами templates/spheres.v1.json')
+  if (errs.length) { bad++; console.error('FAIL база знаний:', errs) } else console.log('ok   смысл базы знаний и банка фраз')
+}
 process.exit(bad ? 1 : 0)

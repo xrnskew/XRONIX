@@ -34,6 +34,8 @@
 Запрос: `{ "email": string, "password": string }`
 Ответ 200: `{ "token": string, "user": User }`
 
+**Cookie-режим (браузер).** Фронт шлёт заголовок `X-Session-Mode: cookie` и `credentials: include`. Сессию бэкенд ставит HttpOnly-cookie (`SameSite=Strict`, на https — `Secure`), а в ответе register и login **токена нет**: `{ "user": User }`. Скрипт страницы токен не видит. Запись по cookie принимается только с `Origin` из `CORS_ORIGINS`. Режим с `Authorization: Bearer` остаётся для клиентов без браузера (коллекция запросов, тесты).
+
 `User`: [`profile.schema.json`](schemas/profile.schema.json), пример [`user.json`](examples/user.json).
 
 ## Профиль
