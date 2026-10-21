@@ -13,6 +13,9 @@ import ApplicationForm from './ApplicationForm'
 
 
 
+// Отказ по стоп-фактору случается на проверке, до оценки: тогда крестик на «Проверке», а не на «Решении»
+const stopStage = (a: Application) => a.status === 'declined' && !a.timeline.some((t) => t.status === 'scoring') ? 1 : undefined
+
 export default function ApplicationView() {
   const { id = '' } = useParams()
   const [app, setApp] = useState<Application | null>(null)
@@ -40,7 +43,7 @@ export default function ApplicationView() {
   return (
     <Screen title={`Заявка ${app.number}`} sub={<span className="flex flex-wrap items-center gap-2">{app.company.registry.name} · {productNames[app.product_id]} · {rub(app.amount_rub)} на {app.term_months} мес. <StatusBadge status={app.status} title={app.status_info.title} /></span>}>
       <Card span={12} className="sm:p-6">
-        <ConveyorTrack status={app.status} />
+        <ConveyorTrack status={app.status} stage={stopStage(app)} />
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <div className="rounded-2xl bg-surface-2/60 p-4">
             <div className="text-[13px] text-muted">Что сейчас происходит</div>

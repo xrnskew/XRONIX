@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
 import type { AiReply, Answer, ChatSummary, Question } from '../../types/plan'
-import { Chip, Conveyor, Logo, Wide } from '../ui'
+import { Chip, Conveyor, Logo, Wide, Icon } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
@@ -10,6 +10,12 @@ import { submittedAnswers } from '../answers'
 import { planPath } from '../PlanRoute'
 
 const starters = ['Кофейня с собой', 'Пекарня', 'Автомойка', 'Магазин одежды']
+const starterIcons: Record<string, string> = {
+  'Кофейня с собой': 'M5 8h11v6a5 5 0 01-5 5h-1a5 5 0 01-5-5zM16 10h2a2 2 0 010 4h-2M8 3v2M11 3v2',
+  'Пекарня': 'M4 12a8 5 0 0116 0v6a1 1 0 01-1 1H5a1 1 0 01-1-1zM9 9.5l1 4M14 9l1 4',
+  'Автомойка': 'M5 16l1.5-5h11L19 16M4 16h16v3H4zM7 19v1M17 19v1M9 7.5c0-1 1-2 1-3.5M13 7.5c0-1 1-2 1-3.5',
+  'Магазин одежды': 'M8 4L4 7l2 3 2-1v11h8V9l2 1 2-3-4-3c0 1.5-1.8 3-4 3S8 5.5 8 4z',
+}
 const starterHints: Record<string, string> = {
   'Кофейня с собой': 'Кофе с собой в проходном месте',
   'Пекарня': 'Своя выпечка и кофе рядом с домом',
@@ -86,9 +92,12 @@ export default function Chat() {
             <div className="mt-8 grid grid-cols-2 gap-3">
               {starters.map((s) => (
                 <button key={s} type="button" onClick={() => submit(`Хочу открыть: ${s.toLowerCase()}`)}
-                  className="card-ring rounded-2xl bg-surface/90 p-4 text-left transition-colors hover:bg-surface-2">
-                  <div className="text-[16px] font-semibold">{s}</div>
-                  <div className="mt-1 text-[13px] text-muted">{starterHints[s]}</div>
+                  className="card-ring group flex items-start gap-3.5 rounded-2xl bg-surface/90 p-4 text-left transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-surface-2">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/12 text-accent-soft transition-colors group-hover:bg-fill group-hover:text-white" aria-hidden><Icon d={starterIcons[s]} /></span>
+                  <span className="min-w-0">
+                    <span className="block text-[16px] font-semibold">{s}</span>
+                    <span className="mt-1 block text-[13px] text-muted">{starterHints[s]}</span>
+                  </span>
                 </button>
               ))}
             </div>

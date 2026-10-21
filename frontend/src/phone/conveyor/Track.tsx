@@ -6,16 +6,17 @@ export const STAGES = ['Подача', 'Проверка', 'Оценка', 'Ре
 export const STAGE: Record<Status, number> = { draft: 0, submitted: 1, checking: 1, info_requested: 1, scoring: 2, manual_review: 3, approved: 3, counter_offer: 3, declined: 3, signing: 4, funded: 5, withdrawn: 0, cancelled: 3 }
 const STOPPED: Status[] = ['declined', 'cancelled', 'withdrawn']
 
-function state(status: Status) {
-  const cur = STAGE[status]
+// stage — этап, на котором заявка остановилась, если он известен точнее статуса (отказ на проверке)
+function state(status: Status, stage?: number) {
+  const cur = stage ?? STAGE[status]
   return { cur, done: status === 'funded', stopped: STOPPED.includes(status), moving: AUTO_STATUSES.includes(status) || status === 'manual_review' }
 }
 
 const Check = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
 const Cross = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg>
 
-export function ConveyorTrack({ status }: { status: Status }) {
-  const { cur, done, stopped, moving } = state(status)
+export function ConveyorTrack({ status, stage }: { status: Status; stage?: number }) {
+  const { cur, done, stopped, moving } = state(status, stage)
   return (
     <div>
       <ol className="flex items-center sm:mb-7" aria-label="Этапы заявки">
