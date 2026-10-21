@@ -1,0 +1,35 @@
+meta {
+  name: Government guarantee match
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/api/products/match
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "company_id": "{{companyId}}",
+    "plan_id": null,
+    "purpose": "equipment",
+    "amount_rub": 40000000,
+    "term_months": 36,
+    "has_collateral": false
+  }
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('Only government guarantee fits 40m without collateral', () => {
+    const fit=res.getBody().items.filter(x => x.eligible && x.can_apply);
+    expect(fit.map(x => x.product_id)).to.deep.equal(['gov_guarantee']);
+    expect(fit[0].gov).to.equal(true); expect(fit[0].valid_until).to.equal('2026-11-15');
+  });
+}

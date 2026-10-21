@@ -1,0 +1,32 @@
+meta {
+  name: Poll government review
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/api/applications/{{govApplicationId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+script:post-response {
+  const body=res.getBody();
+  bru.setVar('govVersion',body.version);
+  const polls=(bru.getVar('govPolls') || 0)+1;
+  bru.setVar('govPolls',polls);
+  if (['submitted','checking','scoring'].includes(body.status) && polls<60) bru.runner.setNextRequest('Poll government review');
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('Government application reaches analyst', () => {
+   const status=res.getBody().status;
+   if (['submitted','checking','scoring'].includes(status)) expect(bru.getVar('govPolls')).to.be.below(60);
+   else expect(status).to.equal('manual_review');
+  });
+}

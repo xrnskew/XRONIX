@@ -6,6 +6,13 @@ from datetime import date, datetime, timezone
 from .validation import annuity as payment, js_round
 
 
+GOV_TEXT = 'Половину риска по кредиту берёт Корпорация МСП: поэтому залог не нужен.'
+
+
+def expired(p, today=None):
+    return bool(p.get('validUntil') and (today or datetime.now(timezone.utc).date()).isoformat() > p['validUntil'])
+
+
 def rub(n):
     return f'{n:,}'.replace(',', '\u00a0') + ' ₽'
 
@@ -40,7 +47,7 @@ def schedule(amount, rate, months):
     return rows
 
 
-def match_products(req, months, products, rules, person=False, plan=None):
+def match_products(req, months, products, rules, person=False, plan=None, today=None):
     out = []
     for p in products.values():
         reasons = []
@@ -54,6 +61,8 @@ def match_products(req, months, products, rules, person=False, plan=None):
             reasons.append('Подходит только для покупки недвижимости.')
         if p['id'] == 'revolving' and req['purpose'] != 'working_capital':
             reasons.append('Линия для пополнения оборота.')
+        if expired(p,today):
+            reasons.append('Акция закончилась '+date.fromisoformat(p['validUntil']).strftime('%d.%m.%Y')+'.')
         if p['id'] == 'start':
             if not plan:
                 reasons.append('Нужен расчёт проекта: посчитайте его в чате или в мастере.')
@@ -68,6 +77,7 @@ def match_products(req, months, products, rules, person=False, plan=None):
         if not can:
             reasons.append('Заявку на этот продукт в демо оформляет менеджер банка.')
         out.append(dict(product_id=p['id'], name=p['name'], demo=p.get('demo', False), eligible=len(reasons) == (0 if can else 1), can_apply=can,
+                        **(dict(gov=True,valid_until=p.get('validUntil')) if p.get('gov') else {}),
                         reasons=reasons, rate_from_percent=p['rateFrom'], url=p['url'],
                         monthly_payment_rub=payment(req['amount_rub'], p['rateFrom'], min(p['termMax'], max(p['termMin'] or 1, req['term_months']))) if p['rateFrom'] is not None and p['id'] != 'revolving' else None))
     return sorted(out, key=lambda x: (not (x['eligible'] and x['can_apply']), x['rate_from_percent'] if x['rate_from_percent'] is not None else 99))
@@ -87,6 +97,12 @@ def stop_factors(i, p, rules, today=None):
         add('tax_debt', limit_rub=rub(s['tax_debt_max_rub'])[:-2])
     if s['head_disqualified'] and i['fns']['head_disqualified']:
         add('head_disqualified')
+    if p['id'] == 'gov_guarantee':
+        limit=rules['gov_guarantee']['msp_max_revenue_rub']
+        if (i['financials']['revenue_12m_rub'] or 0)>limit:
+            add('not_msp',limit_rub=rub(limit)[:-2])
+        if expired(p,date.fromisoformat(i['submitted_on']) if i.get('submitted_on') else today):
+            add('offer_expired',valid_until=date.fromisoformat(p['validUntil']).strftime('%d.%m.%Y'))
     if p['id'] == 'start':
         if not i.get('plan') and rules['start']['plan_required']:
             add('plan_required')
@@ -140,7 +156,11 @@ def score(i, p, rules, today=None):
     ratio = i['amount_rub']/rev if rev else math.inf
     add('amount_to_revenue', 'Сумма к годовой выручке', f'{js_round(ratio*100)}%' if rev else 'выручки нет', band(sc['amount_to_revenue'], 'max_ratio', ratio))
     cv = (i.get('collateral') or {}).get('value_rub', 0)
-    add('collateral', 'Залог', rub(cv) if cv else 'нет', sc['collateral']['full_coverage' if cv >= i['amount_rub'] else 'partial' if cv else 'none'])
+    if p['id'] == 'gov_guarantee':
+        g=rules['gov_guarantee']
+        add('state_guarantee','Поручительство Корпорации МСП',g['scoring_label'],g['scoring_points'])
+    else:
+        add('collateral', 'Залог', rub(cv) if cv else 'нет', sc['collateral']['full_coverage' if cv >= i['amount_rub'] else 'partial' if cv else 'none'])
     if i['fns']['mass_address']:
         add('mass_address', 'Массовый адрес', 'да', sc['mass_address'])
     if i['fns']['tax_debt_rub']:
@@ -163,6 +183,8 @@ def decide(i, s, p, rules):
     def offer(kind, amount, months, explanation):
         if i.get('person'):
             explanation.append(rules['start']['condition_text'])
+        if p['id'] == 'gov_guarantee':
+            explanation.append(GOV_TEXT)
         return dict(kind=kind, amount_rub=amount, term_months=months, rate_percent=rate, explanation=explanation)
     def manual(text):
         return dict(kind='manual', recommendation=text)

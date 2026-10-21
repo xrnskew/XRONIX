@@ -34,7 +34,7 @@ class Conveyor:
         self.settings,self.contracts,self.sessions=settings,contracts,sessions
         self.rules=load(contracts.root,'rules/credit_rules.v1.json')
         self.dict=load(contracts.root,'dictionaries.json')
-        self.products={p['id']:p for p in load(CATALOG,'products.json')['products']+load(contracts.root,'products.demo.json')['products']}
+        self.products={p['id']:p for p in load(CATALOG,'products.json')['products']+load(contracts.root,'products.gov.json')['products']+load(contracts.root,'products.demo.json')['products']}
         self.templates=load(contracts.root,'templates/spheres.v1.json')
 
     def validate(self, definition, body):
@@ -123,7 +123,9 @@ class Conveyor:
         self.move(s,a,'declined',reason=','.join(r['code'] for r in reasons))
 
     def input(self,s,a,external):
+        submitted=s.scalar(select(ApplicationEvent).where(ApplicationEvent.application_id==a.id,ApplicationEvent.actor=='client',ApplicationEvent.to_status.in_(('submitted','checking'))).order_by(ApplicationEvent.seq.desc()).limit(1))
         return dict(**{k:a.data[k] for k in ('financials','product_id','amount_rub','term_months','collateral')},**external,
+                    submitted_on=submitted.at[:10] if submitted else None,
                     person=external['registry']['kind']=='person',plan=(self.plan(s,a.data['plan_id'],a.user_id) or {}).get('finance'))
 
     async def step(self,integrations,application_id=None):

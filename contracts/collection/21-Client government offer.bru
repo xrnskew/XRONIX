@@ -1,0 +1,20 @@
+meta {
+  name: Client government offer
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/api/applications/{{govApplicationId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('Government offer visible to client', () => { expect(res.getBody().offer.product_id).to.equal('gov_guarantee'); expect(res.getBody().offer.amount_rub).to.equal(3000000); });
+}

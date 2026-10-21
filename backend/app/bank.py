@@ -71,6 +71,7 @@ def apply_decision(c,s,a,body,user):
         explanation=['Заявку одобрил кредитный специалист.' if kind=='approve' else 'Кредитный специалист предложил другие условия.']
         if comment:explanation.append(comment)
         if c.company(s,a.company_id,a.user_id)['registry']['kind']=='person':explanation.append(c.rules['start']['condition_text'])
+        if p['id']=='gov_guarantee':explanation.append(credit.GOV_TEXT)
         rows=credit.schedule(amount,rate,term)
         offer=s.scalar(select(Offer).where(Offer.application_id==a.id))
         if not offer:offer=Offer(id=uid(),application_id=a.id);s.add(offer)
@@ -94,7 +95,13 @@ def apply_decision(c,s,a,body,user):
                 raise ApiError('VALIDATION_ERROR','Стаж бизнеса уже соответствует требованиям продукта. Выберите другую причину отказа.')
             try:params['eligible_date']=credit.eligible_date(registry['registered_at'],p['minBusinessMonths'] or 0)
             except (TypeError,ValueError,OverflowError):pass
-        a.data={**a.data,'decline':dict(reasons=[credit.decline_text(dict(code=code,params=params),c.dict) for code in body['decline_reasons']],comment=comment),'info_request':None}
+        if p.get('validUntil'):params['valid_until']=datetime.fromisoformat(p['validUntil']).strftime('%d.%m.%Y')
+        reasons=[]
+        for code in body['decline_reasons']:
+            values={**params}
+            if code=='not_msp':values['limit_rub']=credit.rub(c.rules['gov_guarantee']['msp_max_revenue_rub'])[:-2]
+            reasons.append(credit.decline_text(dict(code=code,params=values),c.dict))
+        a.data={**a.data,'decline':dict(reasons=reasons,comment=comment),'info_request':None}
         c.move(s,a,'declined','analyst',user.id,comment)
     else:raise ApiError('VALIDATION_ERROR','Неизвестное решение.')
 
