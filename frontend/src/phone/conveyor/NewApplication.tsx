@@ -52,7 +52,7 @@ export default function NewApplication() {
   const fromPlan = (c: CalculatedPlan) => { usePlan(c); next() }
 
   return (
-    <Screen title="Новая заявка">
+    <Screen title="Новая заявка" bodyClass="wizard">
       <div data-span={12}><Steps items={steps} current={step} /></div>
       {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
       {name === 'Цель' && <GoalStep preset={preset} onPick={(p) => { setPath(p); if (preset && p !== 'current') usePlan(preset); else setProject(null); setStep(1) }} />}

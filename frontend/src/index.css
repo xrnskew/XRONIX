@@ -143,6 +143,11 @@ input[type="range"] { height: 4px; }
 @keyframes pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: none; opacity: 1; } }
 .pop { animation: pop .38s var(--ease-out) both; }
 
+/* Мастер заявки: карточки нового шага появляются; шкала шагов не перемонтируется и не мигает */
+.wizard > * { animation: appear .32s var(--ease-out) both; }
+.wizard > :nth-child(3) { animation-delay: 40ms; }
+.wizard > :nth-child(n+4) { animation-delay: 80ms; }
+
 @media (prefers-reduced-motion: reduce) {
-  .appear, .belt, .node-pulse, .fill-in, .pop { animation: none; }
+  .appear, .belt, .node-pulse, .fill-in, .pop, .wizard > * { animation: none; }
 }

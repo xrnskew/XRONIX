@@ -1,8 +1,9 @@
 import { useId, useRef, useState } from 'react'
 import { findCities, type City } from '../../data/cities'
 
-export default function CityPicker({ value, onChange, onSelect, label = 'Город', disabled = false }: {
-  value: string; onChange: (value: string) => void; onSelect?: (value: string) => void; label?: string; disabled?: boolean
+// quiet: подпись как у обычных полей формы (профиль), иначе — как заголовок вопроса (чат)
+export default function CityPicker({ value, onChange, onSelect, label = 'Город', disabled = false, quiet = false }: {
+  value: string; onChange: (value: string) => void; onSelect?: (value: string) => void; label?: string; disabled?: boolean; quiet?: boolean
 }) {
   const id = useId()
   const [open, setOpen] = useState(false)
@@ -14,7 +15,7 @@ export default function CityPicker({ value, onChange, onSelect, label = 'Гор�
 
   return (
     <div className="min-w-0" onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false) }}>
-      <label htmlFor={id} className="mb-1.5 block text-[14px] font-semibold">{label}</label>
+      <label htmlFor={id} className={quiet ? 'mb-1 block text-[13px] text-muted' : 'mb-1.5 block text-[14px] font-semibold'}>{label}</label>
       <div className="relative">
         <input ref={input} id={id} role="combobox" aria-autocomplete="list" aria-expanded={open} aria-controls={`${id}-list`}
           aria-activedescendant={open && active >= 0 && options[active] ? `${id}-${active}` : undefined}

@@ -69,6 +69,46 @@ export function Applications() {
   )
 }
 
+// Тип события — иконка и цвет: решение банка, запрос данных, смена статуса, подсказка
+const KIND: Record<FeedItem['kind'], { d: string; cls: string }> = {
+  offer: { d: 'M5 12.5l4.5 4.5L19 7.5', cls: 'bg-ok/15 text-ok' },
+  info_request: { d: 'M12 8v5M12 16.5v.5M12 3l9 16H3z', cls: 'bg-accent/15 text-[#ff8a80]' },
+  status_change: { d: 'M4 12h12M12 6l6 6-6 6', cls: 'bg-steel/15 text-steel' },
+  tip: { d: 'M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z', cls: 'bg-warn/15 text-warn' },
+}
+const dayTitle = (iso: string) => {
+  const d = new Date(iso), today = new Date(), y = new Date(); y.setDate(today.getDate() - 1)
+  const same = (a: Date, b: Date) => a.toDateString() === b.toDateString()
+  return same(d, today) ? 'Сегодня' : same(d, y) ? 'Вчера' : d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })
+}
+function byDay(items: FeedItem[]) {
+  const groups = new Map<string, FeedItem[]>()
+  for (const f of items) { const k = dayTitle(f.created_at); groups.set(k, [...(groups.get(k) ?? []), f]) }
+  return [...groups.entries()]
+}
+const time = (iso: string) => new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+
+function FeedRow({ f }: { f: FeedItem }) {
+  const k = KIND[f.kind] ?? KIND.status_change
+  const body = (
+    <div className="flex gap-3.5 px-4 py-3.5 sm:px-5">
+      <span className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${k.cls}`} aria-hidden>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d={k.d} /></svg>
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <div className={`text-[15px] leading-snug ${f.read ? 'font-medium' : 'font-semibold'}`}>{f.title}</div>
+          <span className="flex shrink-0 items-center gap-1.5 text-[12px] text-muted tabular-nums">
+            {!f.read && <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-label="Новое" />}{time(f.created_at)}
+          </span>
+        </div>
+        <p className="mt-0.5 text-[14px] leading-snug text-text/70">{f.text}</p>
+      </div>
+    </div>
+  )
+  return <li>{f.application_id ? <Link to={`/applications/${f.application_id}`} className="block transition-colors hover:bg-white/[.03]">{body}</Link> : body}</li>
+}
+
 export function Feed() {
   const [items, setItems] = useState<FeedItem[] | null>(null)
   useEffect(() => {
@@ -82,15 +122,13 @@ export function Feed() {
     <Screen title="Лента" sub="События по заявкам и подсказки для вашего бизнеса">
       {!items && <Skeleton />}
       {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">Здесь появятся новости по вашим заявкам: решения банка, запросы данных, подсказки.</p></Card>}
-      {items?.map((f) => (
-        <Card key={f.id} span={12} className={f.read ? '' : 'ring-1 ring-accent/40'}>
-          <div className="flex items-start justify-between gap-3">
-            <div className="text-[15px] font-semibold">{f.title}</div>
-            <span className="shrink-0 text-[12px] text-muted">{dateRu(f.created_at)}</span>
-          </div>
-          <p className="mt-1 text-[14px] leading-snug text-text/80">{f.text}</p>
-          {f.application_id && <Link to={`/applications/${f.application_id}`} className="mt-2 inline-block text-[14px] font-medium text-accent underline-offset-2 hover:underline">Открыть заявку</Link>}
-        </Card>
+      {items && byDay(items).map(([day, list]) => (
+        <section key={day} data-span={12}>
+          <h2 className="mb-2 px-1 text-[13px] font-medium text-muted">{day}</h2>
+          <ul className="card-ring divide-y divide-white/5 overflow-hidden rounded-[22px] bg-surface">
+            {list.map((f) => <FeedRow key={f.id} f={f} />)}
+          </ul>
+        </section>
       ))}
     </Screen>
   )

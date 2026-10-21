@@ -10,12 +10,12 @@ const field = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text 
 export default function ProfileScreen() {
   const { user, saveProfile, signOut } = useCabinet()
   const wide = useContext(Wide)
-  const [draft, setDraft] = useState(() => ({ name: user?.name ?? '', city: user?.city ?? '', experience: user?.experience ?? '', budget: user?.budget_rub == null ? '' : String(user.budget_rub) }))
+  const [draft, setDraft] = useState(() => ({ name: user?.name ?? '', city: user?.city ?? '', experience: user?.experience ?? '', budget: user?.budget_rub == null ? '' : groupDigits(String(user.budget_rub)) }))
   const [tag, setTag] = useState('')
   const [state, setState] = useState<{ kind: 'idle' | 'saving' | 'saved' | 'error'; text?: string }>({ kind: 'idle' })
   if (!user) return null
 
-  const dirty = draft.name !== user.name || draft.city !== (user.city ?? '') || draft.experience !== (user.experience ?? '') || draft.budget !== (user.budget_rub == null ? '' : String(user.budget_rub))
+  const dirty = draft.name !== user.name || draft.city !== (user.city ?? '') || draft.experience !== (user.experience ?? '') || draft.budget.replace(/\s/g, '') !== (user.budget_rub == null ? '' : String(user.budget_rub))
   const set = (k: keyof typeof draft, v: string) => { setDraft({ ...draft, [k]: v }); setState({ kind: 'idle' }) }
 
   async function run(patch: Parameters<typeof saveProfile>[0]) {
@@ -55,9 +55,9 @@ export default function ProfileScreen() {
         </div>
         <div className={`mt-4 ${wide ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'space-y-3'}`}>
           <Field label="Имя" value={draft.name} onChange={(v) => set('name', v)} />
-          <CityPicker value={draft.city} onChange={(v) => set('city', v)} />
+          <CityPicker quiet value={draft.city} onChange={(v) => set('city', v)} />
           <Field label="Опыт" value={draft.experience} onChange={(v) => set('experience', v)} />
-          <Field label="Стартовый бюджет, ₽" value={draft.budget} onChange={(v) => set('budget', v)} inputMode="numeric" />
+          <Field label="Стартовый бюджет, ₽" value={draft.budget} onChange={(v) => set('budget', groupDigits(v))} inputMode="numeric" />
         </div>
         <div className="mt-4 flex items-center gap-3">
           <button onClick={save} disabled={!dirty || state.kind === 'saving'} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white transition-opacity disabled:opacity-35">
@@ -88,6 +88,9 @@ export default function ProfileScreen() {
     </Screen>
   )
 }
+
+// 500000 → «500 000»: бюджет читается сразу; при сохранении пробелы убираются
+const groupDigits = (v: string) => { const d = v.replace(/\D/g, '').slice(0, 12); return d ? new Intl.NumberFormat('ru-RU').format(Number(d)) : '' }
 
 function Field({ label, value, onChange, inputMode }: { label: string; value: string; onChange: (v: string) => void; inputMode?: 'numeric' }) {
   return <label className="block text-[13px] text-muted">{label}<input className={`${field} mt-1`} value={value} onChange={(e) => onChange(e.target.value)} inputMode={inputMode} /></label>

@@ -12,7 +12,8 @@ export const Card = ({ children, className = '', id, delay, span, tall }: { chil
   <div id={id} data-span={span} data-tall={tall || undefined} className={`card-ring rounded-[22px] bg-surface p-4 ${delay === undefined ? '' : 'rise'} ${className}`} style={delay === undefined ? undefined : { animationDelay: `${delay * 70}ms` }}>{children}</div>
 )
 
-export const Screen = ({ title, sub, children }: { title: string; sub?: ReactNode; children: ReactNode }) => {
+// bodyClass — класс тела экрана; например wizard: карточки каждого нового шага мастера плавно появляются
+export const Screen = ({ title, sub, children, bodyClass = '' }: { title: string; sub?: ReactNode; children: ReactNode; bodyClass?: string }) => {
   const wide = useContext(Wide)
   if (wide)
     return (
@@ -22,7 +23,7 @@ export const Screen = ({ title, sub, children }: { title: string; sub?: ReactNod
             <h1 className="font-display text-[30px] font-semibold leading-tight tracking-tight">{title}</h1>
             {sub && <p className="mt-1.5 text-[15px] text-muted">{sub}</p>}
           </div>
-          <div className="wide-grid">{children}</div>
+          <div className={`wide-grid ${bodyClass}`}>{children}</div>
         </div>
       </div>
     )
@@ -32,7 +33,7 @@ export const Screen = ({ title, sub, children }: { title: string; sub?: ReactNod
         <h1 className="text-[26px] font-bold leading-tight tracking-tight">{title}</h1>
         {sub && <p className="mt-0.5 text-[14px] text-muted">{sub}</p>}
       </div>
-      <div data-phone-scroll className="no-scrollbar relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-8">{children}</div>
+      <div data-phone-scroll className={`no-scrollbar relative flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 pb-8 ${bodyClass}`}>{children}</div>
     </div>
   )
 }
