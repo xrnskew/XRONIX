@@ -14,7 +14,7 @@
     "sphere": { "enum": ["coffee", "bakery", "car_wash", "clothing_store", "beauty_salon", "pickup_point", "other"] },
     "member_role": { "enum": ["owner", "director", "cfo", "accountant", "employee"] },
     "collateral_kind": { "enum": ["real_estate", "equipment", "vehicle", "goods", "guarantor"] },
-    "product_id": { "enum": ["fast", "secured", "mortgage", "revolving", "start"], "description": "start — демо-продукт XRONIX, не продукт Альфа-Банка" },
+    "product_id": { "enum": ["fast", "secured", "mortgage", "revolving", "start", "gov_guarantee"], "description": "start — демо-продукт XRONIX, не продукт Альфа-Банка; gov_guarantee — кредит Альфа-Банка с поручительством Корпорации МСП (акция)" },
     "status": { "enum": ["draft", "submitted", "checking", "info_requested", "scoring", "manual_review", "approved", "counter_offer", "signing", "funded", "declined", "withdrawn", "cancelled"] },
     "actor": { "enum": ["client", "system", "analyst"] },
     "check_kind": { "enum": ["completeness", "egrul", "fns", "bki"] },
@@ -22,7 +22,7 @@
     "grade": { "enum": ["A", "B", "C", "D"] },
     "decision_kind": { "enum": ["approve", "counter", "decline", "request_info"] },
     "info_request_kind": { "enum": ["authority_document", "financials", "collateral", "other"] },
-    "decline_reason": { "enum": ["company_inactive", "business_too_young", "overdue_90", "tax_debt", "head_disqualified", "low_score", "high_debt_load", "analyst_decision", "own_funds_low", "plan_required"] },
+    "decline_reason": { "enum": ["company_inactive", "business_too_young", "overdue_90", "tax_debt", "head_disqualified", "low_score", "high_debt_load", "analyst_decision", "own_funds_low", "plan_required", "not_msp", "offer_expired"] },
     "company_status": { "enum": ["active", "liquidating", "liquidated", "bankrupt", "not_registered"], "description": "not_registered — будущий ИП: человек ещё не зарегистрировал бизнес" },
     "company_kind": { "enum": ["ip", "ul", "person"], "description": "person — будущий ИП по личному ИНН" }
   }

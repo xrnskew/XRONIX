@@ -4,6 +4,7 @@ import rules from '../data/credit_rules.v1.json' with { type: 'json' }
 import dict from '../data/dictionaries.json' with { type: 'json' }
 import { alfaProducts, type AlfaProduct } from '../data/alfaProducts.ts'
 import demo from '../data/products.demo.json' with { type: 'json' }
+import gov from '../data/products.gov.json' with { type: 'json' }
 import type { Collateral, DeclineReason, Financials, MatchItem, MatchRequest, ProductId, RegistryCompany, ScheduleItem } from '../types/conveyor.ts'
 
 export interface Fns { mass_address: boolean; tax_debt_rub: number; head_disqualified: boolean }
@@ -11,11 +12,14 @@ export interface Bki { has_history: boolean; history_months: number; loans: { le
 export type Grade = 'A' | 'B' | 'C' | 'D'
 export interface Factor { code: string; name: string; value_text: string; points: number }
 
-// Продукты Альфы и демо-продукт XRONIX «Старт» (contracts/products.demo.json)
-export type Product = Omit<AlfaProduct, 'url'> & { demo?: boolean; url: string | null }
-export const allProducts: Product[] = [...alfaProducts, ...(demo.products as Product[])]
+// Продукты Альфы, кредит с господдержкой (contracts/products.gov.json) и демо-продукт XRONIX «Старт» (contracts/products.demo.json)
+export type Product = Omit<AlfaProduct, 'url'> & { demo?: boolean; gov?: boolean; validUntil?: string; url: string | null }
+export const allProducts: Product[] = [...alfaProducts, ...(gov.products as Product[]), ...(demo.products as Product[])]
 const product = (id: ProductId) => allProducts.find((p) => p.id === id) as Product
-const start = rules.start
+const start = rules.start, govRules = rules.gov_guarantee
+const ruDate = (iso: string) => iso.split('-').reverse().join('.')
+// Акция закончилась: сегодня позже validUntil (дата включительно)
+const expired = (p: Product, now = new Date()) => !!p.validUntil && now.toISOString().slice(0, 10) > p.validUntil
 const nf = new Intl.NumberFormat('ru-RU')
 const rubText = (n: number) => `${nf.format(n)} ₽`
 
@@ -50,7 +54,7 @@ const ageText = (m: number) => {
 // ---- подбор ----
 // plan: расчёт проекта, если заявка из плана; person: бизнеса ещё нет (будущий ИП)
 export interface PlanBrief { startup_cost_rub: number; own_funds_rub: number; monthly_profit_rub: number; monthly_revenue_rub: number }
-export function matchProducts(req: MatchRequest, months: number | null, ctx: { person?: boolean; plan?: PlanBrief | null } = {}): MatchItem[] {
+export function matchProducts(req: MatchRequest, months: number | null, ctx: { person?: boolean; plan?: PlanBrief | null; now?: Date } = {}): MatchItem[] {
   return allProducts.map((p) => {
     const reasons: string[] = []
     if ((p.amountMin != null && req.amount_rub < p.amountMin) || req.amount_rub > p.amountMax) reasons.push(`Сумма должна быть ${p.amountMin ? `от ${rubText(p.amountMin)} ` : ''}до ${rubText(p.amountMax)}.`)
@@ -58,6 +62,7 @@ export function matchProducts(req: MatchRequest, months: number | null, ctx: { p
     if (p.collateral && !req.has_collateral) reasons.push(p.id === 'start' ? 'Нужен залог или поручитель.' : 'Нужен залог: недвижимость, оборудование или транспорт.')
     if (p.id === 'mortgage' && req.purpose !== 'real_estate') reasons.push('Подходит только для покупки недвижимости.')
     if (p.id === 'revolving' && req.purpose !== 'working_capital') reasons.push('Линия для пополнения оборота.')
+    if (expired(p, ctx.now)) reasons.push(`Акция закончилась ${ruDate(p.validUntil!)}.`)
     if (p.id === 'start') {
       if (!ctx.plan) reasons.push('Нужен расчёт проекта: посчитайте его в чате или в мастере.')
       else if (ctx.plan.own_funds_rub < ctx.plan.startup_cost_rub * start.min_own_share) reasons.push(`Своих денег должно быть не меньше ${start.min_own_share * 100}% стоимости запуска: ${rubText(Math.ceil(ctx.plan.startup_cost_rub * start.min_own_share))}, у вас ${rubText(ctx.plan.own_funds_rub)}.`)
@@ -68,6 +73,7 @@ export function matchProducts(req: MatchRequest, months: number | null, ctx: { p
     const fits = reasons.length === (canApply ? 0 : 1)
     return {
       product_id: p.id as ProductId, name: p.name, demo: !!p.demo, eligible: fits, can_apply: canApply, reasons,
+      ...(p.gov ? { gov: true, valid_until: p.validUntil ?? null } : {}),
       rate_from_percent: p.rateFrom, url: p.url,
       monthly_payment_rub: p.rateFrom != null && p.id !== 'revolving' ? payment(req.amount_rub, p.rateFrom, Math.min(p.termMax, Math.max(p.termMin ?? 1, req.term_months))) : null,
     }
@@ -92,6 +98,10 @@ export function stopFactors(i: Input): { code: DeclineReason; params: Record<str
   if (i.bki.overdue_90_12m > s.overdue_90_12m_max) out.push({ code: 'overdue_90', params: {} })
   if (i.fns.tax_debt_rub > s.tax_debt_max_rub) out.push({ code: 'tax_debt', params: { limit_rub: nf.format(s.tax_debt_max_rub) } })
   if (s.head_disqualified && i.fns.head_disqualified) out.push({ code: 'head_disqualified', params: {} })
+  if (i.product_id === 'gov_guarantee') {
+    if ((i.financials.revenue_12m_rub ?? 0) > govRules.msp_max_revenue_rub) out.push({ code: 'not_msp', params: { limit_rub: nf.format(govRules.msp_max_revenue_rub) } })
+    if (expired(p, i.now)) out.push({ code: 'offer_expired', params: { valid_until: ruDate(p.validUntil!) } })
+  }
   if (i.product_id === 'start') {
     if (!i.plan) out.push({ code: 'plan_required', params: {} })
     else if (i.plan.own_funds_rub < i.plan.startup_cost_rub * start.min_own_share) out.push({ code: 'own_funds_low', params: { min_share: String(start.min_own_share * 100) } })
@@ -137,7 +147,9 @@ export function score(i: Input) {
   const revenue = i.product_id === 'start' && i.plan ? i.plan.monthly_revenue_rub * 12 : i.financials.revenue_12m_rub ?? 0, ratio = revenue > 0 ? i.amount_rub / revenue : Infinity
   factors.push({ code: 'amount_to_revenue', name: 'Сумма к годовой выручке', value_text: revenue > 0 ? `${Math.round(ratio * 100)}%` : 'выручки нет', points: band(sc.amount_to_revenue, (x) => x.max_ratio, ratio).points })
   const cv = i.collateral?.value_rub ?? 0
-  factors.push({ code: 'collateral', name: 'Залог', value_text: cv ? `${rubText(cv)}` : 'нет', points: cv >= i.amount_rub ? sc.collateral.full_coverage : cv > 0 ? sc.collateral.partial : sc.collateral.none })
+  // у кредита с господдержкой вместо залога — поручительство Корпорации МСП
+  if (i.product_id === 'gov_guarantee') factors.push({ code: 'state_guarantee', name: 'Поручительство Корпорации МСП', value_text: govRules.scoring_label, points: govRules.scoring_points })
+  else factors.push({ code: 'collateral', name: 'Залог', value_text: cv ? `${rubText(cv)}` : 'нет', points: cv >= i.amount_rub ? sc.collateral.full_coverage : cv > 0 ? sc.collateral.partial : sc.collateral.none })
   if (i.fns.mass_address) factors.push({ code: 'mass_address', name: 'Массовый адрес', value_text: 'да', points: sc.mass_address })
   if (i.fns.tax_debt_rub > 0) factors.push({ code: 'tax_debt', name: 'Недоимка по налогам', value_text: rubText(i.fns.tax_debt_rub), points: sc.small_tax_debt })
   if (i.registry.okved) {
@@ -154,9 +166,12 @@ export type Decision =
   | { kind: 'approve' | 'counter'; amount_rub: number; term_months: number; rate_percent: number; explanation: string[] }
   | { kind: 'manual'; recommendation: string }
 
+export const GOV_TEXT = 'Половину риска по кредиту берёт Корпорация МСП: поэтому залог не нужен.'
+
 export function decide(i: Input, s: ReturnType<typeof score>): Decision {
   const d = decideCore(i, s)
   if (i.person && (d.kind === 'approve' || d.kind === 'counter')) d.explanation.push(start.condition_text)
+  if (i.product_id === 'gov_guarantee' && (d.kind === 'approve' || d.kind === 'counter')) d.explanation.push(GOV_TEXT)
   return d
 }
 function decideCore(i: Input, s: ReturnType<typeof score>): Decision {

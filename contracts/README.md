@@ -10,6 +10,7 @@
 | [ai.md](ai.md) | Backend ↔ AI-сервис (v2: своя экспертная система на правилах — `/ai/consult` для чата подбора бизнеса, `/ai/parse-need` для мастера; база знаний и банк фраз) |
 | [templates.md](templates.md) | **v2.** Расчёт проекта без ИИ: шаблоны сфер [`templates/spheres.v1.json`](templates/spheres.v1.json) и формулы |
 | [products.demo.json](products.demo.json) | **v2.** Демо-продукт «Старт» для нового бизнеса (не продукт Альфа-Банка) |
+| [products.gov.json](products.gov.json) | **v2.** Кредит Альфа-Банка с господдержкой (поручительство Корпорации МСП), акционный |
 | [dictionaries.json](dictionaries.json) | **v2.** Коды и тексты: цели, сферы, статусы, причины отказа |
 | [rules/credit_rules.v1.json](rules/credit_rules.v1.json) | **v2.** Правила скоринга и решения |
 | `schemas/*.json` | JSON Schema (draft-07) для всех тел запросов и ответов |

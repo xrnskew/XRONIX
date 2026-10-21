@@ -12,7 +12,7 @@ export const ghostBtn = 'h-12 rounded-xl bg-surface-2 px-5 text-[15px] font-semi
 export const purposes = dict.purposes as Record<string, { title: string; hint: string; plan?: boolean }>
 export const memberRoles = dict.member_roles as Record<string, { title: string; needs_authority: boolean }>
 export const collateralKinds = dict.collateral_kinds as Record<string, { title: string }>
-export const productNames: Record<string, string> = { fast: 'Кредит без залога', secured: 'Кредит с залогом', mortgage: 'Бизнес-ипотека', revolving: 'Кредитная линия', start: '«Старт» (демо-продукт)' }
+export const productNames: Record<string, string> = { fast: 'Кредит без залога', secured: 'Кредит с залогом', mortgage: 'Бизнес-ипотека', revolving: 'Кредитная линия', start: '«Старт» (демо-продукт)', gov_guarantee: 'Кредит с господдержкой' }
 
 // Чей сейчас ход: от этого цвет статуса и группа в списке заявок
 export type Move = 'you' | 'bank' | 'done'
