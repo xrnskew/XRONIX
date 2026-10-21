@@ -21,6 +21,7 @@
   --color-text: #f5f5f6;
   --color-muted: #8d8d95;
   --color-accent: #ff4538;
+  --color-accent-soft: #ff8a80; /* текст на красной подложке: «ваш ход», запрос данных */
   --color-ok: #3ddc84;
   --color-warn: #ffb020;
   --color-steel: #93a6c8; /* ход банка: заявка у системы или специалиста */

@@ -3,7 +3,7 @@ import TypedPrompt from './TypedPrompt'
 import { FadeWords, Reveal, SectionBox, SplitText, useVisible } from './reveal'
 import { ALFA_DISCLAIMER, alfaProducts, productTerm } from '../data/alfaProducts'
 import { mockPlan, mockProfile } from '../mocks/data'
-import { plural, short } from '../lib/format'
+import { decimal, plural, short } from '../lib/format'
 import { useCountUp } from '../lib/useCountUp'
 
 export const pad = 'px-6 sm:px-12 lg:px-16'
@@ -146,7 +146,7 @@ export function Credit() {
             {alfaProducts.map((p, i) => (
               <Reveal key={p.id} as="tr" delay={600 + i * 110} y={14}>
                 <td className="py-3.5 pr-4 font-semibold"><a href={p.url} target="_blank" rel="noopener noreferrer" className="decoration-brand underline-offset-4 hover:underline">{p.name} ↗</a></td>
-                <td className="py-3.5 pr-4 tabular-nums">{p.rateFrom ? `от ${String(p.rateFrom).replace('.', ',')}%` : 'по запросу'}</td>
+                <td className="py-3.5 pr-4 tabular-nums">{p.rateFrom ? `от ${decimal(p.rateFrom)}%` : 'по запросу'}</td>
                 <td className="py-3.5 pr-4 tabular-nums">{short(p.amountMax)} ₽</td>
                 <td className="py-3.5 tabular-nums">{productTerm(p)}</td>
               </Reveal>

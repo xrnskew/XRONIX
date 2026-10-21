@@ -75,7 +75,7 @@ export const Chip = ({ children, onClick, active }: { children: ReactNode; onCli
 // action — ход клиента, bank — ход банка (система или специалист)
 export type Tone = 'ok' | 'warn' | 'bad' | 'muted' | 'action' | 'bank'
 export const Badge = ({ tone, children, dot }: { tone: Tone; children: ReactNode; dot?: boolean }) => {
-  const t = { ok: 'bg-ok/15 text-ok', warn: 'bg-warn/15 text-warn', bad: 'bg-accent/15 text-accent', muted: 'bg-white/10 text-muted', action: 'bg-accent/15 text-[#ff8a80]', bank: 'bg-steel/15 text-steel' }[tone]
+  const t = { ok: 'bg-ok/15 text-ok', warn: 'bg-warn/15 text-warn', bad: 'bg-accent/15 text-accent', muted: 'bg-white/10 text-muted', action: 'bg-accent/15 text-accent-soft', bank: 'bg-steel/15 text-steel' }[tone]
   return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{dot && <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />}{children}</span>
 }
 
@@ -93,4 +93,9 @@ export const Skeleton = () => (
   <div className="space-y-3" aria-busy="true" aria-label="Загрузка">
     {[150, 190, 130].map((h, i) => <div key={i} className="animate-pulse rounded-[22px] bg-surface" style={{ height: h }} />)}
   </div>
+)
+
+// Контурная иконка 24×24 одним путём: разделы меню и кнопки в шапке
+export const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
 )

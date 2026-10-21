@@ -11,8 +11,8 @@ import NewApplication from '../phone/conveyor/NewApplication'
 import ApplicationView from '../phone/conveyor/ApplicationView'
 import { Applications, Feed } from '../phone/conveyor/Applications'
 import BankApp from './bank/BankApp'
-import { Conveyor, Logo, Wide } from '../phone/ui'
-import { useMediaQuery } from '../landing/useSlides'
+import { Conveyor, Icon, Logo, Wide } from '../phone/ui'
+import { useMediaQuery } from '../lib/useMediaQuery'
 import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 
 // Рабочая версия (/app): кредитный конвейер на весь экран, без слайдов (docs/CONVEYOR.md).
@@ -27,9 +27,6 @@ const tabs = [
   { to: '/profile', label: 'Профиль', d: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6' },
 ]
 
-const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
-)
 
 const points = [
   ['Компания по ИНН', 'Реквизиты подтянутся из реестра, вводить их не нужно'],

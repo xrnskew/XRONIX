@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ApiError } from '../../api'
+import { errorText } from '../../api'
 import { conveyor } from '../../api/conveyor'
 import { AUTO_STATUSES, type Application, type Offer } from '../../types/conveyor'
-import { rub } from '../../lib/format'
+import { decimal, rub } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
 import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, whoseMove } from './parts'
 import { ConveyorTrack } from './Track'
@@ -12,7 +12,6 @@ import { usePolling } from '../../lib/usePolling'
 import ApplicationForm from './ApplicationForm'
 
 
-const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
 
 export default function ApplicationView() {
   const { id = '' } = useParams()
@@ -21,7 +20,7 @@ export default function ApplicationView() {
   const [busy, setBusy] = useState(false)
   const alive = useRef(true)
 
-  const reload = () => conveyor.getApplication(id).then((a) => { if (alive.current) { setApp(a); setError('') } }).catch((e) => alive.current && setError(errText(e)))
+  const reload = () => conveyor.getApplication(id).then((a) => { if (alive.current) { setApp(a); setError('') } }).catch((e) => alive.current && setError(errorText(e)))
   useEffect(() => { alive.current = true; setApp(null); reload(); return () => { alive.current = false } }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Пока заявка движется сама, опрашиваем раз в 2 с; у специалиста — реже
@@ -31,7 +30,7 @@ export default function ApplicationView() {
   const act = async (action: 'accept' | 'reject-offer' | 'sign' | 'withdraw') => {
     if (!app) return
     setBusy(true); setError('')
-    try { setApp(await conveyor.action(app.id, action, app.version)) } catch (e) { setError(errText(e)); reload() } finally { setBusy(false) }
+    try { setApp(await conveyor.action(app.id, action, app.version)) } catch (e) { setError(errorText(e)); reload() } finally { setBusy(false) }
   }
 
   if (!app) return <Screen title="Заявка">{error ? <ErrorText>{error}</ErrorText> : <Skeleton />}</Screen>
@@ -48,7 +47,7 @@ export default function ApplicationView() {
             <p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p>
           </div>
           <div className={`rounded-2xl p-4 ${yourMove ? 'bg-accent/10 ring-1 ring-accent/30' : 'bg-surface-2/60'}`}>
-            <div className={`text-[13px] ${yourMove ? 'text-[#ff8a80]' : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
+            <div className={`text-[13px] ${yourMove ? 'text-accent-soft' : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
             <p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p>
           </div>
         </div>
@@ -114,7 +113,7 @@ function OfferCard({ offer, app, title, schedule, children }: { offer: Offer; ap
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat label="Сумма" value={rub(offer.amount_rub)} />
           <Stat label="Срок" value={`${offer.term_months} мес.`} />
-          <Stat label="Ставка" value={`${String(offer.rate_percent).replace('.', ',')}%`} />
+          <Stat label="Ставка" value={`${decimal(offer.rate_percent)}%`} />
         </div>
       </div>
       {changed && (offer.amount_rub !== app.amount_rub || offer.term_months !== app.term_months) && (
@@ -145,7 +144,7 @@ function Signing({ offer, busy, onSign }: { offer: Offer; busy: boolean; onSign:
   return (
     <Card span={12}>
       <SectionTitle>Кредитный договор</SectionTitle>
-      <p className="text-[15px] leading-snug">{rub(offer.amount_rub)} на {offer.term_months} мес. под {String(offer.rate_percent).replace('.', ',')}% годовых, ежемесячный платёж {rub(offer.monthly_payment_rub)}. Деньги поступят на расчётный счёт компании.</p>
+      <p className="text-[15px] leading-snug">{rub(offer.amount_rub)} на {offer.term_months} мес. под {decimal(offer.rate_percent)}% годовых, ежемесячный платёж {rub(offer.monthly_payment_rub)}. Деньги поступят на расчётный счёт компании.</p>
       <p className="mt-2 text-[13px] text-muted">Подписание в демо смоделировано: настоящая электронная подпись и перевод денег не выполняются.</p>
       <label className="mt-4 flex cursor-pointer items-start gap-3 text-[15px]">
         <input type="checkbox" className="mt-0.5 h-5 w-5 accent-[#ff4538]" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
@@ -169,7 +168,7 @@ function InfoRequest({ app, onDone }: { app: Application; onDone: (a: Applicatio
       let a = app
       if (text.trim()) a = await conveyor.patchApplication(app.id, { version: a.version, info_response: text.trim() })
       onDone(await conveyor.submit(app.id, a.version))
-    } catch (e) { setError(errText(e)) } finally { setBusy(false) }
+    } catch (e) { setError(errorText(e)) } finally { setBusy(false) }
   }
   return (
     <Card span={12}>

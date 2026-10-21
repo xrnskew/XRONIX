@@ -70,7 +70,7 @@ export function Applications() {
 // Тип события — иконка и цвет: решение банка, запрос данных, смена статуса, подсказка
 const KIND: Record<FeedItem['kind'], { d: string; cls: string }> = {
   offer: { d: 'M5 12.5l4.5 4.5L19 7.5', cls: 'bg-ok/15 text-ok' },
-  info_request: { d: 'M12 8v5M12 16.5v.5M12 3l9 16H3z', cls: 'bg-accent/15 text-[#ff8a80]' },
+  info_request: { d: 'M12 8v5M12 16.5v.5M12 3l9 16H3z', cls: 'bg-accent/15 text-accent-soft' },
   status_change: { d: 'M4 12h12M12 6l6 6-6 6', cls: 'bg-steel/15 text-steel' },
   tip: { d: 'M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z', cls: 'bg-warn/15 text-warn' },
 }

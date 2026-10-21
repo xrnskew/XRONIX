@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
-import { annuity, rub, short } from '../../lib/format'
+import { annuity, decimal, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, alfaProducts, alfaSnapshotIsStale, matchProducts, productTerm } from '../../data/alfaProducts'
 
 import { creditAssessment, creditParameters } from '../../lib/credit'
@@ -114,7 +114,7 @@ export default function Finance() {
         </div>
         {amount !== f.funding_gap_rub && <p className="text-[13px] text-warn">Нехватка средств по плану — {rub(f.funding_gap_rub)}. В калькуляторе — {rub(amount)}, в пределах выбранного продукта. Это не рекомендация занимать больше необходимого.</p>}
         <div className="grid grid-cols-3 gap-3 border-t border-line pt-3">
-          <Stat label="Ставка от (оценка)" value={`${String(rate).replace('.', ',')}%`} />
+          <Stat label="Ставка от (оценка)" value={`${decimal(rate)}%`} />
           <Stat label="Платёж в месяц" value={rub(payment)} />
           <Stat label="Нагрузка" value={`${load}%`} tone={loadTone(load)} />
         </div>
@@ -135,7 +135,7 @@ export default function Finance() {
                 <span className="shrink-0 whitespace-nowrap"><Badge tone={!fits ? 'muted' : p.collateral ? 'warn' : 'ok'}>{!fits ? 'Вне диапазона' : p.collateral ? 'Нужен залог' : 'Без залога'}</Badge></span>
               </div>
               <dl className="mt-3 grid grid-cols-3 gap-2 text-[12px]">
-                <div><dt className="text-muted">Ставка</dt><dd className="mt-0.5 text-[14px] font-semibold">{p.rateFrom ? `от ${String(p.rateFrom).replace('.', ',')}%` : 'по запросу'}</dd></div>
+                <div><dt className="text-muted">Ставка</dt><dd className="mt-0.5 text-[14px] font-semibold">{p.rateFrom ? `от ${decimal(p.rateFrom)}%` : 'по запросу'}</dd></div>
                 <div><dt className="text-muted">Сумма до</dt><dd className="mt-0.5 text-[14px] font-semibold">{short(p.amountMax)} ₽</dd></div>
                 <div><dt className="text-muted">Срок</dt><dd className="mt-0.5 text-[14px] font-semibold">{productTerm(p)}</dd></div>
               </dl>
