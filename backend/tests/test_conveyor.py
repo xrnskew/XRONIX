@@ -20,7 +20,7 @@ from app import credit_rules as cr, project_calc
 
 ROOT=Path(__file__).resolve().parents[2]
 CONTRACTS=Contracts(ROOT/'contracts')
-def load(p):return json.loads(p.read_text())
+def load(p):return json.loads(p.read_text(encoding='utf-8'))
 RULES=load(ROOT/'contracts/rules/credit_rules.v1.json')
 PRODUCTS={p['id']:p for p in load(CATALOG/'products.json')['products']+load(ROOT/'contracts/products.demo.json')['products']}
 SCENARIOS=load(ROOT/'integrations-mock/data/companies.json')

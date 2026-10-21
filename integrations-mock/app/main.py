@@ -8,7 +8,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from .inn import valid_inn
 
-SCENARIOS = json.loads((Path(__file__).resolve().parents[1]/'data/companies.json').read_text())
+SCENARIOS = json.loads((Path(__file__).resolve().parents[1]/'data/companies.json').read_text(encoding='utf-8'))
 app = FastAPI(title='XRONIX integrations mock')
 
 

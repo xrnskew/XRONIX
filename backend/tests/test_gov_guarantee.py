@@ -10,7 +10,7 @@ from app.conveyor_models import ApplicationEvent
 from test_conveyor import (settings,client,register,company,draft,submit,step,
     CONTRACTS,PRODUCTS,RULES,SCENARIOS,DEMO)
 
-GOV=json.loads((Path(__file__).resolve().parents[2]/'contracts/products.gov.json').read_text())['products'][0]
+GOV=json.loads((Path(__file__).resolve().parents[2]/'contracts/products.gov.json').read_text(encoding='utf-8'))['products'][0]
 PRODUCTS={**PRODUCTS,GOV['id']:GOV}
 TODAY=date(2026,10,21)
 
@@ -49,7 +49,7 @@ def test_msp_revenue_boundary(revenue,stop):
     assert [r['code'] for r in reasons]==(['not_msp'] if stop else [])
     if stop:
         assert ''.join(reasons[0]['params']['limit_rub'].split())=='2000000000'
-        assert '2\u00a0000\u00a0000\u00a0000' in cr.decline_text(reasons[0],json.loads((CONTRACTS.root/'dictionaries.json').read_text()))['text']
+        assert '2\u00a0000\u00a0000\u00a0000' in cr.decline_text(reasons[0],json.loads((CONTRACTS.root/'dictionaries.json').read_text(encoding='utf-8')))['text']
 
 
 @pytest.mark.parametrize('amount,term,kind',[(1500000,24,'approve'),(2000000,12,'counter')])

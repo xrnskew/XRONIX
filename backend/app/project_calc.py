@@ -7,7 +7,7 @@ from pathlib import Path
 from .validation import js_round, annuity, check_plan
 
 DATA = Path(__file__).parent / 'catalog'
-CITIES = {n.lower().replace('ё', 'е'): p for n, _, p in json.loads((DATA / 'cities.json').read_text())}
+CITIES = {n.lower().replace('ё', 'е'): p for n, _, p in json.loads((DATA / 'cities.json').read_text(encoding='utf-8'))}
 
 
 def normalize_city(city):

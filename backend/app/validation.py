@@ -35,7 +35,7 @@ def schema_error_ru(error):
 class Contracts:
     def __init__(self, root):
         self.root = root
-        schemas = [json.loads(p.read_text()) for p in (root / 'schemas').glob('*.json')]
+        schemas = [json.loads(p.read_text(encoding='utf-8')) for p in (root / 'schemas').glob('*.json')]
         if not schemas:
             raise RuntimeError('Contract schemas missing; use repository root as Docker context')
         self.schemas = {s['$id']: s for s in schemas}
@@ -48,7 +48,7 @@ class Contracts:
         Draft7Validator(schema, registry=self.registry, format_checker=FormatChecker()).validate(data)
 
     def example(self, name):
-        return json.loads((self.root / 'examples' / name).read_text())
+        return json.loads((self.root / 'examples' / name).read_text(encoding='utf-8'))
 
 
 def check_plan(plan):

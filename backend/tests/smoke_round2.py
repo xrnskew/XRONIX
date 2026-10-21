@@ -75,5 +75,5 @@ if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('--url',default='http://127.0.0.1:8000');ap.add_argument('--output')
     args=ap.parse_args();result=run(args.url)
     text=json.dumps(result,ensure_ascii=False,indent=2)
-    if args.output:Path(args.output).write_text(text+'\n')
+    if args.output:Path(args.output).write_text(text+'\n',encoding='utf-8')
     print(text)

@@ -26,7 +26,7 @@ CATALOG=Path(__file__).parent/'catalog'
 
 
 def load(root, name):
-    return json.loads((root/name).read_text())
+    return json.loads((root/name).read_text(encoding='utf-8'))
 
 
 class Conveyor:
