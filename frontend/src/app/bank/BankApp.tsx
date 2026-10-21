@@ -10,6 +10,7 @@ import PlanRoute from '../../phone/PlanRoute'
 import PlanScreen from '../../phone/screens/Plan'
 import { Card, Logo, Screen, SectionTitle, Skeleton, Stat } from '../../phone/ui'
 import { ErrorText, MoneyInput, StatusBadge, dateRu, ghostBtn, input, memberRoles, primaryBtn, productNames, purposes, whoseMove } from '../../phone/conveyor/parts'
+import { usePolling } from '../../lib/usePolling'
 
 // Рабочее место кредитного аналитика (/bank): очередь, карточка заявки с проверками и скорингом, решение, сводка.
 // Контракт: /contracts/conveyor.md, «Рабочее место аналитика». Логика решений — docs/CONVEYOR.md, раздел 7.
@@ -88,13 +89,9 @@ function Queue() {
   const [items, setItems] = useState<QueueItem[] | null>(null)
   const [error, setError] = useState('')
   const nav = useNavigate()
-  useEffect(() => {
-    setItems(null)
-    const load = () => bank.queue(FILTERS[filter].statuses).then((l) => { setItems(l); setError('') }).catch((e) => setError(errText(e)))
-    load()
-    const t = setInterval(load, 5000)
-    return () => clearInterval(t)
-  }, [filter])
+  const load = () => bank.queue(FILTERS[filter].statuses).then((l) => { setItems(l); setError('') }).catch((e) => setError(errText(e)))
+  useEffect(() => { setItems(null); load() }, [filter]) // eslint-disable-line react-hooks/exhaustive-deps
+  usePolling(load, 5000)
   return (
     <Screen title="Очередь заявок" sub="Сверху — те, что ждут дольше всех">
       <div data-span={12} className="flex flex-wrap gap-2">
@@ -158,11 +155,7 @@ function CardView() {
   const load = () => bank.application(id).then((d) => { setData(d); setError('') }).catch((e) => setError(errText(e)))
   useEffect(() => { setData(null); load() }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
   const status = data?.application.status
-  useEffect(() => {
-    if (!status || !['submitted', 'checking', 'scoring'].includes(status)) return
-    const t = setInterval(load, 2000)
-    return () => clearInterval(t)
-  }, [status]) // eslint-disable-line react-hooks/exhaustive-deps
+  usePolling(load, 2000, !!status && ['submitted', 'checking', 'scoring'].includes(status))
 
   if (!data) return <Screen title="Заявка">{error ? <ErrorText>{error}</ErrorText> : <Skeleton />}</Screen>
   const a = data.application, c = a.company.registry, f = a.financials, sc = data.scoring

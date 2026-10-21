@@ -8,6 +8,7 @@ import { Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
 import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, whoseMove } from './parts'
 import { ConveyorTrack } from './Track'
 import { useCountUp } from '../../lib/useCountUp'
+import { usePolling } from '../../lib/usePolling'
 import ApplicationForm from './ApplicationForm'
 
 
@@ -25,11 +26,7 @@ export default function ApplicationView() {
 
   // Пока заявка движется сама, опрашиваем раз в 2 с; у специалиста — реже
   const status = app?.status
-  useEffect(() => {
-    if (!status || !(AUTO_STATUSES.includes(status) || status === 'manual_review')) return
-    const t = setInterval(reload, status === 'manual_review' ? 5000 : 2000)
-    return () => clearInterval(t)
-  }, [status]) // eslint-disable-line react-hooks/exhaustive-deps
+  usePolling(reload, status === 'manual_review' ? 5000 : 2000, !!status && (AUTO_STATUSES.includes(status) || status === 'manual_review'))
 
   const act = async (action: 'accept' | 'reject-offer' | 'sign' | 'withdraw') => {
     if (!app) return

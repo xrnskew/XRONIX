@@ -6,6 +6,7 @@ import { rub } from '../../lib/format'
 import { Card, Screen, Skeleton } from '../ui'
 import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move } from './parts'
 import { MiniTrack } from './Track'
+import { usePolling } from '../../lib/usePolling'
 
 const GROUPS: { move: Move; title: string }[] = [
   { move: 'you', title: 'Нужно ваше действие' },
@@ -34,12 +35,9 @@ function AppCard({ a }: { a: ApplicationListItem }) {
 export function Applications() {
   const [items, setItems] = useState<ApplicationListItem[] | null>(null)
   const [error, setError] = useState('')
-  useEffect(() => {
-    const load = () => conveyor.listApplications().then(setItems).catch(() => setError('Не удалось загрузить заявки.'))
-    load()
-    const t = setInterval(load, 5000) // статусы меняются сами
-    return () => clearInterval(t)
-  }, [])
+  const load = () => conveyor.listApplications().then(setItems).catch(() => setError('Не удалось загрузить заявки.'))
+  useEffect(() => { load() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  usePolling(load, 5000) // статусы меняются сами
 
   return (
     <Screen title="Заявки" sub="Все заявки ваших компаний и их статус">

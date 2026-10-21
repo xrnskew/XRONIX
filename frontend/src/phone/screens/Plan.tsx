@@ -1,13 +1,14 @@
 import type { BudgetItem } from '../../types/plan'
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
-import { useContext } from 'react'
+import { Suspense, lazy, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
 import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub, shortParts } from '../../lib/format'
 import { useCountUp } from '../../lib/useCountUp'
 import { USE_MOCKS } from '../../api'
+
+const ForecastChart = lazy(() => import('./ForecastChart'))
 
 const level = { low: { tone: 'ok', name: 'Низкий' }, medium: { tone: 'warn', name: 'Средний' }, high: { tone: 'bad', name: 'Высокий' } } as const
 
@@ -67,15 +68,7 @@ export default function PlanScreen() {
         <SectionTitle>Выручка и расходы за первый год</SectionTitle>
         <div className="mb-2 flex gap-4 text-[12px] text-muted"><Legend c="bg-accent" t="Выручка" /><Legend c="bg-[#5a5a63]" t="Расходы" /></div>
         <div className={wide ? 'h-56' : 'h-36'} aria-label="Прогноз выручки и расходов по месяцам" role="img">
-          <ResponsiveContainer>
-            <BarChart data={p.finance.revenue_forecast} barGap={2} maxBarSize={wide ? 26 : undefined}>
-              <CartesianGrid stroke="#2c2c31" vertical={false} />
-              <XAxis dataKey="month" tick={{ fill: '#8d8d95', fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip cursor={{ fill: '#ffffff08' }} contentStyle={{ background: '#232327', border: 0, borderRadius: 12, fontSize: 12 }} formatter={(v) => rub(Number(v))} labelFormatter={(l) => `Месяц ${l}`} />
-              <Bar dataKey="revenue_rub" name="Выручка" fill="#ff4538" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expenses_rub" name="Расходы" fill="#5a5a63" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <Suspense fallback={<div className="h-full animate-pulse rounded-xl bg-surface-2/50" />}><ForecastChart data={p.finance.revenue_forecast} wide={wide} /></Suspense>
         </div>
       </Card>
 
