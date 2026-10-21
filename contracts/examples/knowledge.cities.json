@@ -3,6 +3,8 @@
   "version": 1,
   "generated_at": "2026-10-21",
   "sources": [
+    { "id": "fns_msp", "title": "Единый реестр МСП ФНС", "url": "https://www.nalog.gov.ru/opendata/", "license": "открытые данные ФНС (условный пример)", "retrieved_at": "2026-10-21" },
+    { "id": "rosstat_income", "title": "Росстат", "url": "https://rosstat.gov.ru/", "license": "открытые данные (условный пример)", "retrieved_at": "2026-10-21" },
     { "id": "russia_cities", "title": "справочник городов России", "url": "https://github.com/arbaev/russia-cities", "license": "факты, без охраняемого текста", "retrieved_at": "2026-10-19" },
     { "id": "rosstat_salary", "title": "Росстат", "url": "https://rosstat.gov.ru/labor_market_employment_salaries", "license": "открытые данные", "retrieved_at": "2026-10-21" },
     { "id": "osm", "title": "OpenStreetMap", "url": "https://www.openstreetmap.org/copyright", "license": "ODbL 1.0", "retrieved_at": "2026-10-21" }
@@ -16,7 +18,10 @@
       "venues": {
         "coffee": { "value": 300, "source": "osm", "scope": "city" },
         "bakery": { "value": 100, "source": "osm", "scope": "city" }
-      }
+      },
+      "registered_businesses": { "bakery": { "value": 400, "source": "fns_msp", "year": 2026, "scope": "city" } },
+      "footfall": { "malls": { "value": 60, "source": "osm", "scope": "city" } },
+      "income_per_capita_rub": { "value": 45000, "source": "rosstat_income", "year": 2025, "scope": "region" }
     },
     {
       "name": "Казань",

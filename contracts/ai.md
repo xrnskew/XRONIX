@@ -34,7 +34,7 @@ AI-сервис работает как чистая функция: получ�
 
 | Файл | Схема | Что внутри |
 |---|---|---|
-| `ai/app/rules/data/knowledge.cities.json` | [`knowledge.schema.json#/definitions/cities_file`](schemas/knowledge.schema.json) | факты о городах: население, средняя зарплата по региону, число заведений по каждой сфере; у каждого значения — источник и год |
+| `ai/app/rules/data/knowledge.cities.json` | [`knowledge.schema.json#/definitions/cities_file`](schemas/knowledge.schema.json) | факты о городах: население, средняя зарплата по региону, число заведений по каждой сфере; необязательно: число зарегистрированных бизнесов по ОКВЭД (реестр МСП ФНС), признаки проходимости (торговые центры, вузы, бизнес-центры по OSM), среднедушевые доходы и оборот розницы на душу (Росстат); у каждого значения — источник и год |
 | `ai/app/rules/data/phrases.json` | [`knowledge.schema.json#/definitions/phrases_file`](schemas/knowledge.schema.json) | банк фраз: для каждой ситуации (слота) не меньше 3 вариантов формулировки |
 
 Примеры: [knowledge.cities.json](examples/knowledge.cities.json), [knowledge.phrases.json](examples/knowledge.phrases.json).
