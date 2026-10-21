@@ -1,7 +1,7 @@
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide } from '../ui'
+import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide, Conveyor } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { annuity, decimal, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, alfaProducts, alfaSnapshotIsStale, matchProducts, productTerm } from '../../data/alfaProducts'
@@ -12,7 +12,9 @@ const loadTone = (n: number) => (n > 50 ? 'bad' : n > 35 ? 'warn' : 'ok')
 const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 
 export default function Finance() {
-  const { plan, planLoading, planError, reloadPlan } = useCabinet()
+  const { plan, planId, planLoading, planError, reloadPlan } = useCabinet()
+  // рабочая версия: заявка в конвейер по этому плану — главное действие; сайт банка — запасной путь
+  const applyTo = useContext(Conveyor) && planId && planId !== 'demo' ? `/new?plan=${encodeURIComponent(planId)}` : null
   const nav = useNavigate()
   const wide = useContext(Wide)
   const initialProduct = alfaProducts.find((p) => p.id === plan?.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
@@ -119,7 +121,12 @@ export default function Finance() {
           <Stat label="Нагрузка" value={`${load}%`} tone={loadTone(load)} />
         </div>
         <p className="text-[12px] leading-snug text-muted">Предварительный аннуитетный расчёт по обычной ставке «от» выбранного продукта, без платных услуг. Нагрузка — доля платежа в ожидаемой прибыли. Банк может предложить другую ставку и график.</p>
-        <a href={selected.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-fill px-5 py-3 text-center text-[14px] font-semibold text-white hover:bg-brand-deep">Условия и заявка в Альфа-Банке ↗</a>
+        <div className="flex flex-wrap items-center gap-3">
+          {applyTo && <button onClick={() => nav(applyTo)} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-fill px-5 py-3 text-[14px] font-semibold text-white hover:bg-brand-deep">Подать заявку по этому плану</button>}
+          <a href={selected.url} target="_blank" rel="noopener noreferrer" className={applyTo
+            ? 'inline-flex min-h-11 items-center justify-center rounded-xl bg-surface-2 px-5 py-3 text-center text-[14px] font-semibold text-text hover:bg-surface-3'
+            : 'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-fill px-5 py-3 text-center text-[14px] font-semibold text-white hover:bg-brand-deep'}>Условия и заявка в Альфа-Банке ↗</a>
+        </div>
       </Card>
 
       <Card id="alfa-products" delay={3}>
@@ -143,7 +150,7 @@ export default function Finance() {
               <p className={`mt-2 text-[12px] ${fits ? 'text-ok' : 'text-warn'}`}>{fits ? 'В диапазоне суммы и срока' : reasons.join(', ')}</p>
               {p.minBusinessMonths != null && <p className="mt-1 text-[12px] text-muted">Бизнес зарегистрирован от {p.minBusinessMonths} мес.</p>}
               <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть в Альфа-Банке: ${p.name}`}
-                className="mt-4 flex min-h-11 items-center justify-center gap-2 rounded-xl bg-fill px-3 py-3 text-center text-[14px] font-semibold text-white transition-colors hover:bg-brand-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Открыть в Альфа-Банке <span aria-hidden>↗</span></a>
+                className="mt-4 flex min-h-11 items-center justify-center gap-2 rounded-xl bg-surface-3 px-3 py-3 text-center text-[14px] font-semibold text-text transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Открыть в Альфа-Банке <span aria-hidden>↗</span></a>
             </li>
           ))}
         </ul>

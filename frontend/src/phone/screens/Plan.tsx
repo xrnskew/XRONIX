@@ -2,7 +2,7 @@ import type { BudgetItem } from '../../types/plan'
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { Suspense, lazy, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Wide } from '../ui'
+import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Wide, Conveyor } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub, shortParts } from '../../lib/format'
 import { useCountUp } from '../../lib/useCountUp'
@@ -13,7 +13,8 @@ const ForecastChart = lazy(() => import('./ForecastChart'))
 const level = { low: { tone: 'ok', name: 'Низкий' }, medium: { tone: 'warn', name: 'Средний' }, high: { tone: 'bad', name: 'Высокий' } } as const
 
 export default function PlanScreen() {
-  const { plan, planLoading, planError, reloadPlan, showDemoPlan } = useCabinet()
+  const { plan, planId, planLoading, planError, reloadPlan, showDemoPlan } = useCabinet()
+  const applyTo = useContext(Conveyor) && planId && planId !== 'demo' ? `/new?plan=${encodeURIComponent(planId)}` : null
   const nav = useNavigate()
   const wide = useContext(Wide)
   if (planLoading && !plan) return <Screen title="План"><Skeleton /></Screen>
@@ -47,6 +48,12 @@ export default function PlanScreen() {
           <div className="flex gap-1.5"><Badge tone="muted">{p.business.sphere}</Badge><Badge tone="muted">{p.business.city}</Badge></div>
           <h2 className={`mt-3 font-bold leading-tight tracking-tight ${wide ? 'font-display text-[34px] font-semibold' : 'text-[22px]'}`}>{p.title}</h2>
           <p className={`mt-1.5 leading-snug text-text/65 ${wide ? 'max-w-[520px] text-[16px]' : 'text-[14px]'}`}>{p.summary}</p>
+          {applyTo && (
+            <div className="mt-5 flex flex-wrap gap-2.5">
+              <button onClick={() => nav(applyTo)} className="h-11 rounded-xl bg-fill px-5 text-[15px] font-semibold text-white hover:bg-brand-deep">Подобрать кредит по плану</button>
+              <button onClick={() => nav('/finance')} className="h-11 rounded-xl bg-white/10 px-5 text-[15px] font-semibold text-text hover:bg-white/15">Финансы и платёж</button>
+            </div>
+          )}
         </div>
         <div className={`grid grid-cols-3 gap-2 ${wide ? '' : 'mt-5'}`}>
           <Big label="На старт" {...shortParts(p.finance.startup_cost_rub)} wide={wide} />
