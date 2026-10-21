@@ -1,0 +1,20 @@
+meta {
+  name: Analyst stats
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/api/bank/stats
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{analystToken}}
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Real durations and mixed decisions', () => { expect(res.getBody().avg_minutes_to_decision).to.be.above(0); expect(res.getBody().auto_decision_share).to.be.below(1); });
+}

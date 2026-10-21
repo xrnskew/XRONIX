@@ -11,6 +11,7 @@ from .conveyor_models import Application, ApplicationEvent, CheckResult, Company
 from .conveyor_state import expect_version
 from .db import User, uid
 from .errors import ApiError
+from .validation import schema_error_ru
 
 
 def timestamp(value):
@@ -85,6 +86,10 @@ def apply_decision(c,s,a,body,user):
         if not body.get('decline_reasons'):raise ApiError('VALIDATION_ERROR','Выберите причину отказа.')
         if not comment:raise ApiError('VALIDATION_ERROR','Комментарий к отказу обязателен.')
         params=dict(min_months=str(p['minBusinessMonths'] or 0),eligible_date='',limit_rub=credit.rub(c.rules['stop_factors']['tax_debt_max_rub'])[:-2],max_amount_rub='',min_share=f"{c.rules['start']['min_own_share']*100:g}")
+        if 'business_too_young' in body['decline_reasons']:
+            registry=c.company(s,a.company_id,a.user_id)['registry']
+            try:params['eligible_date']=credit.eligible_date(registry['registered_at'],p['minBusinessMonths'] or 0)
+            except (TypeError,ValueError,OverflowError):pass
         a.data={**a.data,'decline':dict(reasons=[credit.decline_text(dict(code=code,params=params),c.dict) for code in body['decline_reasons']],comment=comment),'info_request':None}
         c.move(s,a,'declined','analyst',user.id,comment)
     else:raise ApiError('VALIDATION_ERROR','Неизвестное решение.')
@@ -125,7 +130,7 @@ def install(app,authenticated,db):
     def decide(id:str,body:dict=Body(example=dict(kind='approve',version=5,comment='')),user:User=Depends(analyst),s:Session=Depends(db)):
         a=visible(s,id)
         try:c.contracts.validate('bank',body,'decision_request')
-        except ValidationError as exc:raise ApiError('VALIDATION_ERROR',exc.message) from None
+        except ValidationError as exc:raise ApiError('VALIDATION_ERROR',schema_error_ru(exc)) from None
         apply_decision(c,s,a,body,user)
         c.commit(s)
         return bank_view(c,s,a)

@@ -76,8 +76,8 @@ def test_seed_real_pipeline_idempotent_and_bank_cards(settings):
         assert c.get('/api/bank/stats',headers=h).status_code==404
         assert c.get('/api/bank/applications/'+a['application']['id'],headers=h).status_code==404
         stats=c.get('/api/bank/stats',headers=bank).json();CONTRACTS.validate('bank',stats,'stats')
-        assert sum(stats['by_status'].values())==7 and stats['auto_decision_share']==1
-        assert stats['avg_minutes_to_decision']>=0
+        assert sum(stats['by_status'].values())==7 and 0<stats['auto_decision_share']<1
+        assert stats['avg_minutes_to_decision']>=3
         ids={x['id'] for x in rows}
         r=decision(c,bank,a);assert r.status_code==200,r.text
     with client(settings) as c:

@@ -1,0 +1,30 @@
+meta {
+  name: Vector decision
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/api/bank/applications/{{vectorId}}/decision
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{analystToken}}
+}
+
+body:json {
+  {
+    "kind": "counter",
+    "version": {{vectorVersion}},
+    "amount_rub": 10000000,
+    "term_months": 60,
+    "comment": "Доходы проверены. Предлагаем меньшую сумму."
+  }
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Counter offer by analyst', () => { expect(res.getBody().application.status).to.equal('counter_offer'); expect(res.getBody().events.slice(-1)[0].actor).to.equal('analyst'); });
+}

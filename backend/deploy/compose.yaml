@@ -15,7 +15,10 @@ services:
     environment:
       MOCK_AI: ${MOCK_AI:-true}
       AI_SERVICE_URL: ${AI_SERVICE_URL:-http://ai:8001}
-      CORS_ORIGINS: ${CORS_ORIGINS:-https://xronix.ru,https://www.xronix.ru,http://localhost:5173}
+      CONSULT_CHAT: "true"
+      SEED_DEMO: ${SEED_DEMO:-true}
+      INTEGRATIONS_URL: http://integrations-mock:8002
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://xronix.ru}
       JWT_SECRET: ${JWT_SECRET:-}
       JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
       DATABASE_URL: sqlite:////srv/backend/data/xronix.db
@@ -34,6 +37,8 @@ services:
       - backend_data:/srv/backend/data
       - backend_backups:/srv/backend/backups
     networks: [private, ai]
+    depends_on:
+      integrations-mock: {condition: service_healthy}
     healthcheck:
       test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
       interval: 20s
@@ -45,6 +50,15 @@ services:
     logging:
       driver: json-file
       options: {max-size: 10m, max-file: '3'}
+  integrations-mock:
+    build: ../../integrations-mock
+    restart: unless-stopped
+    networks: [private]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped

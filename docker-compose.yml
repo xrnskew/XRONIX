@@ -51,6 +51,12 @@ services:
       dockerfile: Dockerfile
     environment:
       PORT: "8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/ai/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     restart: unless-stopped
 volumes:
   backend-data:

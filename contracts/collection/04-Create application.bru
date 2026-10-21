@@ -1,0 +1,43 @@
+meta {
+  name: Create application
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/applications
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "company_id": "{{companyId}}",
+    "product_id": "fast",
+    "purpose": "equipment",
+    "amount_rub": 1500000,
+    "term_months": 24,
+    "plan_id": null,
+    "consent_bki": true,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 24000000,
+      "expenses_12m_rub": 19200000,
+      "loan_payments_monthly_rub": 40000
+    }
+  }
+}
+
+script:post-response {
+  bru.setVar('applicationId', res.getBody().id);
+  bru.setVar('version', res.getBody().version);
+}
+
+tests {
+  test("HTTP 201", () => expect(res.getStatus()).to.equal(201));
+  test('Draft', () => expect(res.getBody().status).to.equal('draft'));
+}

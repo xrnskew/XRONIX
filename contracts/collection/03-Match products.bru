@@ -1,0 +1,31 @@
+meta {
+  name: Match products
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/products/match
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "company_id": "{{companyId}}",
+    "plan_id": null,
+    "purpose": "equipment",
+    "amount_rub": 1500000,
+    "term_months": 24,
+    "has_collateral": false
+  }
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Fast eligible', () => expect(res.getBody().items.some(x => x.product_id === 'fast' && x.eligible && x.can_apply)).to.equal(true));
+}

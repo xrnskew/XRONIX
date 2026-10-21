@@ -18,12 +18,12 @@ class ApiCORS(CORSMiddleware):
                          allow_headers=['Authorization', 'Content-Type', 'X-Session-Mode'], allow_credentials=True)
         self.settings, self.sessions = settings, sessions
 
-    def failure(self, code, origin=None, message=None):
+    def failure(self, code, origin=None, message=None, status=None):
         error = ApiError(code,message)
         headers = {'Retry-After': '60'} if code == 'RATE_LIMITED' else {}
         if origin and self.is_allowed_origin(origin):
-            headers.update({'Access-Control-Allow-Origin': origin, 'Vary': 'Origin'})
-        return JSONResponse(error.body(), status_code=error.status, headers=headers)
+            headers.update({'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin'})
+        return JSONResponse(error.body(), status_code=status or error.status, headers=headers)
 
     def preflight_response(self, request_headers):
         response = super().preflight_response(request_headers)
@@ -71,7 +71,7 @@ class ApiCORS(CORSMiddleware):
                         return
                     body.extend(event.get('body', b''))
                     if len(body) > max_bytes:
-                        return await self.failure('VALIDATION_ERROR', origin)(scope, receive, send)
+                        return await self.failure('VALIDATION_ERROR', origin, 'Тело запроса превышает допустимый размер.', status=413)(scope, receive, send)
                     if not event.get('more_body', False):
                         break
                 if body and not multipart:
