@@ -87,7 +87,11 @@ def apply_decision(c,s,a,body,user):
         if not comment:raise ApiError('VALIDATION_ERROR','Комментарий к отказу обязателен.')
         params=dict(min_months=str(p['minBusinessMonths'] or 0),eligible_date='',limit_rub=credit.rub(c.rules['stop_factors']['tax_debt_max_rub'])[:-2],max_amount_rub='',min_share=f"{c.rules['start']['min_own_share']*100:g}")
         if 'business_too_young' in body['decline_reasons']:
-            registry=c.company(s,a.company_id,a.user_id)['registry']
+            company=c.company(s,a.company_id,a.user_id)
+            registry=company['registry']
+            minimum=p['minBusinessMonths'] or 0
+            if minimum==0 or (registry['registered_at'] and company['business_months']>=minimum):
+                raise ApiError('VALIDATION_ERROR','Стаж бизнеса уже соответствует требованиям продукта. Выберите другую причину отказа.')
             try:params['eligible_date']=credit.eligible_date(registry['registered_at'],p['minBusinessMonths'] or 0)
             except (TypeError,ValueError,OverflowError):pass
         a.data={**a.data,'decline':dict(reasons=[credit.decline_text(dict(code=code,params=params),c.dict) for code in body['decline_reasons']],comment=comment),'info_request':None}
