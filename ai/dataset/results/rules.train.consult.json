@@ -60,8 +60,8 @@
       "R_zero_funds": 0.971
     },
     "latency_ms": {
-      "mean": 3.84,
-      "p95": 4.63
+      "mean": 3.71,
+      "p95": 4.4
     }
   },
   "errors": [
