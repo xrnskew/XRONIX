@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-21",
+  "code_commit": "1ef2c44",
+  "merged_dev": "8fd34fb",
+  "merged_ai": "81d660b",
+  "backend": {
+    "passed": 314,
+    "seconds": 126.2
+  },
+  "ai": {
+    "passed": 69,
+    "seconds": 4.662
+  },
+  "bruno": {
+    "requests": 31,
+    "tests_passed": 62,
+    "tests_total": 62,
+    "milliseconds": 35012
+  },
+  "contracts": "passed",
+  "datasets": "0 errors",
+  "offline_knowledge": {
+    "cities": 100,
+    "missing_venues": 0,
+    "equal_to_committed": true
+  },
+  "browser": {
+    "government_match": "passed",
+    "government_scoring": "state_guarantee +8",
+    "samara_bakeries": "about 140, OpenStreetMap",
+    "without_ai": "plan received"
+  },
+  "pending": [
+    "human phrase review A2",
+    "new Docker build",
+    "deployment requires explicit user permission"
+  ]
+}
