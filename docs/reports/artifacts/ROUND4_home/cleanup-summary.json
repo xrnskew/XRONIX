@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-10-21T23:19:27.340035+00:00",
+  "test_project_stopped": true,
+  "preexisting_running_before": 30,
+  "preexisting_still_running": 30,
+  "volumes_preserved": true,
+  "images_preserved": true
+}

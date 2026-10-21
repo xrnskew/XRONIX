@@ -1,0 +1,27 @@
+time="2026-10-21T22:59:40+11:00" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+ ai  Built
+ backend  Built
+ integrations-mock  Built
+ web  Built
+ Network xronix-round4-20261021_default  Creating
+ Network xronix-round4-20261021_default  Created
+ Volume xronix-round4-20261021_backend-data  Creating
+ Volume xronix-round4-20261021_backend-data  Created
+ Container xronix-round4-20261021-ai-1  Creating
+ Container xronix-round4-20261021-integrations-mock-1  Creating
+ Container xronix-round4-20261021-integrations-mock-1  Created
+ Container xronix-round4-20261021-backend-1  Creating
+ Container xronix-round4-20261021-ai-1  Created
+ Container xronix-round4-20261021-backend-1  Created
+ Container xronix-round4-20261021-web-1  Creating
+ Container xronix-round4-20261021-web-1  Created
+ Container xronix-round4-20261021-ai-1  Starting
+ Container xronix-round4-20261021-integrations-mock-1  Starting
+ Container xronix-round4-20261021-integrations-mock-1  Started
+ Container xronix-round4-20261021-integrations-mock-1  Waiting
+ Container xronix-round4-20261021-ai-1  Started
+ Container xronix-round4-20261021-integrations-mock-1  Error
+dependency failed to start: container xronix-round4-20261021-integrations-mock-1 is unhealthy
+real 216.48
+user 0.99
+sys 0.60

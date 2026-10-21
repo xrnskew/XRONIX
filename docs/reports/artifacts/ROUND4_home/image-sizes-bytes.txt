@@ -1,0 +1,4 @@
+xronix-round4-20261021-ai:latest 48785991
+xronix-round4-20261021-backend:latest 57535521
+xronix-round4-20261021-integrations-mock:latest 52080895
+xronix-round4-20261021-web:latest 21640586

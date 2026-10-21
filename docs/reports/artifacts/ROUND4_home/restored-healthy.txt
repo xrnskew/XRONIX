@@ -1,0 +1,5 @@
+SERVICE             STATUS
+ai                  Up 7 seconds (healthy)
+backend             Up 5 minutes (healthy)
+integrations-mock   Up 11 hours (healthy)
+web                 Up 5 minutes (healthy)

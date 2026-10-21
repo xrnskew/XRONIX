@@ -1,0 +1,30 @@
+integrations-mock-1  |     return ctx.invoke(self.callback, **ctx.params)
+integrations-mock-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+integrations-mock-1  |   File "/usr/local/lib/python3.12/site-packages/click/core.py", line 910, in invoke
+integrations-mock-1  |     return callback(*args, **kwargs)
+integrations-mock-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+integrations-mock-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/main.py", line 448, in main
+integrations-mock-1  |     run(
+integrations-mock-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/main.py", line 620, in run
+integrations-mock-1  |     config.load_app()
+integrations-mock-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/config.py", line 434, in load_app
+integrations-mock-1  |     return import_from_string(self.app)
+integrations-mock-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+integrations-mock-1  |   File "/usr/local/lib/python3.12/site-packages/uvicorn/importer.py", line 19, in import_from_string
+integrations-mock-1  |     module = importlib.import_module(module_str)
+integrations-mock-1  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+integrations-mock-1  |   File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+integrations-mock-1  |     return _bootstrap._gcd_import(name[level:], package, level)
+integrations-mock-1  |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1310, in _find_and_load_unlocked
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+integrations-mock-1  |   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+integrations-mock-1  |   File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+integrations-mock-1  |   File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+integrations-mock-1  |   File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+integrations-mock-1  | PermissionError: [Errno 13] Permission denied: '/srv/app/__init__.py'

@@ -1,0 +1,19 @@
+ Volume xronix-round4-20261021_backend-data-noai  Creating
+ Volume xronix-round4-20261021_backend-data-noai  Created
+ Container xronix-round4-20261021-backend-1  Recreate
+ Container xronix-round4-20261021-backend-1  Recreated
+ Container xronix-round4-20261021-web-1  Recreate
+ Container xronix-round4-20261021-web-1  Recreated
+ Container xronix-round4-20261021-backend-1  Starting
+ Container xronix-round4-20261021-backend-1  Started
+ Container xronix-round4-20261021-backend-1  Waiting
+ Container xronix-round4-20261021-backend-1  Healthy
+ Container xronix-round4-20261021-web-1  Starting
+ Container xronix-round4-20261021-web-1  Started
+ Container xronix-round4-20261021-web-1  Waiting
+ Container xronix-round4-20261021-backend-1  Waiting
+ Container xronix-round4-20261021-backend-1  Healthy
+ Container xronix-round4-20261021-web-1  Healthy
+real 47.36
+user 0.35
+sys 0.12

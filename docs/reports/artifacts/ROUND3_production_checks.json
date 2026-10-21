@@ -1,0 +1,93 @@
+{
+  "checked_at": "2026-10-21T12:02:01.169091+00:00",
+  "base_url": "https://api.xronix.ru",
+  "origin": "https://xronix.ru",
+  "release": "4e3e094",
+  "runtime": "6e224f9",
+  "checks": {
+    "client_login": {
+      "status": 200,
+      "json_keys": [
+        "user"
+      ],
+      "cookie_attributes": [
+        "HttpOnly",
+        "Max-Age=86400",
+        "Path=/",
+        "SameSite=strict",
+        "Secure"
+      ]
+    },
+    "analyst_login": {
+      "status": 200,
+      "json_keys": [
+        "user"
+      ],
+      "cookie_attributes": [
+        "HttpOnly",
+        "Max-Age=86400",
+        "Path=/",
+        "SameSite=strict",
+        "Secure"
+      ]
+    },
+    "preflight": 200,
+    "bad_json": {
+      "status": 400,
+      "error": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Проверьте введённые данные."
+        }
+      }
+    },
+    "too_large": {
+      "status": 413,
+      "error": {
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Тело запроса превышает допустимый размер."
+        }
+      }
+    },
+    "analyst_queue": {
+      "count": 2,
+      "vector": true,
+      "lebedev": true
+    },
+    "gov_match": [
+      {
+        "product_id": "gov_guarantee",
+        "name": "Кредит с господдержкой",
+        "demo": false,
+        "eligible": true,
+        "can_apply": true,
+        "gov": true,
+        "valid_until": "2026-11-15",
+        "reasons": [],
+        "rate_from_percent": 24.0,
+        "url": "https://alfabank.ru/help/articles/sme/profits/chto-takoe-zontichnoe-kreditovanie-dlya-malogo-biznesa/",
+        "monthly_payment_rub": 1569314
+      }
+    ],
+    "north_funded": {
+      "id": "20708c95-48d4-4f70-a5f1-1b6b4a62a306",
+      "status": "funded",
+      "stages": [
+        "submitted",
+        "checking",
+        "scoring",
+        "approved",
+        "signing",
+        "funded"
+      ],
+      "monthly_payment_rub": 78933
+    },
+    "fallback_chat": {
+      "chat_id": "a74e6b38-3edb-4c6c-b72b-066289524640",
+      "type": "plan",
+      "own_funds_rub": 900000,
+      "text": "Считаю план по шаблону."
+    }
+  }
+}

@@ -1,0 +1,5 @@
+CONTAINER                                    REPOSITORY                                 TAG                 PLATFORM            IMAGE ID            SIZE                CREATED
+xronix-round4-20261021-ai-1                  xronix-round4-20261021-ai                  latest              linux/amd64         202a0081c92f        48.8MB              2 minutes ago
+xronix-round4-20261021-backend-1             xronix-round4-20261021-backend             latest              linux/amd64         d40315823c9a        57.5MB              2 minutes ago
+xronix-round4-20261021-integrations-mock-1   xronix-round4-20261021-integrations-mock   latest              linux/amd64         5e07fc1c8eeb        52.1MB              3 minutes ago
+xronix-round4-20261021-web-1                 xronix-round4-20261021-web                 latest              linux/amd64         2e3bc81f6247        21.6MB              About a minute ago

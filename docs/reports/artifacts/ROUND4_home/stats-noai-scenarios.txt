@@ -1,0 +1,4 @@
+CONTAINER ID   NAME                                         CPU %     MEM USAGE / LIMIT     MEM %     NET I/O          BLOCK I/O     PIDS
+ec77c945f1dc   xronix-round4-20261021-backend-1             7.61%     66.09MiB / 15.09GiB   0.43%     107kB / 155kB    0B / 7.27MB   4
+c201194f6a24   xronix-round4-20261021-integrations-mock-1   0.26%     33.83MiB / 15.09GiB   0.22%     847kB / 24.9kB   32.8kB / 0B   2
+10f33d45fffb   xronix-round4-20261021-web-1                 0.00%     3.285MiB / 15.09GiB   0.02%     226kB / 254kB    0B / 16.4kB   3
