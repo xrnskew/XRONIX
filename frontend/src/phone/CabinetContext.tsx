@@ -161,7 +161,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     later(6500, () => { setBusy(false); setMessages([greeting, idea, questions, answersMsg, planMsg]); onStep?.(4) })
   }
 
-  const needsOnboarding = !!user && !demo && !skipped && !wasSkipped(user.id) && user.city == null && user.experience == null && user.budget_rub == null
+  const needsOnboarding = !!user && !demo && !skipped && !wasSkipped(user.id) && user.city == null
 
   const value: Ctx = {
     status, user, notice, needsOnboarding,

@@ -1,0 +1,33 @@
+{
+  "type": "questions",
+  "text": "Основное понятно. Ещё несколько вопросов для точного расчёта.",
+  "questions": [
+    {
+      "id": "experience",
+      "text": "Есть ли у вас опыт в этом бизнесе?",
+      "kind": "choice",
+      "options": [
+        "Нет опыта",
+        "Работал наёмным",
+        "Был свой бизнес"
+      ]
+    },
+    {
+      "id": "area_m2",
+      "text": "Какая площадь помещения, м²?",
+      "kind": "text"
+    },
+    {
+      "id": "avg_check_rub",
+      "text": "Какой средний чек, ₽?",
+      "kind": "text"
+    }
+  ],
+  "state": {
+    "sphere": "coffee",
+    "city": "Казань",
+    "own_funds_rub": 300000,
+    "experience": null,
+    "answers": {}
+  }
+}

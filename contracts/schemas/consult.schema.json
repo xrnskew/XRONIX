@@ -12,6 +12,7 @@
         "sphere": { "anyOf": [{ "$ref": "common.schema.json#/definitions/sphere" }, { "type": "null" }], "description": "other не подходит для расчёта: модель предлагает ближайшую сферу из шаблонов" },
         "city": { "type": ["string", "null"], "maxLength": 60, "description": "Именительный падеж, как в cities.json" },
         "own_funds_rub": { "type": ["integer", "null"], "minimum": 0 },
+        "experience": { "anyOf": [{ "$ref": "common.schema.json#/definitions/experience" }, { "type": "null" }], "description": "Необязательное. Опыт в этом бизнесе (none, employee, owner). Спрашивается один раз за диалог, ready от него не зависит. Нет поля или null — не знаем" },
         "answers": { "type": "object", "description": "id вопроса шаблона → значение. Только id из шаблона выбранной сферы, числа в пределах min–max, варианты из options", "additionalProperties": { "type": ["number", "string"] } }
       }
     },
