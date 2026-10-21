@@ -1,0 +1,26 @@
+meta {
+  name: Vector queue
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/bank/applications?status=manual_review
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{analystToken}}
+}
+
+script:post-response {
+  const row = res.getBody().find(x => x.inn === '7768151886');
+  if (!row) throw new Error('Нужна чистая демо-БД: Вектор уже рассмотрен');
+  bru.setVar('vectorId', row.id);
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Vector in queue', () => expect(bru.getVar('vectorId')).to.be.a('string'));
+}

@@ -3,7 +3,7 @@ import { ApiError, USE_MOCKS, request, setToken } from './client'
 import { mockApi } from './mock'
 import { uid } from '../lib/uid'
 
-export { ApiError, USE_MOCKS, getToken, onUnauthorized, setToken } from './client'
+export { ApiError, USE_MOCKS, errorText, getToken, onUnauthorized, setToken } from './client'
 
 // Контракт: /contracts/api.md
 export interface Api {

@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ApiError } from '../../api'
+import { errorText } from '../../api'
 import { conveyor } from '../../api/conveyor'
-import { AUTO_STATUSES, type Application, type Offer, type Status } from '../../types/conveyor'
-import { rub } from '../../lib/format'
+import { AUTO_STATUSES, type Application, type Offer } from '../../types/conveyor'
+import { decimal, rub } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
-import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, whoseMove } from './parts'
+import { ConveyorTrack } from './Track'
+import { useCountUp } from '../../lib/useCountUp'
+import { usePolling } from '../../lib/usePolling'
 import ApplicationForm from './ApplicationForm'
 
-// Этапы на шкале: куда относится каждый статус
-const STAGES = ['Подача', 'Проверка', 'Оценка', 'Решение', 'Подписание', 'Выдача']
-const STAGE: Record<Status, number> = { draft: 0, submitted: 1, checking: 1, info_requested: 1, scoring: 2, manual_review: 3, approved: 3, counter_offer: 3, declined: 3, signing: 4, funded: 5, withdrawn: 0, cancelled: 3 }
 
-const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
+
+// Отказ по стоп-фактору случается на проверке, до оценки: тогда крестик на «Проверке», а не на «Решении»
+const stopStage = (a: Application) => a.status === 'declined' && !a.timeline.some((t) => t.status === 'scoring') ? 1 : undefined
 
 export default function ApplicationView() {
   const { id = '' } = useParams()
@@ -21,44 +23,36 @@ export default function ApplicationView() {
   const [busy, setBusy] = useState(false)
   const alive = useRef(true)
 
-  const reload = () => conveyor.getApplication(id).then((a) => { if (alive.current) { setApp(a); setError('') } }).catch((e) => alive.current && setError(errText(e)))
+  const reload = () => conveyor.getApplication(id).then((a) => { if (alive.current) { setApp(a); setError('') } }).catch((e) => alive.current && setError(errorText(e)))
   useEffect(() => { alive.current = true; setApp(null); reload(); return () => { alive.current = false } }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Пока заявка движется сама, опрашиваем раз в 2 с; у специалиста — реже
   const status = app?.status
-  useEffect(() => {
-    if (!status || !(AUTO_STATUSES.includes(status) || status === 'manual_review')) return
-    const t = setInterval(reload, status === 'manual_review' ? 5000 : 2000)
-    return () => clearInterval(t)
-  }, [status]) // eslint-disable-line react-hooks/exhaustive-deps
+  usePolling(reload, status === 'manual_review' ? 5000 : 2000, !!status && (AUTO_STATUSES.includes(status) || status === 'manual_review'))
 
   const act = async (action: 'accept' | 'reject-offer' | 'sign' | 'withdraw') => {
     if (!app) return
     setBusy(true); setError('')
-    try { setApp(await conveyor.action(app.id, action, app.version)) } catch (e) { setError(errText(e)); reload() } finally { setBusy(false) }
+    try { setApp(await conveyor.action(app.id, action, app.version)) } catch (e) { setError(errorText(e)); reload() } finally { setBusy(false) }
   }
 
   if (!app) return <Screen title="Заявка">{error ? <ErrorText>{error}</ErrorText> : <Skeleton />}</Screen>
   if (app.status === 'draft') return <Screen title={`Заявка ${app.number}`} sub="Черновик: заполните и подайте"><ApplicationForm id={app.id} onSubmitted={setApp} /></Screen>
 
-  const auto = AUTO_STATUSES.includes(app.status)
+  const auto = AUTO_STATUSES.includes(app.status), yourMove = whoseMove(app.status) === 'you' && !!app.status_info.action
   return (
     <Screen title={`Заявка ${app.number}`} sub={<span className="flex flex-wrap items-center gap-2">{app.company.registry.name} · {productNames[app.product_id]} · {rub(app.amount_rub)} на {app.term_months} мес. <StatusBadge status={app.status} title={app.status_info.title} /></span>}>
-      <Card span={12}>
-        <ol className="grid grid-cols-6 gap-1.5" aria-label="Этапы заявки">
-          {STAGES.map((s, i) => {
-            const cur = STAGE[app.status], done = i < cur || app.status === 'funded', bad = i === cur && (app.status === 'declined' || app.status === 'cancelled' || app.status === 'withdrawn')
-            return (
-              <li key={s} aria-current={i === cur ? 'step' : undefined}>
-                <div className={`h-1.5 rounded-full ${bad ? 'bg-accent' : done ? 'bg-ok' : i === cur ? `bg-fill ${auto ? 'animate-pulse' : ''}` : 'bg-surface-3'}`} />
-                <div className={`mt-1.5 truncate text-[12px] ${i === cur ? 'font-semibold text-text' : 'text-muted'}`}>{s}</div>
-              </li>
-            )
-          })}
-        </ol>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          <div><div className="text-[12px] uppercase tracking-wide text-muted">Что сейчас происходит</div><p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p></div>
-          <div><div className="text-[12px] uppercase tracking-wide text-muted">Что нужно от вас</div><p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p></div>
+      <Card span={12} className="sm:p-6">
+        <ConveyorTrack status={app.status} stage={stopStage(app)} />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-2xl bg-surface-2/60 p-4">
+            <div className="text-[13px] text-muted">Что сейчас происходит</div>
+            <p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p>
+          </div>
+          <div className={`rounded-2xl p-4 ${yourMove ? 'bg-accent/10 ring-1 ring-accent/30' : 'bg-surface-2/60'}`}>
+            <div className={`text-[13px] ${yourMove ? 'text-accent-soft' : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
+            <p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p>
+          </div>
         </div>
         {app.plan_id && <Link to={`/plan?plan=${encodeURIComponent(app.plan_id)}`} className="mt-4 inline-block text-[14px] font-medium text-text underline underline-offset-2">Расчёт проекта, на который нужен кредит</Link>}
         <div className="mt-4"><ErrorText>{error}</ErrorText></div>
@@ -92,11 +86,12 @@ export default function ApplicationView() {
 
       <Card span={12}>
         <SectionTitle>История</SectionTitle>
-        <ol className="space-y-2.5">
+        <ol className="relative ml-1.5 border-l border-white/10">
           {[...app.timeline].reverse().map((t, i) => (
-            <li key={`${t.at}-${i}`} className="flex gap-3 text-[14px]">
-              <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${i === 0 ? 'bg-accent' : 'bg-surface-3'}`} />
-              <span className="flex-1">{t.text}<span className="block text-[12px] text-muted">{dateRu(t.at)} · {t.actor === 'client' ? 'вы' : t.actor === 'analyst' ? 'специалист банка' : 'банк, автоматически'}</span></span>
+            <li key={`${t.at}-${i}`} className="relative pb-4 pl-5 last:pb-0">
+              <span className={`absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-surface ${i === 0 ? 'bg-accent' : t.actor === 'client' ? 'bg-text/60' : 'bg-steel/70'}`} aria-hidden />
+              <div className={`text-[15px] leading-snug ${i === 0 ? 'font-medium' : 'text-text/85'}`}>{t.text}</div>
+              <div className="mt-0.5 text-[12px] text-muted">{dateRu(t.at)} · {t.actor === 'client' ? 'вы' : t.actor === 'analyst' ? 'специалист банка' : 'банк, автоматически'}</div>
             </li>
           ))}
         </ol>
@@ -109,15 +104,24 @@ export default function ApplicationView() {
 function OfferCard({ offer, app, title, schedule, children }: { offer: Offer; app: Application; title?: string; schedule?: boolean; children?: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const changed = offer.kind === 'counter'
+  const payment = useCountUp(offer.monthly_payment_rub)
   return (
-    <Card span={12} className="hero-card">
+    <Card span={12} className="hero-card appear sm:p-6">
       <SectionTitle>{title ?? (changed ? 'Банк предлагает другие условия' : 'Условия кредита')}</SectionTitle>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <Stat label={changed && offer.amount_rub !== app.amount_rub ? `Сумма (вы просили ${rub(app.amount_rub)})` : 'Сумма'} value={rub(offer.amount_rub)} />
-        <Stat label={changed && offer.term_months !== app.term_months ? `Срок (вы просили ${app.term_months} мес.)` : 'Срок'} value={`${offer.term_months} мес.`} />
-        <Stat label="Ставка" value={`${String(offer.rate_percent).replace('.', ',')}%`} />
-        <Stat label="Платёж в месяц" value={rub(offer.monthly_payment_rub)} tone="ok" />
+      <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] sm:items-end">
+        <div>
+          <div className="text-[13px] text-muted">Платёж в месяц</div>
+          <div className="mt-1 font-display text-[40px] font-semibold leading-none tracking-tight text-ok tabular-nums sm:text-[46px]">{rub(Math.round(payment))}</div>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <Stat label="Сумма" value={rub(offer.amount_rub)} />
+          <Stat label="Срок" value={`${offer.term_months} мес.`} />
+          <Stat label="Ставка" value={`${decimal(offer.rate_percent)}%`} />
+        </div>
       </div>
+      {changed && (offer.amount_rub !== app.amount_rub || offer.term_months !== app.term_months) && (
+        <p className="mt-4 text-[13px] text-muted">Вы просили: <span className="line-through decoration-muted/70">{rub(app.amount_rub)} на {app.term_months} мес.</span></p>
+      )}
       <ul className="mt-4 space-y-1 text-[14px] leading-snug text-text/80">{offer.explanation.map((e) => <li key={e}>{e}</li>)}</ul>
       <p className="mt-2 text-[13px] text-muted">Всего выплатите {rub(offer.total_payment_rub)}, из них проценты {rub(offer.total_payment_rub - offer.amount_rub)}.</p>
       {children}
@@ -143,7 +147,7 @@ function Signing({ offer, busy, onSign }: { offer: Offer; busy: boolean; onSign:
   return (
     <Card span={12}>
       <SectionTitle>Кредитный договор</SectionTitle>
-      <p className="text-[15px] leading-snug">{rub(offer.amount_rub)} на {offer.term_months} мес. под {String(offer.rate_percent).replace('.', ',')}% годовых, ежемесячный платёж {rub(offer.monthly_payment_rub)}. Деньги поступят на расчётный счёт компании.</p>
+      <p className="text-[15px] leading-snug">{rub(offer.amount_rub)} на {offer.term_months} мес. под {decimal(offer.rate_percent)}% годовых, ежемесячный платёж {rub(offer.monthly_payment_rub)}. Деньги поступят на расчётный счёт компании.</p>
       <p className="mt-2 text-[13px] text-muted">Подписание в демо смоделировано: настоящая электронная подпись и перевод денег не выполняются.</p>
       <label className="mt-4 flex cursor-pointer items-start gap-3 text-[15px]">
         <input type="checkbox" className="mt-0.5 h-5 w-5 accent-[#ff4538]" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
@@ -167,7 +171,7 @@ function InfoRequest({ app, onDone }: { app: Application; onDone: (a: Applicatio
       let a = app
       if (text.trim()) a = await conveyor.patchApplication(app.id, { version: a.version, info_response: text.trim() })
       onDone(await conveyor.submit(app.id, a.version))
-    } catch (e) { setError(errText(e)) } finally { setBusy(false) }
+    } catch (e) { setError(errorText(e)) } finally { setBusy(false) }
   }
   return (
     <Card span={12}>

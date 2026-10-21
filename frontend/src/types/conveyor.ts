@@ -4,11 +4,11 @@ export type Purpose = 'working_capital' | 'equipment' | 'new_location' | 'new_di
 export type Sphere = 'coffee' | 'bakery' | 'car_wash' | 'clothing_store' | 'beauty_salon' | 'pickup_point' | 'other'
 export type MemberRole = 'owner' | 'director' | 'cfo' | 'accountant' | 'employee'
 export type CollateralKind = 'real_estate' | 'equipment' | 'vehicle' | 'goods' | 'guarantor'
-export type ProductId = 'fast' | 'secured' | 'mortgage' | 'revolving' | 'start' // start — демо-продукт XRONIX
+export type ProductId = 'fast' | 'secured' | 'mortgage' | 'revolving' | 'start' | 'gov_guarantee' // start — демо-продукт XRONIX; gov_guarantee — кредит с господдержкой
 export type Status = 'draft' | 'submitted' | 'checking' | 'info_requested' | 'scoring' | 'manual_review' | 'approved' | 'counter_offer' | 'signing' | 'funded' | 'declined' | 'withdrawn' | 'cancelled'
 export type Actor = 'client' | 'system' | 'analyst'
 export type InfoRequestKind = 'authority_document' | 'financials' | 'collateral' | 'other'
-export type DeclineReason = 'company_inactive' | 'business_too_young' | 'overdue_90' | 'tax_debt' | 'head_disqualified' | 'low_score' | 'high_debt_load' | 'analyst_decision' | 'own_funds_low' | 'plan_required'
+export type DeclineReason = 'company_inactive' | 'business_too_young' | 'overdue_90' | 'tax_debt' | 'head_disqualified' | 'low_score' | 'high_debt_load' | 'analyst_decision' | 'own_funds_low' | 'plan_required' | 'not_msp' | 'offer_expired'
 export type CompanyStatus = 'active' | 'liquidating' | 'liquidated' | 'bankrupt' | 'not_registered'
 
 export interface RegistryCompany {
@@ -27,6 +27,7 @@ export interface MatchRequest { purpose: Purpose; amount_rub: number; term_month
 export interface MatchItem {
   product_id: ProductId; name: string; demo: boolean; eligible: boolean; can_apply: boolean; reasons: string[]
   rate_from_percent: number | null; monthly_payment_rub: number | null; url: string | null
+  gov?: boolean; valid_until?: string | null // кредит с господдержкой и дата окончания акции
 }
 
 export interface Financials { revenue_12m_rub: number | null; expenses_12m_rub: number | null; loan_payments_monthly_rub: number | null }

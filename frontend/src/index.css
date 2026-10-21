@@ -16,15 +16,20 @@
   --color-bg: #0e0e10;
   --color-surface: #19191c;
   --color-surface-2: #232327;
+  --color-surface-3: #2d2d33;
   --color-line: #2c2c31;
   --color-text: #f5f5f6;
   --color-muted: #8d8d95;
   --color-accent: #ff4538;
+  --color-accent-soft: #ff8a80; /* текст на красной подложке: «ваш ход», запрос данных */
   --color-ok: #3ddc84;
   --color-warn: #ffb020;
+  --color-steel: #93a6c8; /* ход банка: заявка у системы или специалиста */
 }
 
 html, body, #root { height: 100%; }
+/* тёмные системные элементы: чекбоксы, списки, полосы прокрутки */
+:root { color-scheme: dark; accent-color: var(--color-accent); }
 body { margin: 0; font-family: var(--font-sans); color: var(--color-ink); background: #070708; -webkit-font-smoothing: antialiased; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
@@ -36,7 +41,6 @@ button { font: inherit; cursor: pointer; }
 .rise { animation: rise .25s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .rise { animation: none; } * { scroll-behavior: auto !important; } }
 
-:root { --color-surface-3: #2d2d33; }
 
 .panel-red {
   background:
@@ -114,9 +118,42 @@ input[type="range"] { height: 4px; }
 .wide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-content: start; }
 .wide-grid > * { grid-column: span 12; }
 .wide-grid > .card-ring:not(.hero-card) { padding: 22px; background: rgba(25,25,28,.9); }
+/* Колонка из нескольких карточек (карточка заявки у аналитика) — те же отступы и фон */
+.wide-grid > .stack > .card-ring:not(.hero-card) { padding: 22px; background: rgba(25,25,28,.9); }
 @media (min-width: 1100px) {
+  .wide-grid > [data-span="4"] { grid-column: span 4; }
   .wide-grid > [data-span="5"] { grid-column: span 5; }
   .wide-grid > [data-span="6"] { grid-column: span 6; }
   .wide-grid > [data-span="7"] { grid-column: span 7; }
   .wide-grid > [data-tall] { grid-row: span 2; }
+}
+
+/* ---- Движение кабинета ----
+   Один главный акцент — лента конвейера на экране заявки. Остальное — отклик на действие человека. */
+:root { --ease-out: cubic-bezier(.2,.75,.2,1); }
+@keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.appear { animation: appear .32s var(--ease-out) both; }
+
+/* Лента транспортёра: штриховка едет по участку, где заявка сейчас обрабатывается сама */
+@keyframes belt { from { background-position: 0 0; } to { background-position: 28px 0; } }
+.belt {
+  background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,.34) 0 6px, rgba(255,255,255,0) 6px 14px);
+  background-size: 28px 100%;
+  animation: belt .9s linear infinite;
+}
+@keyframes node-pulse { from { box-shadow: 0 0 0 0 rgba(255,69,56,.55); } to { box-shadow: 0 0 0 10px rgba(255,69,56,0); } }
+.node-pulse { animation: node-pulse 1.6s ease-out infinite; }
+/* Пройденные участки заполняются по очереди при открытии экрана */
+@keyframes fill-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.fill-in { transform-origin: left center; animation: fill-in .5s var(--ease-out) both; }
+@keyframes pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: none; opacity: 1; } }
+.pop { animation: pop .38s var(--ease-out) both; }
+
+/* Мастер заявки: карточки нового шага появляются; шкала шагов не перемонтируется и не мигает */
+.wizard > * { animation: appear .32s var(--ease-out) both; }
+.wizard > :nth-child(3) { animation-delay: 40ms; }
+.wizard > :nth-child(n+4) { animation-delay: 80ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .appear, .belt, .node-pulse, .fill-in, .pop, .wizard > * { animation: none; }
 }

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "XRONIX conveyor round 3",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

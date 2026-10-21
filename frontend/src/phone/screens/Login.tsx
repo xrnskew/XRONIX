@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { Button, Logo, Wide } from '../ui'
+import { Button, Conveyor, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import ForgotPassword from './ForgotPassword'
 import { ApiError, USE_MOCKS } from '../../api'
@@ -7,6 +7,11 @@ import { DEMO_ANALYST, DEMO_CLIENT, DEMO_PASSWORD } from '../../api/demoAccounts
 
 const points = ['План запуска по вашей идее', 'Сколько нужно денег и откуда взять', 'Кредит, который бизнес потянет']
 const field = 'h-[52px] w-full rounded-2xl bg-surface px-4 text-[16px] text-text outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent'
+
+const DEMO_ROLES = [
+  { email: DEMO_CLIENT.email, role: 'Клиент', name: DEMO_CLIENT.name },
+  { email: DEMO_ANALYST.email, role: 'Аналитик банка', name: DEMO_ANALYST.name },
+]
 
 export default function Login() {
   const { signIn, signUp, notice } = useCabinet()
@@ -19,6 +24,8 @@ export default function Login() {
   const [busy, setBusy] = useState(false)
   const [forgot, setForgot] = useState(false)
   const reg = mode === 'register'
+  const conveyorOn = useContext(Conveyor) // рабочая версия /app; в телефоне на презентации панели демо-доступа нет
+  const demo = (e: string) => { setError(null); setBusy(true); signIn(e, DEMO_PASSWORD).catch((err) => { setError(err instanceof ApiError ? err.message : 'Не удалось войти. Попробуйте ещё раз.'); setBusy(false) }) }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -39,7 +46,7 @@ export default function Login() {
   if (forgot) return <ForgotPassword onBack={() => setForgot(false)} />
 
   return (
-    <form className={wide ? 'w-full' : 'relative flex h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
+    <form className={wide ? 'w-full' : 'relative flex min-h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
       {wide ? (
         <div className="mb-8">
           <h1 className="font-display text-[30px] font-semibold leading-tight tracking-tight">{reg ? 'Создайте аккаунт' : 'Вход в кабинет'}</h1>
@@ -48,7 +55,7 @@ export default function Login() {
       ) : (
         <>
           <div className="pointer-events-none absolute -top-24 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-accent/25 blur-[90px]" aria-hidden />
-          <div className="relative mb-auto pt-12">
+          <div className="relative mb-auto shrink-0 pb-6 pt-12">
             <Logo size={reg ? 44 : 56} />
             <h1 className="mt-5 font-display text-[28px] font-semibold leading-[1.1] tracking-tight">{reg ? 'Создайте аккаунт' : 'Кабинет предпринимателя'}</h1>
             {!reg && (
@@ -76,8 +83,21 @@ export default function Login() {
           {reg ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
         </button>
         {!reg && <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={() => setForgot(true)}>Забыли пароль?</button>}
-        {USE_MOCKS && !reg && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
-        {USE_MOCKS && !reg && wide && <button type="button" disabled={busy} onClick={() => { setBusy(true); signIn(DEMO_ANALYST.email, DEMO_PASSWORD).catch(() => setBusy(false)) }} className="h-10 w-full text-[14px] text-muted underline underline-offset-2 hover:text-text">Войти как аналитик банка (демо)</button>}
+        {!reg && conveyorOn && (
+          <div className="rounded-2xl bg-white/[.04] p-4 ring-1 ring-white/5">
+            <div className="text-[13px] text-muted">Демо-доступ: войти одним нажатием</div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {DEMO_ROLES.map((r) => (
+                <button key={r.email} type="button" disabled={busy} onClick={() => demo(r.email)}
+                  className="rounded-xl bg-surface-2 px-3.5 py-3 text-left transition-colors hover:bg-surface-3 disabled:opacity-50">
+                  <span className="block text-[15px] font-semibold">{r.role}</span>
+                  <span className="block truncate text-[12px] text-muted">{r.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {USE_MOCKS && !reg && !conveyorOn && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
       </div>
     </form>
   )

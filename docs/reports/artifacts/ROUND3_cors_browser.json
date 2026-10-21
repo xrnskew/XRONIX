@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "date": "2026-10-21",
+  "page_origin": "http://127.0.0.1:18701",
+  "api_origin": "http://127.0.0.1:18700",
+  "credentials": "include",
+  "checks": [
+    {
+      "name": "cookie register",
+      "status": 201,
+      "error": null
+    },
+    {
+      "name": "invalid JSON",
+      "status": 400,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Проверьте введённые данные."
+      }
+    },
+    {
+      "name": "oversized body",
+      "status": 413,
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Тело запроса превышает допустимый размер."
+      }
+    },
+    {
+      "name": "cookie authentication",
+      "status": 200,
+      "error": null
+    },
+    {
+      "name": "rate limit",
+      "status": 429,
+      "error": {
+        "code": "RATE_LIMITED",
+        "message": "Слишком много запросов. Попробуйте чуть позже."
+      }
+    }
+  ]
+}

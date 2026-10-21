@@ -86,7 +86,9 @@ def test_secure_cookie_auth_csrf_logout_and_revocation(settings):
         assert 'Secure' in cookie and 'HttpOnly' in cookie and 'SameSite=strict' in cookie and 'Path=/' in cookie
         assert 'Domain=' not in cookie
         assert response.headers['access-control-allow-credentials'] == 'true'
-        token = response.json()['token']
+        assert set(response.json()) == {'user'}
+        token = c.cookies.get('__Host-xronix_session')
+        assert token
         assert c.get('/api/me', headers=origin).status_code == 200
         assert c.get('/api/me', headers=origin).headers['cache-control'] == 'no-store'
         error(c.patch('/api/me', json={'name': 'CSRF'}), 'UNAUTHORIZED')
@@ -100,7 +102,8 @@ def test_secure_cookie_auth_csrf_logout_and_revocation(settings):
         assert c.post('/api/auth/logout', headers=origin).status_code == 204
         login = c.post('/api/auth/login', headers=origin, json={'email': 'cookie@example.com', 'password': 'password123'})
         assert login.status_code == 200
-        assert login.json()['token'] != token
+        assert set(login.json()) == {'user'}
+        assert c.cookies.get('__Host-xronix_session') != token
         assert c.get('/api/me', headers=origin).status_code == 200
 
 

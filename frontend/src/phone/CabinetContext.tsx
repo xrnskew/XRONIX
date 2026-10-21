@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import type { AiReply, Answer, ChatMessage, Plan, Profile } from '../types/plan'
-import { ApiError, api, USE_MOCKS, getToken, onUnauthorized, setToken } from '../api'
+import { ApiError, api, USE_MOCKS, errorText, getToken, onUnauthorized, setToken } from '../api'
 import { mockPlan, mockProfile, mockQuestions } from '../mocks/data'
 import { CabinetSession } from './session'
 import { uid } from '../lib/uid'
@@ -55,7 +55,6 @@ const C = createContext<Ctx | null>(null)
 const skipKey = (id?: string) => `xronix_onboarding_skipped_${id ?? ''}`
 const wasSkipped = (id?: string) => { try { return localStorage.getItem(skipKey(id)) === '1' } catch { return false } }
 
-const errText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
 
 export function CabinetProvider({ children, restoreSession = true }: { children: ReactNode; restoreSession?: boolean }) {
   const [status, setStatus] = useState<Status>(restoreSession && (!USE_MOCKS || getToken()) ? 'booting' : 'out')
@@ -65,7 +64,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
   const [demo, setDemo] = useState(false)
   const [demoAnswers, setDemoAnswers] = useState<Record<string, string> | null>(null)
 
-  const [session] = useState(() => new CabinetSession(api, greeting, errText))
+  const [session] = useState(() => new CabinetSession(api, greeting, errorText))
   const state = useSyncExternalStore(session.subscribe, session.getSnapshot)
   const { reloadPlan, openPlan, send, retry, newChat, openChat, deleteChat } = session
   const setPlan = (plan: Plan | null) => session.present({ plan })
@@ -113,7 +112,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     let mounted = true
     api.getMe().then((u) => { if (mounted && generation === authGeneration.current) return enter(u) }).catch((e) => {
       if (!mounted || generation !== authGeneration.current) return
-      if (!(e instanceof ApiError && e.code === 'UNAUTHORIZED')) setNotice(errText(e))
+      if (!(e instanceof ApiError && e.code === 'UNAUTHORIZED')) setNotice(errorText(e))
       setStatus('out')
     })
     return () => { mounted = false }

@@ -1,0 +1,27 @@
+meta {
+  name: Analyst login
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "analyst@xronix.demo",
+    "password": "demo12345"
+  }
+}
+
+script:post-response {
+  bru.setVar('analystToken', res.getBody().token);
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Analyst role', () => expect(res.getBody().user.role).to.equal('analyst'));
+}

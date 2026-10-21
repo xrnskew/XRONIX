@@ -1,0 +1,27 @@
+meta {
+  name: Client login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "client@xronix.demo",
+    "password": "demo12345"
+  }
+}
+
+script:post-response {
+  bru.setVar('clientToken', res.getBody().token);
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Client role', () => expect(res.getBody().user.role).to.equal('client'));
+}

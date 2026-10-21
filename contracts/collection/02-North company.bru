@@ -1,0 +1,31 @@
+meta {
+  name: North company
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/companies
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "inn": "7715881399",
+    "member_role": "director"
+  }
+}
+
+script:post-response {
+  bru.setVar('companyId', res.getBody().id);
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('North company', () => expect(res.getBody().registry.name).to.include('Северная выпечка'));
+}

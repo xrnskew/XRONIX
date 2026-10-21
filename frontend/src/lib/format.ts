@@ -1,4 +1,6 @@
 const nf = new Intl.NumberFormat('ru-RU')
+// Дробь с запятой, как принято в русском тексте: 23.5 → «23,5»
+export const decimal = (n: number | string | null | undefined) => String(n).replace('.', ',')
 export const rub = (n: number | null | undefined) => (n == null ? '—' : `${nf.format(Math.round(n))} ₽`)
 export const short = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1).replace('.0', '').replace('.', ',')} млн` : n >= 1000 ? `${Math.round(n / 1000)} тыс` : String(n)

@@ -39,18 +39,6 @@ export function useSlides(ids: string[]) {
   return { current, settled }
 }
 
-export function useMediaQuery(q: string) {
-  const [m, setM] = useState(() => typeof matchMedia === 'function' && matchMedia(q).matches)
-  useEffect(() => {
-    const mq = matchMedia(q)
-    const on = () => setM(mq.matches)
-    on()
-    mq.addEventListener('change', on)
-    return () => mq.removeEventListener('change', on)
-  }, [q])
-  return m
-}
-
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 let animRaf = 0
 

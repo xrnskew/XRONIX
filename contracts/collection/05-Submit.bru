@@ -1,0 +1,30 @@
+meta {
+  name: Submit
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/applications/{{applicationId}}/submit
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "version": {{version}}
+  }
+}
+
+script:post-response {
+  bru.setVar('polls', 0);
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Submitted', () => expect(res.getBody().status).to.equal('submitted'));
+}

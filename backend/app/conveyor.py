@@ -41,7 +41,8 @@ class Conveyor:
         try:
             self.contracts.validate('conveyor',body,definition)
         except ValidationError as exc:
-            raise ApiError('VALIDATION_ERROR',f"{'.'.join(map(str,exc.path)) or 'Запрос'}: {exc.message}") from None
+            from .validation import schema_error_ru
+            raise ApiError('VALIDATION_ERROR',schema_error_ru(exc)) from None
 
     def company(self,s,company_id,user_id):
         member=s.get(CompanyMember,(user_id,company_id))

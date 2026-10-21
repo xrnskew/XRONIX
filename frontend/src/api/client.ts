@@ -51,3 +51,6 @@ export async function request<T>(method: string, path: string, body?: unknown, t
   }
   return data as T
 }
+
+// Текст ошибки для человека: сообщение сервера или общее «попробуйте ещё раз»
+export const errorText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import dict from '../../data/dictionaries.json'
 import type { Status } from '../../types/conveyor'
-import { Badge } from '../ui'
+import { Badge, type Tone } from '../ui'
 
 // Общие кусочки экранов конвейера: поля ввода, статусы, справочники.
 
@@ -12,14 +12,15 @@ export const ghostBtn = 'h-12 rounded-xl bg-surface-2 px-5 text-[15px] font-semi
 export const purposes = dict.purposes as Record<string, { title: string; hint: string; plan?: boolean }>
 export const memberRoles = dict.member_roles as Record<string, { title: string; needs_authority: boolean }>
 export const collateralKinds = dict.collateral_kinds as Record<string, { title: string }>
-export const productNames: Record<string, string> = { fast: 'Кредит без залога', secured: 'Кредит с залогом', mortgage: 'Бизнес-ипотека', revolving: 'Кредитная линия', start: '«Старт» (демо-продукт)' }
+export const productNames: Record<string, string> = { fast: 'Кредит без залога', secured: 'Кредит с залогом', mortgage: 'Бизнес-ипотека', revolving: 'Кредитная линия', start: '«Старт» (демо-продукт)', gov_guarantee: 'Кредит с господдержкой' }
 
-const tone: Record<Status, 'ok' | 'warn' | 'bad' | 'muted'> = {
-  draft: 'muted', submitted: 'muted', checking: 'muted', scoring: 'muted', manual_review: 'muted',
-  info_requested: 'warn', approved: 'ok', counter_offer: 'warn', signing: 'ok', funded: 'ok',
-  declined: 'bad', withdrawn: 'muted', cancelled: 'muted',
-}
-export const StatusBadge = ({ status, title }: { status: Status; title: string }) => <span className="whitespace-nowrap"><Badge tone={tone[status]}>{title}</Badge></span>
+// Чей сейчас ход: от этого цвет статуса и группа в списке заявок
+export type Move = 'you' | 'bank' | 'done'
+export const whoseMove = (s: Status): Move =>
+  (['draft', 'info_requested', 'approved', 'counter_offer', 'signing'] as Status[]).includes(s) ? 'you'
+    : (['submitted', 'checking', 'scoring', 'manual_review'] as Status[]).includes(s) ? 'bank' : 'done'
+const tone = (s: Status): Tone => s === 'funded' ? 'ok' : s === 'declined' ? 'bad' : { you: 'action', bank: 'bank', done: 'muted' }[whoseMove(s)] as Tone
+export const StatusBadge = ({ status, title }: { status: Status; title: string }) => <span className="whitespace-nowrap"><Badge tone={tone(status)} dot>{title}</Badge></span>
 
 export function Label({ text, hint, children, warn }: { text: string; hint?: string; children: ReactNode; warn?: boolean }) {
   return (

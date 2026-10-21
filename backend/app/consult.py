@@ -14,7 +14,7 @@ from .db import Chat, Message, Plan, Generation, now, uid
 from .errors import ApiError
 from .chat_context import bound_answers
 from .limits import consume
-from . import project_calc
+from . import project_calc, planning
 
 
 SPHERES=[('coffee',r'кофе'),('bakery',r'пекар|хлеб'),('car_wash',r'мойк'),('clothing_store',r'одежд|бутик'),('beauty_salon',r'салон красот|парикмах|барбер'),('pickup_point',r'пункт выдачи|\bпвз\b')]
@@ -34,18 +34,39 @@ def render_history(messages):
     return out
 
 
-def amount(text):
+FUNDS_CONTEXT = re.compile(r'\b(?:своих|свои|есть|накопил[аи]?|накопления|бюджет|отложил[аи]?|вложить)\b', re.I)
+MONEY = re.compile(r'полтора\s+(?:ляма|миллиона)|полмиллиона|пол[- ]ляма|(?<!\w)(?P<number>\d[\d \u00a0]*(?:[.,]\d+)?)\s*(?P<unit>млн|миллион[а-я]*|лям[а-я]*|тыс[а-я]*|к\b|руб[а-я]*|₽)?', re.I)
+CLAUSE_BREAK = re.compile(r'[;!?\n]|(?<!\d)[.,]|[.,](?!\d)')
+
+
+def amount(text, require_context=False):
+    """One unambiguous amount; measurements and average checks are never funds."""
     low=text.lower().replace('ё','е')
-    if re.search(r'полтора\s+(ляма|миллиона)',low):return 1500000
-    if re.search(r'полмиллиона|пол[- ]ляма',low):return 500000
-    m=re.search(r'(\d[\d ]*(?:[.,]\d+)?)\s*(млн|миллион\w*|лям\w*|тыс\w*|к\b|руб\w*|₽)?',low)
-    if not m:return None
-    try:
-        n=float(m[1].replace(' ','').replace(',','.'))
-        unit=m[2] or ''
-        n*=1000000 if unit.startswith(('млн','миллион','лям')) else 1000 if unit.startswith(('тыс','к')) else 1
-        return int(n) if n.is_integer() and 0<=n<=10**12 else None
-    except (ValueError,OverflowError):return None
+    anchors=list(FUNDS_CONTEXT.finditer(low))
+    values=set()
+    for match in MONEY.finditer(low):
+        tail=low[match.end():]
+        # Currency may already have been consumed by MONEY (e.g. «500 ₽ чек»).
+        if re.match(r'\s*(?:м[²2]|кв\.?\s*м|чел(?:\.|\b)|человек\w*|чек\w*)',tail):continue
+        if re.search(r'(?:средний\s+)?чек\s*[:—-]?\s*$',low[:match.start()]):continue
+        if require_context:
+            nearby=False
+            for anchor in anchors:
+                gap=low[anchor.end():match.start()] if anchor.end()<=match.start() else low[match.end():anchor.start()] if match.end()<=anchor.start() else None
+                if gap is not None and len(gap)<=65 and not CLAUSE_BREAK.search(gap):nearby=True
+            if not nearby:continue
+        if match.group('number') is None:
+            n=1500000 if match.group().startswith('полтора') else 500000
+        else:
+            try:
+                n=float(match.group('number').replace(' ','').replace('\u00a0','').replace(',','.'))
+                unit=match.group('unit') or ''
+                n*=1000000 if unit.startswith(('млн','миллион','лям')) else 1000 if unit.startswith(('тыс','к')) else 1
+                if not n.is_integer() or not 0<=n<=10**12:return None
+                n=int(n)
+            except (ValueError,OverflowError):return None
+        values.add(n)
+    return next(iter(values)) if len(values)==1 else None
 
 
 class Consult:
@@ -71,6 +92,7 @@ class Consult:
         state=result['state'];sphere=state['sphere']
         if sphere is not None and sphere not in self.c.templates['spheres']:raise ValueError('Unsupported sphere')
         if result['type']=='message' and state!=before:raise ValueError('Message changed state')
+        if state['city'] is not None:state['city']=project_calc.normalize_city(state['city'])
         if result['type']=='ready' and (not sphere or not state['city'] or state['own_funds_rub'] is None):raise ValueError('Incomplete ready')
         if state['answers']:
             if not sphere:raise ValueError('Answers without sphere')
@@ -88,6 +110,7 @@ class Consult:
     def fallback(self,text,state,previous,answers):
         st=copy.deepcopy(state)
         low=text.lower()
+        st['city']=(st['city'] or '').strip() or None
         if re.search(r'игнорируй|забудь.*инструкц|system:|погода|анекдот|футбол',low):
             return dict(type='message',text='Я помогаю подобрать бизнес. Давайте вернёмся к вашей идее.',state=st)
         sphere=next((s for s,rx in SPHERES if re.search(rx,low)),None)
@@ -106,10 +129,12 @@ class Consult:
             if a['question_id']=='city' and a['answer'].strip():st['city']=a['answer'].strip()[:60]
         if 'city' in asked and not found and not answers and text.strip():st['city']=text.strip()[:60]
         funds_text=next((a['answer'] for a in answers if a['question_id']=='own_funds'),text)
-        money=amount(funds_text)
-        if 'own_funds' in asked or re.search(r'есть|своих|свои|накоп|отлож|вложить|бюджет',low):
+        explicit_answer='own_funds' in asked or any(a['question_id']=='own_funds' for a in answers)
+        if explicit_answer or FUNDS_CONTEXT.search(funds_text):
+            money=amount(funds_text,require_context=not explicit_answer)
             if money is not None:st['own_funds_rub']=money
             elif re.search(r'своих нет|ноль|без своих|^нет\b|^0$',funds_text,re.I):st['own_funds_rub']=0
+            else:st['own_funds_rub']=None
         if not st['sphere']:
             q=dict(id='sphere',text='Что открываем? '+', '.join(d['title'] for d in self.c.templates['spheres'].values())+'.',kind='text')
         elif not st['city']:q=dict(id='city',text='В каком городе открываетесь?',kind='text')
@@ -136,8 +161,12 @@ class Consult:
             messages=list(reversed(s.scalars(select(Message).where(Message.chat_id==chat_id).order_by(Message.seq.desc()).limit(20)).all()))
             previous=next((m for m in reversed(messages) if m.role=='assistant'),None)
             answers=bound_answers(body,previous)
-            state=chat.consult_state or dict(sphere=None,city=user.city,own_funds_rub=None,answers={})
+            state=copy.deepcopy(chat.consult_state) or dict(sphere=None,city=user.city,own_funds_rub=None,answers={})
+            # Backend-only preference; never add fields to the AI state contract.
+            refused=state.pop('credit_refused',False)
             current=body.text+('' if not answers else '\n'+'\n'.join(a['question']+' '+a['answer'] for a in answers))
+            preferences=dict(history=[dict(role='user',content='без кредита')] if refused else [],message=current)
+            refused=planning.credit_refused(preferences)
             # Bound history/current text to the existing service request schema.
             payload=dict(history=render_history(messages),message=current[:4000],state=state)
             if not messages:chat.title=body.text[:60]
@@ -149,14 +178,15 @@ class Consult:
                 self.validate_state(result,state)
             except (httpx.HTTPError,TimeoutError,ValueError,ValidationError,KeyError,TypeError):
                 result=self.fallback(current,state,previous,answers)
-            chat.consult_state=copy.deepcopy(result['state'])
+            chat.consult_state={**copy.deepcopy(result['state']),'credit_refused':refused}
             if result['type']=='ready':
                 st=result['state']
                 plan=project_calc.calculate(dict(sphere=st['sphere'],city=st['city'],own_funds_rub=st['own_funds_rub'],answers=st['answers']),self.c.templates,self.c.products)
+                plan=planning.apply_preferences(plan,dict(history=[],message='без кредита' if refused else ''))
                 self.contracts.validate('plan',plan)
                 plan_id=uid();s.add(Plan(id=plan_id,user_id=user.id,chat_id=chat_id,body=plan))
                 chat.plan_id=plan_id;chat.title=plan['title'][:60]
-                reply=dict(type='plan',text='План готов. Цифры рассчитаны бэкендом по шаблону; параметры можно изменить в расчёте проекта.',plan_id=plan_id,plan=plan)
+                reply=dict(type='plan',text=result['text'],plan_id=plan_id,plan=plan)
             else:reply={k:v for k,v in result.items() if k!='state'}
             self.contracts.validate('reply',reply)
             s.add(Message(chat_id=chat_id,role='assistant',reply=reply));chat.updated_at=now()
