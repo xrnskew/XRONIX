@@ -4,17 +4,11 @@
 Каждый ответ проверяется JSON Schema контракта (contracts/schemas), запросы идут через HTTP-путь FastAPI.
 """
 import json
-import os
 import unittest
 from pathlib import Path
 
-os.environ["GIGACHAT_AUTH_KEY"] = ""
-
 from fastapi.testclient import TestClient  # noqa: E402
 
-from app import config  # noqa: E402
-
-config.AUTH_KEY = ""
 from app.main import app  # noqa: E402
 from app.rules import build_data  # noqa: E402
 from app.rules.extract import own_funds, pick_city  # noqa: E402
@@ -72,11 +66,15 @@ class ConsultContract(Api):
         gold = example("consult.response.ready.json")
         self.assertEqual((r["type"], r["state"]), (gold["type"], gold["state"]))
 
-    def test_no_gigachat_needed(self):
-        self.assertIsNone(app.state.llm)
-        r = self.client.post("/ai/respond", json={"mode": "chat", "user_context": {"profile": {"name": "Т", "city": None,
-                             "experience": None, "budget_rub": None}, "tags": [], "memory": ""}, "history": [], "message": "x"})
-        self.assertEqual(r.json()["error"]["code"], "AI_UNAVAILABLE")
+    def test_no_gigachat_in_service(self):
+        """Замечание 1 раунда 3: v1 /ai/respond и GigaChat убраны из сервиса, его зависимостей и образа."""
+        r = self.client.post("/ai/respond", json={"message": "x"})
+        self.assertEqual((r.status_code, r.json()["error"]["code"]), (404, "NOT_FOUND"))
+        ai = Path(__file__).resolve().parent.parent
+        self.assertNotIn("gigachat", (ai / "requirements.txt").read_text(encoding="utf-8").lower())
+        self.assertNotIn("certs", (ai / "Dockerfile").read_text(encoding="utf-8"))
+        for f in (ai / "app").rglob("*.py"):
+            self.assertNotRegex(f.read_text(encoding="utf-8"), r"(?im)^\s*(from|import)\s+gigachat", f.name)
 
     def test_bad_request(self):
         r = self.client.post("/ai/consult", json={"message": "x"})

@@ -7,15 +7,15 @@
     "schema_valid": 1.0,
     "purpose_accuracy": 0.9739,
     "sphere_accuracy": 0.9735,
-    "city_accuracy": 0.9851,
+    "city_accuracy": 0.9855,
     "amount_rub_accuracy": 1.0,
     "term_months_accuracy": 0.997,
     "has_collateral_accuracy": 0.9922,
-    "all_fields_exact": 0.9254,
+    "all_fields_exact": 0.9258,
     "recall_when_present": {
       "purpose": 0.9692,
       "sphere": 0.9955,
-      "city": 0.9765,
+      "city": 0.9771,
       "amount_rub": 1.0,
       "term_months": 0.9951,
       "has_collateral": 0.9713
@@ -38,13 +38,13 @@
       },
       "city": {
         "need": 0.95,
-        "got": 0.9851,
+        "got": 0.9855,
         "pass": true
       }
     },
     "latency_ms": {
-      "mean": 7.29,
-      "p95": 10.37
+      "mean": 3.37,
+      "p95": 3.91
     }
   },
   "errors": [

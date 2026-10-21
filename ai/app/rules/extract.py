@@ -77,17 +77,31 @@ def fix_typos(text: str) -> str:
 # ---------- Города ----------
 
 CITY_CUES = {"в", "во", "из", "город", "г", "городе", "города", "городу", "гор", "под"}
+# Разговорные и короткие названия: форма -> (город, нужен ли предлог). «в Нижнем», «в Челнах», «Питер», «в Новгороде».
+CITY_ALIASES = {
+    **{f: ("Санкт-Петербург", False) for f in ("питер", "питера", "питере", "питеру", "питером", "спб")},
+    **{f: ("Нижний Новгород", True) for f in ("нижнем", "нижний", "нижнего", "нижнему")},
+    **{f: ("Набережные Челны", True) for f in ("челны", "челнах", "челнов", "челнам")},
+    **{f: ("Великий Новгород", True) for f in ("новгород", "новгороде", "новгорода", "новгороду")},
+    **{f: ("Екатеринбург", False) for f in ("екб", "ебург", "екатеринбурге")},
+    **{f: ("Москва", False) for f in ("мск",)},
+}
 
 
 @lru_cache(maxsize=1)
 def _city_index():
     exact, by_prefix, max_words = {}, {}, 1
+    by_name = {}
     for c in data("cities"):
+        by_name[c["name"]] = c
         for f in c["forms"]:
             exact.setdefault(f, []).append(c)
             max_words = max(max_words, len(f.split()))
             if " " not in f and len(f) >= 5:
                 by_prefix.setdefault(f[:2], []).append((f, c))
+    for f, (name, cue) in CITY_ALIASES.items():
+        if f not in exact and name in by_name:
+            exact[f] = [{**by_name[name], "needs_cue": cue, "alias": True}]
     return exact, by_prefix, max_words
 
 
@@ -113,7 +127,7 @@ def find_cities(text: str, bare_ok: bool = False) -> list:
                 continue
             prev = toks[i - 1][0].rstrip(".") if i else ""
             cued = prev in CITY_CUES
-            nominative = [c for c in cands if norm(c["name"]) == phrase]
+            nominative = [c for c in cands if norm(c["name"]) == phrase or c.get("alias")]
             best = max(nominative or cands, key=lambda c: c["population"])
             if best["needs_cue"] and not (cued or bare_ok):
                 continue
@@ -139,7 +153,7 @@ def pick_city(text: str, bare_ok: bool = False):
 SPHERE_DIRECT = {
     "coffee": [r"кофе(?!ин)", r"кофейн", r"кафе-кофейн"],
     "bakery": [r"пекарн", r"хлебн\w* лавк", r"хлебопекарн"],
-    "car_wash": [r"(?<![а-я])мойк", r"автомойк", r"мойку самообслуж"],
+    "car_wash": [r"(?<![а-я])мойк", r"автомойк", r"мойку самообслуж", r"моечн"],
     "clothing_store": [r"одежд", r"бутик", r"шоурум"],
     "beauty_salon": [r"салон\w* красоты", r"бьюти", r"парикмахер", r"барбер", r"ногтев", r"маникюр", r"бьюти-салон"],
     "pickup_point": [r"(?<![а-я])пвз(?![а-я])", r"пункт\w* выдачи", r"выдачи заказов", r"wildberries|ozon|вайлдберриз|озон", r"маркетплейс"],
@@ -169,11 +183,34 @@ OTHER_BUSINESS = r"стоматолог|клиник|ферм|автошкол|�
                  r"автосервис|шиномонтаж"
 
 
+NEGATED_BEFORE = re.compile(r"(?<![а-я])(не|нет,? не)(\s+(хочу|надо|нужн\w*|буду|будет|планирую))?\s*$")
+
+
+def sphere_mentions(text: str) -> list:
+    """[(позиция, сфера, с отрицанием?)] по порядку: «не кофейня, а пекарня» -> кофейня с отрицанием, пекарня без."""
+    t = norm(text)
+    out = []
+    for code, rxs in SPHERE_DIRECT.items():
+        for rx in rxs:
+            for m in re.finditer(rx, t):
+                before = re.sub(r".*[,.;!?\n]", "", t[max(0, m.start() - 25):m.start()])
+                out.append((m.start(), code, bool(NEGATED_BEFORE.search(before))))
+    return sorted(out)
+
+
+def sphere_negated(text: str) -> bool:
+    """Есть сфера с отрицанием и другая без него: это поправка сферы («нет, не кофейню, пекарню»)."""
+    m = sphere_mentions(text)
+    neg = {c for _, c, n in m if n}
+    return bool(neg) and any(not n and c not in neg for _, c, n in m)
+
+
 def sphere_direct(text: str):
     t = norm(text)
-    for code, rxs in SPHERE_DIRECT.items():
-        if any(re.search(rx, t) for rx in rxs):
-            return code, False
+    mentions = sphere_mentions(t)
+    if mentions:
+        positive = [c for _, c, n in mentions if not n]
+        return (positive[-1] if positive else None), False
     for w in re.findall(r"[а-я-]{6,}", t):
         for code, words in SPHERE_WORDS.items():
             if any(edit_distance_le1(w, x) for x in words if len(x) >= 6):
@@ -214,7 +251,7 @@ ANSWER_CUES = {
     "orders_per_day": (r"(заказ\w*)\s+(в|за)\s+день", r"(заказов)"),
     "avg_check_rub": (r"(руб\w*|₽|р\.)?\s*средн\w* чек", r"(чек\w*)"),
     "fee_per_order_rub": (r"(руб\w*|₽)?\s*(с|за) (одного )?заказ", r"(с|за) (одного )?заказа|доход\w*"),
-    "staff": (r"(сотрудник\w*|продавц\w*|работник\w*|мастер\w*|человек в штате)", r"(штате|сотрудников|продавцов|работать будут)"),
+    "staff": (r"(сотрудник\w*|продавц\w*|работник\w*|мастер\w*|человек в штате)", r"(штате|сотрудник\w*|продавц\w*|работать будут)"),
     "posts": (r"(пост\w*)", r"(постов)"),
     "work_places": (r"(рабоч\w* мест\w*|кресл\w*|мест(?![а-я]))", r"(рабочих мест|кресел)"),
 }
@@ -317,7 +354,9 @@ def template_answers(sphere: str, text: str, asked=()) -> dict:
 FUNDS_CUE = re.compile(r"(есть|свои\w*|своих|накоп\w*|отлож\w*|вложить|вложу|бюджет\w*|готов\w*|имеется|капитал\w*|собрал\w*|"
                        r"сбережен\w*|деньг\w*|на руках)")
 ZERO_FUNDS = re.compile(r"своих (денег |вложений |средств )?(нет|ноль|0)|накоплений нет|без своих|нет своих|только кредит|"
-                        r"ничего нет|денег нет|своих вложений ноль|(?<![а-я0-9])ноль(?![а-я])")
+                        r"ничего нет|денег нет|своих вложений ноль|(?<![а-я0-9])ноль(?![а-я])|ни копейки|ни рубля|"
+                        r"вс[её] в кредит|полностью в кредит|целиком в кредит|денег своих нет")
+FUNDS_AFTER = re.compile(r"[а-я]*\.?\s*(свои(?!ми)|своих|собственн\w*|личн\w*)(?![а-я])")  # «300 тыс|яч своих»
 NOT_FUNDS_CUE = re.compile(r"чек|с заказа|доход|выручк|аренд|стоит|зарплат|кредит на|нужно|нужен|надо|сумма кредита")
 
 
@@ -336,8 +375,10 @@ def own_funds(text: str, asked: bool = False):
     if ZERO_FUNDS.search(t):
         return 0
     for value, start, end, kind in amounts(t):
-        if value < 1000:
-            continue
+        if value < 1000 or re.search(r"(?<![а-я])не\s*$", t[max(0, start - 4):start]):
+            continue  # «своих не миллион, а 800 тысяч»: сумма с «не» — это то, что поправляют
+        if FUNDS_AFTER.match(t[end:end + 15]) and not NOT_FUNDS_CUE.search(re.sub(r".*[,.;!?\n]", "", t[max(0, start - 30):start])):
+            return value  # «300 тысяч свои», «3 млн своих»
         before = t[max(0, start - 30):start]
         before = re.sub(r".*[.;!?\n]", "", before)
         clause = re.sub(r".*,", "", before)  # запрет — только в своей части фразы («чек 1010 ₽, своих 3 млн»)
@@ -345,16 +386,27 @@ def own_funds(text: str, asked: bool = False):
             continue
         if FUNDS_CUE.search(before) or asked:
             return value
-    if asked and any(re.fullmatch(r"(нет|0|ноль)( только кредит)?", seg.strip(" .!»«")) for seg in re.split(r"[,\n;]", t)):
+    if asked and any(re.fullmatch(r"(нет|0|ноль|нисколько|ничего)( только кредит)?", seg.strip(" .!»«")) for seg in re.split(r"[,\n;]", t)):
         return 0
     return None
 
 
 def correction_amount(text: str):
-    """«Неправильно сказал, на самом деле 300 тыс» — сумма без подсказки, но в поправке."""
-    for value, start, end, kind in amounts(text):
-        if value >= 1000 and not NOT_FUNDS_CUE.search(norm(text)[max(0, start - 20):start]):
+    """«Неправильно сказал, на самом деле 300 тыс» — сумма без подсказки, но в поправке. Сумма с «не» — старая."""
+    t = norm(text)
+    for value, start, end, kind in amounts(t):
+        if value >= 1000 and not NOT_FUNDS_CUE.search(t[max(0, start - 20):start]) \
+                and not re.search(r"(?<![а-я])не\s*$", t[max(0, start - 4):start]):
             return value
+    return None
+
+
+def bare_amount(text: str):
+    """Единственная сумма в сообщении без признаков кредита, чека или выручки: «Питер, кофейня, 1 млн»."""
+    t = norm(text)
+    money = [a for a in amounts(t) if a[0] >= 1000]
+    if len(money) == 1 and not re.search(r"кредит|займ|взять|занять|нужн|надо|чек|выручк|доход|аренд|стоит|зарплат|оборот", t):
+        return money[0][0]
     return None
 
 
@@ -366,7 +418,9 @@ ROLE_CHANGE = re.compile(r"забуд\w*|игнорир\w*|инструкц\w*|�
                          r"повтори (дословно|всё|все)|новая роль|сменить роль|смени роль|твоя роль|ты (мой|моя) (психолог|юрист|друг)|"
                          r"ты (юрист|переводчик|психолог|пират|бот без)", re.I)
 CREDIT_PROMISE = re.compile(r"одобр\w*|откаж\w*|отказ\w* (в|по) кредит|гарант\w*|дадут ли|дадут кредит|дадут мне кредит|"
-                            r"получу ли|шанс\w*.{0,20}(кредит|одобр|банк)|точно дадут|возьмут ли", re.I)
+                            r"получу ли|шанс\w*.{0,20}(кредит|одобр|банк)|точно дадут|возьмут ли|"
+                            r"(даст|выдаст|дадут|выдадут)\w*( ли)?( мне)?( банк)?( мне)? (точно )?кредит|"
+                            r"банк\w* (мне )?(точно |вообще )?(даст|выдаст|дадут|выдадут)", re.I)
 GREETING = re.compile(r"^(привет\w*|здравств\w*|здрасьте|добр\w+ (день|утро|вечер|дня)|доброго \w+|хай|ку|салют|приветствую|"
                       r"алло|hello|hi|начн\w*|ты кто|кто ты)$")
 SUMS_QUESTION = re.compile(r"сколько (стоит|нужно|надо|денег|я буду|буду зарабат|зарабат|получ)|за сколько|какую сумму|"

@@ -1,0 +1,368 @@
+{
+  "name": "manual-before",
+  "task": "consult",
+  "split": "manual",
+  "metrics": {
+    "n": 52,
+    "schema_valid": 1.0,
+    "type_accuracy": 0.9423,
+    "state.sphere_accuracy": 0.9423,
+    "state.city_accuracy": 0.9231,
+    "state.own_funds_rub_accuracy": 0.8462,
+    "state.answers_accuracy": 0.9808,
+    "state_exact": 0.7115,
+    "type_and_state_exact": 0.6731,
+    "answers_pairs": {
+      "precision": 1.0,
+      "recall": 0.9474,
+      "f1": 0.973
+    },
+    "invented_amounts_rate": 0.0,
+    "credit_promise_rate": 0.0,
+    "message_keeps_state": 1.0,
+    "by_scenario": {
+      "all_answers": 0.0,
+      "answer_core": 0.0,
+      "colloquial": 0.5,
+      "confirm_nearest": 1.0,
+      "correction": 0.333,
+      "credit_promise": 0.5,
+      "decline_nearest": 1.0,
+      "greeting": 1.0,
+      "mixed_attack": 1.0,
+      "negation": 0.0,
+      "offtopic": 0.667,
+      "out_of_range": 1.0,
+      "partial": 1.0,
+      "role_change": 1.0,
+      "several_sums": 0.857,
+      "short_answer": 0.6,
+      "similar_city": 0.0,
+      "skip": 1.0,
+      "sums_question": 1.0,
+      "unknown_business": 1.0,
+      "vague": 1.0
+    },
+    "by_rule": {
+      "R1_correction": 0.333
+    },
+    "unseen_phrasing": {
+      "n": 52,
+      "type_accuracy": 0.9423,
+      "state_exact": 0.7115,
+      "type_and_state_exact": 0.6731
+    },
+    "latency_ms": {
+      "mean": 32.97,
+      "p95": 4.31
+    }
+  },
+  "errors": [
+    {
+      "id": "consult.manual.000",
+      "scenario": "colloquial",
+      "message": "Привет, думаю про кофейню навынос в Твери, накопил 400 тыщ",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Тверь",
+          "own_funds_rub": 400000,
+          "answers": {
+            "format": "to_go"
+          }
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Тверь",
+          "own_funds_rub": null,
+          "answers": {
+            "format": "to_go"
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.manual.001",
+      "scenario": "several_sums",
+      "message": "хочу пекарню в Нижнем, своих 1.2 млн, кредит нужен ещё миллиона на два",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Нижний Новгород",
+          "own_funds_rub": 1200000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": null,
+          "own_funds_rub": 1200000,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.012",
+      "scenario": "credit_promise",
+      "message": "А банк мне точно даст кредит на бизнес?",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "message",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.014",
+      "scenario": "similar_city",
+      "message": "Кофейня в Новгороде",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Великий Новгород",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.015",
+      "scenario": "similar_city",
+      "message": "Пекарня в Ростове Великом, 300 тысяч свои",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Ростов",
+          "own_funds_rub": 300000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Ростов",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.019",
+      "scenario": "all_answers",
+      "message": "Автомойка на 4 поста в Челябинске, 3 млн своих, машин 50 в день, средний чек 1000, площадь 300 метров, 5 сотрудников",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "ready",
+        "state": {
+          "sphere": "car_wash",
+          "city": "Челябинск",
+          "own_funds_rub": 3000000,
+          "answers": {
+            "posts": 4,
+            "area_m2": 300,
+            "cars_per_day": 50,
+            "avg_check_rub": 1000,
+            "staff": 5
+          }
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "car_wash",
+          "city": "Челябинск",
+          "own_funds_rub": null,
+          "answers": {
+            "posts": 4,
+            "cars_per_day": 50,
+            "avg_check_rub": 1000,
+            "area_m2": 300,
+            "staff": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.manual.020",
+      "scenario": "similar_city",
+      "message": "Пекарня в Кирове, 600 тысяч своих",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Киров",
+          "own_funds_rub": 600000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Киров",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.021",
+      "scenario": "colloquial",
+      "message": "мойка в Челнах, есть 2 ляма",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "car_wash",
+          "city": "Набережные Челны",
+          "own_funds_rub": 2000000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "car_wash",
+          "city": null,
+          "own_funds_rub": 2000000,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.022",
+      "scenario": "colloquial",
+      "message": "Питер, кофейня, 1 млн",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Санкт-Петербург",
+          "own_funds_rub": 1000000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.027",
+      "scenario": "negation",
+      "message": "Не кофейня, а пекарня, в Перми",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Пермь",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Пермь",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    }
+  ]
+}

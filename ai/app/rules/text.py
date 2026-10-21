@@ -50,7 +50,7 @@ TENS = {"двадцать": 20, "тридцать": 30, "сорок": 40, "пя�
 HUNDREDS = {"сто": 100, "двести": 200, "триста": 300, "четыреста": 400, "пятьсот": 500, "шестьсот": 600, "семьсот": 700,
             "восемьсот": 800, "девятьсот": 900}
 SMALL = {**UNITS, **TENS, **HUNDREDS}
-MULT = {"тысяча": 1000, "тысячи": 1000, "тысяч": 1000, "тыс": 1000, "миллион": 10 ** 6, "миллиона": 10 ** 6,
+MULT = {"тысяча": 1000, "тысячи": 1000, "тысяч": 1000, "тыс": 1000, "тыщ": 1000, "тыщи": 1000, "миллион": 10 ** 6, "миллиона": 10 ** 6,
         "миллионов": 10 ** 6, "млн": 10 ** 6, "лям": 10 ** 6, "ляма": 10 ** 6, "лямов": 10 ** 6}
 
 
@@ -88,7 +88,7 @@ def numbers_in(text: str) -> list:
 # Что стоит сразу после числа и говорит, что это не деньги.
 NOT_MONEY_AFTER = re.compile(r"\s*(мес|месяц|год|года|лет|м2|м²|м\b|кв|квадрат|метр|человек|чел|гост|клиент|покупател|"
                              r"машин|заказ|сотрудник|продавц|пост|мест|кресл|раз|%|процент|минут|час|день|дн)")
-MONEY_UNIT = re.compile(r"\s*(млн\.?|миллион\w*|лям\w*|тыс\.?|тысяч\w*|к(?![а-я])|руб\w*|р\.|₽)")
+MONEY_UNIT = re.compile(r"\s*(млн\.?|миллион\w*|лям\w*|тыс\.?|тысяч\w*|тыщ\w*|к(?![а-я])|руб\w*|р\.|₽)")
 
 
 def amounts(text: str) -> list:
@@ -108,6 +108,16 @@ def amounts(text: str) -> list:
         mult = 1000 if m.group(1) == "тысяч" else 10 ** 6
         out.append((SMALL[m.group(2)] * mult, m.start(), m.end(), "words"))
         taken.append((m.start(), m.end()))
+    # То же с цифрами: «своих тысяч 700», «миллиона 2». После числа не должно быть единицы («тысяч 5 человек»).
+    for m in re.finditer(r"(?<![а-я])(миллиона|миллионов|ляма|лямов|тысяч)\s+(\d{1,3})(?![\d.,])", t):
+        before = t[:m.start()].split()
+        tail = t[m.end():m.end() + 14]
+        if (before and (before[-1].isdigit() or before[-1] in SMALL)) or NOT_MONEY_AFTER.match(tail) \
+                or MONEY_UNIT.match(tail) or any(a <= m.start() < b for a, b in taken):
+            continue
+        mult = 1000 if m.group(1) == "тысяч" else 10 ** 6
+        out.append((int(m.group(2)) * mult, m.start(), m.end(), "short"))
+        taken.append((m.start(), m.end()))
     for rx, value, kind in special:
         for m in re.finditer(rx, t):
             if not any(a <= m.start() < b for a, b in taken):
@@ -120,7 +130,7 @@ def amounts(text: str) -> list:
         unit = MONEY_UNIT.match(tail)
         if unit:
             u = unit.group(1)
-            mult = 10 ** 6 if u.startswith(("млн", "миллион", "лям")) else 1000 if u.startswith(("тыс", "к")) else 1
+            mult = 10 ** 6 if u.startswith(("млн", "миллион", "лям")) else 1000 if u.startswith(("тыс", "тыщ", "к")) else 1
             kind = "short" if mult > 1 and t[start].isdigit() else "words" if not t[start].isdigit() else "digits"
             out.append((int(round(value * mult)), start, end + unit.end(), "slang" if u.startswith("лям") else kind))
             taken.append((start, end + unit.end()))

@@ -61,6 +61,47 @@ def city_index() -> list:
                 out.add("-".join([first] + parts[1:-1] + [last]))
         return out
 
+    def cased(src, word):
+        """Регистр букв как в названии: «нижнем» -> «Нижнем»."""
+        return word[:1].upper() + word[1:] if src[:1].isupper() else word
+
+    def loct(word):
+        """Предложный падеж слова в названии. Название стоит в именительном, поэтому берём разбор с nomn:
+        «Воды» — множественное, «Водах», а не «Воде». Нет в словаре: «Ола» -> «Оле», «Мар» -> «Маре»."""
+        low = word.lower()
+        plural = low.endswith(("ы", "и", "ые", "ие"))  # «Набережные Челны», «Химки»; «Мар» — единственное
+        parses = sorted((p for p in morph.parse(low) if ("plur" in p.tag.grammemes) == plural),
+                        key=lambda p: "nomn" not in p.tag.grammemes)
+        for p in parses:
+            if "Geox" in p.tag.grammemes or p.tag.POS in ("NOUN", "ADJF"):
+                inf = p.inflect({"loct"} | ({"plur"} if "plur" in p.tag.grammemes else set()))
+                if inf:
+                    return cased(word, inf.word)
+        if low.endswith("а"):
+            return cased(word, low[:-1] + "е")
+        return cased(word, low + "е" if low[-1:] in "бвгджзклмнпрстфхцчшщ" else low)
+
+    def loct_word(word):
+        """Предложный падеж одного слова названия. Через дефис: «Ростов-на-Дону» — первая часть,
+        «Петропавловск-Камчатский» — обе, остальное — последняя («Йошкар-Оле», «Южно-Сахалинске»)."""
+        if "-" not in word:
+            return loct(word)
+        parts = word.split("-")
+        if len(parts) > 2 and parts[1].lower() in ("на", "над", "под"):
+            idx = [0]
+        elif morph.parse(parts[-1].lower())[0].tag.POS == "ADJF":
+            idx = [0, len(parts) - 1]
+        else:
+            idx = [len(parts) - 1]
+        return "-".join(loct(p) if i in idx else p for i, p in enumerate(parts))
+
+    def in_city(name):
+        """«в Самаре», «во Владимире», «во Пскове», «в Нижнем Новгороде» — для подстановки {in_city}."""
+        loc = " ".join(loct_word(w) for w in name.split())
+        low = loc.lower()
+        vo = (low[:1] in "вф" and len(low) > 1 and low[1] not in "аеёиоуыэюя") or low.startswith("пск")
+        return ("во " if vo else "в ") + loc
+
     out = []
     for name, region, population in cities:
         low = name.lower().replace("ё", "е")
@@ -83,7 +124,8 @@ def city_index() -> list:
             return (morph.word_is_known(f) and "Geox" not in g) or bool({"Surn", "Name"} & g)
         common_word = any(common(f) for f in forms)
         needs_cue = single and population < 250_000 and (common_word or len(low) <= 4)
-        out.append({"name": name, "population": population, "forms": sorted(forms), "needs_cue": needs_cue})
+        out.append({"name": name, "population": population, "forms": sorted(forms), "needs_cue": needs_cue,
+                    "in": in_city(name)})
     return out
 
 

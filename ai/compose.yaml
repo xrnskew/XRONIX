@@ -6,7 +6,6 @@ name: xronix-ai
 services:
   ai:
     build: .
-    env_file: .env
     restart: unless-stopped
     init: true
     read_only: true
