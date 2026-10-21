@@ -1,10 +1,12 @@
-"""AI-сервис XRONIX. Контракт: contracts/ai.md.
+"""Сервис ai XRONIX — собственная экспертная система на правилах. Контракт: contracts/ai.md.
+
+Нейросети, ключей и сети во время работы нет: /ai/consult и /ai/parse-need — правила (app/rules) и файлы
+данных в app/rules/data, /ai/summarize — фильтр сказанного человеком.
 
 Запуск из папки ai:
   .\\.venv\\Scripts\\python -m uvicorn app.main:app --port 8001 --reload
 """
 import logging
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -13,39 +15,32 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from . import config, service
-from .llm import LLM
-from .models import RespondRequest, SummarizeRequest
 from .rules import consult as rules_consult, parse_need as rules_parse_need
 from .rules.models import ConsultRequest, ConsultResponse, ParseNeedRequest, ParseNeedResponse
+from .summarize import SummarizeRequest, summarize as summarize_memory
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("ai")
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # /ai/consult и /ai/parse-need работают на правилах и не требуют GigaChat.
-    # Без ключа сервис стартует сразу, а v1-метод /ai/respond отвечает 503 AI_UNAVAILABLE.
-    app.state.llm = LLM() if config.AUTH_KEY else None
-    if app.state.llm:
-        await app.state.llm.warmup()
-    else:
-        logger.info("GIGACHAT_AUTH_KEY не задан: /ai/respond недоступен, правиловые методы работают")
-    yield
-    if app.state.llm:
-        await app.state.llm.aclose()
+app = FastAPI(title="XRONIX AI")
 
 
-app = FastAPI(title="XRONIX AI", lifespan=lifespan)
+class AiError(Exception):
+    MESSAGES = {"AI_BAD_RESPONSE": "Не получилось составить ответ. Попробуйте ещё раз или переформулируйте."}
+    STATUS = {"AI_BAD_RESPONSE": 502}
+
+    def __init__(self, code: str):
+        super().__init__(code)
+        self.code, self.status, self.message = code, self.STATUS[code], self.MESSAGES[code]
 
 
 def error(status: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(status_code=status, content={"error": {"code": code, "message": message}})
 
 
-@app.exception_handler(service.AiError)
-async def ai_error(_: Request, exc: service.AiError):
+@app.exception_handler(AiError)
+async def ai_error(_: Request, exc: AiError):
     return error(exc.status, exc.code, exc.message)
 
 
@@ -74,20 +69,13 @@ async def health():
     return {"status": "ok"}
 
 
-@app.post("/ai/respond")
-async def respond(req: RespondRequest, request: Request):
-    if request.app.state.llm is None:
-        raise service.AiError("AI_UNAVAILABLE")
-    return await service.respond(request.app.state.llm, req)
-
-
 def _checked(model, payload: dict) -> dict:
     """Свой ответ тоже проверяем по контракту: лучше 502, чем невалидный JSON бэкенду."""
     try:
         out = model.model_validate(payload).model_dump()
     except ValidationError as e:
         logger.error("ответ не по контракту: %s", e.errors()[:3])
-        raise service.AiError("AI_BAD_RESPONSE")
+        raise AiError("AI_BAD_RESPONSE")
     if model is ConsultResponse:
         if out.get("questions") is None:
             out.pop("questions", None)  # state с null-полями оставляем как есть: схема их требует
@@ -111,4 +99,4 @@ async def parse_need(req: ParseNeedRequest):
 
 @app.post("/ai/summarize")
 async def summarize(req: SummarizeRequest):
-    return await service.summarize(req)
+    return summarize_memory(req)

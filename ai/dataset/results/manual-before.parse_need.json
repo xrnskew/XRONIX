@@ -1,0 +1,262 @@
+{
+  "name": "manual-before",
+  "task": "parse_need",
+  "split": "manual",
+  "metrics": {
+    "n": 40,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 0.8,
+    "sphere_accuracy": 0.95,
+    "city_accuracy": 1.0,
+    "amount_rub_accuracy": 0.975,
+    "term_months_accuracy": 1.0,
+    "has_collateral_accuracy": 1.0,
+    "all_fields_exact": 0.75,
+    "recall_when_present": {
+      "purpose": 0.7647,
+      "sphere": 0.9375,
+      "city": 1.0,
+      "amount_rub": 0.9688,
+      "term_months": 1.0,
+      "has_collateral": 1.0
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 0.8,
+        "pass": false
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 0.95,
+        "pass": true
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 0.975,
+        "pass": true
+      },
+      "city": {
+        "need": 0.95,
+        "got": 1.0,
+        "pass": true
+      }
+    },
+    "unseen_phrasing": {
+      "n": 40,
+      "purpose_accuracy": 0.8,
+      "sphere_accuracy": 0.95,
+      "city_accuracy": 1.0,
+      "amount_rub_accuracy": 0.975,
+      "term_months_accuracy": 1.0,
+      "has_collateral_accuracy": 1.0,
+      "all_fields_exact": 0.75
+    },
+    "latency_ms": {
+      "mean": 22.11,
+      "p95": 3.73
+    }
+  },
+  "errors": [
+    {
+      "id": "parse_need.manual.007",
+      "text": "Открываю пункт выдачи Wildberries в Твери",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "pickup_point",
+        "city": "Тверь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "pickup_point",
+        "city": "Тверь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.010",
+      "text": "Хочу купить два новых моечных аппарата Kärcher, примерно 400 тыс",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": "car_wash",
+        "city": null,
+        "amount_rub": 400000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 400000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.012",
+      "text": "Купить кресла и мойки для барбершопа в Перми, 900 тысяч",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": "beauty_salon",
+        "city": "Пермь",
+        "amount_rub": 900000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": "car_wash",
+        "city": "Пермь",
+        "amount_rub": 900000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.016",
+      "text": "Купить склад под пункт выдачи, сумма 4 000 000, залога нет",
+      "gold": {
+        "purpose": "real_estate",
+        "sphere": "pickup_point",
+        "city": null,
+        "amount_rub": 4000000,
+        "term_months": null,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "pickup_point",
+        "city": null,
+        "amount_rub": 4000000,
+        "term_months": null,
+        "has_collateral": false
+      }
+    },
+    {
+      "id": "parse_need.manual.017",
+      "text": "Добавить к салону красоты услугу массажа, нужно 300 тысяч",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": "beauty_salon",
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "beauty_salon",
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.019",
+      "text": "Открою автомойку самообслуживания в Ярославле на 5 постов, кредит 6 млн под залог земли",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "car_wash",
+        "city": "Ярославль",
+        "amount_rub": 6000000,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "car_wash",
+        "city": "Ярославль",
+        "amount_rub": 6000000,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.manual.031",
+      "text": "Кофейня в Твери, хотим вторую в Торжке, нужно 900 тысяч",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "coffee",
+        "city": "Торжок",
+        "amount_rub": 900000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "coffee",
+        "city": "Торжок",
+        "amount_rub": 900000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.033",
+      "text": "У нас автомойка, выручка 2 млн в месяц, нужно 1 млн на новые пылесосы",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": "car_wash",
+        "city": null,
+        "amount_rub": 1000000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "car_wash",
+        "city": null,
+        "amount_rub": 2000000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.034",
+      "text": "Купить второе помещение для пекарни в Калуге, 5 млн, на 10 лет, залог — первое помещение",
+      "gold": {
+        "purpose": "real_estate",
+        "sphere": "bakery",
+        "city": "Калуга",
+        "amount_rub": 5000000,
+        "term_months": 120,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "bakery",
+        "city": "Калуга",
+        "amount_rub": 5000000,
+        "term_months": 120,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.manual.039",
+      "text": "В Великом Новгороде хочу салон красоты, есть залог — дом",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "beauty_salon",
+        "city": "Великий Новгород",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "beauty_salon",
+        "city": "Великий Новгород",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": true
+      }
+    }
+  ]
+}

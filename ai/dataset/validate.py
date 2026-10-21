@@ -156,9 +156,19 @@ def main():
                     bad[e.split(":")[0]] += 1
                     examples.setdefault(e.split(":")[0], (ex["id"], e))
         split = check_split(task, train, hold)
+        # Ручной набор (dataset/manual.py): та же схема и правила, ни одного запроса из train и holdout.
+        manual = load(f"{task}.manual") if (DATA_DIR / f"{task}.manual.jsonl").exists() else []
+        for ex in manual:
+            for e in check(ex):
+                bad[e.split(":")[0]] += 1
+                examples.setdefault(e.split(":")[0], (ex["id"], e))
+        key = (lambda e: json.dumps(e["request"], ensure_ascii=False, sort_keys=True)) if task == "consult"             else (lambda e: e["request"]["text"].strip().lower())
+        copied = {key(e) for e in manual} & {key(e) for e in train + hold}
+        if copied:
+            split.append(f"{task}: {len(copied)} запросов ручного набора есть в train или holdout")
         n_bad = sum(bad.values()) + len(split)
         total_bad += n_bad
-        print(f"{task}: train {len(train)}, holdout {len(hold)}, ошибок {n_bad}")
+        print(f"{task}: train {len(train)}, holdout {len(hold)}, manual {len(manual)}, ошибок {n_bad}")
         for k, n in bad.most_common():
             print(f"   {n:>5} × {examples[k][1]}   (например {examples[k][0]})")
         for e in split:
