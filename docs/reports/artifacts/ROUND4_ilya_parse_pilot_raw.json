@@ -1,0 +1,99 @@
+{
+  "service_commit": "311e8608d7e5d6ee0d2e938a870b67d16a7d6c68",
+  "ai_tree": "5555f1e1916cb803524499ceb01337a31d38fd86",
+  "input_sha256": "27d9bea1c1887ac582561d67c6de2aff10be239b057c708f005b0df0a2975f13",
+  "transport": "ASGI TestClient; no socket/network test",
+  "started_at": "2026-10-21T23:37:48.693844+00:00",
+  "rows": [
+    {
+      "id": "ilya-parse-01",
+      "endpoint": "parse-need",
+      "text": "Мне нужны деньги на Чипсы, выдашь?",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "Личная покупка без бизнес-контекста: не обещать кредит, не выдумывать назначение бизнеса, сумму или срок; уместны пустые поля.",
+      "request": {
+        "text": "Мне нужны деньги на Чипсы, выдашь?"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    },
+    {
+      "id": "ilya-parse-02",
+      "endpoint": "parse-need",
+      "text": "Мне нужно арендовать 50 квадратов площади для моего помещения, это возможно? я из Казани",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "Казань; 50 — площадь, не сумма/срок. Аренду не превращать в покупку недвижимости. Сфера бизнеса явно не указана, назначение может требовать уточнения.",
+      "request": {
+        "text": "Мне нужно арендовать 50 квадратов площади для моего помещения, это возможно? я из Казани"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":\"Казань\",\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"city\":0.95}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    },
+    {
+      "id": "ilya-parse-03",
+      "endpoint": "parse-need",
+      "text": "хочу купить холодильник, у меня своя кофейня",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "equipment, coffee; город, сумма, срок и залог не указаны и должны остаться null.",
+      "request": {
+        "text": "хочу купить холодильник, у меня своя кофейня"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":\"equipment\",\"sphere\":\"coffee\",\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"purpose\":0.9,\"sphere\":0.95}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    },
+    {
+      "id": "ilya-parse-04",
+      "endpoint": "parse-need",
+      "text": "мне СРОЧНО нужна кофемашинка, в моём автосервисе нету кофе!!!",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "equipment; действующий бизнес — автосервис (other), а не кофейня/автомойка. Сумма, срок, город и залог не указаны.",
+      "request": {
+        "text": "мне СРОЧНО нужна кофемашинка, в моём автосервисе нету кофе!!!"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":\"equipment\",\"sphere\":\"coffee\",\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"purpose\":0.9,\"sphere\":0.95}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    },
+    {
+      "id": "ilya-parse-05",
+      "endpoint": "parse-need",
+      "text": "У меня уже есть свой бизнес, ПВЗ в Сивостополе, но в нас прилетел дрон, нужны деньги на востановление",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "pickup_point; предполагаемый город Севастополь с опечаткой. Требуется восстановление существующего бизнеса, не открытие новой точки. Сумма, срок, залог не указаны. Для назначения ремонта точного кода в контракте нет: нужна осторожная трактовка, без выдуманных условий.",
+      "request": {
+        "text": "У меня уже есть свой бизнес, ПВЗ в Сивостополе, но в нас прилетел дрон, нужны деньги на востановление"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":\"pickup_point\",\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"sphere\":0.95}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    },
+    {
+      "id": "ilya-parse-06",
+      "endpoint": "parse-need",
+      "text": "ЙОУ ХОЧУ ОТКРЫТЬ СВОЮ СТУДИЮ РЕПА, В ГОРОДЕ ЕСЕНТУКИ",
+      "source": "Илья, вторая группа сообщений пользователя 22.10.2026",
+      "expected": "Бизнес вне поддерживаемых сфер: other, открытие новой точки/new_location; предполагаемый город Ессентуки с опечаткой. Сумма, срок, залог не указаны. Это пограничный ввод про открытие бизнеса, не сформулированная сумма кредита.",
+      "request": {
+        "text": "ЙОУ ХОЧУ ОТКРЫТЬ СВОЮ СТУДИЮ РЕПА, В ГОРОДЕ ЕСЕНТУКИ"
+      },
+      "status": 200,
+      "response_text": "{\"purpose\":\"new_location\",\"sphere\":\"other\",\"city\":\"Ессентуки\",\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"purpose\":0.88,\"sphere\":0.9,\"city\":0.75}}",
+      "correct": null,
+      "reviewer": null,
+      "reason": null
+    }
+  ]
+}
