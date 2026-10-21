@@ -1,0 +1,33 @@
+meta {
+  name: Poll approval
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/applications/{{applicationId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+script:post-response {
+  const body = res.getBody();
+  bru.setVar('version', body.version);
+  const pending = ['submitted', 'checking', 'scoring'].includes(body.status);
+  const polls = (bru.getVar('polls') || 0) + 1;
+  bru.setVar('polls', polls);
+  if (pending && polls < 60) bru.runner.setNextRequest('Poll approval');
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Approved or still processing within deadline', () => {
+    const body = res.getBody();
+    if (['submitted', 'checking', 'scoring'].includes(body.status)) expect(bru.getVar('polls')).to.be.below(60);
+    else expect(body.status).to.equal('approved');
+  });
+}

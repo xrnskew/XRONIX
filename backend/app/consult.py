@@ -156,7 +156,7 @@ class Consult:
                 self.contracts.validate('plan',plan)
                 plan_id=uid();s.add(Plan(id=plan_id,user_id=user.id,chat_id=chat_id,body=plan))
                 chat.plan_id=plan_id;chat.title=plan['title'][:60]
-                reply=dict(type='plan',text='План готов. Цифры рассчитаны бэкендом по шаблону; параметры можно изменить в расчёте проекта.',plan_id=plan_id,plan=plan)
+                reply=dict(type='plan',text=result['text'],plan_id=plan_id,plan=plan)
             else:reply={k:v for k,v in result.items() if k!='state'}
             self.contracts.validate('reply',reply)
             s.add(Message(chat_id=chat_id,role='assistant',reply=reply));chat.updated_at=now()

@@ -1,0 +1,20 @@
+meta {
+  name: Client sees vector offer
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/api/applications/{{vectorId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+tests {
+  test("HTTP 200", () => expect(res.getStatus()).to.equal(200));
+  test('Offer visible to client', () => { expect(res.getBody().status).to.equal('counter_offer'); expect(res.getBody().offer.amount_rub).to.equal(10000000); });
+}

@@ -11,6 +11,7 @@ from .conveyor_models import Application, ApplicationEvent, CheckResult, Company
 from .conveyor_state import expect_version
 from .db import User, uid
 from .errors import ApiError
+from .validation import schema_error_ru
 
 
 def timestamp(value):
@@ -125,7 +126,7 @@ def install(app,authenticated,db):
     def decide(id:str,body:dict=Body(example=dict(kind='approve',version=5,comment='')),user:User=Depends(analyst),s:Session=Depends(db)):
         a=visible(s,id)
         try:c.contracts.validate('bank',body,'decision_request')
-        except ValidationError as exc:raise ApiError('VALIDATION_ERROR',exc.message) from None
+        except ValidationError as exc:raise ApiError('VALIDATION_ERROR',schema_error_ru(exc)) from None
         apply_decision(c,s,a,body,user)
         c.commit(s)
         return bank_view(c,s,a)

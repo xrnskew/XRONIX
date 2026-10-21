@@ -6,6 +6,32 @@ from jsonschema import Draft7Validator, FormatChecker
 from referencing import Registry, Resource
 
 
+def schema_error_ru(error):
+    """Describe schema failures without echoing submitted values or English internals."""
+    path = '.'.join(map(str, error.absolute_path)) or 'запрос'
+    rule, limit = error.validator, error.validator_value
+    if rule == 'required':
+        field = next((key for key in limit if key not in error.instance), 'обязательное поле')
+        return f'Не заполнено поле {path + "." if path != "запрос" else ""}{field}.'
+    if rule == 'additionalProperties':
+        return f'Поле {path}: переданы лишние поля.'
+    descriptions = {
+        'type': 'неверный тип значения', 'enum': 'выберите допустимое значение',
+        'const': 'недопустимое значение', 'format': 'неверный формат значения',
+        'pattern': 'неверный формат значения',
+        'minLength': f'минимальная длина — {limit} символов',
+        'maxLength': f'максимальная длина — {limit} символов',
+        'minimum': f'значение должно быть не меньше {limit}',
+        'maximum': f'значение должно быть не больше {limit}',
+        'exclusiveMinimum': f'значение должно быть больше {limit}',
+        'exclusiveMaximum': f'значение должно быть меньше {limit}',
+        'minItems': f'нужно не меньше {limit} элементов',
+        'maxItems': f'допускается не больше {limit} элементов',
+        'uniqueItems': 'элементы не должны повторяться',
+    }
+    return f'Поле {path}: {descriptions.get(rule, "значение не соответствует схеме")}.'
+
+
 class Contracts:
     def __init__(self, root):
         self.root = root

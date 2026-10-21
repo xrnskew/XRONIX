@@ -212,6 +212,7 @@ def create_app(settings=None, ai_transport=None, integrations_transport=None):
                 raise ApiError('UNAUTHORIZED')
             response.set_cookie(cookie_name(request), token, max_age=settings.jwt_expire_minutes * 60,
                                 secure=request.url.scheme == 'https', httponly=True, samesite='strict', path='/')
+            return {'user': profile(user)}
         return {'token': token, 'user': profile(user)}
 
     def owned_chat(session, chat_id, user_id):
