@@ -2,7 +2,7 @@
 
 Прототип цифрового кредитного конвейера для малого и микробизнеса. Хакатон «Альфа-Будущее» 2026, кейс «Умный кредитный кабинет предпринимателя».
 
-> **Черновик к сдаче (раунд 2).** Пункты с пометкой ⏳ ещё в работе и появятся до заморозки 26 октября. Логика продукта целиком — в [docs/CONVEYOR.md](docs/CONVEYOR.md).
+> **Черновик к сдаче (раунд 3).** Пункты с пометкой ⏳ остаются до заморозки 26 октября: замеры на чистой машине и тег версии. Логика продукта целиком — в [docs/CONVEYOR.md](docs/CONVEYOR.md).
 
 ## Зачем
 
@@ -58,7 +58,7 @@ cd XRONIX
 docker compose up --build
 ```
 
-⏳ Корневой `docker-compose.yml` собирается в раунде 2.
+Первый запуск дольше остальных: собираются четыре образа. Дождитесь, пока `docker compose ps` покажет все сервисы `healthy`. Демо-данные засеваются при первом старте и сохраняются в томе `backend-data`.
 
 Откройте:
 - http://localhost:8080 — презентация проекта;
@@ -125,7 +125,7 @@ flowchart LR
 | `web` | [`frontend/`](frontend) | React 19, TypeScript, Vite, Tailwind, nginx | кабинет клиента `/app`, рабочее место аналитика `/app#/bank`, презентация `/` |
 | `backend` | [`backend/`](backend) | Python 3.12, FastAPI, SQLAlchemy, SQLite | машина состояний заявки, проверки, скоринг и решение, роли, лента, чат, расчёт проекта |
 | `integrations-mock` | [`integrations-mock/`](integrations-mock) | Python 3.12, FastAPI | смоделированные ЕГРЮЛ/ЕГРИП, «Прозрачный бизнес», БКИ |
-| `ai` | [`ai/`](ai) | Python 3.12, FastAPI, правила и словари | экспертная система: диалог чата подбора бизнеса и разбор фразы в мастере; ⏳ база знаний о городах и банк фраз; без сервиса всё работает по запасному пути |
+| `ai` | [`ai/`](ai) | Python 3.12, FastAPI, правила и словари | экспертная система: диалог чата подбора бизнеса и разбор фразы в мастере; база знаний о 100 городах (Росстат, OpenStreetMap) и банк фраз; без сервиса всё работает по запасному пути |
 | контракты | [`contracts/`](contracts) | JSON Schema, Ajv | форматы всех запросов и ответов, правила скоринга, справочники |
 
 ## Скоринг и решение
@@ -140,7 +140,7 @@ flowchart LR
 
 ## Конфигурация и переменные окружения
 
-⏳ Значения по умолчанию в `docker-compose.yml` подобраны так, что для проверки ничего настраивать не нужно.
+Значения по умолчанию в `docker-compose.yml` подобраны так, что для проверки ничего настраивать не нужно.
 
 **`web`** (аргументы сборки образа, `frontend/Dockerfile`)
 
@@ -153,13 +153,14 @@ flowchart LR
 
 | Переменная | По умолчанию в compose | Назначение |
 |---|---|---|
-| `SEED_DEMO` | `true` | ⏳ засеять демо-учётки и заявки при первом запуске |
+| `SEED_DEMO` | `true` | засеять демо-учётки и заявки при первом запуске; повторный старт ничего не дублирует |
 | `CORS_ORIGINS` | `http://localhost:8080` | адреса сайта через запятую; запись по cookie принимается только с них |
 | `JWT_SECRET` | пусто | пусто — ключ создаётся в томе `data` и сохраняется между перезапусками |
 | `JWT_EXPIRE_MINUTES` | `1440` | срок сессии |
 | `DATABASE_URL` | SQLite в томе `data` | строка подключения SQLAlchemy |
 | `INTEGRATIONS_URL` | `http://integrations-mock:8002` | адрес моков проверок |
-| `MOCK_AI` | ⏳ | `false` — ходить в сервис `ai` |
+| `MOCK_AI` | `false` | `false` — ходить в сервис `ai` |
+| `CONSULT_CHAT` | `true` | чат подбора бизнеса через `/ai/consult`; если сервис недоступен, бэкенд ведёт запасной диалог сам |
 | `AI_SERVICE_URL` | `http://ai:8001` | адрес сервиса `ai` |
 | `AUTH_REQUESTS_PER_MINUTE`, `API_REQUESTS_PER_MINUTE`, `AI_REQUESTS_PER_MINUTE` | 20 / 120 / 6 | ограничения частоты запросов |
 
@@ -169,14 +170,14 @@ flowchart LR
 |---|---|---|
 | `FAIL_INN` | пусто | ИНН, для которого мок отвечает `503`: показывает, что сбой интеграции не ломает конвейер, а отправляет заявку аналитику |
 
-**`ai`** — ключей и настроек не требует. ⏳ Переменные сборки базы знаний и банка фраз (только при разработке) — в `ai/knowledge/`.
+**`ai`** — ключей и настроек не требует: ни GigaChat, ни сети во время работы. Пересборка базы фактов и банка фраз (только при разработке) — [`ai/knowledge/README.md`](ai/knowledge/README.md); `GIGACHAT_AUTH_KEY` нужен только скрипту `generate_phrases.py`, в образ он не попадает.
 
 ## API
 
 - Контракты: [`contracts/conveyor.md`](contracts/conveyor.md) — заявки, компании, подбор, лента, рабочее место аналитика; [`contracts/api.md`](contracts/api.md) — учётки, чат, планы; [`contracts/integrations.md`](contracts/integrations.md) — моки; [`contracts/ai.md`](contracts/ai.md) — модель.
 - JSON Schema всех тел — [`contracts/schemas/`](contracts/schemas), примеры — [`contracts/examples/`](contracts/examples).
 - Swagger: http://localhost:8080/docs, OpenAPI: http://localhost:8080/openapi.json.
-- ⏳ Выгрузка `contracts/openapi.json` и коллекция запросов `contracts/collection/` (Bruno) — пройти основной сценарий без интерфейса.
+- Выгрузка [`contracts/openapi.json`](contracts/openapi.json) и коллекция запросов [Bruno](https://www.usebruno.com) [`contracts/collection/`](contracts/collection): основной сценарий без интерфейса — клиент до выдачи, аналитик по «Вектору», заявка с господдержкой. Запуск и подготовка базы — [`contracts/collection/README.md`](contracts/collection/README.md).
 
 ## Тесты
 
