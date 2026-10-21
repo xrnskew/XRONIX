@@ -9,7 +9,7 @@ import { useCabinet } from '../../phone/CabinetContext'
 import PlanRoute from '../../phone/PlanRoute'
 import PlanScreen from '../../phone/screens/Plan'
 import { Card, Logo, Screen, SectionTitle, Skeleton, Stat } from '../../phone/ui'
-import { ErrorText, MoneyInput, StatusBadge, dateRu, ghostBtn, input, memberRoles, primaryBtn, productNames, purposes } from '../../phone/conveyor/parts'
+import { ErrorText, MoneyInput, StatusBadge, dateRu, ghostBtn, input, memberRoles, primaryBtn, productNames, purposes, whoseMove } from '../../phone/conveyor/parts'
 
 // Рабочее место кредитного аналитика (/bank): очередь, карточка заявки с проверками и скорингом, решение, сводка.
 // Контракт: /contracts/conveyor.md, «Рабочее место аналитика». Логика решений — docs/CONVEYOR.md, раздел 7.
@@ -104,9 +104,26 @@ function Queue() {
       {!items && !error && <Skeleton />}
       {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">Здесь пусто.</p></Card>}
       {items && items.length > 0 && (
-        <div data-span={12} className="card-ring overflow-x-auto rounded-[22px] bg-surface">
+        <ul data-span={12} className="space-y-2.5 md:hidden">
+          {items.map((q) => (
+            <li key={q.id}>
+              <Link to={`/bank/${q.id}`} className="card-ring block rounded-[22px] bg-surface p-4 active:bg-surface-2">
+                <div className="flex items-center justify-between gap-3 text-[12px] text-muted tabular-nums"><span>{q.number}</span><span>ждёт {waited(q.waiting_minutes)}</span></div>
+                <div className="mt-1.5 flex items-start justify-between gap-3">
+                  <div className="min-w-0 text-[16px] font-semibold leading-snug">{q.company_name}</div>
+                  <span className={`font-display text-[20px] font-semibold leading-none ${gradeTone(q.grade)}`} aria-label={`Класс ${q.grade ?? 'нет'}`}>{q.grade ?? '—'}</span>
+                </div>
+                <div className="mt-2 text-[14px] tabular-nums">{rub(q.amount_rub)} · {q.term_months} мес. <span className="text-muted">· {productNames[q.product_id]}</span></div>
+                <div className="mt-3"><StatusBadge status={q.status} title={statuses[q.status].title} /></div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+      {items && items.length > 0 && (
+        <div data-span={12} className="card-ring hidden overflow-x-auto rounded-[22px] bg-surface md:block">
           <table className="w-full min-w-[820px] text-left text-[14px]">
-            <thead className="text-[12px] uppercase tracking-wide text-muted">
+            <thead className="text-[13px] text-muted">
               <tr>{['Заявка', 'Компания', 'Продукт', 'Сумма и срок', 'Класс', 'Статус', 'Ждёт'].map((h) => <th key={h} className="px-4 py-3 font-medium">{h}</th>)}</tr>
             </thead>
             <tbody>
@@ -151,85 +168,66 @@ function CardView() {
   const a = data.application, c = a.company.registry, f = a.financials, sc = data.scoring
   return (
     <Screen title={`Заявка ${a.number}`} sub={<span className="flex flex-wrap items-center gap-2"><Link to="/bank" className="underline underline-offset-2">Очередь</Link> · {c.name} · <StatusBadge status={a.status} title={a.status_info.title} /></span>}>
-      <Card span={7}>
-        <SectionTitle>Запрос клиента</SectionTitle>
-        <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-[14px] sm:grid-cols-3">
-          <Info label="Продукт" value={productNames[a.product_id]} />
-          <Info label="Сумма" value={rub(a.amount_rub)} />
-          <Info label="Срок" value={`${a.term_months} мес.`} />
-          <Info label="Цель" value={purposes[a.purpose]?.title ?? a.purpose} />
-          <Info label="Залог" value={a.collateral ? `${(dict.collateral_kinds as Record<string, { title: string }>)[a.collateral.kind].title}: ${rub(a.collateral.value_rub)}` : 'нет'} />
-          <Info label="Подана" value={data.events.find((e) => e.to_status === 'submitted') ? dateRu(data.events.find((e) => e.to_status === 'submitted')!.at) : '—'} />
-        </dl>
-        {a.collateral?.description && <p className="mt-2 text-[13px] text-muted">{a.collateral.description}</p>}
-        {a.plan_id && <Link to={`/plan?plan=${encodeURIComponent(a.plan_id)}`} className="mt-3 inline-block text-[14px] font-medium underline underline-offset-2">Расчёт проекта клиента</Link>}
-      </Card>
-      <Card span={5}>
-        <SectionTitle>Заявитель и компания</SectionTitle>
-        <dl className="space-y-2 text-[14px]">
-          <Info label="Заявитель" value={`${data.applicant.name} · ${memberRoles[data.applicant.member_role].title}`} />
-          <Info label={c.kind === 'person' ? 'Будущий ИП, личный ИНН' : 'ИНН / ОГРН'} value={c.kind === 'person' ? c.inn : `${c.inn} / ${c.ogrn}`} />
-          {c.okved && <Info label="ОКВЭД" value={`${c.okved.code} · ${c.okved.name}`} />}
-          <Info label="Финансы за 12 мес." value={f.revenue_12m_rub != null ? `выручка ${rub(f.revenue_12m_rub)}, расходы ${rub(f.expenses_12m_rub)}` : 'бизнеса ещё нет — по расчёту проекта'} />
-          <Info label="Платежи по кредитам" value={`${rub(f.loan_payments_monthly_rub)} в месяц`} />
-        </dl>
-        {a.documents.length > 0 && <p className="mt-3 text-[13px] text-muted">Документы: {a.documents.map((d) => d.filename).join(', ')}</p>}
-        {a.info_request === null && a.timeline.some((t) => t.text === 'Данные отправлены') && <p className="mt-2 text-[13px] text-muted">Клиент ответил на запрос данных.</p>}
-      </Card>
+      {/* слева — данные заявки; справа — оценка и решение, на широком экране колонка закреплена */}
+      <div data-span={7} className="stack space-y-4">
+        <Card>
+          <SectionTitle>Запрос клиента</SectionTitle>
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-[14px] sm:grid-cols-3">
+            <Info label="Продукт" value={productNames[a.product_id]} />
+            <Info label="Сумма" value={rub(a.amount_rub)} />
+            <Info label="Срок" value={`${a.term_months} мес.`} />
+            <Info label="Цель" value={purposes[a.purpose]?.title ?? a.purpose} />
+            <Info label="Залог" value={a.collateral ? `${(dict.collateral_kinds as Record<string, { title: string }>)[a.collateral.kind].title}: ${rub(a.collateral.value_rub)}` : 'нет'} />
+            <Info label="Подана" value={data.events.find((e) => e.to_status === 'submitted') ? dateRu(data.events.find((e) => e.to_status === 'submitted')!.at) : '—'} />
+          </dl>
+          {a.collateral?.description && <p className="mt-2 text-[13px] text-muted">{a.collateral.description}</p>}
+          {a.plan_id && <Link to={`/plan?plan=${encodeURIComponent(a.plan_id)}`} className="mt-3 inline-block text-[14px] font-medium underline underline-offset-2">Расчёт проекта клиента</Link>}
+        </Card>
+        <Card>
+          <SectionTitle>Заявитель и компания</SectionTitle>
+          <dl className="space-y-2 text-[14px]">
+            <Info label="Заявитель" value={`${data.applicant.name} · ${memberRoles[data.applicant.member_role].title}`} />
+            <Info label={c.kind === 'person' ? 'Будущий ИП, личный ИНН' : 'ИНН / ОГРН'} value={c.kind === 'person' ? c.inn : `${c.inn} / ${c.ogrn}`} />
+            {c.okved && <Info label="ОКВЭД" value={`${c.okved.code} · ${c.okved.name}`} />}
+            <Info label="Финансы за 12 мес." value={f.revenue_12m_rub != null ? `выручка ${rub(f.revenue_12m_rub)}, расходы ${rub(f.expenses_12m_rub)}` : 'бизнеса ещё нет — по расчёту проекта'} />
+            <Info label="Платежи по кредитам" value={`${rub(f.loan_payments_monthly_rub)} в месяц`} />
+          </dl>
+          {a.documents.length > 0 && <p className="mt-3 text-[13px] text-muted">Документы: {a.documents.map((d) => d.filename).join(', ')}</p>}
+          {a.info_request === null && a.timeline.some((t) => t.text === 'Данные отправлены') && <p className="mt-2 text-[13px] text-muted">Клиент ответил на запрос данных.</p>}
+        </Card>
 
-      <Card span={7}>
-        <SectionTitle>Проверки</SectionTitle>
-        {!data.checks.length && <p className="text-[14px] text-muted">Проверки ещё не выполнялись.</p>}
-        <ul className="space-y-2">
-          {data.checks.map((ch) => (
-            <li key={ch.kind} className="rounded-xl bg-surface-2 p-3">
-              <details>
-                <summary className="flex cursor-pointer list-none items-start gap-3">
-                  <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${resultTone[ch.result]}`} aria-hidden />
-                  <span className="min-w-0 flex-1"><span className="text-[14px] font-medium">{checkTitle[ch.kind]}</span><span className="text-[13px] text-muted"> · {resultText[ch.result]}</span><span className="block text-[14px] leading-snug">{ch.summary}</span></span>
-                  <span className="shrink-0 text-[12px] text-muted">{ch.source}</span>
-                </summary>
-                <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-black/30 p-2.5 text-[12px] text-muted">{JSON.stringify(ch.details, null, 2)}</pre>
-              </details>
-            </li>
-          ))}
-        </ul>
-      </Card>
-      <Card span={5}>
-        <SectionTitle>Скоринг</SectionTitle>
-        {!sc ? <p className="text-[14px] text-muted">{a.status === 'declined' ? 'Не считался: сработал стоп-фактор на проверке.' : 'Ещё не посчитан.'}</p> : (
-          <>
-            <div className="flex items-end gap-5">
-              <div><div className="text-[12px] text-muted">Балл</div><div className="font-display text-[40px] font-semibold leading-none tabular-nums">{sc.score}</div></div>
-              <div><div className="text-[12px] text-muted">Класс</div><div className={`font-display text-[40px] font-semibold leading-none ${gradeTone(sc.grade)}`}>{sc.grade}</div></div>
-              <Stat label="Нагрузка" value={sc.debt_load_percent == null ? '—' : `${String(sc.debt_load_percent).replace('.', ',')}%`} tone={sc.debt_load_percent != null && sc.debt_load_percent > 50 ? 'bad' : undefined} />
-            </div>
-            <table className="mt-4 w-full text-[13px]">
-              <tbody>
-                <tr className="text-muted"><td className="py-1">Базовый балл</td><td /><td className="py-1 text-right tabular-nums">50</td></tr>
-                {sc.factors.map((x) => (
-                  <tr key={x.code} className="border-t border-white/5"><td className="py-1.5">{x.name}</td><td className="py-1.5 text-muted">{x.value_text}</td><td className={`py-1.5 text-right font-semibold tabular-nums ${x.points > 0 ? 'text-ok' : x.points < 0 ? 'text-accent' : 'text-muted'}`}>{x.points > 0 ? '+' : ''}{x.points}</td></tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-2 text-[12px] text-muted">Правила {sc.rules_version}. Итог в пределах 0–100.</p>
-          </>
-        )}
-      </Card>
-
-      <Card span={7}>
-        <SectionTitle>Журнал</SectionTitle>
-        <ol className="space-y-2">
-          {[...data.events].reverse().map((e) => (
-            <li key={e.id} className="text-[14px]">
-              <span className="font-medium">{statuses[e.to_status].title}</span>
-              <span className="text-muted"> · {e.actor_name} · {dateRu(e.at)}</span>
-              {e.reason && <span className="block text-[13px] leading-snug text-muted">{e.reason}</span>}
-            </li>
-          ))}
-        </ol>
-      </Card>
-      <div data-span={5} className="space-y-4">
+        <Card>
+          <SectionTitle>Проверки</SectionTitle>
+          {!data.checks.length && <p className="text-[14px] text-muted">Проверки ещё не выполнялись.</p>}
+          <ul className="space-y-2">
+            {data.checks.map((ch) => (
+              <li key={ch.kind} className="rounded-xl bg-surface-2 p-3">
+                <details>
+                  <summary className="flex cursor-pointer list-none items-start gap-3">
+                    <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${resultTone[ch.result]}`} aria-hidden />
+                    <span className="min-w-0 flex-1"><span className="text-[14px] font-medium">{checkTitle[ch.kind]}</span><span className="text-[13px] text-muted"> · {resultText[ch.result]}</span><span className="block text-[14px] leading-snug">{ch.summary}</span></span>
+                    <span className="shrink-0 text-[12px] text-muted">{ch.source}</span>
+                  </summary>
+                  <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-black/30 p-2.5 text-[12px] text-muted">{JSON.stringify(ch.details, null, 2)}</pre>
+                </details>
+              </li>
+            ))}
+          </ul>
+        </Card>
+        <Card>
+          <SectionTitle>Журнал</SectionTitle>
+          <ol className="space-y-2">
+            {[...data.events].reverse().map((e) => (
+              <li key={e.id} className="text-[14px]">
+                <span className="font-medium">{statuses[e.to_status].title}</span>
+                <span className="text-muted"> · {e.actor_name} · {dateRu(e.at)}</span>
+                {e.reason && <span className="block text-[13px] leading-snug text-muted">{e.reason}</span>}
+              </li>
+            ))}
+          </ol>
+        </Card>
+      </div>
+      <div data-span={5} className="stack space-y-4 self-start min-[1100px]:sticky min-[1100px]:top-0">
         {data.recommendation && (
           <Card>
             <SectionTitle>Рекомендация системы</SectionTitle>
@@ -238,6 +236,28 @@ function CardView() {
           </Card>
         )}
         {a.status === 'manual_review' ? <Decision data={data} onDone={setData} onConflict={load} /> : <Outcome data={data} />}
+        <Card>
+          <SectionTitle>Скоринг</SectionTitle>
+          {!sc ? <p className="text-[14px] text-muted">{a.status === 'declined' ? 'Не считался: сработал стоп-фактор на проверке.' : 'Ещё не посчитан.'}</p> : (
+            <>
+              <div className="flex items-end gap-5">
+                <div><div className="text-[12px] text-muted">Балл</div><div className="font-display text-[40px] font-semibold leading-none tabular-nums">{sc.score}</div></div>
+                <div><div className="text-[12px] text-muted">Класс</div><div className={`font-display text-[40px] font-semibold leading-none ${gradeTone(sc.grade)}`}>{sc.grade}</div></div>
+                <Stat label="Нагрузка" value={sc.debt_load_percent == null ? '—' : `${String(sc.debt_load_percent).replace('.', ',')}%`} tone={sc.debt_load_percent != null && sc.debt_load_percent > 50 ? 'bad' : undefined} />
+              </div>
+              <table className="mt-4 w-full text-[13px]">
+                <tbody>
+                  <tr className="text-muted"><td className="py-1">Базовый балл</td><td /><td className="py-1 text-right tabular-nums">50</td></tr>
+                  {sc.factors.map((x) => (
+                    <tr key={x.code} className="border-t border-white/5"><td className="py-1.5">{x.name}</td><td className="py-1.5 text-muted">{x.value_text}</td><td className={`py-1.5 text-right font-semibold tabular-nums ${x.points > 0 ? 'text-ok' : x.points < 0 ? 'text-accent' : 'text-muted'}`}>{x.points > 0 ? '+' : ''}{x.points}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-2 text-[12px] text-muted">Правила {sc.rules_version}. Итог в пределах 0–100.</p>
+            </>
+          )}
+        </Card>
+
       </div>
     </Screen>
   )
@@ -335,6 +355,10 @@ function Decision({ data, onDone, onConflict }: { data: BankApplication; onDone:
 }
 
 // ---- сводка ----
+// Цвет полосы — чей ход по заявкам в этом статусе, как у значков статуса
+const barTone = (k: Status) => k === 'funded' ? 'bg-ok' : k === 'declined' ? 'bg-accent/45' : { you: 'bg-accent', bank: 'bg-steel', done: 'bg-muted/60' }[whoseMove(k)]
+const BAR_LEGEND: [string, string][] = [['bg-steel', 'у банка'], ['bg-accent', 'у клиента'], ['bg-ok', 'выдано'], ['bg-accent/45', 'отказ'], ['bg-muted/60', 'закрыто']]
+
 function Stats() {
   const [s, setS] = useState<BankStats | null>(null)
   const [error, setError] = useState('')
@@ -354,12 +378,17 @@ function Stats() {
         </div>
       </Card>
       <Card span={12}>
-        <SectionTitle>По статусам</SectionTitle>
-        <ul className="space-y-2">
-          {order.filter((k) => s.by_status[k]).map((k) => (
-            <li key={k} className="grid grid-cols-[170px_1fr_40px] items-center gap-3 text-[14px]">
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+          <SectionTitle>По статусам</SectionTitle>
+          <ul className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted">
+            {BAR_LEGEND.map(([cls, t]) => <li key={t} className="flex items-center gap-1.5"><span className={`h-2 w-2 rounded-full ${cls}`} aria-hidden />{t}</li>)}
+          </ul>
+        </div>
+        <ul className="space-y-2.5">
+          {order.filter((k) => s.by_status[k]).map((k, i) => (
+            <li key={k} className="grid grid-cols-[minmax(0,170px)_1fr_40px] items-center gap-3 text-[14px]">
               <span>{statuses[k].title}</span>
-              <span className="h-2.5 rounded-full bg-surface-3"><span className="block h-full rounded-full bg-accent" style={{ width: `${(s.by_status[k]! / max) * 100}%` }} /></span>
+              <span className="h-2.5 overflow-hidden rounded-full bg-surface-3"><span className={`fill-in block h-full rounded-full ${barTone(k)}`} style={{ width: `${(s.by_status[k]! / max) * 100}%`, animationDelay: `${i * 60}ms` }} /></span>
               <span className="text-right tabular-nums">{s.by_status[k]}</span>
             </li>
           ))}
