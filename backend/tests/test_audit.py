@@ -119,7 +119,9 @@ def test_origin_rejected_before_mutation_and_preflight_json(settings):
 def test_oversized_or_invalid_body(settings,raw):
     with TestClient(create_app(settings),raise_server_exceptions=False) as c:
         h=register(c); cid=chat(c,h)
-        error(c.post(f'/api/chats/{cid}/messages',headers={**h,'Content-Type':'application/json'},content=raw),'VALIDATION_ERROR')
+        r=c.post(f'/api/chats/{cid}/messages',headers={**h,'Content-Type':'application/json'},content=raw)
+        assert r.status_code == (413 if len(raw)>settings.max_body_bytes else 400)
+        assert r.json()['error']['code']=='VALIDATION_ERROR'
 
 
 def test_sqlite_lock_returns_safe_error_and_recovers(settings):

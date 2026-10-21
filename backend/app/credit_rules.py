@@ -22,6 +22,14 @@ def age_text(m):
     return ' '.join(x for x in [f'{y} ' + ('год' if y == 1 else 'года' if y < 5 else 'лет') if y else '', f'{m} мес.' if m else ''] if x) or 'меньше месяца'
 
 
+def eligible_date(registered, months):
+    """Calendar-month addition with the same overflow rule as the conveyor contract."""
+    from datetime import timedelta
+    d = date.fromisoformat(registered)
+    y, m = divmod(d.year*12+d.month-1+months, 12)
+    return (date(y, m+1, 1)+timedelta(days=d.day-1)).strftime('%d.%m.%Y')
+
+
 def schedule(amount, rate, months):
     balance, pay, rows = amount, payment(amount, rate, months), []
     for m in range(1, months+1):
@@ -72,13 +80,7 @@ def stop_factors(i, p, rules, today=None):
     if i['registry']['status'] in s['inactive_statuses']:
         add('company_inactive')
     if not i.get('person') and p['minBusinessMonths'] and business_months(i['registry']['registered_at'], today) < p['minBusinessMonths']:
-        d = date.fromisoformat(i['registry']['registered_at'])
-        y, m = divmod(d.year*12+d.month-1+p['minBusinessMonths'], 12)
-        eligible = date(y, m+1, 1)
-        # Match JavaScript Date.setUTCMonth (overflow rather than clamp).
-        from datetime import timedelta
-        eligible += timedelta(days=d.day-1)
-        add('business_too_young', min_months=str(p['minBusinessMonths']), eligible_date=eligible.strftime('%d.%m.%Y'))
+        add('business_too_young', min_months=str(p['minBusinessMonths']), eligible_date=eligible_date(i['registry']['registered_at'], p['minBusinessMonths']))
     if i['bki']['overdue_90_12m'] > s['overdue_90_12m_max']:
         add('overdue_90')
     if i['fns']['tax_debt_rub'] > s['tax_debt_max_rub']:
@@ -192,4 +194,7 @@ def decline_text(reason, dictionaries):
     params, code = reason['params'], reason['code']
     def fill(s):
         return re.sub(r'\{(\w+)\}', lambda m: str(params.get(m[1], '')), s)
-    return dict(code=code, **{k: fill(v) for k, v in dictionaries['decline_reasons'][code].items()})
+    result = dict(code=code, **{k: fill(v) for k, v in dictionaries['decline_reasons'][code].items()})
+    if code == 'business_too_young' and not params.get('eligible_date'):
+        result['advice'] = 'Подайте заявку после достижения минимального стажа бизнеса. Пока рассмотрите собственные средства или программы поддержки МСП.'
+    return result
