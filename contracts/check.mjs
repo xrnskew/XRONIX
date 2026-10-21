@@ -132,6 +132,7 @@ export function checkPhrases(phrases) {
       for (const [, name] of v.matchAll(/\{([^}]*)\}/g)) if (!PHRASE_PLACEHOLDERS.includes(name)) e.push(`${slot}[${i}]: неизвестная подстановка {${name}}`)
       if (/[{}]/.test(v.replace(/\{[a-z_]+\}/g, ''))) e.push(`${slot}[${i}]: непарная фигурная скобка`)
       if (/одобр|гарантир/i.test(v)) e.push(`${slot}[${i}]: обещание кредита запрещено (ai.md, правило 7)`)
+      if (/(около|примерно|порядка)\s+\{venues\}/i.test(v)) e.push(`${slot}[${i}]: «около» уже внутри {venues}, перед подстановкой его не писать`)
     })
   return e
 }

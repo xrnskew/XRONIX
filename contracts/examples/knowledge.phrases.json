@@ -14,9 +14,9 @@
     "city_competition": {
       "description": "Фраза о конкуренции в городе, когда в базе есть число заведений сферы",
       "variants": [
-        "{in_city} уже работает около {venues} {sphere_many} (по данным {source}). Место и формат решат многое.",
-        "По данным {source}, {in_city} около {venues} {sphere_many}. Чтобы выделиться, продумайте место и формат.",
-        "Конкуренция заметная: {in_city} примерно {venues} {sphere_many} ({source})."
+        "{in_city} уже работает {venues} {sphere_many} (по данным {source}). Место и формат решат многое.",
+        "По данным {source}, {in_city} {venues} {sphere_many}. Чтобы выделиться, продумайте место и формат.",
+        "Конкуренция заметная: {in_city} {venues} {sphere_many} ({source})."
       ]
     },
     "bakery_tip": {
