@@ -1,0 +1,43 @@
+meta {
+  name: Create government application
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/api/applications
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "company_id": "{{companyId}}",
+    "product_id": "gov_guarantee",
+    "purpose": "equipment",
+    "amount_rub": 40000000,
+    "term_months": 36,
+    "plan_id": null,
+    "consent_bki": true,
+    "collateral": null,
+    "financials": {
+      "revenue_12m_rub": 24000000,
+      "expenses_12m_rub": 19200000,
+      "loan_payments_monthly_rub": 40000
+    }
+  }
+}
+
+script:post-response {
+  bru.setVar('govApplicationId',res.getBody().id);
+  bru.setVar('govVersion',res.getBody().version);
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(201));
+  test('Unsecured government draft', () => { expect(res.getBody().product_id).to.equal('gov_guarantee'); expect(res.getBody().collateral).to.equal(null); });
+}

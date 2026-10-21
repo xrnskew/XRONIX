@@ -200,3 +200,23 @@ def test_consult_service_never_receives_backend_preference(settings):
             r=send(c,h,cid,text);assert r.status_code==200,r.text
             assert r.json()['plan']['credit']['needed'] is needed
         assert len(seen)==3 and all('credit_refused' not in b['state'] for b in seen)
+
+
+def test_manual_young_business_reason_rejected_when_minimum_already_met(settings):
+    from sqlalchemy import select
+    from app.conveyor_models import Company
+    with client(settings) as c:
+        h=login(c,'analyst@xronix.demo');row=manual(c,h)
+        with c.app.app.state.sessions() as s:
+            co=s.scalar(select(Company).where(Company.inn==row['inn']))
+            co.registry={**co.registry,'registered_at':'2020-02-01'};s.commit()
+        before=view(c,h,row['id'])
+        a=before['application'];endpoint='/api/bank/applications/'+a['id']+'/decision'
+        r=c.post(endpoint,headers=h,json=dict(kind='decline',version=a['version'],comment='Стаж бизнеса.',decline_reasons=['business_too_young']))
+        assert r.status_code==400,r.text
+        assert r.json()['error']==dict(code='VALIDATION_ERROR',message='Стаж бизнеса уже соответствует требованиям продукта. Выберите другую причину отказа.')
+        # A rejected reason must not save a decline, event, or version change.
+        assert view(c,h,a['id'])==before
+        r=c.post(endpoint,headers=h,json=dict(kind='decline',version=a['version'],comment='Недостаточно подтверждённых доходов.',decline_reasons=['analyst_decision']))
+        assert r.status_code==200,r.text
+        assert r.json()['application']['status']=='declined'

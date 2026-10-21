@@ -19,6 +19,7 @@ import sys
 import time
 from collections import Counter, defaultdict
 
+from app.rules import knowledge
 from app.rules.text import amounts
 
 from .common import RESULTS_DIR, schema_errors
@@ -73,13 +74,16 @@ def money_in(text: str) -> list:
 
 def invented_amounts(ex, pred) -> list:
     """Суммы в ответе, которых человек не называл: свои деньги и денежные ответы анкеты в state, суммы во всех
-    видимых текстах. Повторить сумму человека можно, назвать новую — нет."""
+    видимых текстах. Повторить сумму человека или назвать факт из базы знаний можно, придумать новую — нет."""
     allowed = set(ex["meta"]["user_amounts"])
     if ex["request"]["state"]["own_funds_rub"] is not None:
         allowed.add(ex["request"]["state"]["own_funds_rub"])
     allowed |= {v for k, v in ex["request"]["state"]["answers"].items() if k.endswith("_rub")}
-    found = []
     state = pred.get("state") if isinstance(pred, dict) and isinstance(pred.get("state"), dict) else {}
+    # Суммы из базы фактов (зарплата по региону, ai.md правило 8) — не придуманные: для города запроса и ответа.
+    for city in {ex["request"]["state"]["city"], state.get("city") if isinstance(state.get("city"), str) else None}:
+        allowed |= knowledge.allowed_amounts(city)
+    found = []
     own = state.get("own_funds_rub")
     if isinstance(own, (int, float)) and not isinstance(own, bool) and own not in allowed:
         found.append(own)
@@ -197,7 +201,7 @@ def eval_need(rows, preds):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--task", choices=["consult", "parse_need"], required=True)
-    ap.add_argument("--split", default="holdout", choices=["holdout", "train"])
+    ap.add_argument("--split", default="holdout", choices=["holdout", "train", "manual"])
     ap.add_argument("--predictor", help="модуль:функция, например dataset.baseline:consult")
     ap.add_argument("--predictions", help="JSONL с {id, response}")
     ap.add_argument("--name", default="run")

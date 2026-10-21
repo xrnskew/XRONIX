@@ -1,0 +1,30 @@
+meta {
+  name: Government counter offer
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/api/bank/applications/{{govApplicationId}}/decision
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{analystToken}}
+}
+
+body:json {
+  {
+    "kind": "counter",
+    "version": {{govVersion}},
+    "amount_rub": 3000000,
+    "term_months": 60,
+    "comment": "Уменьшена сумма по результатам оценки доходов."
+  }
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('Guarantee explained in offer', () => { expect(res.getBody().application.status).to.equal('counter_offer'); expect(res.getBody().application.offer.explanation).to.include('Половину риска по кредиту берёт Корпорация МСП: поэтому залог не нужен.'); });
+}

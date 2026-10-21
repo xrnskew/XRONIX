@@ -1,0 +1,61 @@
+{
+  "name": "manual-after",
+  "task": "parse_need",
+  "split": "manual",
+  "metrics": {
+    "n": 40,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 1.0,
+    "sphere_accuracy": 1.0,
+    "city_accuracy": 1.0,
+    "amount_rub_accuracy": 1.0,
+    "term_months_accuracy": 1.0,
+    "has_collateral_accuracy": 1.0,
+    "all_fields_exact": 1.0,
+    "recall_when_present": {
+      "purpose": 1.0,
+      "sphere": 1.0,
+      "city": 1.0,
+      "amount_rub": 1.0,
+      "term_months": 1.0,
+      "has_collateral": 1.0
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "city": {
+        "need": 0.95,
+        "got": 1.0,
+        "pass": true
+      }
+    },
+    "unseen_phrasing": {
+      "n": 40,
+      "purpose_accuracy": 1.0,
+      "sphere_accuracy": 1.0,
+      "city_accuracy": 1.0,
+      "amount_rub_accuracy": 1.0,
+      "term_months_accuracy": 1.0,
+      "has_collateral_accuracy": 1.0,
+      "all_fields_exact": 1.0
+    },
+    "latency_ms": {
+      "mean": 18.97,
+      "p95": 4.11
+    }
+  },
+  "errors": []
+}

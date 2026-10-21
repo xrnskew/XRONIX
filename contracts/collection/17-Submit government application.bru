@@ -1,0 +1,30 @@
+meta {
+  name: Submit government application
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/api/applications/{{govApplicationId}}/submit
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{clientToken}}
+}
+
+body:json {
+  {
+    "version": {{govVersion}}
+  }
+}
+
+script:post-response {
+  bru.setVar('govPolls',0);
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('Submitted', () => expect(res.getBody().status).to.equal('submitted'));
+}

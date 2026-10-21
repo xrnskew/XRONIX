@@ -1,0 +1,5430 @@
+{
+ "comment": "Собрано knowledge/build.py из knowledge/raw. Население — справочник городов (2023), зарплата — Росстат, среднемесячная номинальная начисленная по региону, число заведений — OpenStreetMap (данные неполные, в тексте только «около N»). Пункты выдачи — shop=outpost, без постаматов.",
+ "version": 1,
+ "generated_at": "2026-10-21",
+ "sources": [
+  {
+   "id": "russia_cities",
+   "title": "справочник городов России",
+   "url": "https://github.com/arbaev/russia-cities",
+   "license": "факты, без охраняемого текста",
+   "retrieved_at": "2026-10-19"
+  },
+  {
+   "id": "rosstat_salary",
+   "title": "Росстат",
+   "url": "https://rosstat.gov.ru/labor_market_employment_salaries",
+   "license": "открытые данные, со ссылкой на источник",
+   "retrieved_at": "2026-10-21"
+  },
+  {
+   "id": "osm",
+   "title": "OpenStreetMap",
+   "url": "https://www.openstreetmap.org/copyright",
+   "license": "ODbL 1.0",
+   "retrieved_at": "2026-10-21"
+  }
+ ],
+ "cities": [
+  {
+   "name": "Москва",
+   "region": "Москва",
+   "population": {
+    "value": 13010112,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 181777,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 2020,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 777,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 1092,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 3007,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 5734,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 7155,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Санкт-Петербург",
+   "region": "Санкт-Петербург",
+   "population": {
+    "value": 5601911,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 123341,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 1132,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 1114,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 617,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 2316,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 3324,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 4694,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Новосибирск",
+   "region": "Новосибирская область",
+   "population": {
+    "value": 1633595,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 88684,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 79,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 93,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 158,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 308,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 510,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 843,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Екатеринбург",
+   "region": "Свердловская область",
+   "population": {
+    "value": 1544376,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 89675,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 79,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 147,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 241,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 524,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 529,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 916,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Казань",
+   "region": "Республика Татарстан",
+   "population": {
+    "value": 1308660,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 91495,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 211,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 277,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 160,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 843,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1040,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 1205,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Нижний Новгород",
+   "region": "Нижегородская область",
+   "population": {
+    "value": 1226076,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 81408,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 94,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 96,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 178,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 271,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 433,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 855,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Челябинск",
+   "region": "Челябинская область",
+   "population": {
+    "value": 1189525,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 81368,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 34,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 123,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 203,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 212,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 609,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Красноярск",
+   "region": "Красноярский край",
+   "population": {
+    "value": 1187771,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 106698,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 50,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 71,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 120,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 171,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 538,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Самара",
+   "region": "Самарская область",
+   "population": {
+    "value": 1173299,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 79036,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 83,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 136,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 117,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 407,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 374,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 825,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Уфа",
+   "region": "Республика Башкортостан",
+   "population": {
+    "value": 1144809,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74398,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 126,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 131,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 85,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 309,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 461,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 654,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ростов-на-Дону",
+   "region": "Ростовская область",
+   "population": {
+    "value": 1142162,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 71838,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 113,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 180,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 179,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 824,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Омск",
+   "region": "Омская область",
+   "population": {
+    "value": 1125695,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74036,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 84,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 52,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 160,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 311,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 405,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 590,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Краснодар",
+   "region": "Краснодарский край",
+   "population": {
+    "value": 1099344,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80518,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 96,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 80,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 199,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 192,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 347,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 1110,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Воронеж",
+   "region": "Воронежская область",
+   "population": {
+    "value": 1057681,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 75525,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 161,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 237,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 319,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 633,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Пермь",
+   "region": "Пермский край",
+   "population": {
+    "value": 1034002,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 84931,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 91,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 91,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 179,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 166,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 586,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Волгоград",
+   "region": "Волгоградская область",
+   "population": {
+    "value": 1028036,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 69325,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 96,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 106,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 200,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 453,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Саратов",
+   "region": "Саратовская область",
+   "population": {
+    "value": 901361,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67798,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 57,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 88,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 162,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 156,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 509,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Тюмень",
+   "region": "Тюменская область",
+   "population": {
+    "value": 847488,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 94909,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 75,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 71,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 94,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 175,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 193,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 522,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Тольятти",
+   "region": "Самарская область",
+   "population": {
+    "value": 684709,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 79036,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 34,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 57,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 68,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 356,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Барнаул",
+   "region": "Алтайский край",
+   "population": {
+    "value": 630877,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 65568,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 196,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 187,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 334,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ижевск",
+   "region": "Республика Удмуртская",
+   "population": {
+    "value": 623472,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80571,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 73,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 68,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 97,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 104,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 444,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Махачкала",
+   "region": "Республика Дагестан",
+   "population": {
+    "value": 623254,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 50101,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 118,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 145,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 156,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Хабаровск",
+   "region": "Хабаровский край",
+   "population": {
+    "value": 617441,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 101704,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 78,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 165,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ульяновск",
+   "region": "Ульяновская область",
+   "population": {
+    "value": 617352,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 70507,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 121,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 99,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 165,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 362,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Иркутск",
+   "region": "Иркутская область",
+   "population": {
+    "value": 617264,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 97366,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 139,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 165,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 218,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Владивосток",
+   "region": "Приморский край",
+   "population": {
+    "value": 603519,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 100836,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 57,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 110,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 147,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 312,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 186,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ярославль",
+   "region": "Ярославская область",
+   "population": {
+    "value": 577279,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 75143,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 77,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 89,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 149,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 408,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Кемерово",
+   "region": "Кемеровская область",
+   "population": {
+    "value": 557119,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 83970,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 56,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 55,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 203,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Томск",
+   "region": "Томская область",
+   "population": {
+    "value": 556478,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 89519,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 54,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 211,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 330,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 384,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Набережные Челны",
+   "region": "Республика Татарстан",
+   "population": {
+    "value": 548434,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 91495,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 43,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 65,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 96,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 103,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 201,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ставрополь",
+   "region": "Ставропольский край",
+   "population": {
+    "value": 547443,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 66298,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 89,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 93,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 86,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 282,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Оренбург",
+   "region": "Оренбургская область",
+   "population": {
+    "value": 543654,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 75015,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 67,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 57,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 82,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 299,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Новокузнецк",
+   "region": "Кемеровская область",
+   "population": {
+    "value": 537480,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 83970,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 79,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 184,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Рязань",
+   "region": "Рязанская область",
+   "population": {
+    "value": 528599,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74525,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 93,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 90,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 367,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Балашиха",
+   "region": "Московская область",
+   "population": {
+    "value": 520962,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 76,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 102,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 75,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 243,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 431,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Пенза",
+   "region": "Пензенская область",
+   "population": {
+    "value": 501109,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67386,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 65,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 125,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 207,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 240,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Чебоксары",
+   "region": "Республика Чувашская",
+   "population": {
+    "value": 497807,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 68742,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 55,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 144,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 143,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 279,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Липецк",
+   "region": "Липецкая область",
+   "population": {
+    "value": 496403,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 77053,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 154,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 159,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 342,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Калининград",
+   "region": "Калининградская область",
+   "population": {
+    "value": 490449,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 78252,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 88,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 248,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 209,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 311,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Астрахань",
+   "region": "Астраханская область",
+   "population": {
+    "value": 475629,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 70487,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 44,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 97,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 241,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Тула",
+   "region": "Тульская область",
+   "population": {
+    "value": 473622,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 85812,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 104,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 157,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 453,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Киров",
+   "region": "Кировская область",
+   "population": {
+    "value": 468212,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67550,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 148,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 135,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 373,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Сочи",
+   "region": "Краснодарский край",
+   "population": {
+    "value": 466078,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80518,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 149,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 81,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 95,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 279,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 228,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 450,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Курск",
+   "region": "Курская область",
+   "population": {
+    "value": 440052,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 75783,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 148,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 168,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 259,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Улан-Удэ",
+   "region": "Республика Бурятия",
+   "population": {
+    "value": 437565,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 84441,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 17,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 128,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Тверь",
+   "region": "Тверская область",
+   "population": {
+    "value": 416219,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 73967,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 62,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 159,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 140,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 343,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Магнитогорск",
+   "region": "Челябинская область",
+   "population": {
+    "value": 410594,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 81368,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 43,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 144,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Сургут",
+   "region": "Ханты-Мансийский автономный округ",
+   "population": {
+    "value": 396443,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 137126,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 73,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 102,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 164,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 229,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Брянск",
+   "region": "Брянская область",
+   "population": {
+    "value": 379152,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67049,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 248,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Иваново",
+   "region": "Ивановская область",
+   "population": {
+    "value": 361644,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 58174,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 217,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Якутск",
+   "region": "Республика Саха /Якутия/",
+   "population": {
+    "value": 355443,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 141235,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 95,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Владимир",
+   "region": "Владимирская область",
+   "population": {
+    "value": 349951,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74888,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 266,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 285,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 181,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Белгород",
+   "region": "Белгородская область",
+   "population": {
+    "value": 339978,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74887,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 213,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Нижний Тагил",
+   "region": "Свердловская область",
+   "population": {
+    "value": 338966,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 89675,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 126,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Калуга",
+   "region": "Калужская область",
+   "population": {
+    "value": 337058,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 86134,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 72,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 221,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 174,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 258,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Чита",
+   "region": "Забайкальский край",
+   "population": {
+    "value": 334427,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 101279,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 120,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Грозный",
+   "region": "Республика Чеченская",
+   "population": {
+    "value": 328533,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 46404,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 84,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Волжский",
+   "region": "Волгоградская область",
+   "population": {
+    "value": 321479,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 69325,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 3,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 34,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 129,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Смоленск",
+   "region": "Смоленская область",
+   "population": {
+    "value": 316570,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 70224,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 93,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 79,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 214,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Подольск",
+   "region": "Московская область",
+   "population": {
+    "value": 314934,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 41,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 71,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 204,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Саранск",
+   "region": "Республика Мордовия",
+   "population": {
+    "value": 314871,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 66837,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 63,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 72,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 165,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Вологда",
+   "region": "Вологодская область",
+   "population": {
+    "value": 313944,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80997,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 52,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 104,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 208,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Курган",
+   "region": "Курганская область",
+   "population": {
+    "value": 310911,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 73835,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 0,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 128,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Череповец",
+   "region": "Вологодская область",
+   "population": {
+    "value": 305185,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80997,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 72,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 150,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Орёл",
+   "region": "Орловская область",
+   "population": {
+    "value": 303169,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 64143,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 219,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Архангельск",
+   "region": "Архангельская область",
+   "population": {
+    "value": 301199,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 92132,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 95,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 327,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 432,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 223,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Владикавказ",
+   "region": "Республика Северная Осетия - Алания",
+   "population": {
+    "value": 295830,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 54071,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 59,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 37,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 164,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Нижневартовск",
+   "region": "Ханты-Мансийский автономный округ",
+   "population": {
+    "value": 283256,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 137126,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 17,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 97,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 104,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Йошкар-Ола",
+   "region": "Республика Марий Эл",
+   "population": {
+    "value": 281248,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 71083,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 205,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Стерлитамак",
+   "region": "Республика Башкортостан",
+   "population": {
+    "value": 277410,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74398,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 94,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Мурманск",
+   "region": "Мурманская область",
+   "population": {
+    "value": 270384,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 126374,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 72,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 85,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 83,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 170,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Кострома",
+   "region": "Костромская область",
+   "population": {
+    "value": 267481,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 64837,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 34,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 194,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Новороссийск",
+   "region": "Краснодарский край",
+   "population": {
+    "value": 262293,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80518,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 219,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Тамбов",
+   "region": "Тамбовская область",
+   "population": {
+    "value": 261803,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 63960,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 84,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 96,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 208,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Химки",
+   "region": "Московская область",
+   "population": {
+    "value": 257128,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 76,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 111,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 111,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 250,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Мытищи",
+   "region": "Московская область",
+   "population": {
+    "value": 255429,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 90,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 125,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 298,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Нальчик",
+   "region": "Республика Кабардино-Балкарская",
+   "population": {
+    "value": 247054,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 53321,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 103,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 123,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Таганрог",
+   "region": "Ростовская область",
+   "population": {
+    "value": 245120,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 71838,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 41,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 185,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Нижнекамск",
+   "region": "Республика Татарстан",
+   "population": {
+    "value": 241479,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 91495,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 80,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Благовещенск",
+   "region": "Амурская область",
+   "population": {
+    "value": 241437,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 99044,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Комсомольск-на-Амуре",
+   "region": "Хабаровский край",
+   "population": {
+    "value": 238505,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 101704,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 40,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 124,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 67,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Петрозаводск",
+   "region": "Республика Карелия",
+   "population": {
+    "value": 234897,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 82438,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 67,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 246,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Королёв",
+   "region": "Московская область",
+   "population": {
+    "value": 228095,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 160,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Шахты",
+   "region": "Ростовская область",
+   "population": {
+    "value": 226452,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 71838,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 98,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Энгельс",
+   "region": "Саратовская область",
+   "population": {
+    "value": 225428,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67798,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 124,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Великий Новгород",
+   "region": "Новгородская область",
+   "population": {
+    "value": 224286,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 72710,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 50,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 75,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 202,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Люберцы",
+   "region": "Московская область",
+   "population": {
+    "value": 224195,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 85,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 170,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 350,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Братск",
+   "region": "Иркутская область",
+   "population": {
+    "value": 224071,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 97366,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Старый Оскол",
+   "region": "Белгородская область",
+   "population": {
+    "value": 221676,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 74887,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 81,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 116,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Ангарск",
+   "region": "Иркутская область",
+   "population": {
+    "value": 221296,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 97366,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 37,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 103,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Сыктывкар",
+   "region": "Республика Коми",
+   "population": {
+    "value": 220580,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 97935,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 81,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 109,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 187,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Дзержинск",
+   "region": "Нижегородская область",
+   "population": {
+    "value": 218630,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 81408,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 93,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Псков",
+   "region": "Псковская область",
+   "population": {
+    "value": 193082,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 63662,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 56,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 174,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Орск",
+   "region": "Оренбургская область",
+   "population": {
+    "value": 189195,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 75015,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 97,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Красногорск",
+   "region": "Московская область",
+   "population": {
+    "value": 187634,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 117139,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 54,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 78,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 103,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 251,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 450,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Армавир",
+   "region": "Краснодарский край",
+   "population": {
+    "value": 187177,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80518,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 3,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 85,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Абакан",
+   "region": "Республика Хакасия",
+   "population": {
+    "value": 184769,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 80492,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 41,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 156,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Балаково",
+   "region": "Саратовская область",
+   "population": {
+    "value": 184466,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 67798,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 2,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 71,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 97,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Бийск",
+   "region": "Алтайский край",
+   "population": {
+    "value": 183852,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 65568,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 0,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 3,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  },
+  {
+   "name": "Южно-Сахалинск",
+   "region": "Сахалинская область",
+   "population": {
+    "value": 181587,
+    "source": "russia_cities",
+    "year": 2023,
+    "scope": "city"
+   },
+   "avg_salary_rub": {
+    "value": 147698,
+    "source": "rosstat_salary",
+    "year": 2025,
+    "scope": "region"
+   },
+   "venues": {
+    "coffee": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "pickup_point": {
+     "value": 67,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   }
+  }
+ ]
+}

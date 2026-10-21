@@ -1,0 +1,29 @@
+meta {
+  name: Government scoring
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/api/bank/applications/{{govApplicationId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{analystToken}}
+}
+
+script:post-response {
+  bru.setVar('govVersion',res.getBody().application.version);
+}
+
+tests {
+  test("HTTP status", () => expect(res.getStatus()).to.equal(200));
+  test('MSP guarantee replaces collateral', () => {
+   const factors=res.getBody().scoring.factors;
+   expect(factors.some(f => f.code==='collateral')).to.equal(false);
+   const guarantee=factors.find(f => f.code==='state_guarantee');
+   expect(guarantee.name).to.equal('Поручительство Корпорации МСП'); expect(guarantee.points).to.equal(8);
+  });
+}

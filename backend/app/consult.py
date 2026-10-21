@@ -122,7 +122,7 @@ class Consult:
         found=next((n for n in sorted(names,key=len,reverse=True) if re.search(r'(?<![а-я])'+re.escape(n)+r'(?![а-я])',normalized(text))),None)
         if found:
             # Catalog preserves the original name for public state.
-            city_rows=json.loads((project_calc.DATA/'cities.json').read_text())
+            city_rows=json.loads((project_calc.DATA/'cities.json').read_text(encoding='utf-8'))
             st['city']=next(n for n,_,_ in city_rows if normalized(n)==found)
         asked={q['id'] for q in (previous.reply.get('questions',[]) if previous else [])}
         for a in answers:

@@ -10,7 +10,7 @@ def main():
     destination=Path(sys.argv[1]) if len(sys.argv)>1 else Path('../contracts/openapi.json')
     settings=Settings(database_url='sqlite://',jwt_secret='openapi-export-only-not-a-runtime-secret',seed_demo=False)
     schema=create_app(settings).app.openapi()
-    destination.write_text(json.dumps(schema,ensure_ascii=False,indent=2)+'\n')
+    destination.write_text(json.dumps(schema,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(f'{destination}: {len(schema["paths"])} paths')
 
 

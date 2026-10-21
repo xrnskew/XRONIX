@@ -3,11 +3,15 @@
 Порядок: атака или смена роли -> вопрос «одобрят ли» -> приветствие -> факты из сообщения -> не по теме ->
 обновление state (поправки) -> ответ: ближайшая сфера / недостающее основное / один раунд анкеты / ready.
 Сумм не называет и кредит не обещает. Условия «Старта» берутся из снимка правил (data/rules.json).
+Формулировки — из банка фраз (data/phrases.json), факты о городе — из базы (data/knowledge.cities.json), см. knowledge.py.
+Запасные тексты ниже — без цифр: ими сервис отвечает, если слота или факта нет.
 """
 import copy
 import re
 
+from ..scope import OFF_TOPIC
 from . import extract as ex
+from . import knowledge as kn
 from .text import norm
 
 SPHERE_ACC = {"coffee": "кофейню", "bakery": "пекарню", "car_wash": "автомойку", "clothing_store": "магазин одежды",
@@ -50,9 +54,41 @@ TEXTS = {
 }
 
 
-def credit_text() -> str:
-    return ("Решение по кредиту принимает банк после проверки заявки, заранее я его не знаю. " + _start_terms() +
-            " Давайте посчитаем план — по нему будет видно нагрузку.")
+CREDIT_FALLBACK = "Решение по кредиту принимает банк после проверки заявки, заранее я его не знаю."
+CREDIT_TAIL = "Давайте посчитаем план — по нему будет видно нагрузку."
+# Слоты банка фраз для текстов TEXTS и основных вопросов.
+TEXT_SLOTS = {"core": "core_intro", "sums": "sums_intro", "template": "template_intro", "nearest": "nearest_intro",
+              "no_near": "no_near_intro", "ready": "ready_intro", "offtopic": "offtopic", "greeting": "greeting",
+              "role": "role_change"}
+ASK_SLOTS = {"sphere": "ask_sphere", "city": "ask_city", "own_funds": "ask_own_funds"}
+
+
+class Turn:
+    """Ключ диалога и номер реплики: от них зависит выбор варианта фразы (knowledge.phrase)."""
+
+    def __init__(self, history: list, message: str):
+        self.key = kn.dialog_key(history, message)
+        self.n = sum(1 for h in history if h["role"] == "user")
+
+    def text(self, kind: str, vals: dict | None = None) -> str:
+        return kn.phrase(TEXT_SLOTS[kind], self.key, self.n, vals or {}, TEXTS[kind])
+
+    def core_question(self, k: str) -> dict:
+        q = dict(CORE_QUESTIONS[k])
+        text = kn.phrase(ASK_SLOTS[k], self.key, self.n, {})
+        if text:
+            if k == "sphere":
+                text = f"{text} Сейчас считаю: {SPHERE_LIST_TEXT}."
+            elif k == "own_funds" and "«нет»" not in text:
+                text = f"{text} Если своих нет, напишите «нет»."  # ответ «нет» понимается как ноль своих денег
+            if len(text) <= 200:  # предел текста вопроса в consult.schema.json
+                q["text"] = text
+        return q
+
+
+def credit_text(turn: "Turn | None" = None) -> str:
+    first = kn.phrase("credit_promise", turn.key, turn.n, {}, CREDIT_FALLBACK) if turn else CREDIT_FALLBACK
+    return kn.join([first, _start_terms(), CREDIT_TAIL])
 
 
 def question_for(sphere: str, q: dict) -> dict:
@@ -70,7 +106,17 @@ def complete(state: dict) -> bool:
 # ---------- Что спрашивали в прошлый раз ----------
 
 PROPOSAL_RX = re.compile(r"ближе всего по расчету — (.+?)\. считаем так")
-CORE_STRIP = [norm(q["text"]) for q in CORE_QUESTIONS.values()]
+CORE_KEYWORDS = {"sphere": "какой бизнес", "city": "каком городе", "own_funds": "своих денег"}
+
+
+def ask_texts(k: str) -> list:
+    """Как мог звучать наш вопрос: запасной текст и все варианты из банка фраз (без «?» на конце)."""
+    out = [norm(CORE_QUESTIONS[k]["text"])] + [norm(v) for v in kn.variants(ASK_SLOTS[k])]
+    return [t.rstrip("?").strip() for t in out]
+
+
+def core_strip() -> list:
+    return [norm(q["text"]) for q in CORE_QUESTIONS.values()] + [norm(v) for k in ASK_SLOTS for v in kn.variants(ASK_SLOTS[k])]
 
 
 def asked_context(prev: dict, history: list) -> dict:
@@ -88,12 +134,9 @@ def asked_context(prev: dict, history: list) -> dict:
         prev_user = next((h["content"] for h in reversed(history) if h["role"] == "user"), "")
         ctx["proposal"] = ex.sphere_nearest(ex.fix_typos(prev_user))
         ctx["proposed"] = True  # даже если сферу не восстановили, «да/нет» — это ответ на предложение
-    if "какой бизнес" in a:
-        ctx["core"].add("sphere")
-    if "каком городе" in a:
-        ctx["core"].add("city")
-    if "своих денег" in a:
-        ctx["core"].add("own_funds")
+    for k, word in CORE_KEYWORDS.items():
+        if word in a or any(t in a for t in ask_texts(k)):
+            ctx["core"].add(k)
     # Анкету уже спрашивали, если её вопросы есть в любой реплике ассистента. Полный state этого не доказывает.
     template_texts = [norm(t)[:-1] for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())]
     ctx["template_last"] = any(t in a for t in template_texts)
@@ -110,7 +153,7 @@ def strip_our_questions(message: str) -> str:
     lines = []
     for line in message.split("\n"):
         t = norm(line)
-        for q in CORE_STRIP:
+        for q in core_strip():
             t = t.replace(q, " ")
         t = re.sub(r"ближе всего по расчету — .+?\?", " ", t)
         lines.append(re.sub(r"\s+", " ", t).strip())
@@ -119,9 +162,27 @@ def strip_our_questions(message: str) -> str:
 
 # ---------- Ответ ----------
 
-def _message(kind: str, prev: dict) -> dict:
-    text = credit_text() if kind == "credit" else TEXTS[kind]
+def _message(kind: str, prev: dict, turn: Turn) -> dict:
+    text = credit_text(turn) if kind == "credit" else turn.text(kind)
     return {"type": "message", "text": text, "state": copy.deepcopy(prev)}
+
+
+def competition(state: dict, history: list, turn: Turn) -> str | None:
+    """Факт о конкуренции из базы — один раз за диалог, когда известны сфера и город."""
+    if kn.said_competition(history):
+        return None
+    facts = kn.fact_values(state, "venues")
+    return kn.phrase("city_competition", turn.key, turn.n, {**kn.values(state), **facts}) if facts else None
+
+
+def ready_text(state: dict, history: list, turn: Turn) -> str:
+    """Вступление к плану, факт о конкуренции (если ещё не звучал), зарплата по региону и совет или риск сферы."""
+    vals = kn.values(state)
+    salary = kn.fact_values(state, "salary")
+    advice = f"{state['sphere']}_{('tip', 'risk')[kn.choice('advice', turn.key, turn.n, 2)]}"
+    return kn.join([turn.text("ready", vals), competition(state, history, turn),
+                    kn.phrase("salary_fact", turn.key, turn.n, {**vals, **salary}) if salary else None,
+                    kn.phrase(advice, turn.key, turn.n, vals)])
 
 
 def respond(request: dict) -> dict:
@@ -131,18 +192,19 @@ def respond(request: dict) -> dict:
     message = ex.fix_typos(request["message"])  # «етсь 250 тыс» -> «есть 250 тыс»; переводы строк сохраняются
     raw = norm(message)
     ctx = asked_context(prev, history)
+    turn = Turn(history, request["message"])
     # Человек отвечает строками «Какой формат? Кофе с собой» — значит, вопросы анкеты он видел (пример контракта
     # consult.request.answers.json), даже если бэкенд положил в history только вступительный текст.
     if any(norm(t) in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())):
         ctx["template"] = ctx["template_last"] = True
 
     if ex.ROLE_CHANGE.search(raw):
-        return _message("role", prev)
+        return _message("role", prev, turn)
     if ex.CREDIT_PROMISE.search(raw):
-        return _message("credit", prev)
+        return _message("credit", prev, turn)
 
     body = strip_our_questions(message)
-    correction = bool(ex.CORRECTION.search(body))
+    correction = bool(ex.CORRECTION.search(body)) or ex.sphere_negated(body)  # «нет, не кофейню, пекарню»
     first_turn = not history
     short = len(body.split()) <= 2  # «Печоры», «город Тверь»: название можно без предлога
 
@@ -166,6 +228,8 @@ def respond(request: dict) -> dict:
     funds = None if confirm is not None else ex.own_funds(body, asked="own_funds" in ctx["core"] and not leading_no)
     if funds is None and correction and prev.get("own_funds_rub") is not None and not ex.SUMS_QUESTION.search(body):
         funds = ex.correction_amount(body)
+    if funds is None and first_turn and (sphere or proposal or city) and not leading_no:
+        funds = ex.bare_amount(body)  # «Питер, кофейня, 1 млн»: единственная сумма без признаков кредита
     target_sphere = sphere if sphere and (prev.get("sphere") is None or correction or "sphere" in ctx["core"]) else prev.get("sphere")
     answers = ex.template_answers(target_sphere, message) if target_sphere in ex.templates() else {}
 
@@ -174,10 +238,14 @@ def respond(request: dict) -> dict:
     answers_our_question = ctx["template_last"] and (
         any(norm(t)[:-1] in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values()))
         or bool(re.search(r"\d|" + "|".join(a for a, _ in ex.ANSWER_CUES.values()), body)))
+    # «Какая погода завтра в Самаре?» — не про бизнес, даже если назван город. Текст до исправления опечаток:
+    # «погода» иначе становится «полгода».
+    if OFF_TOPIC.search(norm(request["message"])) and not (sphere or proposal or funds is not None or answers):
+        return _message("offtopic", prev, turn)
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
                        correction and history, ex.SKIP.search(body), ex.SUMS_QUESTION.search(body), ex.BUSINESS_WORDS.search(body)])
     if not informative:
-        return _message("greeting" if ex.is_greeting(message) else "offtopic", prev)
+        return _message("greeting" if ex.is_greeting(message) else "offtopic", prev, turn)
 
     # --- обновление state: известное меняется только по явной поправке или как ответ на вопрос ---
     state = copy.deepcopy(prev)
@@ -197,26 +265,27 @@ def respond(request: dict) -> dict:
         if proposal:
             questions.append({"id": "sphere", "text": f"Ближе всего по расчёту — {SPHERE_ACC[proposal]}. Считаем так?",
                               "kind": "choice", "options": ["Да, подходит", "Нет, другой бизнес"]})
-            text = TEXTS["nearest"]
+            text = turn.text("nearest")
         else:
-            questions.append(CORE_QUESTIONS["sphere"])
-            text = TEXTS["no_near"]
+            questions.append(turn.core_question("sphere"))
+            text = turn.text("no_near")
         if state["city"] is None:
-            questions.append(CORE_QUESTIONS["city"])
+            questions.append(turn.core_question("city"))
         if state["own_funds_rub"] is None:
-            questions.append(CORE_QUESTIONS["own_funds"])
+            questions.append(turn.core_question("own_funds"))
         return {"type": "questions", "text": text, "questions": questions, "state": state}
 
     if not complete(state):
         missing = [k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub"))
                    if (state[f] is None if f != "sphere" else state["sphere"] not in ex.templates())]
-        text = TEXTS["sums"] if ex.SUMS_QUESTION.search(body) else TEXTS["core"]
-        return {"type": "questions", "text": text, "questions": [CORE_QUESTIONS[k] for k in missing], "state": state}
+        text = turn.text("sums" if ex.SUMS_QUESTION.search(body) else "core")
+        return {"type": "questions", "text": text, "questions": [turn.core_question(k) for k in missing], "state": state}
 
     if not ctx["template"]:
         # Анкету ещё не спрашивали (по истории): один раунд, если есть неотвеченные вопросы, иначе сразу ready.
         pending = [q for q in ex.templates()[state["sphere"]]["questions"] if q["id"] not in state["answers"]]
         if pending:
-            return {"type": "questions", "text": TEXTS["template"],
+            text = kn.join([turn.text("template", kn.values(state)), competition(state, history, turn)])
+            return {"type": "questions", "text": text,
                     "questions": [question_for(state["sphere"], q) for q in pending[:4]], "state": state}
-    return {"type": "ready", "text": TEXTS["ready"], "state": state}
+    return {"type": "ready", "text": ready_text(state, history, turn), "state": state}
