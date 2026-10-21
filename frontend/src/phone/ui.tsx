@@ -71,9 +71,11 @@ export const Chip = ({ children, onClick, active }: { children: ReactNode; onCli
   </button>
 )
 
-export const Badge = ({ tone, children }: { tone: 'ok' | 'warn' | 'bad' | 'muted'; children: ReactNode }) => {
-  const t = { ok: 'bg-ok/15 text-ok', warn: 'bg-warn/15 text-warn', bad: 'bg-accent/15 text-accent', muted: 'bg-white/10 text-muted' }[tone]
-  return <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{children}</span>
+// action — ход клиента, bank — ход банка (система или специалист)
+export type Tone = 'ok' | 'warn' | 'bad' | 'muted' | 'action' | 'bank'
+export const Badge = ({ tone, children, dot }: { tone: Tone; children: ReactNode; dot?: boolean }) => {
+  const t = { ok: 'bg-ok/15 text-ok', warn: 'bg-warn/15 text-warn', bad: 'bg-accent/15 text-accent', muted: 'bg-white/10 text-muted', action: 'bg-accent/15 text-[#ff8a80]', bank: 'bg-steel/15 text-steel' }[tone]
+  return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{dot && <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />}{children}</span>
 }
 
 export const Logo = ({ size = 40 }: { size?: number }) => (

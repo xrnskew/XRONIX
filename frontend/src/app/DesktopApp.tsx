@@ -20,9 +20,9 @@ import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 // Чат подбора бизнеса ведёт модель Дани (/ai/consult), цифры плана считает бэкенд по шаблонам. План и финансы — по #/plan и #/finance.
 
 const tabs = [
-  { to: '/chat', label: 'Подбор бизнеса', d: 'M4 5h16v11H9l-5 4z' },
+  { to: '/chat', label: 'Подбор бизнеса', short: 'Подбор', d: 'M4 5h16v11H9l-5 4z' },
   { to: '/applications', label: 'Заявки', d: 'M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7' },
-  { to: '/new', label: 'Новая заявка', d: 'M12 5v14M5 12h14' },
+  { to: '/new', label: 'Новая заявка', short: 'Новая', d: 'M12 5v14M5 12h14' },
   { to: '/feed', label: 'Лента', d: 'M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4' },
   { to: '/profile', label: 'Профиль', d: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6' },
 ]
@@ -139,6 +139,7 @@ function ShaderSync() {
 
 function Shell() {
   const { status, notice, user } = useCabinet()
+  const { pathname } = useLocation()
 
   if (status === 'booting')
     return <div className="flex h-svh items-center justify-center" role="status" aria-label="Загрузка"><Logo size={56} /></div>
@@ -151,6 +152,8 @@ function Shell() {
       <div className="flex min-w-0 flex-1 flex-col">
         {notice && <p role="alert" className="bg-accent/10 p-3 text-[14px] text-accent">{notice}</p>}
         <main className="mx-auto min-h-0 w-full max-w-[1180px] flex-1">
+          {/* смена раздела — короткое появление экрана; ключ по пути, чтобы анимация шла на каждом переходе */}
+          <div key={pathname} className="appear h-full">
           <Routes>
             <Route path="/applications" element={<Applications />} />
             <Route path="/applications/:id" element={<ApplicationView />} />
@@ -162,12 +165,13 @@ function Shell() {
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="*" element={<Navigate to="/applications" replace />} />
           </Routes>
+          </div>
         </main>
         {/* узкий экран: боковой панели нет, разделы внизу, как в телефоне */}
         <nav className="mx-3 mb-4 grid grid-cols-5 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
           {tabs.map((t) => (
             <NavLink key={t.to} to={t.to} className={({ isActive }) => `flex min-h-[50px] flex-col items-center justify-center gap-0.5 rounded-[20px] text-[11px] font-medium transition-colors ${isActive ? 'bg-fill text-white' : 'text-muted'}`}>
-              <Icon d={t.d} size={21} />{t.label}
+              <Icon d={t.d} size={21} />{'short' in t ? t.short : t.label}
             </NavLink>
           ))}
         </nav>

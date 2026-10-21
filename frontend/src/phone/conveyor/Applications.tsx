@@ -4,7 +4,32 @@ import { conveyor } from '../../api/conveyor'
 import type { ApplicationListItem, FeedItem } from '../../types/conveyor'
 import { rub } from '../../lib/format'
 import { Card, Screen, Skeleton } from '../ui'
-import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move } from './parts'
+import { MiniTrack } from './Track'
+
+const GROUPS: { move: Move; title: string }[] = [
+  { move: 'you', title: 'Нужно ваше действие' },
+  { move: 'bank', title: 'В работе у банка' },
+  { move: 'done', title: 'Завершены' },
+]
+
+function AppCard({ a }: { a: ApplicationListItem }) {
+  return (
+    <Link to={`/applications/${a.id}`} data-span={6} className="card-ring group block rounded-[22px] bg-surface p-4 transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[.99] sm:p-5">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+        <span className="whitespace-nowrap text-[12px] text-muted tabular-nums">{a.number}</span>
+        <StatusBadge status={a.status} title={a.status_title} />
+      </div>
+      <div className="mt-2 line-clamp-2 text-[16px] font-semibold leading-snug">{a.company_name}</div>
+      <div className="mt-3 flex flex-wrap items-baseline gap-x-2">
+        <span className="font-display text-[22px] font-semibold tabular-nums tracking-tight">{rub(a.amount_rub)}</span>
+        <span className="text-[14px] text-muted">{productNames[a.product_id]}</span>
+      </div>
+      <div className="mt-4"><MiniTrack status={a.status} /></div>
+      <div className="mt-2 text-[12px] text-muted">Обновлено {dateRu(a.updated_at)}</div>
+    </Link>
+  )
+}
 
 export function Applications() {
   const [items, setItems] = useState<ApplicationListItem[] | null>(null)
@@ -30,19 +55,16 @@ export function Applications() {
           </div>
         </Card>
       )}
-      {items?.map((a) => (
-        <Link key={a.id} to={`/applications/${a.id}`} data-span={6} className="card-ring block rounded-[22px] bg-surface p-4 transition-colors hover:bg-surface-2">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <div className="text-[13px] text-muted">{a.number}</div>
-              <div className="mt-0.5 truncate text-[16px] font-semibold">{a.company_name}</div>
-            </div>
-            <StatusBadge status={a.status} title={a.status_title} />
-          </div>
-          <div className="mt-3 text-[14px] tabular-nums">{productNames[a.product_id]} · {rub(a.amount_rub)}</div>
-          <div className="mt-1 text-[12px] text-muted">Обновлено {dateRu(a.updated_at)}</div>
-        </Link>
-      ))}
+      {items && items.length > 0 && GROUPS.map((g) => {
+        const list = items.filter((a) => whoseMove(a.status) === g.move).sort((x, y) => y.updated_at.localeCompare(x.updated_at))
+        if (!list.length) return null
+        return [
+          <h2 key={g.move} className="flex items-baseline gap-2 pt-2 text-[15px] font-semibold first:pt-0">
+            {g.title}<span className="text-[13px] font-normal text-muted tabular-nums">{list.length}</span>
+          </h2>,
+          ...list.map((a) => <AppCard key={a.id} a={a} />),
+        ]
+      })}
     </Screen>
   )
 }
