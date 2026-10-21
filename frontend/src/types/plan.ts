@@ -78,7 +78,7 @@ export interface Answer {
 }
 
 // Ответы API (см. /contracts/api.md)
-export interface AuthResult { token: string; user: Profile }
+export interface AuthResult { token?: string; user: Profile } // в cookie-режиме токена в ответе нет (contracts/api.md)
 export interface ChatSummary { id: string; title: string; updated_at: string; plan_id: string | null }
 export interface ChatMessageDto { id: string; role: 'user' | 'assistant'; created_at: string; reply: AiReply; answers?: Answer[] }
 export interface ChatDetail { id: string; messages: ChatMessageDto[]; facts?: Record<string, ChatFact>; generation?: Generation | null }
