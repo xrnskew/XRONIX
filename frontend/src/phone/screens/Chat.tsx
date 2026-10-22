@@ -1,13 +1,25 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
-import type { AiReply, Answer, ChatSummary, Question } from '../../types/plan'
-import { Chip, Conveyor, Logo, Wide, Icon } from '../ui'
+import type { AiReply, Answer, ChatMessage, ChatSummary, Question } from '../../types/plan'
+import { Chip, Conveyor, EmptyState, Logo, Wide, Icon } from '../ui'
 import { useCabinet } from '../CabinetContext'
-import { rub } from '../../lib/format'
+import { shortParts } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
 import { submittedAnswers } from '../answers'
 import { planPath } from '../PlanRoute'
+
+// Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
+const TAG_LABELS: Record<string, string> = { experience: 'Опыт', own_funds: 'Свои деньги', city: 'Город', sphere: 'Сфера', format: 'Формат', area_m2: 'Площадь', customers_per_day: 'Гостей в день', avg_check_rub: 'Средний чек', staff: 'Сотрудники' }
+const tagLabel = (q: Question) => TAG_LABELS[q.id] ?? q.text.split(/[?.!]/)[0].trim().slice(0, 28)
+// Теги ответов на анкету из предыдущего сообщения ИИ; пусто, если человек писал своими словами
+function answerTags(messages: ChatMessage[], index: number): { label: string; value: string }[] {
+  const prev = messages[index - 1]?.reply
+  if (messages[index]?.role !== 'user' || prev?.type !== 'questions') return []
+  const given = submittedAnswers(messages, index - 1)
+  const show = (v: string) => (/^\d{4,}$/.test(v) ? Number(v).toLocaleString('ru-RU') : v) // «900000» → «900 000»
+  return prev.questions.flatMap((q) => (given[q.id] && given[q.id] !== '—' ? [{ label: tagLabel(q), value: show(given[q.id]) }] : []))
+}
 
 const starters = ['Кофейня с собой', 'Пекарня', 'Автомойка', 'Магазин одежды']
 const starterIcons: Record<string, string> = {
@@ -116,7 +128,7 @@ export default function Chat() {
               m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
-              {m.text ?? <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} onCredit={conveyorOn && m.reply?.type === 'plan' ? () => nav(`/new?plan=${encodeURIComponent((m.reply as { plan_id: string }).plan_id)}`) : undefined} />}
+              {m.text !== undefined ? <MessageText text={m.text} tags={answerTags(messages, index)} /> : <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} onCredit={conveyorOn && m.reply?.type === 'plan' ? () => nav(`/new?plan=${encodeURIComponent((m.reply as { plan_id: string }).plan_id)}`) : undefined} />}
               {m.error && canRetry && m === last && (
                 <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
               )}
@@ -203,7 +215,7 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
           </div>
         )}
         {!items && !error && [0, 1, 2].map((i) => <div key={i} className="h-[68px] animate-pulse rounded-2xl bg-surface" aria-hidden />)}
-        {items?.length === 0 && <p className="px-2 py-10 text-center text-[15px] leading-snug text-muted">Диалогов пока нет. Опишите идею бизнеса в новом диалоге.</p>}
+        {items?.length === 0 && <EmptyState icon="M4 5h16v11H9l-5 4z" title="Диалогов пока нет" text="Опишите идею бизнеса в новом диалоге, и ИИ соберёт план." />}
         {items?.map((c) => confirm === c.id ? (
           <div key={c.id} className="card-ring rounded-2xl bg-surface-2 p-3.5" role="group" aria-label={`Удалить диалог «${c.title}»`}>
             <p className="text-[14px] leading-snug">Удалить «{c.title}»{c.plan_id ? ' вместе с планом' : ''}?</p>
@@ -232,6 +244,54 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
   )
 }
 
+function MessageText({ text, tags }: { text: string; tags: { label: string; value: string }[] }) {
+  if (!tags.length) return <>{text}</>
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {tags.map((t) => <span key={t.label} className="rounded-full bg-white/15 px-3 py-1 text-[14px] leading-snug"><span className="text-white/75">{t.label}: </span><span className="font-semibold">{t.value}</span></span>)}
+    </div>
+  )
+}
+
+const money = (n: number) => { const { value, unit } = shortParts(n); return `${value} ${unit}` } // «3,1 млн ₽»: три колонки влезают и на телефоне
+const paybackTone = (m: number | null) => (m == null ? 'text-accent' : m <= 12 ? 'text-ok' : m <= 24 ? 'text-warn' : 'text-accent')
+const BAR = ['bg-accent', 'bg-accent-soft', 'bg-steel', 'bg-warn', 'bg-ok']
+
+// «План готов»: главные цифры, цвет окупаемости и из чего складывается стартовый бюджет
+function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type: 'plan' }>; onOpen: () => void; onCredit?: () => void }) {
+  const f = reply.plan.finance
+  const items = [...(f.startup_items ?? [])].sort((a, b) => b.amount_rub - a.amount_rub)
+  const total = items.reduce((n, i) => n + i.amount_rub, 0)
+  const top = items.slice(0, 4), rest = items.slice(4).reduce((n, i) => n + i.amount_rub, 0)
+  const parts = rest > 0 ? [...top, { title: 'Остальное', amount_rub: rest }] : top
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 text-[13px] font-medium text-ok">
+        <span className="pop flex h-5 w-5 items-center justify-center rounded-full bg-ok/15" aria-hidden><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>План готов
+      </div>
+      <div className="text-[20px] font-semibold leading-tight tracking-tight">{reply.plan.title}</div>
+      <div className="grid grid-cols-3 gap-3">
+        <div><div className="text-[12px] text-muted">На старт</div><div className="mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums">{money(f.startup_cost_rub)}</div></div>
+        <div><div className="text-[12px] text-muted">Прибыль в мес.</div><div className="mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums text-ok">{money(f.monthly_profit_rub)}</div></div>
+        <div><div className="text-[12px] text-muted">Окупаемость</div><div className={`mt-0.5 text-[16px] font-semibold ${paybackTone(f.payback_months)}`}>{f.payback_months ?? '—'} мес.</div></div>
+      </div>
+      {total > 0 && (
+        <div>
+          <div className="text-[12px] text-muted">Из чего складывается старт</div>
+          <div className="mt-1.5 flex h-2 gap-0.5 overflow-hidden rounded-full" role="img" aria-label="Структура стартового бюджета">
+            {parts.map((p, i) => <div key={p.title} className={`fill-in ${BAR[i] ?? 'bg-white/30'}`} style={{ width: `${(p.amount_rub / total) * 100}%`, animationDelay: `${i * 70}ms` }} />)}
+          </div>
+          <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[12px] text-text/75">
+            {parts.slice(0, 4).map((p, i) => <li key={p.title} className="flex min-w-0 items-center gap-1.5"><span className={`h-1.5 w-1.5 shrink-0 rounded-full ${BAR[i] ?? 'bg-white/30'}`} aria-hidden /><span className="truncate">{p.title}</span><span className="ml-auto tabular-nums text-muted">{Math.round((p.amount_rub / total) * 100)}%</span></li>)}
+          </ul>
+        </div>
+      )}
+      <button onClick={onOpen} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${onCredit ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Открыть план</button>
+      {onCredit && <button onClick={onCredit} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Подобрать кредит</button>}
+    </div>
+  )
+}
+
 function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit }: {
   reply: AiReply
   active: boolean
@@ -242,19 +302,7 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit 
   onCredit?: () => void // рабочая версия: перейти к заявке на кредит по этому плану
 }) {
   if (reply.type === 'message') return <>{reply.text}</>
-  if (reply.type === 'plan')
-    return (
-      <div className="space-y-3">
-        <div className="text-[13px] text-muted">План готов</div>
-        <div className="text-[17px] font-semibold leading-tight">{reply.plan.title}</div>
-        <div className="grid grid-cols-2 gap-3">
-          <div><div className="text-[12px] text-muted">Нужно на старт</div><div className="font-semibold tabular-nums">{rub(reply.plan.finance.startup_cost_rub)}</div></div>
-          <div><div className="text-[12px] text-muted">Окупаемость</div><div className="font-semibold">{reply.plan.finance.payback_months ?? '—'} мес.</div></div>
-        </div>
-        <button onClick={onOpen} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${onCredit ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Открыть план</button>
-        {onCredit && <button onClick={onCredit} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Подобрать кредит</button>}
-      </div>
-    )
+  if (reply.type === 'plan') return <PlanCard reply={reply} onOpen={onOpen} onCredit={onCredit} />
   // достаточно ответить хотя бы на один вопрос: остальные уйдут как «—», а ИИ сам просит пропускать то, чего вы не знаете
   const done = reply.questions.some((q) => answers[q.id]?.trim())
   return (

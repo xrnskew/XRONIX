@@ -99,3 +99,13 @@ export const Skeleton = () => (
 export const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
 )
+
+// Пустое состояние: иконка, что здесь будет и главное действие (кнопки передаются детьми)
+export const EmptyState = ({ icon, title, text, children }: { icon: string; title: string; text: string; children?: ReactNode }) => (
+  <div className="flex flex-col items-center px-2 py-8 text-center">
+    <span className="pop flex h-16 w-16 items-center justify-center rounded-full bg-accent/12 text-accent-soft ring-1 ring-accent/25" aria-hidden><Icon d={icon} size={28} /></span>
+    <p className="mt-4 text-[17px] font-semibold">{title}</p>
+    <p className="mt-1 max-w-[360px] text-[14px] leading-snug text-muted">{text}</p>
+    {children && <div className="mt-5 flex flex-wrap justify-center gap-3">{children}</div>}
+  </div>
+)
