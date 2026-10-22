@@ -1,0 +1,5 @@
+NAME                            IMAGE                         COMMAND                  SERVICE             CREATED          STATUS                    PORTS
+xronix-r4-ai-1                  xronix-r4-ai                  "uvicorn app.main:ap…"   ai                  20 minutes ago   Up 8 seconds (healthy)    8001/tcp
+xronix-r4-backend-1             xronix-r4-backend             "uvicorn app.main:cr…"   backend             20 minutes ago   Up 20 minutes (healthy)   8000/tcp
+xronix-r4-integrations-mock-1   xronix-r4-integrations-mock   "uvicorn app.main:ap…"   integrations-mock   20 minutes ago   Up 20 minutes (healthy)   8002/tcp
+xronix-r4-web-1                 xronix-r4-web                 "/docker-entrypoint.…"   web                 20 minutes ago   Up 20 minutes (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp

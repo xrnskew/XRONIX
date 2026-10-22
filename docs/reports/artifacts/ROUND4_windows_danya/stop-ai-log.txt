@@ -1,0 +1,8 @@
+docker :  Container xronix-r4-ai-1 Stopping 
+At line:1 char:496
++ ... <папка замера>\xronix-r4; docker compose stop ai *>&1 | Out-F ...
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Container xronix-r4-ai-1 Stopping :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ Container xronix-r4-ai-1 Stopped 

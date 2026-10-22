@@ -1,0 +1,4 @@
+CONTAINER ID   NAME                            CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O     PIDS
+31c6cef54ee2   xronix-r4-web-1                 0.00%     10.3MiB / 7.622GiB    0.13%     86.5kB / 1.05MB   0B / 8.19kB   13
+b1ccf1b4e3d2   xronix-r4-backend-1             1.63%     66.39MiB / 7.622GiB   0.85%     43kB / 49.4kB     0B / 2.95MB   3
+78a71bd5c235   xronix-r4-integrations-mock-1   0.26%     33.84MiB / 7.622GiB   0.43%     9.22kB / 10.5kB   0B / 0B       2
