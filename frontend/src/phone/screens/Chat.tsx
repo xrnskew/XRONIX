@@ -57,7 +57,9 @@ export default function Chat() {
     finally { setCitySaving(false) }
   }
   const submitAnswers = (qs: Question[]) => {
-    submit(qs.map((q) => `${q.text} ${answers[q.id] ?? '—'}`).join('\n'), qs.map((q) => ({ question_id: q.id, answer: answers[q.id] ?? '' })))
+    // в текст уходят все вопросы (пропущенные — как «—»), в answers только отвеченные: пустой ответ backend отклоняет
+    const given = (q: Question) => answers[q.id]?.trim()
+    submit(qs.map((q) => `${q.text} ${given(q) || '—'}`).join('\n'), qs.filter(given).map((q) => ({ question_id: q.id, answer: given(q)! })))
     setAnswers({})
   }
   const last = messages[messages.length - 1]
@@ -249,7 +251,8 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit 
         {onCredit && <button onClick={onCredit} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Подобрать кредит</button>}
       </div>
     )
-  const done = reply.questions.every((q) => answers[q.id]?.trim())
+  // достаточно ответить хотя бы на один вопрос: остальные уйдут как «—», а ИИ сам просит пропускать то, чего вы не знаете
+  const done = reply.questions.some((q) => answers[q.id]?.trim())
   return (
     <fieldset disabled={!active} className="space-y-4 border-0 p-0 disabled:opacity-60">
       <legend className="mb-3 p-0">{reply.text}</legend>

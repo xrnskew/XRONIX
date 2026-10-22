@@ -19,6 +19,7 @@ export default function GoalStep({ preset, onPick }: { preset: CalculatedPlan | 
   // число шагов после выбора цели; с готовым планом из чата шага «Проект» нет
   const stepsOf = (p: Path) => PATHS[p].slice(1).filter((x) => !preset || x !== 'Проект').length
   const goals = preset ? [
+    { path: 'current' as Path, title: 'У меня есть бизнес — нужен кредит на текущие задачи', text: 'Оборудование, оборот, недвижимость. План из чата не понадобится: сразу к подбору кредита.' },
     { path: 'new_point' as Path, title: 'У меня есть бизнес — это будет новая точка', text: 'Выберите компанию: сумма и срок кредита придут из плана.' },
     { path: 'no_business' as Path, title: 'Бизнеса пока нет', text: 'Заявка как будущий ИП на демо-продукт «Старт»: нужен залог или поручитель и не меньше 20% своих денег.' },
   ] : GOALS

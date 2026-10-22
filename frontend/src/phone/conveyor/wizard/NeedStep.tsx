@@ -72,7 +72,7 @@ export default function NeedStep({ company, need, setNeed, project, onBack, onDo
           <Chip active={!need.has_collateral} onClick={() => set({ has_collateral: false })}>Нет</Chip>
           <Chip active={need.has_collateral} onClick={() => set({ has_collateral: true })}>{company.registry.kind === 'person' ? 'Да: залог или поручитель' : 'Да: недвижимость, оборудование, транспорт'}</Chip>
         </div>
-        {company.registry.kind !== 'person' && company.business_months < 9 && <p className="mt-4 text-[13px] leading-snug text-warn">Бизнесу {company.business_months} мес. Кредиты Альфа-Банка для бизнеса требуют от 9 месяцев работы — на следующем шаге покажем, что доступно.</p>}
+        {company.registry.kind !== 'person' && company.business_months < 9 && <p className="mt-4 text-[13px] leading-snug text-warn">Бизнесу {company.business_months} мес. Кредитные продукты для бизнеса требуют от 9 месяцев работы — на следующем шаге покажем, что доступно.</p>}
         <div className="mt-6 flex gap-3">
           <button onClick={onBack} className={ghostBtn}>Назад</button>
           <button onClick={onDone} disabled={!ready} className={primaryBtn}>Подобрать кредит</button>

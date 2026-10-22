@@ -66,7 +66,7 @@ export function matchProducts(req: MatchRequest, months: number | null, ctx: { p
     if (p.id === 'start') {
       if (!ctx.plan) reasons.push('Нужен расчёт проекта: посчитайте его в чате или в мастере.')
       else if (ctx.plan.own_funds_rub < ctx.plan.startup_cost_rub * start.min_own_share) reasons.push(`Своих денег должно быть не меньше ${start.min_own_share * 100}% стоимости запуска: ${rubText(Math.ceil(ctx.plan.startup_cost_rub * start.min_own_share))}, у вас ${rubText(ctx.plan.own_funds_rub)}.`)
-    } else if (ctx.person) reasons.push('Продукт Альфа-Банка для действующего бизнеса: нужны зарегистрированные ИП или компания.')
+    } else if (ctx.person) reasons.push('Продукт для действующего бизнеса: нужны зарегистрированные ИП или компания.')
     else if (months != null && p.minBusinessMonths != null && months < p.minBusinessMonths) reasons.push(`Бизнес должен работать не меньше ${p.minBusinessMonths} месяцев, у вас ${ageText(months).replace(/\.$/, '')}.`)
     const canApply = (rules.applicable_products as string[]).includes(p.id)
     if (!canApply) reasons.push('Заявку на этот продукт в демо оформляет менеджер банка.')

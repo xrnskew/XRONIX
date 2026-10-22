@@ -110,6 +110,64 @@ def experience_answer(message: str):
     return None
 
 
+# ---------- «Не знаю, что открыть» (бета-тест 1, docs/tasks/ROUND4_danya_final.md, п. 2) ----------
+# Три разных ответа подряд вместо одного и того же вопроса о сфере: категории -> пример из базы -> шесть сфер кнопками.
+
+UNDECIDED = re.compile(r"не знаю|не решил|не определил|затрудня|прибыльн|выгодн|доходн|что открыть|какой бизнес|"
+                       r"без разницы|что угодно|любой бизнес|помогите выбрать|выбрать бизнес|на ваш выбор")
+# «Посоветуйте» — подбор сферы, только если коротко или про бизнес: «Посоветуй фильм на вечер» — не по теме.
+ADVICE = re.compile(r"посовет|подскаж|предложи")
+
+
+def is_undecided(body: str) -> bool:
+    t = norm(body)
+    return bool(UNDECIDED.search(t)) or bool(ADVICE.search(t)) and (len(t.split()) <= 2 or bool(ex.BUSINESS_WORDS.search(t)))
+CATEGORY = [(r"общепит|питани", "coffee"), (r"услуг", "beauty_salon"), (r"торговл", "clothing_store")]
+UNDECIDED_TEXT = ("Давайте подберём вместе. Могу посчитать кофейню, пекарню, автомойку, магазин одежды, салон красоты или "
+                  "пункт выдачи. Что ближе: общепит, услуги или торговля?")
+CATEGORY_QUESTION = {"id": "sphere", "text": "Что ближе?", "kind": "choice", "options": ["Общепит", "Услуги", "Торговля"]}
+EXAMPLE_QUESTION = "Посчитаем для примера {acc}?"
+EXAMPLE_RX = re.compile(r"посчитаем для примера (.+?)\?")
+PICK_TEXT = "Выберите, пожалуйста, одну из шести сфер кнопкой ниже — их я умею считать. Остальное уточню после выбора."
+PICK_QUESTIONS = [{"id": "sphere", "text": "Общепит или торговля?", "kind": "choice", "options": ["Кофейня", "Пекарня", "Магазин одежды"]},
+                  {"id": "sphere_services", "text": "Или услуги?", "kind": "choice",  # у choice не больше 5 вариантов
+                   "options": ["Автомойка", "Салон красоты", "Пункт выдачи заказов"]}]
+UNDECIDED_MARKS = ("давайте подберем вместе", "посчитаем для примера", "общепит или торговля?")
+UNDECIDED_QUESTIONS = [norm(q["text"]) for q in [CATEGORY_QUESTION] + PICK_QUESTIONS]
+
+
+def undecided_level(history: list) -> int:
+    """Сколько наших ответов «не знаю» подряд стоит в конце history."""
+    n = 0
+    for h in reversed([h for h in history if h["role"] == "assistant"]):
+        if not any(m in norm(h["content"]) for m in UNDECIDED_MARKS):
+            break
+        n += 1
+    return n
+
+
+def undecided_reply(state: dict, history: list, body: str, turn: "Turn", declined: bool = False) -> dict:
+    """declined — человек ответил «нет» на пример сферы: сразу шесть сфер кнопками."""
+    category = next((code for rx, code in CATEGORY if re.search(rx, norm(body))), None)
+    level = 2 if declined else max(undecided_level(history), 1 if category else 0)
+    missing = [turn.core_question(k) for k, f in (("city", "city"), ("own_funds", "own_funds_rub")) if state[f] is None]
+    if level == 0:
+        return {"type": "questions", "text": UNDECIDED_TEXT, "questions": [CATEGORY_QUESTION] + missing, "state": state}
+    if level == 1:
+        s = category or "bakery"
+        sample = {**state, "sphere": s}
+        vals = kn.values(sample)
+        place = kn.fact_values(sample, "places")
+        fact = kn.phrase(f"places_{place['_kind']}", turn.key, turn.n, {**vals, **place}) if place else None
+        city = f" {vals['in_city']}" if "in_city" in vals and not fact else ""  # в факте город уже назван
+        head = f"Например, {kn.SPHERE_NOMN[s]}{city}."
+        question = {"id": "sphere", "text": EXAMPLE_QUESTION.format(acc=SPHERE_ACC[s]), "kind": "choice",
+                    "options": ["Да, давайте", "Нет, другой бизнес"]}
+        return {"type": "questions", "text": kn.join([head, fact, kn.phrase(f"{s}_tip", turn.key, turn.n, vals)]),
+                "questions": [question] + missing, "state": state}
+    return {"type": "questions", "text": PICK_TEXT, "questions": PICK_QUESTIONS, "state": state}
+
+
 class Turn:
     """Ключ диалога и номер реплики: от них зависит выбор варианта фразы (knowledge.phrase)."""
 
@@ -173,7 +231,7 @@ def asked_context(prev: dict, history: list) -> dict:
     if last is None:
         return ctx
     a = norm(last)
-    m = PROPOSAL_RX.search(a)
+    m = PROPOSAL_RX.search(a) or EXAMPLE_RX.search(a)
     if m:
         ctx["proposal"] = next((k for k, v in SPHERE_ACC.items() if norm(v) == m.group(1).strip()), None)
         ctx["proposed"] = True
@@ -203,6 +261,10 @@ def strip_our_questions(message: str) -> str:
         for q in core_strip():
             t = t.replace(q, " ")
         t = re.sub(r"ближе всего по расчету — .+?\?", " ", t)
+        # Кнопки на «не знаю»: в вопросе «Посчитаем для примера пекарню? Нет, другой бизнес» сфера — не ответ (замечание Саши).
+        t = EXAMPLE_RX.sub(" ", t)
+        for q in UNDECIDED_QUESTIONS:
+            t = t.replace(q, " ")
         lines.append(re.sub(r"\s+", " ", t).strip())
     return "\n".join(lines)
 
@@ -215,8 +277,9 @@ def _message(kind: str, prev: dict, turn: Turn) -> dict:
 
 
 def competition(state: dict, history: list, turn: Turn) -> str | None:
-    """Факт о конкуренции из базы — один раз за диалог, когда известны сфера и город."""
-    if kn.said_competition(history):
+    """Факт о конкуренции из базы — один раз за диалог, когда известны сфера и город. Пример сферы на «не знаю»
+    (тоже со ссылкой на OpenStreetMap) не в счёт: он был про другую сферу."""
+    if kn.said_competition([h for h in history if "посчитаем для примера" not in norm(h["content"])]):
         return None
     facts = kn.fact_values(state, "venues")
     return kn.phrase("city_competition", turn.key, turn.n, {**kn.values(state), **facts}) if facts else None
@@ -262,6 +325,11 @@ def respond(request: dict) -> dict:
     # consult.request.answers.json), даже если бэкенд положил в history только вступительный текст.
     if any(norm(t) in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())):
         ctx["template"] = ctx["template_last"] = True
+    # То же для примера сферы: «Посчитаем для примера пекарню? Да, давайте» — ответ на пример, даже без него в history.
+    example = EXAMPLE_RX.search(raw)
+    if example and not ctx["proposed"]:
+        ctx["proposal"] = next((k for k, v in SPHERE_ACC.items() if norm(v) == example.group(1).strip()), None)
+        ctx["proposed"] = True
 
     if ex.ROLE_CHANGE.search(raw):
         return _message("role", prev, turn)
@@ -310,10 +378,15 @@ def respond(request: dict) -> dict:
     # Ответ на вопрос об опыте — только если его задали в последней реплике (правило 9).
     last_assistant = [h for h in history if h["role"] == "assistant"][-1:]
     experience = experience_answer(message) if experience_asked(last_assistant) else None  # после исправления опечаток
-    # Голое «нет» на наш основной вопрос (не про деньги) — отказ ответить, а не «не по теме»: спросим снова.
-    bare_no = bool(ctx["core"]) and bool(re.fullmatch(r"(нет|нету|неа)", body.strip(" .!,")))
+    # «Не знаю», «что-то прибыльное», выбор категории или «нет» на пример сферы — пока сферы нет (бета-тест 1).
+    last_text = norm(last_assistant[0]["content"]) if last_assistant else ""
+    example_declined = confirm is False and bool(EXAMPLE_RX.search(last_text) or example)
+    undecided = prev.get("sphere") is None and not (sphere or proposal or unknown or confirm) and (
+        is_undecided(body) or any(re.search(rx, norm(body)) for rx, _ in CATEGORY) or example_declined)
+    # Голое «нет» на наш вопрос (основной не про деньги или анкеты) — отказ ответить, а не «не по теме».
+    bare_no = bool(ctx["core"] or ctx["template_last"]) and bool(re.fullmatch(r"(нет|нету|неа)", body.strip(" .!,")))
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
-                       experience is not None, bare_no,
+                       experience is not None, bare_no, undecided,
                        correction and history, ex.SKIP.search(body), ex.SUMS_QUESTION.search(body), ex.BUSINESS_WORDS.search(body)])
     if not informative:
         return _message("greeting" if ex.is_greeting(message) else "offtopic", prev, turn)
@@ -333,6 +406,8 @@ def respond(request: dict) -> dict:
         state["experience"] = experience
 
     # --- ответ ---
+    if undecided and state["sphere"] is None:
+        return undecided_reply(state, history, body, turn, declined=example_declined)
     if state["sphere"] is None and (proposal or unknown or confirm is False):
         questions = []
         if proposal:

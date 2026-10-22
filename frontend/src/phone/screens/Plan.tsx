@@ -119,6 +119,15 @@ export default function PlanScreen() {
           ))}
         </ul>
       </Card>
+      {p.tax_note && (
+        <Card delay={5} span={12}>
+          <SectionTitle>Налоги</SectionTitle>
+          <p className="text-[14px] leading-relaxed text-muted">{p.tax_note.text}</p>
+          <p className="mt-2 text-[12px] text-muted">
+            Источники: {p.tax_note.sources.map((s, i) => <span key={s.url}>{i > 0 && '; '}<a href={s.url} target="_blank" rel="noreferrer" className="underline decoration-white/20 underline-offset-2 hover:text-text">{s.title}</a></span>)}. Проверено {new Date(p.tax_note.checked_at).toLocaleDateString('ru-RU')}.
+          </p>
+        </Card>
+      )}
     </Screen>
   )
 }

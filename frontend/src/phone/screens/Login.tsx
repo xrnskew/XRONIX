@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react'
 import { Button, Conveyor, Logo, Wide } from '../ui'
 import { useCabinet } from '../CabinetContext'
-import ForgotPassword from './ForgotPassword'
 import { ApiError, USE_MOCKS } from '../../api'
 import { DEMO_ANALYST, DEMO_CLIENT, DEMO_PASSWORD } from '../../api/demoAccounts'
 
@@ -22,7 +21,6 @@ export default function Login() {
   const [pass, setPass] = useState(USE_MOCKS ? DEMO_PASSWORD : '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-  const [forgot, setForgot] = useState(false)
   const reg = mode === 'register'
   const conveyorOn = useContext(Conveyor) // рабочая версия /app; в телефоне на презентации панели демо-доступа нет
   const demo = (e: string) => { setError(null); setBusy(true); signIn(e, DEMO_PASSWORD).catch((err) => { setError(err instanceof ApiError ? err.message : 'Не удалось войти. Попробуйте ещё раз.'); setBusy(false) }) }
@@ -43,7 +41,6 @@ export default function Login() {
     }
   }
 
-  if (forgot) return <ForgotPassword onBack={() => setForgot(false)} />
 
   return (
     <form className={wide ? 'w-full' : 'relative flex min-h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
@@ -82,7 +79,6 @@ export default function Login() {
         <button type="button" className="h-10 w-full text-center text-[14px] text-muted" onClick={() => { setMode(reg ? 'login' : 'register'); setError(null) }}>
           {reg ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
         </button>
-        {!reg && <button type="button" className="h-10 w-full text-[14px] text-muted" onClick={() => setForgot(true)}>Забыли пароль?</button>}
         {!reg && conveyorOn && (
           <div className="rounded-2xl bg-white/[.04] p-4 ring-1 ring-white/5">
             <div className="text-[13px] text-muted">Демо-доступ: войти одним нажатием</div>

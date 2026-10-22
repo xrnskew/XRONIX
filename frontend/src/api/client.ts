@@ -53,4 +53,7 @@ export async function request<T>(method: string, path: string, body?: unknown, t
 }
 
 // Текст ошибки для человека: сообщение сервера или общее «попробуйте ещё раз»
-export const errorText = (e: unknown) => (e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.')
+export const errorText = (e: unknown) => {
+  if (e instanceof ApiError && e.code === 'RATE_LIMITED') return 'Вы пишете слишком часто, чат на минуту перестал принимать сообщения. Подождите немного и нажмите «Повторить».'
+  return e instanceof ApiError ? e.message : 'Что-то пошло не так. Попробуйте ещё раз.'
+}
