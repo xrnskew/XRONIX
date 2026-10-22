@@ -133,6 +133,7 @@ PICK_QUESTIONS = [{"id": "sphere", "text": "Общепит или торговл
                   {"id": "sphere_services", "text": "Или услуги?", "kind": "choice",  # у choice не больше 5 вариантов
                    "options": ["Автомойка", "Салон красоты", "Пункт выдачи заказов"]}]
 UNDECIDED_MARKS = ("давайте подберем вместе", "посчитаем для примера", "общепит или торговля?")
+UNDECIDED_QUESTIONS = [norm(q["text"]) for q in [CATEGORY_QUESTION] + PICK_QUESTIONS]
 
 
 def undecided_level(history: list) -> int:
@@ -260,6 +261,10 @@ def strip_our_questions(message: str) -> str:
         for q in core_strip():
             t = t.replace(q, " ")
         t = re.sub(r"ближе всего по расчету — .+?\?", " ", t)
+        # Кнопки на «не знаю»: в вопросе «Посчитаем для примера пекарню? Нет, другой бизнес» сфера — не ответ (замечание Саши).
+        t = EXAMPLE_RX.sub(" ", t)
+        for q in UNDECIDED_QUESTIONS:
+            t = t.replace(q, " ")
         lines.append(re.sub(r"\s+", " ", t).strip())
     return "\n".join(lines)
 
@@ -320,6 +325,11 @@ def respond(request: dict) -> dict:
     # consult.request.answers.json), даже если бэкенд положил в history только вступительный текст.
     if any(norm(t) in raw for t in list(TEMPLATE_QUESTION_TEXT.values()) + list(CUSTOMERS_TEXT.values())):
         ctx["template"] = ctx["template_last"] = True
+    # То же для примера сферы: «Посчитаем для примера пекарню? Да, давайте» — ответ на пример, даже без него в history.
+    example = EXAMPLE_RX.search(raw)
+    if example and not ctx["proposed"]:
+        ctx["proposal"] = next((k for k, v in SPHERE_ACC.items() if norm(v) == example.group(1).strip()), None)
+        ctx["proposed"] = True
 
     if ex.ROLE_CHANGE.search(raw):
         return _message("role", prev, turn)
@@ -370,7 +380,7 @@ def respond(request: dict) -> dict:
     experience = experience_answer(message) if experience_asked(last_assistant) else None  # после исправления опечаток
     # «Не знаю», «что-то прибыльное», выбор категории или «нет» на пример сферы — пока сферы нет (бета-тест 1).
     last_text = norm(last_assistant[0]["content"]) if last_assistant else ""
-    example_declined = confirm is False and bool(EXAMPLE_RX.search(last_text))
+    example_declined = confirm is False and bool(EXAMPLE_RX.search(last_text) or example)
     undecided = prev.get("sphere") is None and not (sphere or proposal or unknown or confirm) and (
         is_undecided(body) or any(re.search(rx, norm(body)) for rx, _ in CATEGORY) or example_declined)
     # Голое «нет» на наш вопрос (основной не про деньги или анкеты) — отказ ответить, а не «не по теме».

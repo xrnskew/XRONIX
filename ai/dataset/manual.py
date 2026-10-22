@@ -241,6 +241,29 @@ UNDECIDED = [
     ("undecided", STEP3, "Или услуги? Автомойка", S(), "questions", S("car_wash"), []),
 ]
 
+
+def example_step(acc):
+    return STEP1 + [user("что-то прибыльное"), asst("Например.", f"Посчитаем для примера {acc}? Варианты: Да, давайте / "
+                                                    "Нет, другой бизнес", CITY, FUNDS)]
+
+
+# Замечание Саши к d9cffea: ответ кнопкой «вопрос? ответ» — сфера только из ответа, слово в вопросе её не ставит.
+ACC = {"coffee": "кофейню", "bakery": "пекарню", "car_wash": "автомойку", "clothing_store": "магазин одежды",
+       "beauty_salon": "салон красоты", "pickup_point": "пункт выдачи заказов"}
+EXAMPLE_ANSWERS = [
+    *[("example_decline", example_step(acc), f"Посчитаем для примера {acc}? {ans}", S(), "questions", S(), [])
+      for (code, acc), ans in zip(ACC.items(), ["Нет, другой бизнес", "нет", "не хочу", "другой", "Нет, другой бизнес", "нет"])],
+    ("example_accept", example_step(ACC["coffee"]), f"Посчитаем для примера {ACC['coffee']}? Да, давайте", S(), "questions",
+     S("coffee"), []),
+    ("example_accept", example_step(ACC["pickup_point"]), f"Посчитаем для примера {ACC['pickup_point']}? Да, давайте", S(),
+     "questions", S("pickup_point"), []),
+    ("example_accept", STEP1, "Что ближе? Услуги", S(), "questions", S(), []),  # категория — ещё не сфера
+    # Правило 9: ответ «Вопрос? Ответ» про опыт по-прежнему разбирается по ответу.
+    ("example_accept", [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, EXPERIENCE, AREA)],
+     f"{EXPERIENCE_Q['text']} Был свой бизнес", S("bakery", "Самара", 900000), "ready",
+     {**S("bakery", "Самара", 900000), "experience": "owner"}, [900000]),
+]
+
 # (категория, текст, purpose, sphere, city, amount_rub, term_months, has_collateral)
 NEED = [
     ("equipment", "Нужно 2 млн на новую кофемашину и гриндер для кофейни в Самаре", "equipment", "coffee", "Самара", 2000000, None, None),
@@ -301,7 +324,7 @@ def _gold_questions(st):
 
 def consult_rows():
     rows = []
-    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS + STAFF_ZERO + UNDECIDED]
+    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS + STAFF_ZERO + UNDECIDED + EXAMPLE_ANSWERS]
     for i, ((cat, hist, msg, before, kind, after, sums), source) in enumerate(cases):
         resp = {"type": kind, "text": NEUTRAL_TEXT, "state": after}
         if kind == "questions":
