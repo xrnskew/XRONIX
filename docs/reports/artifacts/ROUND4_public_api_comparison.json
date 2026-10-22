@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-10-22T01:35:38.855637+00:00",
+  "public_url": "https://xronix.ru/app",
+  "api_url": "https://api.xronix.ru",
+  "public_observed_ids": [
+    "2510ae40-910f-4bfa-8534-6e638679f3a2",
+    "34fa7893-40ba-449d-ad16-59496b89d0ea",
+    "6295414f-2321-42ff-adab-11d27d75a585",
+    "a400f47d-ffd2-4279-84c6-4c37108342c9",
+    "aa7afebf-f1ba-482a-86a3-bd13dd7bff68",
+    "b8252db4-d5f9-4e43-8d73-b56eef36e917",
+    "f439fd3a-6d70-4779-9875-19b34151f47f"
+  ],
+  "api_application_ids": [
+    "1f4a211f-b517-5c5a-b655-59255bdb2a30",
+    "20708c95-48d4-4f70-a5f1-1b6b4a62a306",
+    "240f450c-4889-5247-9ed5-2ac9a551d16e",
+    "2d539785-1fb5-5438-89f3-113a2320eb02",
+    "51ef83a6-2ce8-5a9d-a69c-fbd94c01356b",
+    "d3224b3a-7a8b-55f3-84ac-18a8e42cd388",
+    "d3ff63b2-3036-5af1-a116-2047d9301531",
+    "f13c9dbb-32bf-5f07-84f4-c9b1cb64eea6"
+  ],
+  "intersection": [],
+  "same_seeded_vector": true
+}

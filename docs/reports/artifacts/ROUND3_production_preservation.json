@@ -1,0 +1,20 @@
+{
+  "users": {
+    "preserved_rows": 18,
+    "current_rows": 18
+  },
+  "chats": {
+    "preserved_rows": 33,
+    "current_rows": 33
+  },
+  "messages": {
+    "preserved_rows": 134,
+    "current_rows": 134
+  },
+  "plans": {
+    "preserved_rows": 28,
+    "current_rows": 28
+  },
+  "env_unchanged": true,
+  "jwt_unchanged": true
+}

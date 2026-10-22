@@ -1,0 +1,40 @@
+time="2026-10-22T12:29:10+11:00" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+ ai  Built
+ backend  Built
+ integrations-mock  Built
+ web  Built
+ Network xronix-round4-20261021_default  Creating
+ Network xronix-round4-20261021_default  Created
+ Volume xronix-round4-20261021_backend-data-final  Creating
+ Volume xronix-round4-20261021_backend-data-final  Created
+ Container xronix-round4-20261021-ai-1  Creating
+ Container xronix-round4-20261021-integrations-mock-1  Creating
+ Container xronix-round4-20261021-ai-1  Created
+ Container xronix-round4-20261021-integrations-mock-1  Created
+ Container xronix-round4-20261021-backend-1  Creating
+ Container xronix-round4-20261021-backend-1  Created
+ Container xronix-round4-20261021-web-1  Creating
+ Container xronix-round4-20261021-web-1  Created
+ Container xronix-round4-20261021-ai-1  Starting
+ Container xronix-round4-20261021-integrations-mock-1  Starting
+ Container xronix-round4-20261021-ai-1  Started
+ Container xronix-round4-20261021-integrations-mock-1  Started
+ Container xronix-round4-20261021-integrations-mock-1  Waiting
+ Container xronix-round4-20261021-integrations-mock-1  Healthy
+ Container xronix-round4-20261021-backend-1  Starting
+ Container xronix-round4-20261021-backend-1  Started
+ Container xronix-round4-20261021-backend-1  Waiting
+ Container xronix-round4-20261021-backend-1  Healthy
+ Container xronix-round4-20261021-web-1  Starting
+ Container xronix-round4-20261021-web-1  Started
+ Container xronix-round4-20261021-backend-1  Waiting
+ Container xronix-round4-20261021-integrations-mock-1  Waiting
+ Container xronix-round4-20261021-ai-1  Waiting
+ Container xronix-round4-20261021-web-1  Waiting
+ Container xronix-round4-20261021-integrations-mock-1  Healthy
+ Container xronix-round4-20261021-backend-1  Healthy
+ Container xronix-round4-20261021-ai-1  Healthy
+ Container xronix-round4-20261021-web-1  Healthy
+real 115.11
+user 0.74
+sys 0.37

@@ -1,0 +1,519 @@
+{
+  "release": "01bbb4b",
+  "environment": "fresh third Docker volume; home server; AI enabled",
+  "summary": {
+    "totalRequests": 29,
+    "passedRequests": 29,
+    "failedRequests": 0,
+    "errorRequests": 0,
+    "skippedRequests": 0,
+    "skippedByBail": 0,
+    "totalAssertions": 0,
+    "passedAssertions": 0,
+    "failedAssertions": 0,
+    "totalTests": 58,
+    "passedTests": 58,
+    "failedTests": 0,
+    "totalPreRequestTests": 0,
+    "passedPreRequestTests": 0,
+    "failedPreRequestTests": 0,
+    "totalPostResponseTests": 0,
+    "passedPostResponseTests": 0,
+    "failedPostResponseTests": 0
+  },
+  "requests": [
+    {
+      "name": "Client login",
+      "status": "pass",
+      "runDuration": 3.219579416,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "hQhbDZTI0-HC2FI3ovfbR"
+        },
+        {
+          "description": "Client role",
+          "status": "pass",
+          "uid": "TOJ-UM_UE5baSTzba4Snu"
+        }
+      ]
+    },
+    {
+      "name": "North company",
+      "status": "pass",
+      "runDuration": 1.429579542,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "s5r9DfA5lSBEq60_gzBHR"
+        },
+        {
+          "description": "North company",
+          "status": "pass",
+          "uid": "lqSo9r4X13Kf0hM_Uwm_8"
+        }
+      ]
+    },
+    {
+      "name": "Match products",
+      "status": "pass",
+      "runDuration": 1.168890209,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "ZoqSvettU9DSApnvulFcK"
+        },
+        {
+          "description": "Fast eligible",
+          "status": "pass",
+          "uid": "bhjd-ZmzMkWc0jReRfGGt"
+        }
+      ]
+    },
+    {
+      "name": "Create application",
+      "status": "pass",
+      "runDuration": 1.380164417,
+      "tests": [
+        {
+          "description": "HTTP 201",
+          "status": "pass",
+          "uid": "mkQH0TsWE4HRaJvwNEdiw"
+        },
+        {
+          "description": "Draft",
+          "status": "pass",
+          "uid": "cAeXJhbgBxNAxuwN5ko-A"
+        }
+      ]
+    },
+    {
+      "name": "Submit",
+      "status": "pass",
+      "runDuration": 1.246756959,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "LzWLjXfF6Y3RYZcCoh-cq"
+        },
+        {
+          "description": "Submitted",
+          "status": "pass",
+          "uid": "2Ne1PVX0CdYXI99mtgoA9"
+        }
+      ]
+    },
+    {
+      "name": "Poll approval",
+      "status": "pass",
+      "runDuration": 1.214360458,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "7F1W1x2-MVLUF-7K3Y6Ea"
+        },
+        {
+          "description": "Approved or still processing within deadline",
+          "status": "pass",
+          "uid": "aZkI9NyuzDuEBKe2y8mws"
+        }
+      ]
+    },
+    {
+      "name": "Poll approval",
+      "status": "pass",
+      "runDuration": 1.459870209,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "Sou0yb7ITTGbWCN3ehedP"
+        },
+        {
+          "description": "Approved or still processing within deadline",
+          "status": "pass",
+          "uid": "eyhvCwSX9lXon6kQK5bvi"
+        }
+      ]
+    },
+    {
+      "name": "Poll approval",
+      "status": "pass",
+      "runDuration": 1.449276084,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "XCS5jmGAH1uqoFqr5-GbE"
+        },
+        {
+          "description": "Approved or still processing within deadline",
+          "status": "pass",
+          "uid": "Q2h-eUgIWwe6ifhwbE4w2"
+        }
+      ]
+    },
+    {
+      "name": "Poll approval",
+      "status": "pass",
+      "runDuration": 1.226488375,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "JVwKKySmqvU1D2on_IOjM"
+        },
+        {
+          "description": "Approved or still processing within deadline",
+          "status": "pass",
+          "uid": "yodRPOA2rBkEHORdfsLgD"
+        }
+      ]
+    },
+    {
+      "name": "Poll approval",
+      "status": "pass",
+      "runDuration": 1.2834875829999999,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "xta3Bo2tHVUKl-liKbyGc"
+        },
+        {
+          "description": "Approved or still processing within deadline",
+          "status": "pass",
+          "uid": "ynAksj7WhtHRQ-ugHq2gi"
+        }
+      ]
+    },
+    {
+      "name": "Accept",
+      "status": "pass",
+      "runDuration": 1.586150709,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "ILUDTFK5Z0c-625wTVjRP"
+        },
+        {
+          "description": "Signing",
+          "status": "pass",
+          "uid": "XGkRQcereqcZRx4Mz85cE"
+        }
+      ]
+    },
+    {
+      "name": "Sign",
+      "status": "pass",
+      "runDuration": 1.289646625,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "LchJ_pxdV5_oWnlXCJeld"
+        },
+        {
+          "description": "Funded",
+          "status": "pass",
+          "uid": "4x2VxMXJ3rWZclGGfMkDR"
+        }
+      ]
+    },
+    {
+      "name": "Analyst login",
+      "status": "pass",
+      "runDuration": 2.052376375,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "FtEiRXKa6Lxkaq84v6COa"
+        },
+        {
+          "description": "Analyst role",
+          "status": "pass",
+          "uid": "-rtq_4d2WVKNFbq6iTns6"
+        }
+      ]
+    },
+    {
+      "name": "Vector queue",
+      "status": "pass",
+      "runDuration": 1.837285917,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "QxHpNuStTV-iNgPoGc-2v"
+        },
+        {
+          "description": "Vector in queue",
+          "status": "pass",
+          "uid": "eJq8qEwDDbw4gyUgvTUUh"
+        }
+      ]
+    },
+    {
+      "name": "Vector card",
+      "status": "pass",
+      "runDuration": 1.3894185000000001,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "lwjAcg4JqtfSHKDF_I7v6"
+        },
+        {
+          "description": "Checks available",
+          "status": "pass",
+          "uid": "-AEx2CsyYA4sKwIgNbaKH"
+        }
+      ]
+    },
+    {
+      "name": "Vector decision",
+      "status": "pass",
+      "runDuration": 1.316296042,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "by9aNsbgH_iAQ22gyP_57"
+        },
+        {
+          "description": "Counter offer by analyst",
+          "status": "pass",
+          "uid": "X4UKQttnnVbl-Da9jEngt"
+        }
+      ]
+    },
+    {
+      "name": "Client sees vector offer",
+      "status": "pass",
+      "runDuration": 1.221771791,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "91cs9FVoWkQyERGkPOh8F"
+        },
+        {
+          "description": "Offer visible to client",
+          "status": "pass",
+          "uid": "kmKPf0P8maLhIBHVG_jx7"
+        }
+      ]
+    },
+    {
+      "name": "Analyst stats",
+      "status": "pass",
+      "runDuration": 1.17833575,
+      "tests": [
+        {
+          "description": "HTTP 200",
+          "status": "pass",
+          "uid": "gYMMmuZ7YJmUJETSzvZE9"
+        },
+        {
+          "description": "Real durations and mixed decisions",
+          "status": "pass",
+          "uid": "rVhrURmFPvCqtcyTG9-Rk"
+        }
+      ]
+    },
+    {
+      "name": "Government guarantee match",
+      "status": "pass",
+      "runDuration": 1.380584291,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "VyyD0upnBJxscGn3hqRqu"
+        },
+        {
+          "description": "Only government guarantee fits 40m without collateral",
+          "status": "pass",
+          "uid": "3YzEdyY0cv_LKtc0kvtmx"
+        }
+      ]
+    },
+    {
+      "name": "Create government application",
+      "status": "pass",
+      "runDuration": 1.255390792,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "S_ER9ROIQW4t20-OhSTI1"
+        },
+        {
+          "description": "Unsecured government draft",
+          "status": "pass",
+          "uid": "g6onK1KFAwQgaxzoG-UxA"
+        }
+      ]
+    },
+    {
+      "name": "Submit government application",
+      "status": "pass",
+      "runDuration": 1.278463833,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "AcsDMCGJBlnubPerjhm-k"
+        },
+        {
+          "description": "Submitted",
+          "status": "pass",
+          "uid": "CuXp7WIXfZHVSW585AIec"
+        }
+      ]
+    },
+    {
+      "name": "Poll government review",
+      "status": "pass",
+      "runDuration": 1.354897834,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "ukSskxBpEZbFvDtHyrx0q"
+        },
+        {
+          "description": "Government application reaches analyst",
+          "status": "pass",
+          "uid": "_818xxTtNbefJxQe7I5cs"
+        }
+      ]
+    },
+    {
+      "name": "Poll government review",
+      "status": "pass",
+      "runDuration": 1.317583167,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "_dG4sURb3mYo-WS1VXhtb"
+        },
+        {
+          "description": "Government application reaches analyst",
+          "status": "pass",
+          "uid": "ypqG0_UCwLwIEGrtjP60x"
+        }
+      ]
+    },
+    {
+      "name": "Poll government review",
+      "status": "pass",
+      "runDuration": 1.3013965,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "5x9GuuVmya0sG8j-ErVJR"
+        },
+        {
+          "description": "Government application reaches analyst",
+          "status": "pass",
+          "uid": "25xN2xqMcU1FBS1NZI0xj"
+        }
+      ]
+    },
+    {
+      "name": "Poll government review",
+      "status": "pass",
+      "runDuration": 1.271559375,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "2ONjv2u1hvxAOZD1l97gL"
+        },
+        {
+          "description": "Government application reaches analyst",
+          "status": "pass",
+          "uid": "DKs6w61Zvh7GJBQlzifNe"
+        }
+      ]
+    },
+    {
+      "name": "Poll government review",
+      "status": "pass",
+      "runDuration": 1.470053416,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "hZOUybAZ-z_Vfwvz2_48s"
+        },
+        {
+          "description": "Government application reaches analyst",
+          "status": "pass",
+          "uid": "dQTA96g6EmDB3FfLekM9-"
+        }
+      ]
+    },
+    {
+      "name": "Government scoring",
+      "status": "pass",
+      "runDuration": 1.4020365,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "roSfMUyo494PeUJukwfq0"
+        },
+        {
+          "description": "MSP guarantee replaces collateral",
+          "status": "pass",
+          "uid": "0GTgsiR0RekBVcrnZSyP7"
+        }
+      ]
+    },
+    {
+      "name": "Government counter offer",
+      "status": "pass",
+      "runDuration": 1.371021583,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "M3RA3I88_nf9-mvqZcKLC"
+        },
+        {
+          "description": "Guarantee explained in offer",
+          "status": "pass",
+          "uid": "gtyR11uks_vTa6IsAK3a7"
+        }
+      ]
+    },
+    {
+      "name": "Client government offer",
+      "status": "pass",
+      "runDuration": 0.280021292,
+      "tests": [
+        {
+          "description": "HTTP status",
+          "status": "pass",
+          "uid": "p8SQUfyYprb7cQtQLGRjr"
+        },
+        {
+          "description": "Government offer visible to client",
+          "status": "pass",
+          "uid": "8360TOmzK-X8VE_OmEhdK"
+        }
+      ]
+    }
+  ]
+}
