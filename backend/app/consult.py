@@ -164,7 +164,11 @@ class Consult:
             state=copy.deepcopy(chat.consult_state) or dict(sphere=None,city=user.city,own_funds_rub=None,answers={})
             # Backend-only preference; never add fields to the AI state contract.
             refused=state.pop('credit_refused',False)
-            current=body.text+('' if not answers else '\n'+'\n'.join(a['question']+' '+a['answer'] for a in answers))
+            # Conditional examples in an assistant's funds question are not user facts.
+            # Keep the original question in history/UI, but use an unambiguous label here.
+            current=body.text+('' if not answers else '\n'+'\n'.join(
+                ('Сколько своих денег готовы вложить?' if a['question_id']=='own_funds' else a['question'])+' '+a['answer']
+                for a in answers))
             preferences=dict(history=[dict(role='user',content='без кредита')] if refused else [],message=current)
             refused=planning.credit_refused(preferences)
             # Bound history/current text to the existing service request schema.
