@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { conveyor } from '../../api/conveyor'
 import type { ApplicationListItem, FeedItem } from '../../types/conveyor'
 import { rub } from '../../lib/format'
-import { Card, Screen, Skeleton } from '../ui'
+import { Card, EmptyState, Screen, Skeleton } from '../ui'
 import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move, statusTone } from './parts'
 import { MiniTrack } from './Track'
 import { usePolling } from '../../lib/usePolling'
@@ -16,9 +16,9 @@ const GROUPS: { move: Move; title: string }[] = [
 
 const STRIPE: Record<string, string> = { ok: 'before:bg-ok', warn: 'before:bg-warn', bad: 'before:bg-accent', action: 'before:bg-accent-soft', bank: 'before:bg-steel/70', muted: 'before:bg-white/15' }
 
-function AppCard({ a }: { a: ApplicationListItem }) {
+function AppCard({ a, i }: { a: ApplicationListItem; i: number }) {
   return (
-    <Link to={`/applications/${a.id}`} data-span={6} className={`card-ring group relative block overflow-hidden rounded-[22px] bg-surface p-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${STRIPE[statusTone(a.status)]}  transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[.99] sm:p-5`}>
+    <Link to={`/applications/${a.id}`} data-span={6} style={{ '--i': i } as React.CSSProperties} className={`stagger card-ring group relative block overflow-hidden rounded-[22px] bg-surface p-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${STRIPE[statusTone(a.status)]}  transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[.99] sm:p-5`}>
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
         <span className="whitespace-nowrap text-[12px] text-muted tabular-nums">{a.number}</span>
         <StatusBadge status={a.status} title={a.status_title} />
@@ -47,22 +47,21 @@ export function Applications() {
       {!items && !error && <Skeleton />}
       {items?.length === 0 && (
         <Card span={12}>
-          <p className="text-[16px] font-semibold">Заявок пока нет</p>
-          <p className="mt-1 text-[14px] text-muted">Ещё выбираете бизнес — расскажите об идее в чате, посчитаем план и подберём кредит. Бизнес уже есть — укажите ИНН компании и подайте заявку.</p>
-          <div className="mt-4 flex flex-wrap gap-3">
+          <EmptyState icon="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h4" title="Заявок пока нет" text="Ещё выбираете бизнес — расскажите об идее в чате, посчитаем план и подберём кредит. Бизнес уже есть — укажите ИНН компании и подайте заявку.">
             <Link to="/chat" className={`${primaryBtn} inline-flex items-center`}>Подобрать бизнес</Link>
             <Link to="/new" className={`${ghostBtn} inline-flex items-center`}>Новая заявка</Link>
-          </div>
+          </EmptyState>
         </Card>
       )}
-      {items && items.length > 0 && GROUPS.map((g) => {
+      {items && items.length > 0 && GROUPS.map((g, gi) => {
+        const before = GROUPS.slice(0, gi).reduce((n, h) => n + items.filter((a) => whoseMove(a.status) === h.move).length, 0)
         const list = items.filter((a) => whoseMove(a.status) === g.move).sort((x, y) => y.updated_at.localeCompare(x.updated_at))
         if (!list.length) return null
         return [
           <h2 key={g.move} className="flex items-baseline gap-2 pt-2 text-[15px] font-semibold first:pt-0">
             {g.title}<span className="text-[13px] font-normal text-muted tabular-nums">{list.length}</span>
           </h2>,
-          ...list.map((a) => <AppCard key={a.id} a={a} />),
+          ...list.map((a, n) => <AppCard key={a.id} a={a} i={before + n} />),
         ]
       })}
     </Screen>
@@ -88,7 +87,7 @@ function byDay(items: FeedItem[]) {
 }
 const time = (iso: string) => new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
 
-function FeedRow({ f }: { f: FeedItem }) {
+function FeedRow({ f, i }: { f: FeedItem; i: number }) {
   const k = KIND[f.kind] ?? KIND.status_change
   const body = (
     <div className="flex gap-3.5 px-4 py-3.5 sm:px-5">
@@ -106,7 +105,7 @@ function FeedRow({ f }: { f: FeedItem }) {
       </div>
     </div>
   )
-  return <li>{f.application_id ? <Link to={`/applications/${f.application_id}`} className="block transition-colors hover:bg-white/[.03]">{body}</Link> : body}</li>
+  return <li className="stagger" style={{ '--i': i } as React.CSSProperties}>{f.application_id ? <Link to={`/applications/${f.application_id}`} className="block transition-colors hover:bg-white/[.03]">{body}</Link> : body}</li>
 }
 
 export function Feed() {
@@ -121,12 +120,12 @@ export function Feed() {
   return (
     <Screen title="Лента" sub="События по заявкам и подсказки для вашего бизнеса">
       {!items && <Skeleton />}
-      {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">Здесь появятся новости по вашим заявкам: решения банка, запросы данных, подсказки.</p></Card>}
+      {items?.length === 0 && <Card span={12}><EmptyState icon="M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" title="Пока тихо" text="Здесь появятся новости по вашим заявкам: решения банка, запросы данных, подсказки." /></Card>}
       {items && byDay(items).map(([day, list]) => (
         <section key={day} data-span={12}>
           <h2 className="mb-2 px-1 text-[13px] font-medium text-muted">{day}</h2>
           <ul className="card-ring divide-y divide-white/5 overflow-hidden rounded-[22px] bg-surface">
-            {list.map((f) => <FeedRow key={f.id} f={f} />)}
+            {list.map((f, n) => <FeedRow key={f.id} f={f} i={n} />)}
           </ul>
         </section>
       ))}

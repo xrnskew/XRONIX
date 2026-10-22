@@ -53,8 +53,8 @@ export const Button = ({ children, onClick, variant = 'primary', disabled }: { c
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] disabled:opacity-40 ${
-      variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep' : 'bg-surface-2 text-text active:bg-surface-3'
+    className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] ${
+      variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep disabled:bg-surface-3 disabled:text-text/60 disabled:shadow-none' : 'bg-surface-2 text-text active:bg-surface-3 disabled:opacity-40'
     }`}
   >
     {children}
@@ -98,4 +98,14 @@ export const Skeleton = () => (
 // Контурная иконка 24×24 одним путём: разделы меню и кнопки в шапке
 export const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>
+)
+
+// Пустое состояние: иконка, что здесь будет и главное действие (кнопки передаются детьми)
+export const EmptyState = ({ icon, title, text, children }: { icon: string; title: string; text: string; children?: ReactNode }) => (
+  <div className="flex flex-col items-center px-2 py-8 text-center">
+    <span className="pop flex h-16 w-16 items-center justify-center rounded-full bg-accent/12 text-accent-soft ring-1 ring-accent/25" aria-hidden><Icon d={icon} size={28} /></span>
+    <p className="mt-4 text-[17px] font-semibold">{title}</p>
+    <p className="mt-1 max-w-[360px] text-[14px] leading-snug text-muted">{text}</p>
+    {children && <div className="mt-5 flex flex-wrap justify-center gap-3">{children}</div>}
+  </div>
 )

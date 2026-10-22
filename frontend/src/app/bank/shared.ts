@@ -7,3 +7,6 @@ export const declineReasons = dict.decline_reasons as Record<DeclineReason, { te
 export const infoKinds = dict.info_request_kinds as Record<InfoRequestKind, { title: string; text: string }>
 
 export const gradeTone = (g: string | null) => (g === 'A' ? 'text-ok' : g === 'B' ? 'text-text' : g === 'C' ? 'text-warn' : g === 'D' ? 'text-accent' : 'text-muted')
+
+// Тон карточки по смыслу: A — хорошо, C — внимание, D — плохо, B и «нет класса» — нейтрально (классы `tone-*` в index.css)
+export const gradeToneClass = (g: string | null) => (g === 'A' ? 'tone-ok' : g === 'C' ? 'tone-warn' : g === 'D' ? 'tone-bad' : 'tone-muted')

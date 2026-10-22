@@ -26,7 +26,7 @@ export default function ResetPassword({ token }: { token: string }) {
           <label className="block">Новый пароль<input className="mt-1 h-12 w-full rounded-xl bg-surface-2 px-4" type="password" autoComplete="new-password" required minLength={8} maxLength={1024} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
           <label className="block">Повторите пароль<input className="mt-1 h-12 w-full rounded-xl bg-surface-2 px-4" type="password" autoComplete="new-password" required minLength={8} maxLength={1024} value={confirm} onChange={(e) => setConfirm(e.target.value)} /></label>
           {error && <p role="alert" className="text-accent">{error}</p>}
-          <button disabled={busy} className="h-12 w-full rounded-xl bg-fill font-semibold text-white disabled:opacity-35">{busy ? 'Сохраняем…' : 'Сохранить пароль'}</button>
+          <button disabled={busy} className="h-12 w-full rounded-xl bg-fill font-semibold text-white disabled:bg-surface-3 disabled:text-text/60">{busy ? 'Сохраняем…' : 'Сохранить пароль'}</button>
           <a href="/app" className="block text-center text-[14px] text-muted">Вернуться ко входу</a>
         </form>}
     </div>

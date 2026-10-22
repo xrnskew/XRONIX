@@ -2,7 +2,7 @@ import type { BudgetItem } from '../../types/plan'
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { Suspense, lazy, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Wide, Conveyor } from '../ui'
+import { Badge, Button, Card, EmptyState, Screen, SectionTitle, Skeleton, Wide, Conveyor } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { rub, shortParts } from '../../lib/format'
 import { useCountUp } from '../../lib/useCountUp'
@@ -32,10 +32,11 @@ export default function PlanScreen() {
   if (!plan)
     return (
       <Screen title="План">
-        <Card className="space-y-3 py-8 text-center">
-          <p className="mx-auto max-w-[240px] text-[15px] leading-snug text-muted">Плана пока нет. Опишите идею в чате, и ИИ соберёт его.</p>
-          <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
-          {USE_MOCKS && <Button variant="ghost" onClick={showDemoPlan}>Показать пример</Button>}
+        <Card>
+          <EmptyState icon="M4 19V9M10 19V5M16 19v-7M22 19H2" title="Плана пока нет" text="Опишите идею в чате, и ИИ соберёт план: шаги, деньги и кредит, который бизнес потянет.">
+            <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
+            {USE_MOCKS && <Button variant="ghost" onClick={showDemoPlan}>Показать пример</Button>}
+          </EmptyState>
         </Card>
       </Screen>
     )

@@ -46,7 +46,7 @@ export default function ProfileScreen() {
           <CityPicker quiet value={draft.city} onChange={(v) => set('city', v)} />
         </div>
         <div className="mt-4 flex items-center gap-3">
-          <button onClick={save} disabled={!dirty || state.kind === 'saving'} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white transition-opacity disabled:opacity-35">
+          <button onClick={save} disabled={!dirty || state.kind === 'saving'} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white transition-opacity disabled:bg-surface-3 disabled:text-text/60">
             {state.kind === 'saving' ? 'Сохраняем…' : 'Сохранить'}
           </button>
           <span role="status" className={`text-[13px] ${state.kind === 'error' ? 'text-accent' : 'text-ok'}`}>{state.kind === 'saved' ? 'Сохранено' : state.kind === 'error' ? state.text : ''}</span>
