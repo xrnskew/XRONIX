@@ -72,6 +72,28 @@ class Experience(unittest.TestCase):
         self.assertNotIn("experience", [q["id"] for q in r["questions"]])
         self.assertEqual(r["state"]["experience"], "employee")
 
+    def test_no_from_hints_and_own_funds_is_not_experience(self):
+        """«Нет» из подсказки ассистента или ответ про свои деньги — не ответ про опыт (критерий Ильи)."""
+        r, hist = self.first_round()
+        for msg in ["Сколько своих денег готовы вложить в запуск? Если своих нет, напишите «нет». 900 тысяч",
+                    "своих нет, считайте", "Нет, давайте лучше кофейню", "денег нет, площадь 40", "нет, не знаю"]:
+            with self.subTest(msg=msg):
+                out = self.consult(msg, r["state"], hist)
+                self.assertIsNone(out["state"].get("experience"))
+        # Тот же короткий «нет» в раунде без вопроса об опыте (про свои деньги) — тоже не опыт.
+        st = {**EMPTY, "sphere": "bakery", "city": "Самара"}
+        hist2 = [{"role": "user", "content": "Пекарня в Самаре"},
+                 {"role": "assistant", "content": "Уточню.\nСколько своих денег готовы вложить в запуск? Если своих нет, напишите «нет»."}]
+        out = self.consult("нет", st, hist2)
+        self.assertEqual((out["state"]["own_funds_rub"], out["state"].get("experience")), (0, None))
+
+    def test_new_chat_asks_again(self):
+        """Опыт — свойство бизнеса из этого диалога: новый чат спрашивает снова, старый ответ не переносится."""
+        r, hist = self.first_round()
+        self.consult("Был свой бизнес", r["state"], hist)
+        again = self.consult("Хочу автомойку в Казани, своих 2 млн", EMPTY)
+        self.assertEqual(again["questions"][0]["id"], "experience")
+
     def test_contract_example(self):
         ex = json.loads((CONTRACTS / "examples" / "consult.response.experience.json").read_text(encoding="utf-8"))
         r = self.consult("Хочу открыть кофейню в Казани, есть около 300 тысяч", EMPTY)
