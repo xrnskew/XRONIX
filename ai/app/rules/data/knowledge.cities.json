@@ -1,7 +1,7 @@
 {
  "comment": "Собрано knowledge/build.py из knowledge/raw. Население — справочник городов (2023), зарплата — Росстат, среднемесячная номинальная начисленная по региону, число заведений — OpenStreetMap (данные неполные, в тексте только «около N»). Пункты выдачи — shop=outpost, без постаматов.",
  "version": 1,
- "generated_at": "2026-10-21",
+ "generated_at": "2026-10-22",
  "sources": [
   {
    "id": "russia_cities",
@@ -23,6 +23,27 @@
    "url": "https://www.openstreetmap.org/copyright",
    "license": "ODbL 1.0",
    "retrieved_at": "2026-10-21"
+  },
+  {
+   "id": "rosstat_income",
+   "title": "Росстат",
+   "url": "https://rosstat.gov.ru/folder/13397",
+   "license": "открытые данные, со ссылкой на источник",
+   "retrieved_at": "2026-10-21"
+  },
+  {
+   "id": "rosstat_retail",
+   "title": "Росстат",
+   "url": "https://rosstat.gov.ru/statistics/roznichnayatorgovlya",
+   "license": "открытые данные, со ссылкой на источник",
+   "retrieved_at": "2026-10-21"
+  },
+  {
+   "id": "fns_rmsp",
+   "title": "ФНС",
+   "url": "https://www.nalog.gov.ru/opendata/7707329152-rsmp/",
+   "license": "открытые данные ФНС России",
+   "retrieved_at": "2026-10-22"
   }
  ],
  "cities": [
@@ -75,6 +96,70 @@
     "pickup_point": {
      "value": 7155,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 536,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 5300,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 495,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 165866,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 47345,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 768,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 1861,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 999,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 6441,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 12540,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -132,6 +217,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 264,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 1650,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 324,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 103838,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 43079,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 507,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 1116,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 449,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 3048,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 5769,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -183,6 +332,70 @@
     "pickup_point": {
      "value": 843,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 94,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 295,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 76,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 68111,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 32046,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 193,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 569,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 161,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1895,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1922,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -240,6 +453,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 60,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 392,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 88,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 75016,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 32153,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 128,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 319,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 128,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 2187,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1829,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -291,6 +568,70 @@
     "pickup_point": {
      "value": 1205,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 74,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 202,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 82,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 74504,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33700,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 108,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 307,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 97,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1419,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1176,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -348,6 +689,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 59,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 265,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 50,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 72320,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 34614,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 122,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 212,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 83,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 574,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 935,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -399,6 +804,70 @@
     "pickup_point": {
      "value": 609,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 104,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 138,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 64,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 55337,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 28656,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 93,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 306,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 105,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1128,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1105,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -456,6 +925,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 200,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 68989,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 26652,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 86,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 384,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 145,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1074,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1166,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -507,6 +1040,70 @@
     "pickup_point": {
      "value": 825,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 78,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 73,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 68,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 59390,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 31430,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 110,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 276,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 96,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 806,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1061,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -564,6 +1161,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 107,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 54,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54198,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 31626,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 103,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 328,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 98,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 933,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1216,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -615,6 +1276,70 @@
     "pickup_point": {
      "value": 824,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 70,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 64572,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 36231,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 137,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 384,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 104,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 940,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1227,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -672,6 +1397,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 126,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 261,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 54,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54959,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 25212,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 46,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 299,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 85,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1054,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 939,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -723,6 +1512,70 @@
     "pickup_point": {
      "value": 1110,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 239,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 77290,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 40154,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 175,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 565,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 170,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 1346,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1840,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -780,6 +1633,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 62937,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33636,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 57,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 227,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 111,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 615,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 807,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -831,6 +1748,70 @@
     "pickup_point": {
      "value": 586,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 87,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 353,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 61588,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27531,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 157,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 291,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 69,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 849,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 916,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -888,6 +1869,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 63,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 49124,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24277,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 64,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 212,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 70,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 610,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1248,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -939,6 +1984,70 @@
     "pickup_point": {
      "value": 509,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 42,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 50,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 45112,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 22734,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 48,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 206,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 59,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 661,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 716,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -996,6 +2105,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 99,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 90761,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33922,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 93,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 224,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 108,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 773,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 1248,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1047,6 +2220,70 @@
     "pickup_point": {
      "value": 356,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 52,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 95,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 59390,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 31430,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 55,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 166,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 594,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 520,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1104,6 +2341,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 56,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 165,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 50506,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23272,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 134,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 211,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 112,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 512,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 659,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1155,6 +2456,70 @@
     "pickup_point": {
      "value": 444,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 99,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 37,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 56979,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23485,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 63,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 161,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 666,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 585,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1212,6 +2577,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 43,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 51868,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23737,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 153,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 36,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 796,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 211,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1263,6 +2692,70 @@
     "pickup_point": {
      "value": 165,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 79559,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 36162,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 53,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 199,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 55,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 563,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 738,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1320,6 +2813,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 55,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 72,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 33,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 50044,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 21735,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 38,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 159,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 46,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 598,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 684,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1371,6 +2928,70 @@
     "pickup_point": {
      "value": 218,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 75,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 83,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 57429,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27613,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 214,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 76,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 773,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 575,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1428,6 +3049,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 140,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 74918,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 35114,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 211,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 79,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 621,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 747,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1479,6 +3164,70 @@
     "pickup_point": {
      "value": 408,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 77,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 57,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 61613,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 29309,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 40,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 121,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 52,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 449,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 733,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1536,6 +3285,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 54,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 53100,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23014,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 68,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 143,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 43,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 392,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 519,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1587,6 +3400,70 @@
     "pickup_point": {
      "value": 384,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 44,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 179,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 55620,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 26536,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 105,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 400,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 506,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1644,6 +3521,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 87,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 141,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 74504,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33700,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 161,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 30,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 744,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 446,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1695,6 +3636,70 @@
     "pickup_point": {
      "value": 282,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 44109,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 25531,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 219,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 60,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 546,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 496,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1752,6 +3757,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 50802,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24357,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 30,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 157,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 51,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 409,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 546,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1803,6 +3872,70 @@
     "pickup_point": {
      "value": 184,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 53100,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23014,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 85,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 34,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 365,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 407,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1860,6 +3993,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 105,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 55570,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27135,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 38,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 129,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 401,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 434,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -1911,6 +4108,70 @@
     "pickup_point": {
      "value": 431,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 76,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 21,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 111,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 47,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 366,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 710,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -1968,6 +4229,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 109,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 66,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 51380,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24448,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 124,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 34,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 428,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 445,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2019,6 +4344,70 @@
     "pickup_point": {
      "value": 279,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 19,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 44,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 47224,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 21430,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 98,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 30,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 755,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 537,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2076,6 +4465,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 62288,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 30759,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 82,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 29,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 403,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 377,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2127,6 +4580,70 @@
     "pickup_point": {
      "value": 311,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 41,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 58,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 62918,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27887,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 79,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 159,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 37,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 634,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 610,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2184,6 +4701,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 47649,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 21949,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 35,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 147,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 38,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 465,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 429,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2235,6 +4816,70 @@
     "pickup_point": {
      "value": 453,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 53,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 61103,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 30016,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 60,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 125,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 36,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 402,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 435,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2292,6 +4937,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 63,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 75,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 34,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 52441,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23707,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 62,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 80,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 399,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 420,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2343,6 +5052,70 @@
     "pickup_point": {
      "value": 450,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 77290,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 40154,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 102,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 266,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 56,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 934,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 874,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2400,6 +5173,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 56,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 44,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 58739,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27589,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 37,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 70,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 32,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 381,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 324,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2451,6 +5288,70 @@
     "pickup_point": {
      "value": 128,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 53579,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 26898,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 47,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 161,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 38,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 604,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 462,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2508,6 +5409,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 56791,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 29219,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 28,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 101,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 343,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 421,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2559,6 +5524,70 @@
     "pickup_point": {
      "value": 144,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 38,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 55337,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 28656,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 99,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 29,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 370,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 291,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2616,6 +5645,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 51,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 276,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 94008,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 30326,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 35,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 123,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 45,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 438,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 660,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2667,6 +5760,70 @@
     "pickup_point": {
      "value": 248,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 115,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 56285,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27655,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 30,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 75,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 24,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 389,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 370,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2724,6 +5881,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 55814,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 26571,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 76,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 25,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 401,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 269,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2775,6 +5996,70 @@
     "pickup_point": {
      "value": 95,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 74,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91767,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33500,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 48,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 162,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 498,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 372,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2832,6 +6117,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 56,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 52,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54156,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24876,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 27,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 83,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 354,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 381,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2883,6 +6232,70 @@
     "pickup_point": {
      "value": 213,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 245,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 66174,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 28459,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 43,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 102,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 341,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 380,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -2940,6 +6353,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 98,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 75016,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 32153,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 9,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 322,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 321,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -2991,6 +6468,70 @@
     "pickup_point": {
      "value": 258,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 116,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 60609,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24408,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 109,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 321,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 322,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3048,6 +6589,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 55,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 3,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 61370,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23138,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 148,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 37,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 553,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 477,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3099,6 +6704,70 @@
     "pickup_point": {
      "value": 84,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 46457,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 17237,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 6,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 88,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 391,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 76,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3156,6 +6825,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 37,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 49124,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24277,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 14,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 64,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 150,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 368,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3207,6 +6940,70 @@
     "pickup_point": {
      "value": 214,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 37,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 61414,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 25336,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 91,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 16,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 228,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 304,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3264,6 +7061,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 31,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 13,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 60,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 165,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 359,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3315,6 +7176,70 @@
     "pickup_point": {
      "value": 165,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 44143,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23810,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 112,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 399,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 328,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3372,6 +7297,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 39,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 60104,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23377,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 33,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 71,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 20,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 334,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 341,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3423,6 +7412,70 @@
     "pickup_point": {
      "value": 128,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 284,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 49110,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 21318,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 17,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 24,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 297,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 233,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3480,6 +7533,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 61,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 60104,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23377,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 70,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 33,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 248,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 207,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3531,6 +7648,70 @@
     "pickup_point": {
      "value": 219,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 63628,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 25852,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 54,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 235,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 231,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3588,6 +7769,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 125,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 47,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 52,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 76227,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 32852,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 58,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 12,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 251,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 348,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3639,6 +7884,70 @@
     "pickup_point": {
      "value": 164,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 0,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 44,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 47533,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23806,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 14,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 135,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 26,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 296,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 179,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3696,6 +8005,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 41,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 94008,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 30326,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 110,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 34,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 230,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 373,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3747,6 +8120,70 @@
     "pickup_point": {
      "value": 205,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 23,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 43497,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 20252,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 27,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 66,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 17,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 179,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 256,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3804,6 +8241,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54198,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 31626,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 61,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 11,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 227,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 238,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3855,6 +8356,70 @@
     "pickup_point": {
      "value": 170,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 17,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 43,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 24,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 97104,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33139,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 35,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 63,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 219,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 397,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -3912,6 +8477,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 27,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 139,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 58792,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27675,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 64,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 8,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 217,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 217,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -3963,6 +8592,70 @@
     "pickup_point": {
      "value": 219,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 77290,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 40154,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 110,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 38,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 284,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 371,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4020,6 +8713,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 45,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54683,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 25419,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 72,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 21,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 344,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 265,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4071,6 +8828,70 @@
     "pickup_point": {
      "value": 250,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 69,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 14,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 64,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 32,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 148,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 431,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4128,6 +8949,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 32,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 108,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 40,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 178,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 444,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4179,6 +9064,70 @@
     "pickup_point": {
      "value": 123,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 0,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 53963,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 29917,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 10,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 105,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 9,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 172,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 149,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4236,6 +9185,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 3,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 64572,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 36231,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 20,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 68,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 201,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 185,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4287,6 +9300,70 @@
     "pickup_point": {
      "value": 80,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 36,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 74504,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 33700,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 11,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 138,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 154,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4344,6 +9421,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 63,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 76564,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 35586,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 70,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 28,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 318,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 288,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4395,6 +9536,70 @@
     "pickup_point": {
      "value": 67,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 63,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 79559,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 36162,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 50,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 12,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 212,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 205,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4452,6 +9657,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 29,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 35,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 75024,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 31904,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 20,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 73,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 24,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 188,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 467,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4503,6 +9772,70 @@
     "pickup_point": {
      "value": 160,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 17,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 20,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 43,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 14,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 168,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 287,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4560,6 +9893,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 4,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 64572,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 36231,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 13,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 60,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 8,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 151,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 125,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4611,6 +10008,70 @@
     "pickup_point": {
      "value": 124,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 10,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 45112,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 22734,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 16,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 49,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 127,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 167,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4668,6 +10129,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 54913,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27364,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 15,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 171,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 209,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4719,6 +10244,70 @@
     "pickup_point": {
      "value": 350,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 48,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 24,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 88,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 42,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 245,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 545,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4776,6 +10365,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 12,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 57429,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27613,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 49,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 16,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 165,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 137,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4827,6 +10480,70 @@
     "pickup_point": {
      "value": 116,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 25,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 66174,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 28459,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 23,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 52,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 16,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 126,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 308,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4884,6 +10601,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 9,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 57429,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27613,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 12,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 74,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 16,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 245,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 127,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -4935,6 +10716,70 @@
     "pickup_point": {
      "value": 187,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 133,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 72478,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 27834,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 56,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 193,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 325,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -4992,6 +10837,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 72320,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 34614,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 18,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 43,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 12,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 180,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 207,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -5043,6 +10952,70 @@
     "pickup_point": {
      "value": 174,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 21,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 22,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 56229,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 28908,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 10,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 17,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 159,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 148,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -5100,6 +11073,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 28,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 30,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 18,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 50802,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24357,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 17,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 56,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 203,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 118,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -5151,6 +11188,70 @@
     "pickup_point": {
      "value": 450,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 26,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 46,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 6,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 91248,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42755,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 26,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 68,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 200,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 579,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -5208,6 +11309,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 5,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 15,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 77290,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 40154,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 8,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 177,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 260,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 140,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -5259,6 +11424,70 @@
     "pickup_point": {
      "value": 156,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 16,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 47225,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 24056,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 13,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 54,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 19,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 294,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 196,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }
@@ -5316,6 +11545,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 20,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 1,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 45112,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 22734,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 13,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 22,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 10,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 164,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 112,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -5370,6 +11663,70 @@
      "year": 2026,
      "scope": "city"
     }
+   },
+   "footfall": {
+    "malls": {
+     "value": 7,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 11,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 8,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 50506,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 23272,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 27,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 41,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 17,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 111,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 171,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    }
    }
   },
   {
@@ -5421,6 +11778,70 @@
     "pickup_point": {
      "value": 67,
      "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "footfall": {
+    "malls": {
+     "value": 49,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "business_centers": {
+     "value": 14,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    },
+    "universities": {
+     "value": 17,
+     "source": "osm",
+     "year": 2026,
+     "scope": "city"
+    }
+   },
+   "income_per_capita_rub": {
+    "value": 117212,
+    "source": "rosstat_income",
+    "year": 2025,
+    "scope": "region"
+   },
+   "retail_turnover_per_capita_rub": {
+    "value": 42226,
+    "source": "rosstat_retail",
+    "year": 2024,
+    "scope": "region"
+   },
+   "registered_businesses": {
+    "coffee": {
+     "value": 40,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "bakery": {
+     "value": 98,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "car_wash": {
+     "value": 31,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "clothing_store": {
+     "value": 277,
+     "source": "fns_rmsp",
+     "year": 2026,
+     "scope": "city"
+    },
+    "beauty_salon": {
+     "value": 341,
+     "source": "fns_rmsp",
      "year": 2026,
      "scope": "city"
     }

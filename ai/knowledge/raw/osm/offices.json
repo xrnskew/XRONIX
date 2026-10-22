@@ -1,0 +1,1902 @@
+{
+ "Москва": {
+  "query": "[out:json][timeout:280];\narea(3600102269)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Москва",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "4096",
+     "relations": "1196",
+     "areas": "0",
+     "total": "5300"
+    }
+   }
+  ],
+  "seconds": 89.6
+ },
+ "Санкт-Петербург": {
+  "query": "[out:json][timeout:280];\narea(3600337422)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Санкт-Петербург",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "22",
+     "ways": "1382",
+     "relations": "246",
+     "areas": "0",
+     "total": "1650"
+    }
+   }
+  ],
+  "seconds": 61.9
+ },
+ "Новосибирск": {
+  "query": "[out:json][timeout:280];\narea(3601751445)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Новосибирск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "285",
+     "relations": "10",
+     "areas": "0",
+     "total": "295"
+    }
+   }
+  ],
+  "seconds": 60.3
+ },
+ "Екатеринбург": {
+  "query": "[out:json][timeout:280];\narea(3601104258)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Екатеринбург",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "369",
+     "relations": "17",
+     "areas": "0",
+     "total": "392"
+    }
+   }
+  ],
+  "seconds": 66.7
+ },
+ "Казань": {
+  "query": "[out:json][timeout:280];\narea(3600367666)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Казань",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "194",
+     "relations": "7",
+     "areas": "0",
+     "total": "202"
+    }
+   }
+  ],
+  "seconds": 41.6
+ },
+ "Нижний Новгород": {
+  "query": "[out:json][timeout:280];\narea(3600335495)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Нижний Новгород",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "143",
+     "relations": "122",
+     "areas": "0",
+     "total": "265"
+    }
+   }
+  ],
+  "seconds": 52.3
+ },
+ "Челябинск": {
+  "query": "[out:json][timeout:280];\narea(3600398407)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Челябинский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "136",
+     "relations": "1",
+     "areas": "0",
+     "total": "138"
+    }
+   }
+  ],
+  "seconds": 57.8
+ },
+ "Красноярск": {
+  "query": "[out:json][timeout:280];\narea(3601157393)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Красноярск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "189",
+     "relations": "6",
+     "areas": "0",
+     "total": "200"
+    }
+   }
+  ],
+  "seconds": 55.3
+ },
+ "Самара": {
+  "query": "[out:json][timeout:280];\narea(3600287507)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Самара",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "67",
+     "relations": "6",
+     "areas": "0",
+     "total": "73"
+    }
+   }
+  ],
+  "seconds": 31.5
+ },
+ "Уфа": {
+  "query": "[out:json][timeout:280];\narea(3600398551)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Уфа",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "103",
+     "relations": "4",
+     "areas": "0",
+     "total": "107"
+    }
+   }
+  ],
+  "seconds": 31.2
+ },
+ "Ростов-на-Дону": {
+  "query": "[out:json][timeout:280];\narea(3600964255)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Ростов-на-Дону",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "52",
+     "relations": "16",
+     "areas": "0",
+     "total": "69"
+    }
+   }
+  ],
+  "seconds": 27.7
+ },
+ "Омск": {
+  "query": "[out:json][timeout:280];\narea(3601558108)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Омск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "254",
+     "relations": "5",
+     "areas": "0",
+     "total": "261"
+    }
+   }
+  ],
+  "seconds": 54.3
+ },
+ "Краснодар": {
+  "query": "[out:json][timeout:280];\narea(3600269701)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Краснодар",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "231",
+     "relations": "3",
+     "areas": "0",
+     "total": "239"
+    }
+   }
+  ],
+  "seconds": 42.4
+ },
+ "Воронеж": {
+  "query": "[out:json][timeout:280];\narea(3601144811)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Воронеж",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "58",
+     "relations": "2",
+     "areas": "0",
+     "total": "61"
+    }
+   }
+  ],
+  "seconds": 49.8
+ },
+ "Волгоград": {
+  "query": "[out:json][timeout:280];\narea(3601099982)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Волгоград",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "49",
+     "relations": "0",
+     "areas": "0",
+     "total": "49"
+    }
+   }
+  ],
+  "seconds": 80.2
+ },
+ "Саратов": {
+  "query": "[out:json][timeout:280];\narea(3602725551)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Саратов",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "44",
+     "relations": "6",
+     "areas": "0",
+     "total": "50"
+    }
+   }
+  ],
+  "seconds": 46.6
+ },
+ "Тюмень": {
+  "query": "[out:json][timeout:280];\narea(3600897992)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Тюмень",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "95",
+     "relations": "1",
+     "areas": "0",
+     "total": "99"
+    }
+   }
+  ],
+  "seconds": 48.8
+ },
+ "Тольятти": {
+  "query": "[out:json][timeout:280];\narea(3601345135)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Тольятти",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "94",
+     "relations": "0",
+     "areas": "0",
+     "total": "95"
+    }
+   }
+  ],
+  "seconds": 33.1
+ },
+ "Барнаул": {
+  "query": "[out:json][timeout:280];\narea(3601440772)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Барнаул",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "164",
+     "relations": "1",
+     "areas": "0",
+     "total": "165"
+    }
+   }
+  ],
+  "seconds": 80.5
+ },
+ "Ижевск": {
+  "query": "[out:json][timeout:280];\narea(3600954515)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Ижевск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "23",
+     "relations": "0",
+     "areas": "0",
+     "total": "24"
+    }
+   }
+  ],
+  "seconds": 54.2
+ },
+ "Махачкала": {
+  "query": "[out:json][timeout:280];\narea(3601963798)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Махачкала",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "9",
+     "relations": "1",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 50.4
+ },
+ "Хабаровск": {
+  "query": "[out:json][timeout:280];\narea(3601782064)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Хабаровск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "46",
+     "relations": "1",
+     "areas": "0",
+     "total": "48"
+    }
+   }
+  ],
+  "seconds": 53.9
+ },
+ "Ульяновск": {
+  "query": "[out:json][timeout:280];\narea(3601760251)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Ульяновск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "67",
+     "relations": "3",
+     "areas": "0",
+     "total": "72"
+    }
+   }
+  ],
+  "seconds": 48.6
+ },
+ "Иркутск": {
+  "query": "[out:json][timeout:280];\narea(3601430613)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Иркутск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "81",
+     "relations": "0",
+     "areas": "0",
+     "total": "83"
+    }
+   }
+  ],
+  "seconds": 39.6
+ },
+ "Владивосток": {
+  "query": "[out:json][timeout:280];\narea(3601647394)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Владивостокский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "20",
+     "relations": "2",
+     "areas": "0",
+     "total": "23"
+    }
+   }
+  ],
+  "seconds": 55.2
+ },
+ "Ярославль": {
+  "query": "[out:json][timeout:280];\narea(3601701436)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Ярославль",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "57",
+     "relations": "0",
+     "areas": "0",
+     "total": "57"
+    }
+   }
+  ],
+  "seconds": 75.9
+ },
+ "Кемерово": {
+  "query": "[out:json][timeout:280];\narea(3601153257)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Кемеровский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "54",
+     "relations": "0",
+     "areas": "0",
+     "total": "54"
+    }
+   }
+  ],
+  "seconds": 67.0
+ },
+ "Томск": {
+  "query": "[out:json][timeout:280];\narea(3601591241)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Томск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "169",
+     "relations": "7",
+     "areas": "0",
+     "total": "179"
+    }
+   }
+  ],
+  "seconds": 49.2
+ },
+ "Набережные Челны": {
+  "query": "[out:json][timeout:280];\narea(3600367728)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Набережные Челны",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "124",
+     "relations": "17",
+     "areas": "0",
+     "total": "141"
+    }
+   }
+  ],
+  "seconds": 18.9
+ },
+ "Ставрополь": {
+  "query": "[out:json][timeout:280];\narea(3601030059)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Ставрополь",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "26",
+     "relations": "3",
+     "areas": "0",
+     "total": "29"
+    }
+   }
+  ],
+  "seconds": 24.3
+ },
+ "Оренбург": {
+  "query": "[out:json][timeout:280];\narea(3601398615)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Оренбург",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "23",
+     "relations": "0",
+     "areas": "0",
+     "total": "24"
+    }
+   }
+  ],
+  "seconds": 67.2
+ },
+ "Новокузнецк": {
+  "query": "[out:json][timeout:280];\narea(3601153293)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Новокузнецкий городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 61.8
+ },
+ "Рязань": {
+  "query": "[out:json][timeout:280];\narea(3601066115)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Рязань",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "98",
+     "relations": "3",
+     "areas": "0",
+     "total": "105"
+    }
+   }
+  ],
+  "seconds": 128.0
+ },
+ "Балашиха": {
+  "query": "[out:json][timeout:280];\narea(3600184108)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Балашиха",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 40.6
+ },
+ "Пенза": {
+  "query": "[out:json][timeout:280];\narea(3601846781)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Пенза",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "61",
+     "relations": "2",
+     "areas": "0",
+     "total": "66"
+    }
+   }
+  ],
+  "seconds": 115.4
+ },
+ "Чебоксары": {
+  "query": "[out:json][timeout:280];\narea(3601810276)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Чебоксары",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "36",
+     "relations": "7",
+     "areas": "0",
+     "total": "44"
+    }
+   }
+  ],
+  "seconds": 45.0
+ },
+ "Липецк": {
+  "query": "[out:json][timeout:280];\narea(3601273067)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Липецк",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "24",
+     "relations": "1",
+     "areas": "0",
+     "total": "25"
+    }
+   }
+  ],
+  "seconds": 50.1
+ },
+ "Калининград": {
+  "query": "[out:json][timeout:280];\narea(3600331414)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Калининград",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "34",
+     "relations": "4",
+     "areas": "0",
+     "total": "39"
+    }
+   }
+  ],
+  "seconds": 35.8
+ },
+ "Астрахань": {
+  "query": "[out:json][timeout:280];\narea(3601853865)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Астрахань",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   }
+  ],
+  "seconds": 32.9
+ },
+ "Тула": {
+  "query": "[out:json][timeout:280];\narea(3604775559)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Тула",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "38",
+     "relations": "1",
+     "areas": "0",
+     "total": "39"
+    }
+   }
+  ],
+  "seconds": 57.8
+ },
+ "Киров": {
+  "query": "[out:json][timeout:280];\narea(3600382776)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Киров",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "73",
+     "relations": "2",
+     "areas": "0",
+     "total": "75"
+    }
+   }
+  ],
+  "seconds": 40.1
+ },
+ "Сочи": {
+  "query": "[out:json][timeout:280];\narea(3600365233)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Сочи",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "46",
+     "relations": "1",
+     "areas": "0",
+     "total": "48"
+    }
+   }
+  ],
+  "seconds": 51.7
+ },
+ "Курск": {
+  "query": "[out:json][timeout:280];\narea(3601646090)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Курск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "18",
+     "relations": "0",
+     "areas": "0",
+     "total": "18"
+    }
+   }
+  ],
+  "seconds": 40.0
+ },
+ "Улан-Удэ": {
+  "query": "[out:json][timeout:280];\narea(3601949930)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Улан-Удэ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 52.8
+ },
+ "Тверь": {
+  "query": "[out:json][timeout:280];\narea(3600369838)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Тверь",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "26",
+     "relations": "4",
+     "areas": "0",
+     "total": "31"
+    }
+   }
+  ],
+  "seconds": 33.4
+ },
+ "Магнитогорск": {
+  "query": "[out:json][timeout:280];\narea(3600398397)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Магнитогорский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "38",
+     "relations": "0",
+     "areas": "0",
+     "total": "38"
+    }
+   }
+  ],
+  "seconds": 41.8
+ },
+ "Сургут": {
+  "query": "[out:json][timeout:280];\narea(3601761435)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Сургут",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "273",
+     "relations": "3",
+     "areas": "0",
+     "total": "276"
+    }
+   }
+  ],
+  "seconds": 84.7
+ },
+ "Брянск": {
+  "query": "[out:json][timeout:280];\narea(3602401505)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Брянск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "12",
+     "relations": "2",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 34.8
+ },
+ "Иваново": {
+  "query": "[out:json][timeout:280];\narea(3600543140)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Иваново",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 69.0
+ },
+ "Якутск": {
+  "query": "[out:json][timeout:280];\narea(3601444344)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Якутск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "14",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 47.4
+ },
+ "Владимир": {
+  "query": "[out:json][timeout:280];\narea(3600389677)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Владимир",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "18",
+     "relations": "4",
+     "areas": "0",
+     "total": "22"
+    }
+   }
+  ],
+  "seconds": 37.8
+ },
+ "Белгород": {
+  "query": "[out:json][timeout:280];\narea(3601852568)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Белгород",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "240",
+     "relations": "4",
+     "areas": "0",
+     "total": "245"
+    }
+   }
+  ],
+  "seconds": 66.5
+ },
+ "Нижний Тагил": {
+  "query": "[out:json][timeout:280];\narea(3601317756)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "муниципальный округ Нижний Тагил",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "98",
+     "relations": "0",
+     "areas": "0",
+     "total": "98"
+    }
+   }
+  ],
+  "seconds": 54.0
+ },
+ "Калуга": {
+  "query": "[out:json][timeout:280];\narea(3601235082)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Калуга",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "113",
+     "relations": "3",
+     "areas": "0",
+     "total": "116"
+    }
+   }
+  ],
+  "seconds": 49.0
+ },
+ "Чита": {
+  "query": "[out:json][timeout:280];\narea(3601846012)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Чита",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "3"
+    }
+   }
+  ],
+  "seconds": 49.9
+ },
+ "Грозный": {
+  "query": "[out:json][timeout:280];\narea(3601957640)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Грозный",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 69.0
+ },
+ "Волжский": {
+  "query": "[out:json][timeout:280];\narea(3601108299)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Волжский",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "25",
+     "relations": "0",
+     "areas": "0",
+     "total": "27"
+    }
+   }
+  ],
+  "seconds": 28.4
+ },
+ "Смоленск": {
+  "query": "[out:json][timeout:280];\narea(3601674536)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Смоленск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 31.1
+ },
+ "Подольск": {
+  "query": "[out:json][timeout:280];\narea(3600181189)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Подольск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "24",
+     "relations": "7",
+     "areas": "0",
+     "total": "31"
+    }
+   }
+  ],
+  "seconds": 46.0
+ },
+ "Саранск": {
+  "query": "[out:json][timeout:280];\narea(3601537985)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Саранск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "2",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 42.0
+ },
+ "Вологда": {
+  "query": "[out:json][timeout:280];\narea(3601614795)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Вологда",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "19",
+     "relations": "2",
+     "areas": "0",
+     "total": "25"
+    }
+   }
+  ],
+  "seconds": 37.0
+ },
+ "Курган": {
+  "query": "[out:json][timeout:280];\narea(3600398427)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Курган",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "279",
+     "relations": "5",
+     "areas": "0",
+     "total": "284"
+    }
+   }
+  ],
+  "seconds": 233.6
+ },
+ "Череповец": {
+  "query": "[out:json][timeout:280];\narea(3601327492)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Череповец",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   }
+  ],
+  "seconds": 27.0
+ },
+ "Орёл": {
+  "query": "[out:json][timeout:280];\narea(3601776249)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Орёл",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "1",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 33.5
+ },
+ "Архангельск": {
+  "query": "[out:json][timeout:280];\narea(3603360571)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Архангельск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "45",
+     "relations": "1",
+     "areas": "0",
+     "total": "47"
+    }
+   }
+  ],
+  "seconds": 73.7
+ },
+ "Владикавказ": {
+  "query": "[out:json][timeout:280];\narea(3601060633)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Владикавказ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   }
+  ],
+  "seconds": 32.3
+ },
+ "Нижневартовск": {
+  "query": "[out:json][timeout:280];\narea(3601761430)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Нижневартовск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "1",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 51.6
+ },
+ "Йошкар-Ола": {
+  "query": "[out:json][timeout:280];\narea(3601662421)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Йошкар-Ола",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "21",
+     "relations": "7",
+     "areas": "0",
+     "total": "28"
+    }
+   }
+  ],
+  "seconds": 42.6
+ },
+ "Стерлитамак": {
+  "query": "[out:json][timeout:280];\narea(3601791629)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Стерлитамак",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "4"
+    }
+   }
+  ],
+  "seconds": 33.1
+ },
+ "Мурманск": {
+  "query": "[out:json][timeout:280];\narea(3601029489)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Мурманск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "43",
+     "relations": "0",
+     "areas": "0",
+     "total": "43"
+    }
+   }
+  ],
+  "seconds": 36.5
+ },
+ "Кострома": {
+  "query": "[out:json][timeout:280];\narea(3602194955)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Кострома",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "138",
+     "relations": "1",
+     "areas": "0",
+     "total": "139"
+    }
+   }
+  ],
+  "seconds": 41.6
+ },
+ "Новороссийск": {
+  "query": "[out:json][timeout:280];\narea(3600364545)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Новороссийск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 53.0
+ },
+ "Тамбов": {
+  "query": "[out:json][timeout:280];\narea(3601777927)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Тамбов",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "41",
+     "relations": "4",
+     "areas": "0",
+     "total": "45"
+    }
+   }
+  ],
+  "seconds": 39.9
+ },
+ "Химки": {
+  "query": "[out:json][timeout:280];\narea(3601703094)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Химки",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "55",
+     "relations": "10",
+     "areas": "0",
+     "total": "69"
+    }
+   }
+  ],
+  "seconds": 62.5
+ },
+ "Мытищи": {
+  "query": "[out:json][timeout:280];\narea(3600173406)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Мытищи",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "10",
+     "relations": "5",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 52.9
+ },
+ "Нальчик": {
+  "query": "[out:json][timeout:280];\narea(3601059420)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Нальчик",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   }
+  ],
+  "seconds": 29.4
+ },
+ "Таганрог": {
+  "query": "[out:json][timeout:280];\narea(3600960764)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Таганрог",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "3"
+    }
+   }
+  ],
+  "seconds": 32.7
+ },
+ "Нижнекамск": {
+  "query": "[out:json][timeout:280];\narea(3603314466)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городское поселение Нижнекамск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "18",
+     "relations": "0",
+     "areas": "0",
+     "total": "18"
+    }
+   }
+  ],
+  "seconds": 30.8
+ },
+ "Благовещенск": {
+  "query": "[out:json][timeout:280];\narea(3601749247)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Благовещенск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "62",
+     "relations": "1",
+     "areas": "0",
+     "total": "63"
+    }
+   }
+  ],
+  "seconds": 135.5
+ },
+ "Комсомольск-на-Амуре": {
+  "query": "[out:json][timeout:280];\narea(3601788811)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Комсомольск-на-Амуре",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "57",
+     "relations": "6",
+     "areas": "0",
+     "total": "63"
+    }
+   }
+  ],
+  "seconds": 96.4
+ },
+ "Петрозаводск": {
+  "query": "[out:json][timeout:280];\narea(3601020358)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Петрозаводский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "33",
+     "relations": "2",
+     "areas": "0",
+     "total": "35"
+    }
+   }
+  ],
+  "seconds": 35.3
+ },
+ "Королёв": {
+  "query": "[out:json][timeout:280];\narea(3601703090)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Королёв",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "1",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 31.3
+ },
+ "Шахты": {
+  "query": "[out:json][timeout:280];\narea(3601482450)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Шахты",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "4"
+    }
+   }
+  ],
+  "seconds": 30.6
+ },
+ "Энгельс": {
+  "query": "[out:json][timeout:280];\narea(3604559782)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городское поселение Энгельс",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 24.6
+ },
+ "Великий Новгород": {
+  "query": "[out:json][timeout:280];\narea(3602417529)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Великий Новгород",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 21.2
+ },
+ "Люберцы": {
+  "query": "[out:json][timeout:280];\narea(3600184002)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Люберцы",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "19",
+     "relations": "1",
+     "areas": "0",
+     "total": "20"
+    }
+   }
+  ],
+  "seconds": 34.9
+ },
+ "Братск": {
+  "query": "[out:json][timeout:280];\narea(3601469711)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Братск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   }
+  ],
+  "seconds": 129.2
+ },
+ "Старый Оскол": {
+  "query": "[out:json][timeout:280];\narea(3601645375)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Старооскольский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 55.9
+ },
+ "Ангарск": {
+  "query": "[out:json][timeout:280];\narea(3601465764)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Ангарский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 48.1
+ },
+ "Дзержинск": {
+  "query": "[out:json][timeout:280];\narea(3600335494)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Дзержинск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "6",
+     "relations": "1",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 41.5
+ },
+ "Псков": {
+  "query": "[out:json][timeout:280];\narea(3601050399)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Псков",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "1",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 25.0
+ },
+ "Орск": {
+  "query": "[out:json][timeout:280];\narea(3601395096)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Орск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "29",
+     "relations": "1",
+     "areas": "0",
+     "total": "30"
+    }
+   }
+  ],
+  "seconds": 58.3
+ },
+ "Красногорск": {
+  "query": "[out:json][timeout:280];\narea(3600181345)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Красногорск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "40",
+     "relations": "6",
+     "areas": "0",
+     "total": "46"
+    }
+   }
+  ],
+  "seconds": 41.2
+ },
+ "Армавир": {
+  "query": "[out:json][timeout:280];\narea(3600371614)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Армавир",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "5",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   }
+  ],
+  "seconds": 42.2
+ },
+ "Абакан": {
+  "query": "[out:json][timeout:280];\narea(3601474707)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Абакан",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 40.0
+ },
+ "Балаково": {
+  "query": "[out:json][timeout:280];\narea(3604246271)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городское поселение Балаково",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   }
+  ],
+  "seconds": 70.8
+ },
+ "Бийск": {
+  "query": "[out:json][timeout:280];\narea(3601437128)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Бийск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 55.6
+ },
+ "Южно-Сахалинск": {
+  "query": "[out:json][timeout:280];\narea(3601778094)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Южно-Сахалинск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 57.2
+ },
+ "Пермь": {
+  "query": "[out:json][timeout:280];\narea(3601084793)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "Пермский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "341",
+     "relations": "12",
+     "areas": "0",
+     "total": "353"
+    }
+   }
+  ],
+  "seconds": 58.5
+ },
+ "Сыктывкар": {
+  "query": "[out:json][timeout:280];\narea(3600421732)->.x;\n(nwr(area.x)[\"building\"=\"office\"]; nwr(area.x)[\"name\"~\"^(БЦ|Бизнес-центр|Бизнес центр)\"];); out count;",
+  "area": "городской округ Сыктывкар",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "131",
+     "relations": "2",
+     "areas": "0",
+     "total": "133"
+    }
+   }
+  ],
+  "seconds": 56.2
+ }
+}

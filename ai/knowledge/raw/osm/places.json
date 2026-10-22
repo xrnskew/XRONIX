@@ -1,0 +1,6302 @@
+{
+ "Москва": {
+  "query": "[out:json][timeout:280];\narea(3600102269)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Москва",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "30",
+     "ways": "425",
+     "relations": "81",
+     "areas": "0",
+     "total": "536"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "13591",
+     "ways": "923",
+     "relations": "236",
+     "areas": "0",
+     "total": "14750"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "276",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "276"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "109",
+     "ways": "99",
+     "relations": "167",
+     "areas": "0",
+     "total": "375"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "43",
+     "ways": "128",
+     "relations": "126",
+     "areas": "0",
+     "total": "297"
+    }
+   }
+  ],
+  "seconds": 53.1
+ },
+ "Санкт-Петербург": {
+  "query": "[out:json][timeout:280];\narea(3600337422)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Санкт-Петербург",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "15",
+     "ways": "202",
+     "relations": "47",
+     "areas": "0",
+     "total": "264"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7345",
+     "ways": "590",
+     "relations": "31",
+     "areas": "0",
+     "total": "7966"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "72",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "72"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "57",
+     "ways": "117",
+     "relations": "77",
+     "areas": "0",
+     "total": "251"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "43",
+     "ways": "103",
+     "relations": "44",
+     "areas": "0",
+     "total": "190"
+    }
+   }
+  ],
+  "seconds": 50.6
+ },
+ "Новосибирск": {
+  "query": "[out:json][timeout:280];\narea(3601751445)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Новосибирск",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "90",
+     "relations": "3",
+     "areas": "0",
+     "total": "94"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1439",
+     "ways": "149",
+     "relations": "0",
+     "areas": "0",
+     "total": "1588"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "35",
+     "relations": "4",
+     "areas": "0",
+     "total": "49"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "11",
+     "ways": "30",
+     "relations": "2",
+     "areas": "0",
+     "total": "43"
+    }
+   }
+  ],
+  "seconds": 29.3
+ },
+ "Екатеринбург": {
+  "query": "[out:json][timeout:280];\narea(3601104258)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Екатеринбург",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "16",
+     "ways": "43",
+     "relations": "1",
+     "areas": "0",
+     "total": "60"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1647",
+     "ways": "470",
+     "relations": "2",
+     "areas": "0",
+     "total": "2119"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "17",
+     "ways": "30",
+     "relations": "5",
+     "areas": "0",
+     "total": "52"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "18",
+     "ways": "36",
+     "relations": "1",
+     "areas": "0",
+     "total": "55"
+    }
+   }
+  ],
+  "seconds": 69.3
+ },
+ "Казань": {
+  "query": "[out:json][timeout:280];\narea(3600367666)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Казань",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "13",
+     "ways": "57",
+     "relations": "4",
+     "areas": "0",
+     "total": "74"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1649",
+     "ways": "129",
+     "relations": "0",
+     "areas": "0",
+     "total": "1778"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "11",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "22",
+     "ways": "44",
+     "relations": "4",
+     "areas": "0",
+     "total": "70"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "34",
+     "relations": "3",
+     "areas": "0",
+     "total": "45"
+    }
+   }
+  ],
+  "seconds": 72.4
+ },
+ "Нижний Новгород": {
+  "query": "[out:json][timeout:280];\narea(3600335495)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Нижний Новгород",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "38",
+     "relations": "21",
+     "areas": "0",
+     "total": "59"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2080",
+     "ways": "97",
+     "relations": "7",
+     "areas": "0",
+     "total": "2184"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "15",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "19",
+     "relations": "26",
+     "areas": "0",
+     "total": "47"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "14",
+     "relations": "24",
+     "areas": "0",
+     "total": "39"
+    }
+   }
+  ],
+  "seconds": 41.7
+ },
+ "Челябинск": {
+  "query": "[out:json][timeout:280];\narea(3600398407)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Челябинский городской округ",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "98",
+     "relations": "3",
+     "areas": "0",
+     "total": "104"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1532",
+     "ways": "294",
+     "relations": "1",
+     "areas": "0",
+     "total": "1827"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "41",
+     "relations": "2",
+     "areas": "0",
+     "total": "49"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "45",
+     "relations": "1",
+     "areas": "0",
+     "total": "48"
+    }
+   }
+  ],
+  "seconds": 128.9
+ },
+ "Красноярск": {
+  "query": "[out:json][timeout:280];\narea(3601157393)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Красноярск",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "50",
+     "relations": "4",
+     "areas": "0",
+     "total": "58"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1484",
+     "ways": "91",
+     "relations": "0",
+     "areas": "0",
+     "total": "1575"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "14",
+     "relations": "4",
+     "areas": "0",
+     "total": "24"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "33",
+     "relations": "1",
+     "areas": "0",
+     "total": "36"
+    }
+   }
+  ],
+  "seconds": 37.6
+ },
+ "Самара": {
+  "query": "[out:json][timeout:280];\narea(3600287507)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Самара",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "11",
+     "ways": "66",
+     "relations": "1",
+     "areas": "0",
+     "total": "78"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "185",
+     "ways": "1184",
+     "relations": "3",
+     "areas": "0",
+     "total": "1372"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "11",
+     "ways": "41",
+     "relations": "0",
+     "areas": "0",
+     "total": "52"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "42",
+     "relations": "0",
+     "areas": "0",
+     "total": "52"
+    }
+   }
+  ],
+  "seconds": 73.7
+ },
+ "Уфа": {
+  "query": "[out:json][timeout:280];\narea(3600398551)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Уфа",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "40",
+     "relations": "1",
+     "areas": "0",
+     "total": "46"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "919",
+     "ways": "40",
+     "relations": "0",
+     "areas": "0",
+     "total": "959"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "17",
+     "relations": "4",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "29",
+     "relations": "2",
+     "areas": "0",
+     "total": "38"
+    }
+   }
+  ],
+  "seconds": 129.9
+ },
+ "Ростов-на-Дону": {
+  "query": "[out:json][timeout:280];\narea(3600964255)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Ростов-на-Дону",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "39",
+     "relations": "1",
+     "areas": "0",
+     "total": "45"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1382",
+     "ways": "48",
+     "relations": "0",
+     "areas": "0",
+     "total": "1430"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "17",
+     "relations": "13",
+     "areas": "0",
+     "total": "40"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "29",
+     "relations": "10",
+     "areas": "0",
+     "total": "46"
+    }
+   }
+  ],
+  "seconds": 129.0
+ },
+ "Краснодар": {
+  "query": "[out:json][timeout:280];\narea(3600269701)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Краснодар",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "37",
+     "relations": "5",
+     "areas": "0",
+     "total": "45"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1554",
+     "ways": "72",
+     "relations": "0",
+     "areas": "0",
+     "total": "1626"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "38",
+     "relations": "2",
+     "areas": "0",
+     "total": "48"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "23",
+     "relations": "1",
+     "areas": "0",
+     "total": "27"
+    }
+   }
+  ],
+  "seconds": 126.4
+ },
+ "Воронеж": {
+  "query": "[out:json][timeout:280];\narea(3601144811)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Воронеж",
+  "retrieved_at": "2026-10-21",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "48",
+     "relations": "1",
+     "areas": "0",
+     "total": "51"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1074",
+     "ways": "51",
+     "relations": "4",
+     "areas": "0",
+     "total": "1129"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "16",
+     "ways": "21",
+     "relations": "14",
+     "areas": "0",
+     "total": "51"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "13",
+     "ways": "22",
+     "relations": "1",
+     "areas": "0",
+     "total": "36"
+    }
+   }
+  ],
+  "seconds": 44.9
+ },
+ "Пермь": {
+  "query": "[out:json][timeout:280];\narea(3601084793)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Пермский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "15",
+     "ways": "69",
+     "relations": "3",
+     "areas": "0",
+     "total": "87"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1557",
+     "ways": "194",
+     "relations": "4",
+     "areas": "0",
+     "total": "1755"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "15",
+     "relations": "6",
+     "areas": "0",
+     "total": "28"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "16",
+     "ways": "13",
+     "relations": "2",
+     "areas": "0",
+     "total": "31"
+    }
+   }
+  ],
+  "seconds": 37.2
+ },
+ "Волгоград": {
+  "query": "[out:json][timeout:280];\narea(3601099982)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Волгоград",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "63",
+     "relations": "0",
+     "areas": "0",
+     "total": "63"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "917",
+     "ways": "153",
+     "relations": "1",
+     "areas": "0",
+     "total": "1071"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "22",
+     "relations": "7",
+     "areas": "0",
+     "total": "31"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "31",
+     "relations": "2",
+     "areas": "0",
+     "total": "37"
+    }
+   }
+  ],
+  "seconds": 70.9
+ },
+ "Саратов": {
+  "query": "[out:json][timeout:280];\narea(3602725551)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Саратов",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "32",
+     "relations": "7",
+     "areas": "0",
+     "total": "42"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1372",
+     "ways": "637",
+     "relations": "4",
+     "areas": "0",
+     "total": "2013"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "6",
+     "relations": "22",
+     "areas": "0",
+     "total": "35"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "9",
+     "relations": "26",
+     "areas": "0",
+     "total": "42"
+    }
+   }
+  ],
+  "seconds": 49.2
+ },
+ "Тюмень": {
+  "query": "[out:json][timeout:280];\narea(3600897992)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Тюмень",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "50",
+     "relations": "0",
+     "areas": "0",
+     "total": "58"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1105",
+     "ways": "24",
+     "relations": "0",
+     "areas": "0",
+     "total": "1129"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "15",
+     "ways": "15",
+     "relations": "3",
+     "areas": "0",
+     "total": "33"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 32.5
+ },
+ "Тольятти": {
+  "query": "[out:json][timeout:280];\narea(3601345135)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Тольятти",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "50",
+     "relations": "1",
+     "areas": "0",
+     "total": "52"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "736",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "745"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "5",
+     "relations": "1",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 39.6
+ },
+ "Барнаул": {
+  "query": "[out:json][timeout:280];\narea(3601440772)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Барнаул",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "49",
+     "relations": "0",
+     "areas": "0",
+     "total": "56"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1152",
+     "ways": "53",
+     "relations": "0",
+     "areas": "0",
+     "total": "1205"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 41.1
+ },
+ "Ижевск": {
+  "query": "[out:json][timeout:280];\narea(3600954515)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Ижевск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "94",
+     "relations": "1",
+     "areas": "0",
+     "total": "99"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "704",
+     "ways": "136",
+     "relations": "0",
+     "areas": "0",
+     "total": "840"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "10",
+     "relations": "2",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "24",
+     "relations": "2",
+     "areas": "0",
+     "total": "29"
+    }
+   }
+  ],
+  "seconds": 34.8
+ },
+ "Махачкала": {
+  "query": "[out:json][timeout:280];\narea(3601963798)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Махачкала",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "20",
+     "ways": "23",
+     "relations": "0",
+     "areas": "0",
+     "total": "43"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "249",
+     "ways": "26",
+     "relations": "0",
+     "areas": "0",
+     "total": "275"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "12",
+     "ways": "11",
+     "relations": "4",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "17"
+    }
+   }
+  ],
+  "seconds": 128.6
+ },
+ "Хабаровск": {
+  "query": "[out:json][timeout:280];\narea(3601782064)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Хабаровск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "44",
+     "relations": "0",
+     "areas": "0",
+     "total": "46"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "712",
+     "ways": "28",
+     "relations": "0",
+     "areas": "0",
+     "total": "740"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "10",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "20"
+    }
+   }
+  ],
+  "seconds": 31.0
+ },
+ "Ульяновск": {
+  "query": "[out:json][timeout:280];\narea(3601760251)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Ульяновск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "47",
+     "relations": "5",
+     "areas": "0",
+     "total": "55"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1320",
+     "ways": "52",
+     "relations": "0",
+     "areas": "0",
+     "total": "1372"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "9",
+     "relations": "4",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "15",
+     "relations": "7",
+     "areas": "0",
+     "total": "26"
+    }
+   }
+  ],
+  "seconds": 32.1
+ },
+ "Иркутск": {
+  "query": "[out:json][timeout:280];\narea(3601430613)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Иркутск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "64",
+     "relations": "2",
+     "areas": "0",
+     "total": "75"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "814",
+     "ways": "45",
+     "relations": "0",
+     "areas": "0",
+     "total": "859"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "11",
+     "relations": "6",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 34.9
+ },
+ "Владивосток": {
+  "query": "[out:json][timeout:280];\narea(3601647394)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Владивостокский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "55",
+     "ways": "73",
+     "relations": "12",
+     "areas": "0",
+     "total": "140"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "810",
+     "ways": "37",
+     "relations": "3",
+     "areas": "0",
+     "total": "850"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "24",
+     "relations": "3",
+     "areas": "0",
+     "total": "28"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "14",
+     "relations": "4",
+     "areas": "0",
+     "total": "22"
+    }
+   }
+  ],
+  "seconds": 136.4
+ },
+ "Кемерово": {
+  "query": "[out:json][timeout:280];\narea(3601153257)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Кемеровский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "23",
+     "relations": "0",
+     "areas": "0",
+     "total": "23"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "859",
+     "ways": "17",
+     "relations": "0",
+     "areas": "0",
+     "total": "876"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "21",
+     "relations": "2",
+     "areas": "0",
+     "total": "23"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "13",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 68.7
+ },
+ "Томск": {
+  "query": "[out:json][timeout:280];\narea(3601591241)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Томск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "34",
+     "relations": "0",
+     "areas": "0",
+     "total": "44"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "719",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "733"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "33",
+     "relations": "4",
+     "areas": "0",
+     "total": "46"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "37",
+     "relations": "2",
+     "areas": "0",
+     "total": "41"
+    }
+   }
+  ],
+  "seconds": 41.4
+ },
+ "Набережные Челны": {
+  "query": "[out:json][timeout:280];\narea(3600367728)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Набережные Челны",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "86",
+     "relations": "1",
+     "areas": "0",
+     "total": "87"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "410",
+     "ways": "374",
+     "relations": "21",
+     "areas": "0",
+     "total": "805"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "8",
+     "relations": "2",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 77.8
+ },
+ "Ставрополь": {
+  "query": "[out:json][timeout:280];\narea(3601030059)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Ставрополь",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "20",
+     "relations": "1",
+     "areas": "0",
+     "total": "26"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "513",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "525"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "14",
+     "relations": "2",
+     "areas": "0",
+     "total": "25"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 70.0
+ },
+ "Оренбург": {
+  "query": "[out:json][timeout:280];\narea(3601398615)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Оренбург",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "21",
+     "relations": "0",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "544",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "559"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "22",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "33"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "21",
+     "relations": "1",
+     "areas": "0",
+     "total": "26"
+    }
+   }
+  ],
+  "seconds": 37.6
+ },
+ "Новокузнецк": {
+  "query": "[out:json][timeout:280];\narea(3601153293)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Новокузнецкий городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "21"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "326",
+     "ways": "48",
+     "relations": "0",
+     "areas": "0",
+     "total": "374"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "8"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 52.4
+ },
+ "Рязань": {
+  "query": "[out:json][timeout:280];\narea(3601066115)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Рязань",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "40",
+     "relations": "1",
+     "areas": "0",
+     "total": "51"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "607",
+     "ways": "26",
+     "relations": "1",
+     "areas": "0",
+     "total": "634"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "18",
+     "relations": "0",
+     "areas": "0",
+     "total": "21"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "17",
+     "relations": "0",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 135.3
+ },
+ "Балашиха": {
+  "query": "[out:json][timeout:280];\narea(3600184108)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Балашиха",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "73",
+     "relations": "2",
+     "areas": "0",
+     "total": "76"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "545",
+     "ways": "20",
+     "relations": "2",
+     "areas": "0",
+     "total": "567"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "3",
+     "relations": "2",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "3",
+     "relations": "1",
+     "areas": "0",
+     "total": "6"
+    }
+   }
+  ],
+  "seconds": 74.4
+ },
+ "Пенза": {
+  "query": "[out:json][timeout:280];\narea(3601846781)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Пенза",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "25",
+     "ways": "84",
+     "relations": "0",
+     "areas": "0",
+     "total": "109"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "590",
+     "ways": "18",
+     "relations": "1",
+     "areas": "0",
+     "total": "609"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "9",
+     "relations": "5",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "14",
+     "relations": "2",
+     "areas": "0",
+     "total": "17"
+    }
+   }
+  ],
+  "seconds": 70.5
+ },
+ "Липецк": {
+  "query": "[out:json][timeout:280];\narea(3601273067)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Липецк",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "35",
+     "relations": "0",
+     "areas": "0",
+     "total": "38"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "631",
+     "ways": "32",
+     "relations": "0",
+     "areas": "0",
+     "total": "663"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "4",
+     "relations": "2",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "16",
+     "relations": "1",
+     "areas": "0",
+     "total": "18"
+    }
+   }
+  ],
+  "seconds": 228.0
+ },
+ "Калининград": {
+  "query": "[out:json][timeout:280];\narea(3600331414)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Калининград",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "34",
+     "relations": "1",
+     "areas": "0",
+     "total": "41"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "817",
+     "ways": "72",
+     "relations": "0",
+     "areas": "0",
+     "total": "889"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "26",
+     "ways": "16",
+     "relations": "12",
+     "areas": "0",
+     "total": "54"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "9",
+     "relations": "2",
+     "areas": "0",
+     "total": "17"
+    }
+   }
+  ],
+  "seconds": 139.6
+ },
+ "Астрахань": {
+  "query": "[out:json][timeout:280];\narea(3601853865)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Астрахань",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "28",
+     "relations": "1",
+     "areas": "0",
+     "total": "32"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "339",
+     "ways": "17",
+     "relations": "3",
+     "areas": "0",
+     "total": "359"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "17"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "12",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 41.4
+ },
+ "Тула": {
+  "query": "[out:json][timeout:280];\narea(3604775559)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Тула",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "46",
+     "relations": "1",
+     "areas": "0",
+     "total": "53"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1104",
+     "ways": "56",
+     "relations": "1",
+     "areas": "0",
+     "total": "1161"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "4",
+     "relations": "4",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "20"
+    }
+   }
+  ],
+  "seconds": 45.6
+ },
+ "Киров": {
+  "query": "[out:json][timeout:280];\narea(3600382776)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Киров",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "45",
+     "relations": "4",
+     "areas": "0",
+     "total": "63"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "628",
+     "ways": "31",
+     "relations": "3",
+     "areas": "0",
+     "total": "662"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "12",
+     "ways": "28",
+     "relations": "0",
+     "areas": "0",
+     "total": "40"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "16",
+     "ways": "22",
+     "relations": "1",
+     "areas": "0",
+     "total": "39"
+    }
+   }
+  ],
+  "seconds": 44.1
+ },
+ "Сочи": {
+  "query": "[out:json][timeout:280];\narea(3600365233)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Сочи",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "43",
+     "relations": "2",
+     "areas": "0",
+     "total": "51"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1079",
+     "ways": "83",
+     "relations": "1",
+     "areas": "0",
+     "total": "1163"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "18"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "4",
+     "relations": "1",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 219.9
+ },
+ "Курск": {
+  "query": "[out:json][timeout:280];\narea(3601646090)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Курск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "53",
+     "relations": "2",
+     "areas": "0",
+     "total": "56"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "811",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "826"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "26"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "28",
+     "relations": "1",
+     "areas": "0",
+     "total": "32"
+    }
+   }
+  ],
+  "seconds": 64.1
+ },
+ "Улан-Удэ": {
+  "query": "[out:json][timeout:280];\narea(3601949930)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Улан-Удэ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "23",
+     "relations": "2",
+     "areas": "0",
+     "total": "28"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "925",
+     "ways": "33",
+     "relations": "0",
+     "areas": "0",
+     "total": "958"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "12",
+     "relations": "3",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "26",
+     "relations": "2",
+     "areas": "0",
+     "total": "28"
+    }
+   }
+  ],
+  "seconds": 135.1
+ },
+ "Тверь": {
+  "query": "[out:json][timeout:280];\narea(3600369838)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Тверь",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "15",
+     "relations": "2",
+     "areas": "0",
+     "total": "31"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "691",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "705"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "10",
+     "relations": "2",
+     "areas": "0",
+     "total": "26"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "12",
+     "relations": "3",
+     "areas": "0",
+     "total": "20"
+    }
+   }
+  ],
+  "seconds": 83.6
+ },
+ "Магнитогорск": {
+  "query": "[out:json][timeout:280];\narea(3600398397)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Магнитогорский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "22",
+     "relations": "0",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "850",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "861"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "2",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 49.9
+ },
+ "Сургут": {
+  "query": "[out:json][timeout:280];\narea(3601761435)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Сургут",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "46",
+     "relations": "2",
+     "areas": "0",
+     "total": "51"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "411",
+     "ways": "10",
+     "relations": "1",
+     "areas": "0",
+     "total": "422"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "3",
+     "relations": "5",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "7",
+     "relations": "6",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 42.1
+ },
+ "Брянск": {
+  "query": "[out:json][timeout:280];\narea(3602401505)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Брянск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "104",
+     "relations": "4",
+     "areas": "0",
+     "total": "115"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "674",
+     "ways": "41",
+     "relations": "23",
+     "areas": "0",
+     "total": "738"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "18"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 40.6
+ },
+ "Иваново": {
+  "query": "[out:json][timeout:280];\narea(3600543140)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Иваново",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "32",
+     "relations": "2",
+     "areas": "0",
+     "total": "35"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "340",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "352"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "21",
+     "relations": "1",
+     "areas": "0",
+     "total": "24"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 37.9
+ },
+ "Якутск": {
+  "query": "[out:json][timeout:280];\narea(3601444344)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Якутск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "70",
+     "relations": "2",
+     "areas": "0",
+     "total": "74"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "781",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "781"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "14",
+     "relations": "1",
+     "areas": "0",
+     "total": "16"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "4"
+    }
+   }
+  ],
+  "seconds": 35.2
+ },
+ "Владимир": {
+  "query": "[out:json][timeout:280];\narea(3600389677)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Владимир",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "33",
+     "relations": "15",
+     "areas": "0",
+     "total": "56"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "428",
+     "ways": "8",
+     "relations": "1",
+     "areas": "0",
+     "total": "437"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "29",
+     "ways": "7",
+     "relations": "6",
+     "areas": "0",
+     "total": "42"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "5",
+     "relations": "16",
+     "areas": "0",
+     "total": "29"
+    }
+   }
+  ],
+  "seconds": 37.3
+ },
+ "Белгород": {
+  "query": "[out:json][timeout:280];\narea(3601852568)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Белгород",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "31",
+     "relations": "1",
+     "areas": "0",
+     "total": "36"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "428",
+     "ways": "105",
+     "relations": "0",
+     "areas": "0",
+     "total": "533"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "4",
+     "relations": "5",
+     "areas": "0",
+     "total": "13"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "17"
+    }
+   }
+  ],
+  "seconds": 43.2
+ },
+ "Нижний Тагил": {
+  "query": "[out:json][timeout:280];\narea(3601317756)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "муниципальный округ Нижний Тагил",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "18",
+     "relations": "1",
+     "areas": "0",
+     "total": "25"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "436",
+     "ways": "63",
+     "relations": "0",
+     "areas": "0",
+     "total": "499"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "4"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "20"
+    }
+   }
+  ],
+  "seconds": 130.2
+ },
+ "Калуга": {
+  "query": "[out:json][timeout:280];\narea(3601235082)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Калуга",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "24",
+     "relations": "3",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "511",
+     "ways": "39",
+     "relations": "1",
+     "areas": "0",
+     "total": "551"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "8",
+     "ways": "4",
+     "relations": "3",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "22",
+     "relations": "0",
+     "areas": "0",
+     "total": "23"
+    }
+   }
+  ],
+  "seconds": 56.3
+ },
+ "Чита": {
+  "query": "[out:json][timeout:280];\narea(3601846012)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Чита",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "51",
+     "relations": "0",
+     "areas": "0",
+     "total": "55"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "556",
+     "ways": "25",
+     "relations": "0",
+     "areas": "0",
+     "total": "581"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 72.5
+ },
+ "Грозный": {
+  "query": "[out:json][timeout:280];\narea(3601957640)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Грозный",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "53",
+     "ways": "3",
+     "relations": "1",
+     "areas": "0",
+     "total": "57"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 31.6
+ },
+ "Волжский": {
+  "query": "[out:json][timeout:280];\narea(3601108299)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Волжский",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "36",
+     "relations": "0",
+     "areas": "0",
+     "total": "37"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "597",
+     "ways": "184",
+     "relations": "0",
+     "areas": "0",
+     "total": "781"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "2",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 69.9
+ },
+ "Смоленск": {
+  "query": "[out:json][timeout:280];\narea(3601674536)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Смоленск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "35",
+     "relations": "1",
+     "areas": "0",
+     "total": "37"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "519",
+     "ways": "33",
+     "relations": "0",
+     "areas": "0",
+     "total": "552"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "17"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 25.2
+ },
+ "Подольск": {
+  "query": "[out:json][timeout:280];\narea(3600181189)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Подольск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "26",
+     "relations": "6",
+     "areas": "0",
+     "total": "32"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "497",
+     "ways": "12",
+     "relations": "4",
+     "areas": "0",
+     "total": "513"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "1",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "7",
+     "relations": "2",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 42.4
+ },
+ "Саранск": {
+  "query": "[out:json][timeout:280];\narea(3601537985)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Саранск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "31",
+     "relations": "0",
+     "areas": "0",
+     "total": "32"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "392",
+     "ways": "13",
+     "relations": "0",
+     "areas": "0",
+     "total": "405"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "4",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "3",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 43.0
+ },
+ "Вологда": {
+  "query": "[out:json][timeout:280];\narea(3601614795)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Вологда",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "33",
+     "relations": "1",
+     "areas": "0",
+     "total": "39"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "403",
+     "ways": "19",
+     "relations": "1",
+     "areas": "0",
+     "total": "423"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "17"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 67.6
+ },
+ "Курган": {
+  "query": "[out:json][timeout:280];\narea(3600398427)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Курган",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "280",
+     "ways": "26",
+     "relations": "0",
+     "areas": "0",
+     "total": "306"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "9",
+     "relations": "1",
+     "areas": "0",
+     "total": "10"
+    }
+   }
+  ],
+  "seconds": 69.0
+ },
+ "Череповец": {
+  "query": "[out:json][timeout:280];\narea(3601327492)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Череповец",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "56",
+     "relations": "0",
+     "areas": "0",
+     "total": "61"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "380",
+     "ways": "16",
+     "relations": "0",
+     "areas": "0",
+     "total": "396"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "5",
+     "relations": "0",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 141.4
+ },
+ "Орёл": {
+  "query": "[out:json][timeout:280];\narea(3601776249)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Орёл",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "22",
+     "relations": "1",
+     "areas": "0",
+     "total": "24"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "391",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "403"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "5",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 39.0
+ },
+ "Архангельск": {
+  "query": "[out:json][timeout:280];\narea(3603360571)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Архангельск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "67",
+     "ways": "58",
+     "relations": "0",
+     "areas": "0",
+     "total": "125"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "438",
+     "ways": "24",
+     "relations": "0",
+     "areas": "0",
+     "total": "462"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "18",
+     "ways": "14",
+     "relations": "1",
+     "areas": "0",
+     "total": "33"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "15",
+     "relations": "2",
+     "areas": "0",
+     "total": "26"
+    }
+   }
+  ],
+  "seconds": 136.3
+ },
+ "Владикавказ": {
+  "query": "[out:json][timeout:280];\narea(3601060633)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Владикавказ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "8"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "598",
+     "ways": "13",
+     "relations": "0",
+     "areas": "0",
+     "total": "611"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "20",
+     "relations": "2",
+     "areas": "0",
+     "total": "31"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "22",
+     "relations": "0",
+     "areas": "0",
+     "total": "22"
+    }
+   }
+  ],
+  "seconds": 42.7
+ },
+ "Нижневартовск": {
+  "query": "[out:json][timeout:280];\narea(3601761430)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Нижневартовск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "40",
+     "relations": "1",
+     "areas": "0",
+     "total": "41"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "273",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "279"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "7",
+     "relations": "3",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "2",
+     "relations": "3",
+     "areas": "0",
+     "total": "5"
+    }
+   }
+  ],
+  "seconds": 52.6
+ },
+ "Стерлитамак": {
+  "query": "[out:json][timeout:280];\narea(3601791629)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Стерлитамак",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "24",
+     "relations": "1",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "212",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "215"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 66.3
+ },
+ "Мурманск": {
+  "query": "[out:json][timeout:280];\narea(3601029489)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Мурманск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "17"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "348",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "351"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "13",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 87.9
+ },
+ "Кострома": {
+  "query": "[out:json][timeout:280];\narea(3602194955)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Кострома",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "25",
+     "relations": "2",
+     "areas": "0",
+     "total": "27"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "473",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "482"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "1",
+     "relations": "1",
+     "areas": "0",
+     "total": "4"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "13",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   }
+  ],
+  "seconds": 33.8
+ },
+ "Новороссийск": {
+  "query": "[out:json][timeout:280];\narea(3600364545)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Новороссийск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "280",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "300"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "2",
+     "relations": "1",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 70.1
+ },
+ "Тамбов": {
+  "query": "[out:json][timeout:280];\narea(3601777927)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Тамбов",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "24",
+     "relations": "1",
+     "areas": "0",
+     "total": "30"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "459",
+     "ways": "19",
+     "relations": "1",
+     "areas": "0",
+     "total": "479"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "12",
+     "relations": "5",
+     "areas": "0",
+     "total": "19"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "4",
+     "relations": "4",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 46.6
+ },
+ "Химки": {
+  "query": "[out:json][timeout:280];\narea(3601703094)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Химки",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "16",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "495",
+     "ways": "15",
+     "relations": "2",
+     "areas": "0",
+     "total": "512"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "2",
+     "relations": "4",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   }
+  ],
+  "seconds": 137.0
+ },
+ "Мытищи": {
+  "query": "[out:json][timeout:280];\narea(3600173406)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Мытищи",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "30",
+     "relations": "2",
+     "areas": "0",
+     "total": "32"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "512",
+     "ways": "12",
+     "relations": "5",
+     "areas": "0",
+     "total": "529"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "1",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "4",
+     "relations": "1",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 36.4
+ },
+ "Нальчик": {
+  "query": "[out:json][timeout:280];\narea(3601059420)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Нальчик",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "11",
+     "relations": "9",
+     "areas": "0",
+     "total": "20"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "668",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "671"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "4",
+     "relations": "7",
+     "areas": "0",
+     "total": "25"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "1",
+     "relations": "5",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 62.7
+ },
+ "Таганрог": {
+  "query": "[out:json][timeout:280];\narea(3600960764)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Таганрог",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "20"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "346",
+     "ways": "75",
+     "relations": "0",
+     "areas": "0",
+     "total": "421"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 39.0
+ },
+ "Нижнекамск": {
+  "query": "[out:json][timeout:280];\narea(3603314466)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городское поселение Нижнекамск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "9",
+     "ways": "27",
+     "relations": "0",
+     "areas": "0",
+     "total": "36"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "264",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "271"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "3",
+     "relations": "1",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 228.7
+ },
+ "Благовещенск": {
+  "query": "[out:json][timeout:280];\narea(3601749247)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Благовещенск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "16",
+     "relations": "0",
+     "areas": "0",
+     "total": "18"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "482",
+     "ways": "26",
+     "relations": "0",
+     "areas": "0",
+     "total": "508"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "14",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "18"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "13",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 43.4
+ },
+ "Комсомольск-на-Амуре": {
+  "query": "[out:json][timeout:280];\narea(3601788811)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Комсомольск-на-Амуре",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "15",
+     "ways": "16",
+     "relations": "4",
+     "areas": "0",
+     "total": "35"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "455",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "463"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "2",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "12",
+     "relations": "1",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 28.8
+ },
+ "Петрозаводск": {
+  "query": "[out:json][timeout:280];\narea(3601020358)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Петрозаводский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "19",
+     "relations": "8",
+     "areas": "0",
+     "total": "29"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "380",
+     "ways": "16",
+     "relations": "0",
+     "areas": "0",
+     "total": "396"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "7",
+     "relations": "5",
+     "areas": "0",
+     "total": "13"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "16",
+     "relations": "2",
+     "areas": "0",
+     "total": "19"
+    }
+   }
+  ],
+  "seconds": 42.4
+ },
+ "Шахты": {
+  "query": "[out:json][timeout:280];\narea(3601482450)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Шахты",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "8"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "246",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "258"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "6",
+     "relations": "1",
+     "areas": "0",
+     "total": "7"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "12"
+    }
+   }
+  ],
+  "seconds": 31.3
+ },
+ "Энгельс": {
+  "query": "[out:json][timeout:280];\narea(3604559782)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городское поселение Энгельс",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "7",
+     "relations": "2",
+     "areas": "0",
+     "total": "10"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "146",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "154"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "2",
+     "relations": "0",
+     "areas": "0",
+     "total": "2"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 138.4
+ },
+ "Великий Новгород": {
+  "query": "[out:json][timeout:280];\narea(3602417529)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Великий Новгород",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "206",
+     "ways": "11",
+     "relations": "3",
+     "areas": "0",
+     "total": "220"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 34.8
+ },
+ "Люберцы": {
+  "query": "[out:json][timeout:280];\narea(3600184002)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Люберцы",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "47",
+     "relations": "1",
+     "areas": "0",
+     "total": "48"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "501",
+     "ways": "8",
+     "relations": "6",
+     "areas": "0",
+     "total": "515"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "5",
+     "relations": "1",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 148.5
+ },
+ "Братск": {
+  "query": "[out:json][timeout:280];\narea(3601469711)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Братск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "271",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "291"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "4"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   }
+  ],
+  "seconds": 42.6
+ },
+ "Старый Оскол": {
+  "query": "[out:json][timeout:280];\narea(3601645375)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Старооскольский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "13",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "25"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "410",
+     "ways": "94",
+     "relations": "0",
+     "areas": "0",
+     "total": "504"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "10",
+     "ways": "2",
+     "relations": "0",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "9",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   }
+  ],
+  "seconds": 71.2
+ },
+ "Ангарск": {
+  "query": "[out:json][timeout:280];\narea(3601465764)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "Ангарский городской округ",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "522",
+     "ways": "19",
+     "relations": "0",
+     "areas": "0",
+     "total": "541"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "10"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "5",
+     "relations": "1",
+     "areas": "0",
+     "total": "9"
+    }
+   }
+  ],
+  "seconds": 61.9
+ },
+ "Сыктывкар": {
+  "query": "[out:json][timeout:280];\narea(3600421732)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Сыктывкар",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "25",
+     "relations": "3",
+     "areas": "0",
+     "total": "30"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "419",
+     "ways": "2",
+     "relations": "1",
+     "areas": "0",
+     "total": "422"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "2",
+     "relations": "0",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "9",
+     "relations": "2",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 123.9
+ },
+ "Дзержинск": {
+  "query": "[out:json][timeout:280];\narea(3600335494)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Дзержинск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "417",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "431"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "2",
+     "relations": "0",
+     "areas": "0",
+     "total": "2"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "5",
+     "relations": "2",
+     "areas": "0",
+     "total": "7"
+    }
+   }
+  ],
+  "seconds": 53.4
+ },
+ "Псков": {
+  "query": "[out:json][timeout:280];\narea(3601050399)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Псков",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "257",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "268"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "12",
+     "relations": "1",
+     "areas": "0",
+     "total": "15"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "15",
+     "relations": "0",
+     "areas": "0",
+     "total": "18"
+    }
+   }
+  ],
+  "seconds": 37.1
+ },
+ "Орск": {
+  "query": "[out:json][timeout:280];\narea(3601395096)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Орск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "27",
+     "relations": "1",
+     "areas": "0",
+     "total": "28"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "171",
+     "ways": "13",
+     "relations": "0",
+     "areas": "0",
+     "total": "184"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "8"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "14",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 33.7
+ },
+ "Красногорск": {
+  "query": "[out:json][timeout:280];\narea(3600181345)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Красногорск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "26",
+     "relations": "0",
+     "areas": "0",
+     "total": "26"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "367",
+     "ways": "11",
+     "relations": "1",
+     "areas": "0",
+     "total": "379"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "1"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "2",
+     "areas": "0",
+     "total": "2"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "0",
+     "relations": "3",
+     "areas": "0",
+     "total": "4"
+    }
+   }
+  ],
+  "seconds": 38.0
+ },
+ "Армавир": {
+  "query": "[out:json][timeout:280];\narea(3600371614)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Армавир",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "10",
+     "relations": "0",
+     "areas": "0",
+     "total": "11"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "85",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "93"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "6",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "7",
+     "relations": "1",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 51.0
+ },
+ "Балаково": {
+  "query": "[out:json][timeout:280];\narea(3604246271)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городское поселение Балаково",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "20",
+     "relations": "0",
+     "areas": "0",
+     "total": "20"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "258",
+     "ways": "27",
+     "relations": "0",
+     "areas": "0",
+     "total": "285"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "2"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "6"
+    }
+   }
+  ],
+  "seconds": 122.6
+ },
+ "Бийск": {
+  "query": "[out:json][timeout:280];\narea(3601437128)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Бийск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "7",
+     "relations": "0",
+     "areas": "0",
+     "total": "7"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "371",
+     "ways": "1",
+     "relations": "0",
+     "areas": "0",
+     "total": "372"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "1",
+     "relations": "1",
+     "areas": "0",
+     "total": "2"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "6",
+     "ways": "8",
+     "relations": "0",
+     "areas": "0",
+     "total": "14"
+    }
+   }
+  ],
+  "seconds": 36.2
+ },
+ "Южно-Сахалинск": {
+  "query": "[out:json][timeout:280];\narea(3601778094)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Южно-Сахалинск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "46",
+     "relations": "2",
+     "areas": "0",
+     "total": "49"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "534",
+     "ways": "25",
+     "relations": "0",
+     "areas": "0",
+     "total": "559"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "9",
+     "relations": "3",
+     "areas": "0",
+     "total": "12"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "5",
+     "relations": "6",
+     "areas": "0",
+     "total": "11"
+    }
+   }
+  ],
+  "seconds": 68.8
+ },
+ "Омск": {
+  "query": "[out:json][timeout:280];\narea(3601558108)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Омск",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "23",
+     "ways": "98",
+     "relations": "5",
+     "areas": "0",
+     "total": "126"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1690",
+     "ways": "39",
+     "relations": "3",
+     "areas": "0",
+     "total": "1732"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "25",
+     "relations": "7",
+     "areas": "0",
+     "total": "37"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "7",
+     "ways": "35",
+     "relations": "5",
+     "areas": "0",
+     "total": "47"
+    }
+   }
+  ],
+  "seconds": 70.3
+ },
+ "Ярославль": {
+  "query": "[out:json][timeout:280];\narea(3601701436)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Ярославль",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "70",
+     "relations": "3",
+     "areas": "0",
+     "total": "77"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "737",
+     "ways": "26",
+     "relations": "1",
+     "areas": "0",
+     "total": "764"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "21",
+     "relations": "7",
+     "areas": "0",
+     "total": "32"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "29",
+     "relations": "0",
+     "areas": "0",
+     "total": "34"
+    }
+   }
+  ],
+  "seconds": 133.4
+ },
+ "Чебоксары": {
+  "query": "[out:json][timeout:280];\narea(3601810276)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Чебоксары",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "13",
+     "relations": "3",
+     "areas": "0",
+     "total": "19"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "569",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "572"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "11",
+     "relations": "7",
+     "areas": "0",
+     "total": "21"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "5",
+     "ways": "11",
+     "relations": "5",
+     "areas": "0",
+     "total": "21"
+    }
+   }
+  ],
+  "seconds": 135.9
+ },
+ "Йошкар-Ола": {
+  "query": "[out:json][timeout:280];\narea(3601662421)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Йошкар-Ола",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "16",
+     "relations": "3",
+     "areas": "0",
+     "total": "23"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "353",
+     "ways": "17",
+     "relations": "3",
+     "areas": "0",
+     "total": "373"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "5",
+     "relations": "3",
+     "areas": "0",
+     "total": "8"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "11",
+     "relations": "0",
+     "areas": "0",
+     "total": "13"
+    }
+   }
+  ],
+  "seconds": 69.1
+ },
+ "Королёв": {
+  "query": "[out:json][timeout:280];\narea(3601703090)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Королёв",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "15",
+     "relations": "1",
+     "areas": "0",
+     "total": "17"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "145",
+     "ways": "5",
+     "relations": "4",
+     "areas": "0",
+     "total": "154"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "3",
+     "ways": "5",
+     "relations": "1",
+     "areas": "0",
+     "total": "9"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "1",
+     "ways": "5",
+     "relations": "0",
+     "areas": "0",
+     "total": "6"
+    }
+   }
+  ],
+  "seconds": 39.7
+ },
+ "Абакан": {
+  "query": "[out:json][timeout:280];\narea(3601474707)->.x;\nnwr(area.x)[\"shop\"=\"mall\"]; out count;\n(nwr(area.x)[\"highway\"=\"bus_stop\"]; nwr(area.x)[\"public_transport\"=\"platform\"]; nwr(area.x)[\"railway\"=\"tram_stop\"];); out count;\nnwr(area.x)[\"railway\"=\"station\"][\"station\"=\"subway\"]; out count;\nnwr(area.x)[\"amenity\"=\"university\"]; out count;\nnwr(area.x)[\"amenity\"=\"college\"]; out count;",
+  "area": "городской округ Абакан",
+  "retrieved_at": "2026-10-22",
+  "elements": [
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "4",
+     "ways": "12",
+     "relations": "0",
+     "areas": "0",
+     "total": "16"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "467",
+     "ways": "69",
+     "relations": "0",
+     "areas": "0",
+     "total": "536"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "0",
+     "ways": "0",
+     "relations": "0",
+     "areas": "0",
+     "total": "0"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "4",
+     "relations": "0",
+     "areas": "0",
+     "total": "6"
+    }
+   },
+   {
+    "type": "count",
+    "id": 0,
+    "tags": {
+     "nodes": "2",
+     "ways": "3",
+     "relations": "0",
+     "areas": "0",
+     "total": "5"
+    }
+   }
+  ],
+  "seconds": 43.4
+ }
+}

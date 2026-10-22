@@ -52,6 +52,10 @@ TEXTS = {
     "greeting": "Здравствуйте! Я помогу подобрать бизнес и посчитать план. Что хотите открыть и в каком городе?",
     "role": "Я остаюсь консультантом по подбору бизнеса и не меняю роль. Давайте продолжим с вашим планом.",
 }
+# Не хватает только своих денег: вводная говорит, зачем они, а не «важные детали» (замечание Саши к core_intro).
+FUNDS_INTRO = "Без суммы своих денег план не посчитать: от неё зависит, сколько понадобится в кредит."
+# Вопросов в ответе — не больше maxItems consult.schema.json (опыт + до 3 вопросов анкеты).
+MAX_QUESTIONS = 4
 
 
 CREDIT_FALLBACK = "Решение по кредиту принимает банк после проверки заявки, заранее я его не знаю."
@@ -61,6 +65,49 @@ TEXT_SLOTS = {"core": "core_intro", "sums": "sums_intro", "template": "template_
               "no_near": "no_near_intro", "ready": "ready_intro", "offtopic": "offtopic", "greeting": "greeting",
               "role": "role_change"}
 ASK_SLOTS = {"sphere": "ask_sphere", "city": "ask_city", "own_funds": "ask_own_funds"}
+
+# ---------- Опыт в этом бизнесе (contracts/ai.md, правило 9) ----------
+
+EXPERIENCE_TEXT = "Есть ли у вас опыт в этом бизнесе?"
+EXPERIENCE_WORDS = [("owner", r"был\w* сво|сво\w* бизнес|владел|собственник|предпринимател|свое дело|своё дело"),
+                    ("employee", r"наём|наем|работал|по найму"),  # не «сотрудник»: «сотрудников 3» — ответ анкеты
+                    ("none", r"нет опыта|без опыта|опыта нет|не было|никакого|^(нет|нету)$|новичок")]
+# «нет» — ответ про опыт, только если это весь ответ: «Нет, давайте лучше магазин одежды» — поправка, а не опыт.
+# Не «^не»: «не знаю» — не ответ.
+
+
+def experience_options() -> list:
+    return [v["title"] for v in ex.data("dictionaries")["experiences"].values()]
+
+
+def experience_question(turn: "Turn") -> dict:
+    text = kn.phrase("ask_experience", turn.key, turn.n, {}) or EXPERIENCE_TEXT
+    return {"id": "experience", "text": text, "kind": "choice", "options": experience_options()}
+
+
+def experience_texts() -> list:
+    return [norm(t).rstrip("?").strip() for t in [EXPERIENCE_TEXT] + kn.variants("ask_experience")]
+
+
+def experience_asked(history: list) -> bool:
+    """Спрашивали ли об опыте — по history, как анкету: текст вопроса или строка его вариантов."""
+    options = norm(" / ".join(experience_options()))
+    return any(any(t in norm(h["content"]) for t in experience_texts()) or options in norm(h["content"])
+               for h in history if h["role"] == "assistant")
+
+
+def experience_answer(message: str):
+    """Ответ на вопрос об опыте: подпись кнопки, строка «Вопрос? Ответ» или слова. Иначе None."""
+    for value, info in ex.data("dictionaries")["experiences"].items():
+        if norm(info["title"]) in norm(message):
+            return value
+    lines = [ln.split("?", 1)[1] for ln in message.split("\n") if "?" in ln and "опыт" in norm(ln.split("?", 1)[0])]
+    for text in lines or [message]:
+        t = norm(text).strip(" .!,")
+        for value, rx in EXPERIENCE_WORDS:
+            if re.search(rx, t):
+                return value
+    return None
 
 
 class Turn:
@@ -175,14 +222,32 @@ def competition(state: dict, history: list, turn: Turn) -> str | None:
     return kn.phrase("city_competition", turn.key, turn.n, {**kn.values(state), **facts}) if facts else None
 
 
+def registered(state: dict, history: list, turn: Turn) -> str | None:
+    """Число зарегистрированных бизнесов сферы по реестру МСП ФНС — один раз за диалог."""
+    if kn.said_registered(history):
+        return None
+    facts = kn.fact_values(state, "registered")
+    return kn.phrase("registered_fact", turn.key, turn.n, {**kn.values(state), **facts}) if facts else None
+
+
+def fact_phrase(slot: str, state: dict, fact: str, turn: Turn) -> str | None:
+    facts = kn.fact_values(state, fact)
+    return kn.phrase(slot, turn.key, turn.n, {**kn.values(state), **facts}) if facts else None
+
+
 def ready_text(state: dict, history: list, turn: Turn) -> str:
-    """Вступление к плану, факт о конкуренции (если ещё не звучал), зарплата по региону и совет или риск сферы."""
+    """Вступление к плану, затем по важности, пока помещается в 600 символов: конкуренция и регистрации (если ещё не
+    звучали), зарплата по региону, совет или риск сферы и один новый факт (ROUND4_knowledge.md: не больше одного
+    нового факта на блок) — доход, розница или проходимость для сферы, выбор по хешу диалога."""
     vals = kn.values(state)
-    salary = kn.fact_values(state, "salary")
     advice = f"{state['sphere']}_{('tip', 'risk')[kn.choice('advice', turn.key, turn.n, 2)]}"
-    return kn.join([turn.text("ready", vals), competition(state, history, turn),
-                    kn.phrase("salary_fact", turn.key, turn.n, {**vals, **salary}) if salary else None,
-                    kn.phrase(advice, turn.key, turn.n, vals)])
+    place = kn.fact_values(state, "places").get("_kind")
+    extra = [fact_phrase("income_fact", state, "income", turn), fact_phrase("retail_fact", state, "retail", turn),
+             fact_phrase(f"places_{place}", state, "places", turn) if place else None]
+    extra = [x for x in extra if x]
+    new_fact = extra[kn.choice("new_fact", turn.key, turn.n, len(extra))] if extra else None
+    return kn.join([turn.text("ready", vals), competition(state, history, turn), registered(state, history, turn),
+                    fact_phrase("salary_fact", state, "salary", turn), kn.phrase(advice, turn.key, turn.n, vals), new_fact])
 
 
 def respond(request: dict) -> dict:
@@ -242,7 +307,13 @@ def respond(request: dict) -> dict:
     # «погода» иначе становится «полгода».
     if OFF_TOPIC.search(norm(request["message"])) and not (sphere or proposal or funds is not None or answers):
         return _message("offtopic", prev, turn)
+    # Ответ на вопрос об опыте — только если его задали в последней реплике (правило 9).
+    last_assistant = [h for h in history if h["role"] == "assistant"][-1:]
+    experience = experience_answer(message) if experience_asked(last_assistant) else None  # после исправления опечаток
+    # Голое «нет» на наш основной вопрос (не про деньги) — отказ ответить, а не «не по теме»: спросим снова.
+    bare_no = bool(ctx["core"]) and bool(re.fullmatch(r"(нет|нету|неа)", body.strip(" .!,")))
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
+                       experience is not None, bare_no,
                        correction and history, ex.SKIP.search(body), ex.SUMS_QUESTION.search(body), ex.BUSINESS_WORDS.search(body)])
     if not informative:
         return _message("greeting" if ex.is_greeting(message) else "offtopic", prev, turn)
@@ -258,6 +329,8 @@ def respond(request: dict) -> dict:
         state["own_funds_rub"] = funds
     if state["sphere"] == target_sphere:
         state["answers"].update(answers)
+    if experience is not None:
+        state["experience"] = experience
 
     # --- ответ ---
     if state["sphere"] is None and (proposal or unknown or confirm is False):
@@ -278,14 +351,23 @@ def respond(request: dict) -> dict:
     if not complete(state):
         missing = [k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub"))
                    if (state[f] is None if f != "sphere" else state["sphere"] not in ex.templates())]
-        text = turn.text("sums" if ex.SUMS_QUESTION.search(body) else "core")
+        if ex.SUMS_QUESTION.search(body):
+            text = turn.text("sums")
+        else:
+            text = FUNDS_INTRO if missing == ["own_funds"] else turn.text("core")
         return {"type": "questions", "text": text, "questions": [turn.core_question(k) for k in missing], "state": state}
 
+    # Опыт (правило 9): один раз за диалог, первым в раунде анкеты. Если анкета не нужна (всё уже сказано) — один
+    # вопрос об опыте вместо неё. Если анкету уже спрашивали без него, отдельно не спрашиваем: сразу ready
+    # (как в примере контракта consult.request.answers.json -> consult.response.ready.json).
+    ask_exp = not experience_asked(history) and state.get("experience") is None
     if not ctx["template"]:
-        # Анкету ещё не спрашивали (по истории): один раунд, если есть неотвеченные вопросы, иначе сразу ready.
+        # Анкету ещё не спрашивали (по истории): один раунд, если есть неотвеченные вопросы.
         pending = [q for q in ex.templates()[state["sphere"]]["questions"] if q["id"] not in state["answers"]]
-        if pending:
-            text = kn.join([turn.text("template", kn.values(state)), competition(state, history, turn)])
-            return {"type": "questions", "text": text,
-                    "questions": [question_for(state["sphere"], q) for q in pending[:4]], "state": state}
+        questions = ([experience_question(turn)] if ask_exp else []) + \
+            [question_for(state["sphere"], q) for q in pending[:MAX_QUESTIONS - ask_exp]]
+        if questions:
+            text = kn.join([turn.text("template", kn.values(state)), competition(state, history, turn),
+                            registered(state, history, turn)])
+            return {"type": "questions", "text": text, "questions": questions, "state": state}
     return {"type": "ready", "text": ready_text(state, history, turn), "state": state}

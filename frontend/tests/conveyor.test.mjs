@@ -202,3 +202,21 @@ test('кредит с господдержкой: подбор без залог
   const dec = decide(input, sc)
   assert.equal(dec.kind, 'approve'); assert.equal(dec.rate_percent, 24); assert.ok(dec.explanation.includes(GOV_TEXT))
 })
+
+// ---- опыт в бизнесе (contracts/ai.md, правило 9; contracts/templates.md) ----
+test('опыт: разбор ответа, риск «нет опыта», числа плана не зависят от опыта', async () => {
+  const { parseExperience, EXPERIENCE_OPTIONS } = await import('../src/lib/parseText.ts')
+  const exp = contract('dictionaries.json').experiences
+  assert.deepEqual(EXPERIENCE_OPTIONS, Object.values(exp).map((x) => x.title), 'подписи вариантов совпадают со справочником контракта')
+  assert.deepEqual(EXPERIENCE_OPTIONS.map(parseExperience), ['none', 'employee', 'owner'])
+  assert.equal(parseExperience('нет'), 'none'); assert.equal(parseExperience('Раньше был свой бизнес, кофейня'), 'owner')
+  assert.equal(parseExperience('работал бариста'), 'employee'); assert.equal(parseExperience('не знаю, 500 тысяч'), null)
+  const base = { sphere: 'coffee', city: 'Казань', own_funds_rub: 500000, answers: {} }
+  const plain = calculatePlan(base), none = calculatePlan({ ...base, experience: 'none' }), owner = calculatePlan({ ...base, experience: 'owner' })
+  assert.equal(plain.business.experience, undefined); assert.equal(none.business.experience, 'none')
+  const r = contract('templates/spheres.v1.json').experience_risk
+  assert.deepEqual(none.risks.at(-1), { title: r.title, level: r.level, mitigation: r.mitigation })
+  assert.equal(none.risks.length, plain.risks.length + 1); assert.deepEqual(owner.risks, plain.risks, 'при owner риски не меняются')
+  assert.deepEqual(none.finance, plain.finance); assert.deepEqual(none.credit, plain.credit)
+  for (const k of Object.keys(contract('templates/spheres.v1.json').spheres)) assert.ok(calculatePlan({ ...base, sphere: k, experience: 'none' }).risks.length <= 8, k)
+})

@@ -23,7 +23,8 @@ def contract_sources() -> dict:
     rules = _load(CONTRACTS / "rules" / "credit_rules.v1.json")
     demo = _load(CONTRACTS / "products.demo.json")
     return {
-        "dictionaries": {"version": d["version"], "purposes": d["purposes"], "spheres": d["spheres"]},
+        "dictionaries": {"version": d["version"], "purposes": d["purposes"], "spheres": d["spheres"],
+                         "experiences": d["experiences"]},
         "templates": {"version": t["version"], "spheres": {k: {"title": v["title"], "questions": v["questions"]} for k, v in t["spheres"].items()}},
         "rules": {"version": rules["version"], "start": rules["start"],
                   "start_product": next(p for p in demo["products"] if p["id"] == "start")},

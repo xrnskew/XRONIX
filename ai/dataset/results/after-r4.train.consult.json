@@ -1,0 +1,404 @@
+{
+  "name": "after-r4.train",
+  "task": "consult",
+  "split": "train",
+  "metrics": {
+    "n": 2827,
+    "schema_valid": 1.0,
+    "type_accuracy": 0.995,
+    "state.sphere_accuracy": 0.9996,
+    "state.city_accuracy": 0.989,
+    "state.own_funds_rub_accuracy": 0.9982,
+    "state.answers_accuracy": 0.9936,
+    "state.experience_accuracy": 0.9996,
+    "state_exact": 0.9802,
+    "type_and_state_exact": 0.9784,
+    "answers_pairs": {
+      "precision": 1.0,
+      "recall": 0.9877,
+      "f1": 0.9938
+    },
+    "invented_amounts_rate": 0.0,
+    "credit_promise_rate": 0.0,
+    "message_keeps_state": 1.0,
+    "by_scenario": {
+      "answer_core": 0.979,
+      "answer_template": 0.965,
+      "confirm_nearest": 1.0,
+      "correction": 0.935,
+      "credit_promise": 1.0,
+      "first_all_answers": 0.931,
+      "first_full": 0.978,
+      "first_partial": 0.98,
+      "first_vague": 1.0,
+      "greeting": 1.0,
+      "mixed_attack": 1.0,
+      "nearest": 0.994,
+      "no_near": 0.962,
+      "offtopic": 0.976,
+      "ready_direct": 0.99,
+      "role_change": 1.0,
+      "sums_question": 1.0
+    },
+    "by_rule": {
+      "R1_correction": 0.935,
+      "R1_keep_state": 0.979,
+      "R2_nearest": 0.997,
+      "R2_no_near": 0.962,
+      "R2_sphere_code": 0.975,
+      "R3_answers_ids": 0.964,
+      "R3_choice_value": 0.972,
+      "R3_range": 0.974,
+      "R3_unsaid": 0.972,
+      "R4_one_round": 0.976,
+      "R4_ready": 0.977,
+      "R5_question_format": 0.981,
+      "R6_offtopic": 0.978,
+      "R6_role_change": 1.0,
+      "R7_no_credit_promise": 1.0,
+      "R9_experience": 0.942,
+      "R_no_sums": 1.0,
+      "R_profile_city": 1.0,
+      "R_zero_funds": 0.971
+    },
+    "latency_ms": {
+      "mean": 6.56,
+      "p95": 10.02
+    }
+  },
+  "errors": [
+    {
+      "id": "consult.train.00053",
+      "scenario": "first_partial",
+      "message": "Сергиев Пшсад",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Сергиев Посад",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "message",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.train.00242",
+      "scenario": "answer_template",
+      "message": "был свой бизнус, двадцать двять человек в день, пять кресел, площадь семьдесят метров",
+      "state_in": {
+        "sphere": "beauty_salon",
+        "city": "Саратов",
+        "own_funds_rub": 50000,
+        "answers": {}
+      },
+      "gold": {
+        "type": "ready",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Саратов",
+          "own_funds_rub": 50000,
+          "answers": {
+            "customers_per_day": 29,
+            "area_m2": 70,
+            "work_places": 5
+          },
+          "experience": "owner"
+        }
+      },
+      "pred": {
+        "type": "ready",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Саратов",
+          "own_funds_rub": 50000,
+          "experience": "owner",
+          "answers": {
+            "customers_per_day": 29,
+            "area_m2": 70
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.train.00259",
+      "scenario": "first_partial",
+      "message": "Альметьевск. есть 400 000",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Альметьевск",
+          "own_funds_rub": 400000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": 400000,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.train.00272",
+      "scenario": "nearest",
+      "message": "Хочу запустить шиномонтаж, своих вложений ноь",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": 0,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.train.00326",
+      "scenario": "answer_template",
+      "message": "восемьдесят квадратов, 8 кресел, оклоо 18 клиентов в день",
+      "state_in": {
+        "sphere": "beauty_salon",
+        "city": "Волгоград",
+        "own_funds_rub": 350000,
+        "answers": {}
+      },
+      "gold": {
+        "type": "ready",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Волгоград",
+          "own_funds_rub": 350000,
+          "answers": {
+            "work_places": 8,
+            "customers_per_day": 18,
+            "area_m2": 80
+          }
+        }
+      },
+      "pred": {
+        "type": "ready",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Волгоград",
+          "own_funds_rub": 350000,
+          "answers": {
+            "area_m2": 80,
+            "customers_per_day": 18
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.train.00488",
+      "scenario": "first_all_answers",
+      "message": "Привет! Есть идея открыть бьюти-салон. накопил 250000 рублей. работать будут 4 человека. открываться буду в Кургане. площадь 100 метров. чек около 2610₽. 9 кресел. поток 22 человека в день",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Курган",
+          "own_funds_rub": 250000,
+          "answers": {
+            "work_places": 9,
+            "area_m2": 100,
+            "customers_per_day": 22,
+            "avg_check_rub": 2610,
+            "staff": 4
+          }
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Курган",
+          "own_funds_rub": 250000,
+          "answers": {
+            "staff": 4,
+            "area_m2": 100,
+            "avg_check_rub": 2610,
+            "customers_per_day": 22
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.train.00489",
+      "scenario": "first_all_answers",
+      "message": "хочу открыть бьюти-салон в городе Курган. своих денег примерно 250 тыс. девять кресел. площадь 100 метров. около 22 клиентов в день. средний чек 2610. работать будут 4 человека",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Курган",
+          "own_funds_rub": 250000,
+          "answers": {
+            "work_places": 9,
+            "area_m2": 100,
+            "customers_per_day": 22,
+            "avg_check_rub": 2610,
+            "staff": 4
+          }
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "beauty_salon",
+          "city": "Курган",
+          "own_funds_rub": 250000,
+          "answers": {
+            "area_m2": 100,
+            "customers_per_day": 22,
+            "avg_check_rub": 2610,
+            "staff": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.train.00667",
+      "scenario": "answer_template",
+      "message": "средэий чек 4200, примерно 31 в днеь",
+      "state_in": {
+        "sphere": "clothing_store",
+        "city": "Армавир",
+        "own_funds_rub": 350000,
+        "answers": {}
+      },
+      "gold": {
+        "type": "ready",
+        "state": {
+          "sphere": "clothing_store",
+          "city": "Армавир",
+          "own_funds_rub": 350000,
+          "answers": {
+            "avg_check_rub": 4200,
+            "customers_per_day": 31
+          }
+        }
+      },
+      "pred": {
+        "type": "ready",
+        "state": {
+          "sphere": "clothing_store",
+          "city": "Армавир",
+          "own_funds_rub": 350000,
+          "answers": {
+            "avg_check_rub": 4200
+          }
+        }
+      }
+    },
+    {
+      "id": "consult.train.00721",
+      "scenario": "first_partial",
+      "message": "здравствуйе! я из Кергополя",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": "Каргополь",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "message",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.train.00749",
+      "scenario": "answer_core",
+      "message": "Кпино",
+      "state_in": {
+        "sphere": "coffee",
+        "city": null,
+        "own_funds_rub": 200000,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Купино",
+          "own_funds_rub": 200000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "message",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": 200000,
+          "answers": {}
+        }
+      }
+    }
+  ]
+}

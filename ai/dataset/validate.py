@@ -69,6 +69,8 @@ def check_consult(ex) -> list:
         errs.append("обещание или отказ в кредите")
     if st["own_funds_rub"] is not None and st["own_funds_rub"] not in ex["meta"]["user_amounts"]:
         errs.append(f"own_funds_rub={st['own_funds_rub']} человек не называл")
+    if st.get("experience") not in (None, "none", "employee", "owner"):
+        errs.append(f"experience={st.get('experience')!r} не из dictionaries.experiences")
     if resp["type"] == "questions" and len(resp["questions"]) > 4:
         errs.append("больше 4 вопросов")
     # История — то, что видел человек: у каждой реплики ассистента есть вопросы (и варианты у choice).

@@ -7,7 +7,9 @@ import { useCabinet } from '../CabinetContext'
 import { rub, shortParts } from '../../lib/format'
 import { useCountUp } from '../../lib/useCountUp'
 import { USE_MOCKS } from '../../api'
+import dict from '../../data/dictionaries.json'
 
+const experiences = dict.experiences as Record<string, { title: string }>
 const ForecastChart = lazy(() => import('./ForecastChart'))
 
 const level = { low: { tone: 'ok', name: 'Низкий' }, medium: { tone: 'warn', name: 'Средний' }, high: { tone: 'bad', name: 'Высокий' } } as const
@@ -45,7 +47,7 @@ export default function PlanScreen() {
       {unconfirmedMetro(p) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
       <div className={`hero-card card-ring rise rounded-[26px] ${wide ? 'grid items-end gap-8 p-8 min-[1100px]:grid-cols-[1.15fr_1fr]' : 'p-5'}`}>
         <div>
-          <div className="flex gap-1.5"><Badge tone="muted">{p.business.sphere}</Badge><Badge tone="muted">{p.business.city}</Badge></div>
+          <div className="flex flex-wrap gap-1.5"><Badge tone="muted">{p.business.sphere}</Badge><Badge tone="muted">{p.business.city}</Badge>{p.business.experience && <Badge tone="muted">{experiences[p.business.experience].title}</Badge>}</div>
           <h2 className={`mt-3 font-bold leading-tight tracking-tight ${wide ? 'font-display text-[34px] font-semibold' : 'text-[22px]'}`}>{p.title}</h2>
           <p className={`mt-1.5 leading-snug text-text/65 ${wide ? 'max-w-[520px] text-[16px]' : 'text-[14px]'}`}>{p.summary}</p>
           {applyTo && (

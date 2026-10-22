@@ -53,8 +53,8 @@
       "type_and_state_exact": 1.0
     },
     "latency_ms": {
-      "mean": 15.41,
-      "p95": 4.5
+      "mean": 12.71,
+      "p95": 4.26
     }
   },
   "errors": []

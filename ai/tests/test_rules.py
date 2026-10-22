@@ -60,8 +60,12 @@ class ConsultContract(Api):
     def test_contract_examples(self):
         r = self.consult(**{k: v for k, v in example("consult.request.json").items()})
         gold = example("consult.response.questions.json")
-        self.assertEqual((r["type"], r["state"]), (gold["type"], gold["state"]))
-        self.assertEqual([q["id"] for q in r["questions"]][:2], ["format", "area_m2"])
+        # experience: null в примере — с c59bc3d Саши; в прежней редакции примера поля нет. Сравниваем со значением null.
+        self.assertEqual((r["type"], r["state"]), (gold["type"], {**gold["state"], "experience": None}))
+        # Правило 9: первым — вопрос об опыте (пример consult.response.experience.json), затем анкета.
+        self.assertEqual([q["id"] for q in r["questions"]][:3], ["experience", "format", "area_m2"])
+        exp = example("consult.response.experience.json")["questions"][0]
+        self.assertEqual((r["questions"][0]["kind"], r["questions"][0]["options"]), (exp["kind"], exp["options"]))
         r = self.consult(**{k: v for k, v in example("consult.request.answers.json").items()})
         gold = example("consult.response.ready.json")
         self.assertEqual((r["type"], r["state"]), (gold["type"], gold["state"]))

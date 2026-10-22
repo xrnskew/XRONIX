@@ -1,0 +1,76 @@
+{
+  "name": "before-funds.holdout",
+  "task": "consult",
+  "split": "holdout",
+  "metrics": {
+    "n": 298,
+    "schema_valid": 1.0,
+    "type_accuracy": 1.0,
+    "state.sphere_accuracy": 1.0,
+    "state.city_accuracy": 1.0,
+    "state.own_funds_rub_accuracy": 1.0,
+    "state.answers_accuracy": 1.0,
+    "state.experience_accuracy": 1.0,
+    "state_exact": 1.0,
+    "type_and_state_exact": 1.0,
+    "answers_pairs": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "invented_amounts_rate": 0.0,
+    "credit_promise_rate": 0.0,
+    "message_keeps_state": 1.0,
+    "by_scenario": {
+      "answer_core": 1.0,
+      "answer_template": 1.0,
+      "confirm_nearest": 1.0,
+      "correction": 1.0,
+      "credit_promise": 1.0,
+      "first_all_answers": 1.0,
+      "first_full": 1.0,
+      "first_partial": 1.0,
+      "first_vague": 1.0,
+      "greeting": 1.0,
+      "mixed_attack": 1.0,
+      "nearest": 1.0,
+      "no_near": 1.0,
+      "offtopic": 1.0,
+      "ready_direct": 1.0,
+      "role_change": 1.0,
+      "sums_question": 1.0
+    },
+    "by_rule": {
+      "R1_correction": 1.0,
+      "R1_keep_state": 1.0,
+      "R2_nearest": 1.0,
+      "R2_no_near": 1.0,
+      "R2_sphere_code": 1.0,
+      "R3_answers_ids": 1.0,
+      "R3_choice_value": 1.0,
+      "R3_range": 1.0,
+      "R3_unsaid": 1.0,
+      "R4_one_round": 1.0,
+      "R4_ready": 1.0,
+      "R5_question_format": 1.0,
+      "R6_offtopic": 1.0,
+      "R6_role_change": 1.0,
+      "R7_no_credit_promise": 1.0,
+      "R9_experience": 1.0,
+      "R_no_sums": 1.0,
+      "R_profile_city": 1.0,
+      "R_zero_funds": 1.0
+    },
+    "unseen_phrasing": {
+      "n": 101,
+      "type_accuracy": 1.0,
+      "state_exact": 1.0,
+      "type_and_state_exact": 1.0
+    },
+    "latency_ms": {
+      "mean": 6.03,
+      "p95": 5.09
+    }
+  },
+  "errors": []
+}

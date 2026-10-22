@@ -25,7 +25,7 @@ from app.rules.text import amounts
 from .common import RESULTS_DIR, schema_errors
 from .validate import PROMISE, load
 
-STATE_FIELDS = ("sphere", "city", "own_funds_rub", "answers")
+STATE_FIELDS = ("sphere", "city", "own_funds_rub", "answers", "experience")
 NEED_FIELDS = ("purpose", "sphere", "city", "amount_rub", "term_months", "has_collateral")
 THRESHOLDS = {"purpose": 0.90, "sphere": 0.90, "amount_rub": 0.90, "city": 0.95}
 
@@ -120,7 +120,7 @@ def eval_consult(rows, preds):
         gst = gold["state"]
         type_ok = valid and pred["type"] == gold["type"]
         ok["type"] += type_ok
-        field_ok = {f: valid and pst.get(f) == gst[f] for f in STATE_FIELDS}
+        field_ok = {f: valid and pst.get(f) == gst.get(f) for f in STATE_FIELDS}  # experience необязательное
         for f, v in field_ok.items():
             ok[f] += v
         state_ok = all(field_ok.values())

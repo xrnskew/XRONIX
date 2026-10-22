@@ -15,6 +15,7 @@ class ConsultState(_Strict):
     sphere: Optional[Sphere]
     city: Optional[Annotated[str, Field(max_length=60)]]
     own_funds_rub: Optional[Annotated[int, Field(ge=0)]]
+    experience: Optional[Literal["none", "employee", "owner"]] = None  # ai.md, правило 9; необязательное
     answers: Dict[str, Union[int, float, str]]
 
 
