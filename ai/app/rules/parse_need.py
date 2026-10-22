@@ -24,6 +24,39 @@ COLLATERAL_NO = re.compile(r"без залога|залога нет|нет за
 COLLATERAL_YES = re.compile(r"залог|заложить|под обеспечение|поручител")
 
 
+# Какие суммы — не сумма запроса (класс 1 независимой оценки): свои деньги («свои 700 тысяч», «500к своих есть»)
+# и доход («получать 100к в месяц», «200 тысяч чистыми»). Смотрим слова в своей части фразы до числа и сразу после.
+OWN_BEFORE = re.compile(r"(?<![а-я])(свои\w*|своих|собственн\w*|личн\w*|есть|имеется|накопил\w*|накоплен\w*|отложил\w*|отложено|"
+                        r"сбережен\w*|на руках|скопил\w*|собрал\w*)\W+(\w+\W+){0,2}$")
+OWN_AFTER = re.compile(r"\s*(свои\w*|своих|собственн\w*|личн\w*|накоплен\w*|на руках)(?![а-я])|"
+                       r"\s*(уже\s+)?(есть|имеется)\s*([,.;!?]|$)")  # «500к есть», но не «4 млн. есть недвижимость»
+INCOME_BEFORE = re.compile(r"(?<![а-я])(получать|получа\w*|доход\w*|прибыл\w*|зарабат\w*|выручк\w*|оборот\w*|выйти на|"
+                           r"зарплат\w*)\W+(\w+\W+){0,2}$")
+INCOME_AFTER = re.compile(r"\s*(чистыми|(в|за) (месяц|день|год|неделю)|ежемесячно|в мес(?![а-я]))")
+NEED_CUE = re.compile(r"нужн|надо|не хватает|нехватк|кредит|займ|взять|занять|одолжить|у банка|требуется|ещ[её]")
+
+
+def _clause_before(t: str, start: int) -> str:
+    return re.sub(r".*[,.;!?\n]", "", t[max(0, start - 40):start])
+
+
+def requested_amounts(t: str) -> list:
+    """Суммы, которые могут быть суммой запроса, по порядку уверенности: сначала со словами «нужно / не хватает /
+    кредит» в своей части фразы, затем остальные. Свои деньги и доход не возвращаются."""
+    out = []
+    for a in amounts(t):
+        value, start, end, _ = a
+        before = _clause_before(t, start)
+        after = "" if t[end - 1] == "." else re.split(r"[.;!?\n]", t[end:end + 20], maxsplit=1)[0]  # «4 млн.» — конец фразы
+        if not 1000 <= value <= 1_000_000_000:
+            continue
+        if OWN_BEFORE.search(before) or OWN_AFTER.match(after) or INCOME_BEFORE.search(before) or INCOME_AFTER.match(after):
+            continue
+        clause = before + t[start:end] + re.split(r"[,.;!?\n]", after, maxsplit=1)[0]
+        out.append((0 if NEED_CUE.search(clause) else 1, a))
+    return [a for _, a in sorted(out, key=lambda x: (x[0], x[1][1]))]
+
+
 def _purpose(t: str):
     for code, rx, conf in PURPOSES:
         if re.search(rx, t):
@@ -41,12 +74,12 @@ def parse(request: dict) -> dict:
     sphere, fuzzy_sphere = ex.sphere_direct(t)
     if sphere is None and (ex.sphere_nearest(t) or re.search(ex.OTHER_BUSINESS, t) or ex.unknown_business(t)):
         sphere, fuzzy_sphere = "other", False
+    if ex.sphere_alternatives(t):
+        sphere = None  # «кофейня или пекарня» — человек ещё выбирает, сферу не придумываем
     city, fuzzy_city = ex.pick_city(text)
-    # Выручка, доход и прибыль — не сумма запроса: «выручка 2 млн в месяц, нужно 1 млн на пылесосы» -> 1 млн.
-    money = [a for a in amounts(t) if 1000 <= a[0] <= 1_000_000_000]
-    asked = [a for a in money if not re.search(r"(выручк|доход|прибыл|зарабат|оборот)\w*[^,.;]{0,12}$", t[max(0, a[1] - 25):a[1]])
-             and not re.match(r"\s*(в|за) (месяц|день|год)", t[a[2]:a[2] + 12])]
-    money = asked or money
+    # Выручка, доход и свои деньги — не сумма запроса: «выручка 2 млн в месяц, нужно 1 млн на пылесосы» -> 1 млн,
+    # «свои 700 тысяч есть, нужно ещё 800» -> 800 тысяч; если других сумм нет — суммы нет.
+    money = requested_amounts(t)
     term = term_months(t)
 
     # Бизнес-смысл нужен, чтобы не «находить» цель или город в болтовне («Как приготовить плов?»).

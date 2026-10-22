@@ -1,0 +1,134 @@
+{
+    "description":  "ROUND4 Windows clean run (Danya), docs/tasks/ROUND4_windows_run.md",
+    "date":  "2026-10-22",
+    "revision":  "469c508555e2cd983061e832ed60df5018be05f9",
+    "branch":  "backend",
+    "sanitized":  "personal path of the measure folder replaced with \u003cпапка замера\u003e in run-measure.ps1, up-log.txt, stop-ai-log.txt, attempt1-script-parse-error.txt",
+    "files":  [
+                  {
+                      "file":  "01-login.png",
+                      "bytes":  1130914,
+                      "sha256":  "dd4b6d1f29b3a87daa3256af37c17be097a94099dea849d044cb0be91455e5d2"
+                  },
+                  {
+                      "file":  "02-chat.png",
+                      "bytes":  851662,
+                      "sha256":  "26a09e7062cc7a64f4104a8751a1626c4c8045deb8fcecf680c43141b191a178"
+                  },
+                  {
+                      "file":  "03-no-experience.png",
+                      "bytes":  906083,
+                      "sha256":  "14cc88d6e014a72d784c65405c0eea210f899140c3fb2c2a9b3311ca43e16410"
+                  },
+                  {
+                      "file":  "04-plan-taxes.png",
+                      "bytes":  1037477,
+                      "sha256":  "628905fb35194c0cb5f8d07fd62f883d28fb1b0352a05a445d9382f7bc258bbe"
+                  },
+                  {
+                      "file":  "05-analyst-queue.png",
+                      "bytes":  903642,
+                      "sha256":  "6d3b92855ad3c73d3b0a8a2d59fc36f351da28d830fc6dd5833b315718af435e"
+                  },
+                  {
+                      "file":  "06-no-ai-chat.png",
+                      "bytes":  890535,
+                      "sha256":  "648e0284988729bdbd1e5f60530344b11f13682df69403d234a930ad63fba3f4"
+                  },
+                  {
+                      "file":  "attempt1-script-parse-error.txt",
+                      "bytes":  1030,
+                      "sha256":  "8b511e3065ffbb7a890d814e35fd9bf457d634c5f69561214ce43fd09607f856"
+                  },
+                  {
+                      "file":  "compose-images.txt",
+                      "bytes":  795,
+                      "sha256":  "c0442e3d188da742dff481412ac7fd6ea6b605f95bc29e8729e75fe0ef2e181a"
+                  },
+                  {
+                      "file":  "df-after.txt",
+                      "bytes":  279,
+                      "sha256":  "1133745380a4b5999ce5cf719381b3f6f1bb1cde04c5fe10825f9744bf30136d"
+                  },
+                  {
+                      "file":  "df-before.txt",
+                      "bytes":  259,
+                      "sha256":  "1a4f3a905964093abc729bfafb12b0f7d433f4f064487b0793af0c5f0ff4193b"
+                  },
+                  {
+                      "file":  "images-before.txt",
+                      "bytes":  58,
+                      "sha256":  "70d2a09f6628339d5c83ef53c7d7ed77bd98dce283766448500cfba69052261d"
+                  },
+                  {
+                      "file":  "ps.txt",
+                      "bytes":  840,
+                      "sha256":  "1e5cc4eeee886dd10fae2c7105823a23d9f73e82752dc65ed80f31333135f86c"
+                  },
+                  {
+                      "file":  "ps-final.txt",
+                      "bytes":  840,
+                      "sha256":  "96ea9f1b9c81a58369b07b4910e77d5ecd58f03dd00921888c80ebc89e14a6eb"
+                  },
+                  {
+                      "file":  "revision.txt",
+                      "bytes":  42,
+                      "sha256":  "47c6527881bc08f5824526dbb4feab50b61a72ce24953539e46e97ebfb415992"
+                  },
+                  {
+                      "file":  "run-measure.ps1",
+                      "bytes":  898,
+                      "sha256":  "9c8bff7ff79920c076a2456e7efb9b0ba8e1582488b7f46f3883a34f0f1714c7"
+                  },
+                  {
+                      "file":  "start-ai-log.txt",
+                      "bytes":  752,
+                      "sha256":  "16c4f8317439de7d323e1440815a5317979e33a37353c011d2a2cad3d0467289"
+                  },
+                  {
+                      "file":  "stats-ai-stopped.txt",
+                      "bytes":  500,
+                      "sha256":  "37c7b71ec2898425cd8cfc7174ab1c3bdbf7de69acd56eefde516654a9a35542"
+                  },
+                  {
+                      "file":  "stats-final.txt",
+                      "bytes":  624,
+                      "sha256":  "363b1ae2530595b7e48864628f4fefcc0c1bf1071d79f0c985f1b98f95cabd75"
+                  },
+                  {
+                      "file":  "stats-healthy.txt",
+                      "bytes":  624,
+                      "sha256":  "20d7a15a42419657451b2f7b63efdc1c3419461e052654eec42a15be553e2a4b"
+                  },
+                  {
+                      "file":  "stop-ai-log.txt",
+                      "bytes":  418,
+                      "sha256":  "fd2377b53fcc1e13d15d11bf46e6f1be4a755385350a11517b4e9e016e1c1e5e"
+                  },
+                  {
+                      "file":  "timing.txt",
+                      "bytes":  37,
+                      "sha256":  "539b327f09ccbc1fc3ac4aed64b4b3bdbe96b8c6b01e8d3d97b77a754d6c0c94"
+                  },
+                  {
+                      "file":  "timing-ai-restart.txt",
+                      "bytes":  33,
+                      "sha256":  "51d7d315ca199ebc3c0d1c086146ba06c1cee324b9dd9044ccf5b6f08b2e9ea5"
+                  },
+                  {
+                      "file":  "up-log.txt",
+                      "bytes":  44065,
+                      "sha256":  "5a64dba9a751e4b9e6dc42666b2dca1802d3aefad10d9201870bab45283a71e4"
+                  },
+                  {
+                      "file":  "ver-compose.txt",
+                      "bytes":  31,
+                      "sha256":  "d79f5c74b957e5b6428d0eb823466d330c65e5d85d44c6fbf1bda0f15a87cdb0"
+                  },
+                  {
+                      "file":  "ver-docker.txt",
+                      "bytes":  785,
+                      "sha256":  "b31d5eb784d5db788d80212139d2cae28c32ca476def1b924d92e780c2b4f687"
+                  }
+              ]
+}

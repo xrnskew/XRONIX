@@ -1,0 +1,18 @@
+Попытка 1 (22.10.2026, ~23:00): run-measure.ps1 не запустился — Windows PowerShell 5.1 прочитал файл без BOM как ANSI, строка «ГОТОВО» сломала разбор. Клон и сборка не выполнялись, Docker остался пустым. Скрипт переписан только латиницей (run-measure.ps1 в этой папке — вторая, успешная попытка). Вывод попытки 1:
+
+At <папка замера>\run-measure.ps1:11 char:11
++ "Р“РћРўРћР’Рћ"
++           ~~~~
+The string is missing the terminator: '.
+At <папка замера>\run-measure.ps1:11 char:4
++ "Р“РћРўРћР’Рћ"
++    ~~~~~~~~~~~
+Unexpected token 'РћРўРћР’Рћ"
+Get-Content ..\timing.txt
+Get-Content ..\ps.txt
+' in expression or statement.
+    + CategoryInfo          : ParserError: (:) [], ParseException
+    + FullyQualifiedErrorId : TerminatorExpectedAtEndOfString
+ 
+
+[exited with code 1]

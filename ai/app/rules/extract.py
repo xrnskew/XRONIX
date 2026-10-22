@@ -90,27 +90,43 @@ CITY_ALIASES = {
 }
 
 
+# Общие слова, которые на одну букву от названия города: «в городе» — не Городец (класс 4 независимой оценки).
+# Нечёткое совпадение для них не ищем.
+CITY_STOP = set("""
+город города городе городу городом городок городке городка городков городу городской пригород пригороде
+посёлок поселок посёлке поселке поселка села село селе деревня деревне деревни район районе района области область
+регион регионе региона центр центре центра столица столице столицы округ округе края крае республике микрорайоне окраине
+""".split())
+
+
 @lru_cache(maxsize=1)
 def _city_index():
-    exact, by_prefix, max_words = {}, {}, 1
+    """exact: форма -> города; by_prefix: для нечёткого поиска по одному слову; parts: части названий с дефисом —
+    «ростов на дону», «петропавловске камчатском» (без дефиса, первая часть в другом падеже) (класс 5)."""
+    exact, by_prefix, parts, max_words = {}, {}, {}, 1
     by_name = {}
     for c in data("cities"):
         by_name[c["name"]] = c
         for f in c["forms"]:
-            exact.setdefault(f, []).append(c)
-            max_words = max(max_words, len(f.split()))
+            keys = [f] + ([f.replace("-", " ")] if "-" in f else [])
+            for k in keys:
+                exact.setdefault(k, []).append(c)
+                max_words = max(max_words, len(k.split()))
+            if "-" in f:
+                p = tuple(f.split("-"))
+                parts.setdefault(len(p), []).append((p, c))
             if " " not in f and len(f) >= 5:
                 by_prefix.setdefault(f[:2], []).append((f, c))
     for f, (name, cue) in CITY_ALIASES.items():
         if f not in exact and name in by_name:
             exact[f] = [{**by_name[name], "needs_cue": cue, "alias": True}]
-    return exact, by_prefix, max_words
+    return exact, by_prefix, parts, max_words
 
 
 def find_cities(text: str, bare_ok: bool = False) -> list:
     """Города в тексте: [{"name", "start", "cued", "fuzzy", "negated"}] по порядку появления.
     bare_ok — текст сам ответ на вопрос «В каком городе?»: предлог не обязателен."""
-    exact, by_prefix, max_words = _city_index()
+    exact, by_prefix, parts, max_words = _city_index()
     t = norm(text)
     toks = [(m.group(), m.start(), m.end()) for m in re.finditer(r"[a-zа-я0-9]+(?:-[a-zа-я0-9]+)*|г\.", t)]
     found, used = [], set()
@@ -118,9 +134,15 @@ def find_cities(text: str, bare_ok: bool = False) -> list:
         for i in range(len(toks) - n + 1):
             if any(j in used for j in range(i, i + n)):
                 continue
-            phrase = " ".join(w for w, _, _ in toks[i:i + n])
+            words = [w for w, _, _ in toks[i:i + n]]
+            phrase = " ".join(words)
             cands, fuzzy = exact.get(phrase), False
-            if not cands and n == 1 and len(phrase) >= 5:
+            if not cands and n >= 2 and all(len(w) >= 2 for w in words):
+                # Название из частей без дефиса, каждая часть — с точностью до одной буквы («петропавловске камчатском»).
+                cands = [c for p, c in parts.get(n, []) if all(w == x or (len(x) >= 5 and edit_distance_le1(w, x))
+                                                              for w, x in zip(words, p))]
+                fuzzy = bool(cands)
+            if not cands and n == 1 and len(phrase) >= 5 and phrase not in CITY_STOP:
                 # Опечатка: от 6 букв — любой город, в 5 букв — только крупный («Перьм», «Кзани»).
                 cands = [c for f, c in by_prefix.get(phrase[:2], []) + by_prefix.get(phrase[:1] + phrase[2:3], [])
                          if edit_distance_le1(phrase, f) and (len(phrase) >= 6 or c["population"] >= 300_000)]
@@ -169,9 +191,13 @@ SPHERE_WORDS = {
     "beauty_salon": ["парикмахерская", "парикмахерскую", "парикмахерской", "барбершоп", "барбершопа", "барбершопе", "красоты"],
     "pickup_point": ["выдачи"],
 }
+# Кофейный автомат — не кофейня (класс 6 независимой оценки): слова про кофе внутри такой фразы сферу не задают,
+# а SPHERE_NEAREST предлагает кофейню как ближайший шаблон с вопросом «Считаем так?».
+VENDING = re.compile(r"(кофе\w*|кофейн\w*)\s+(\w+\s+)?(автомат\w*|аппарат\w*)|(автомат\w*|аппарат\w*)\s+(\w+\s+){0,2}кофе\w*|"
+                     r"вендинг\w*(\s+\w+){0,3}|кофемат\w*")
 # Бизнес не из шаблонов -> ближайший шаблон (правило 2 /ai/consult) и other для /ai/parse-need.
 SPHERE_NEAREST = [
-    (r"кальян", "coffee"), (r"шаурм", "coffee"), (r"суши", "coffee"), (r"столов(ая|ую|ой)", "coffee"), (r"(?<![а-я])кафе(?![а-я-])", "coffee"),
+    (VENDING.pattern, "coffee"), (r"кальян", "coffee"), (r"шаурм", "coffee"), (r"суши", "coffee"), (r"столов(ая|ую|ой)", "coffee"), (r"(?<![а-я])кафе(?![а-я-])", "coffee"),
     (r"ресторан", "coffee"), (r"бургер", "coffee"), (r"пиццер", "coffee"), (r"чайн(ая|ую)", "coffee"),
     (r"кондитерск", "bakery"), (r"выпечк", "bakery"), (r"шиномонтаж", "car_wash"), (r"автосервис", "car_wash"), (r"детейлинг", "car_wash"),
     (r"автомастерск", "car_wash"), (r"(?<![а-я])сто(?![а-я])", "car_wash"), (r"обувн", "clothing_store"), (r"сумок|сумки", "clothing_store"),
@@ -188,9 +214,14 @@ OTHER_BUSINESS = r"стоматолог|клиник|ферм|автошкол|�
 NEGATED_BEFORE = re.compile(r"(?<![а-я])(не|нет,? не)(\s+(хочу|надо|нужн\w*|буду|будет|планирую))?\s*$")
 
 
+def _without_vending(t: str) -> str:
+    return VENDING.sub(lambda m: " " * len(m.group()), t)
+
+
 def sphere_mentions(text: str) -> list:
-    """[(позиция, сфера, с отрицанием?)] по порядку: «не кофейня, а пекарня» -> кофейня с отрицанием, пекарня без."""
-    t = norm(text)
+    """[(позиция, сфера, с отрицанием?)] по порядку: «не кофейня, а пекарня» -> кофейня с отрицанием, пекарня без.
+    Кофейный автомат и вендинг — не упоминание кофейни."""
+    t = _without_vending(norm(text))
     out = []
     for code, rxs in SPHERE_DIRECT.items():
         for rx in rxs:
@@ -213,7 +244,7 @@ def sphere_direct(text: str):
     if mentions:
         positive = [c for _, c, n in mentions if not n]
         return (positive[-1] if positive else None), False
-    for w in re.findall(r"[а-я-]{6,}", t):
+    for w in re.findall(r"[а-я-]{6,}", _without_vending(t)):
         for code, words in SPHERE_WORDS.items():
             if any(edit_distance_le1(w, x) for x in words if len(x) >= 6):
                 return code, True
@@ -223,6 +254,34 @@ def sphere_direct(text: str):
 def sphere_nearest(text: str):
     t = norm(text)
     return next((code for rx, code in SPHERE_NEAREST if re.search(rx, t)), None)
+
+
+# Два варианта в одной фразе («то ли барбершоп, то ли магазин», «может пункт выдачи, может что-то с машинами») —
+# сферу не выбираем молча, а спрашиваем, какую считать (класс 6). Расплывчатое «с машинами» — подсказка на автомойку.
+HEDGE = re.compile(r"(?<![а-я])(или|либо|то ли|может|может быть|а может)(?![а-я])")
+SPHERE_HINTS = [(r"(?<![а-я])(машин\w*|автомобил\w*|авто)(?![а-я])", "car_wash")]
+
+
+def sphere_alternatives(text: str) -> list:
+    """Разные сферы, между которыми человек выбирает: есть «или / может / то ли» и хотя бы две разные сферы
+    (названные, похожие или по подсказке). Иначе пустой список."""
+    t = norm(text)
+    if not HEDGE.search(t):
+        return []
+    found = [(p, c) for p, c, neg in sphere_mentions(t) if not neg]
+    clean = _without_vending(t)
+    for rx, code in SPHERE_NEAREST[1:] + SPHERE_HINTS:
+        m = re.search(rx, clean)
+        if m:
+            found.append((m.start(), code))
+    m = VENDING.search(t)
+    if m:
+        found.append((m.start(), "coffee"))
+    out = []
+    for _, code in sorted(found):
+        if code not in out:
+            out.append(code)
+    return out if len(out) >= 2 else []
 
 
 OPEN_INTENT = re.compile(r"(открыть|открою|открытие|запустить|запуск|завести|начать|создать|организовать|мечтаю о|думаю про|"

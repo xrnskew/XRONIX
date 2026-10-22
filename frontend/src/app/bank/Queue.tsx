@@ -17,24 +17,28 @@ const FILTERS: { label: string; statuses: Status[] }[] = [
   { label: 'Завершены', statuses: ['funded', 'declined', 'withdrawn', 'cancelled'] },
   { label: 'Все', statuses: [] },
 ]
+const EMPTY = ['Заявок, которые ждут решения, нет. Новые появятся здесь сами.', 'Сейчас нет заявок, которые ждут ответа клиента.', 'Система не обрабатывает ни одной заявки.', 'Завершённых заявок пока нет.', 'Заявок пока нет.']
 const waited = (m: number) => (m < 60 ? `${m} мин` : m < 1440 ? `${Math.floor(m / 60)} ч ${m % 60} мин` : `${Math.floor(m / 1440)} дн`)
 
 export default function Queue() {
   const [filter, setFilter] = useState(0)
-  const [items, setItems] = useState<QueueItem[] | null>(null)
   const [error, setError] = useState('')
   const nav = useNavigate()
-  const load = () => bank.queue(FILTERS[filter].statuses).then((l) => { setItems(l); setError('') }).catch((e) => setError(errorText(e)))
-  useEffect(() => { setItems(null); load() }, [filter]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Один запрос на все заявки: счётчики вкладок и список считаются на месте, вкладка переключается без ожидания
+  const [all, setAll] = useState<QueueItem[] | null>(null)
+  const load = () => bank.queue().then((l) => { setAll(l); setError('') }).catch((e) => setError(errorText(e)))
+  useEffect(() => { load() }, []) // eslint-disable-line react-hooks/exhaustive-deps
   usePolling(load, 5000)
+  const inFilter = (i: number, q: QueueItem) => !FILTERS[i].statuses.length || FILTERS[i].statuses.includes(q.status)
+  const items = all && all.filter((q) => inFilter(filter, q)).sort((a, b) => b.waiting_minutes - a.waiting_minutes)
   return (
     <Screen title="Очередь заявок" sub="Сверху — те, что ждут дольше всех">
       <div data-span={12} className="flex flex-wrap gap-2">
-        {FILTERS.map((f, i) => <button key={f.label} onClick={() => setFilter(i)} aria-pressed={filter === i} className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${filter === i ? 'bg-fill text-white' : 'bg-surface-2 hover:bg-surface-3'}`}>{f.label}</button>)}
+        {FILTERS.map((f, i) => <button key={f.label} onClick={() => setFilter(i)} aria-pressed={filter === i} className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${filter === i ? 'bg-fill text-white' : 'bg-surface-2 hover:bg-surface-3'}`}>{f.label}{all && <span className={`ml-1.5 tabular-nums ${filter === i ? 'text-white/80' : 'text-muted'}`}>{all.filter((q) => inFilter(i, q)).length}</span>}</button>)}
       </div>
       <ErrorText>{error}</ErrorText>
       {!items && !error && <Skeleton />}
-      {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">Здесь пусто.</p></Card>}
+      {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">{EMPTY[filter]}</p></Card>}
       {items && items.length > 0 && (
         <ul data-span={12} className="space-y-2.5 md:hidden">
           {items.map((q) => (
@@ -64,7 +68,7 @@ export default function Queue() {
                   <td className="whitespace-nowrap px-4 py-3 tabular-nums"><Link to={`/bank/${q.id}`} className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>{q.number}</Link></td>
                   <td className="px-4 py-3"><div className="font-medium">{q.company_name}</div><div className="text-[12px] text-muted tabular-nums">ИНН {q.inn}</div></td>
                   <td className="px-4 py-3">{productNames[q.product_id]}</td>
-                  <td className="px-4 py-3 tabular-nums">{rub(q.amount_rub)}<div className="text-[12px] text-muted">{q.term_months} мес.</div></td>
+                  <td className="whitespace-nowrap px-4 py-3 tabular-nums">{rub(q.amount_rub)}<div className="text-[12px] text-muted">{q.term_months} мес.</div></td>
                   <td className={`px-4 py-3 text-[16px] font-semibold ${gradeTone(q.grade)}`}>{q.grade ?? '—'}</td>
                   <td className="px-4 py-3"><StatusBadge status={q.status} title={statuses[q.status].title} /></td>
                   <td className="whitespace-nowrap px-4 py-3 tabular-nums text-muted">{waited(q.waiting_minutes)}</td>

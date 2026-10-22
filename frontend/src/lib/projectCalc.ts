@@ -1,6 +1,7 @@
 // Расчёт проекта без ИИ: шаблон сферы + формулы из /contracts/templates.md.
 // Эталон для бэкенда (POST /api/plans/calculate) и движок мок-режима фронта.
 import spheres from '../data/spheres.v1.json' with { type: 'json' }
+import wages from '../data/city_wages.v1.json' with { type: 'json' }
 import { cities, normalizeCity } from '../data/cities.ts'
 import { alfaProducts } from '../data/alfaProducts.ts'
 import { payment } from './creditRules.ts'
@@ -14,7 +15,7 @@ export interface CalcRequest { sphere: Sphere; city: string; own_funds_rub: numb
 type StartupItem = { title: string; kind: 'fixed' | 'per_m2' | 'per_answer' | 'rent_months'; rub?: number; months?: number; answer?: string; days: number; assumption: string }
 type SphereDef = Template & {
   sphere_label: string; startup: StartupItem[]
-  monthly: { rent_per_m2: number; salary_per_staff: number; cogs_percent: number; other_rub: number; cogs_title: string }
+  monthly: { rent_per_m2: number; salary_share: number; cogs_percent: number; other_rub: number; cogs_title: string }
   revenue: { qty: string; price: string; days_per_month: number }; ramp: number[]
   opportunities: Plan['opportunities']; risks: Plan['risks']
 }
@@ -29,6 +30,11 @@ export class CalcError extends Error {}
 
 const groups = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 const shortRub = (n: number) => n >= 1_000_000 ? `${(Math.round(n / 100_000) / 10).toString().replace('.', ',')} млн ₽` : `${groups(Math.round(n / 1000))} тыс ₽`
+
+// Средняя зарплата региона города (Росстат); города нет в таблице — значение по умолчанию. Ключ как у бэкенда: без регистра и «ё»
+const wageKey = (s: string) => s.trim().toLowerCase().replace(/ё/g, 'е')
+const wageTable = new Map(Object.entries(wages.cities as Record<string, number>).map(([n, v]) => [wageKey(n), v]))
+export const cityWage = (city: string) => { const v = wageTable.get(wageKey(city)); return { avg: v ?? wages.default_avg_salary_rub, known: v != null } }
 
 export function cityK(city: string) {
   const c = cities.find((x) => normalizeCity(x.name) === normalizeCity(city))
@@ -67,11 +73,12 @@ export function calculatePlan(req: CalcRequest): Plan {
   const startup = startup_items.reduce((x, s) => x + s.amount_rub, 0)
 
   const revenue = Math.round(Number(a[d.revenue.qty]) * Number(a[d.revenue.price]) * d.revenue.days_per_month)
-  const salaries = Math.round(staff * m.salary_per_staff * (0.6 + 0.4 * k) * (1 + spheres.payroll_tax_percent / 100))
+  const wage = cityWage(req.city), perStaff = Math.round(wage.avg * m.salary_share)
+  const salaries = Math.round(staff * perStaff * (1 + spheres.payroll_tax_percent / 100))
   const variable = (rev: number) => Math.round(rev * m.cogs_percent / 100) + Math.round(rev * tax / 100)
   const monthly_items = [
-    { title: 'Аренда', amount_rub: rent, assumption: `${groups(m.rent_per_m2)} ₽ за м² в Москве × ${area} м² × коэффициент города ${k}` },
-    { title: 'Зарплаты', amount_rub: salaries, assumption: staff === 0 ? 'Наёмных сотрудников нет: работает сам предприниматель' : `${staff} чел., с учётом уровня зарплат в городе и страховых взносов ${spheres.payroll_tax_percent}%` },
+    { title: 'Аренда', amount_rub: rent, assumption: `${groups(Math.round(m.rent_per_m2 * k))} ₽ за м² × ${area} м² (ставка Москвы ${groups(m.rent_per_m2)} ₽ × коэффициент города ${k})` },
+    { title: 'Зарплаты', amount_rub: salaries, assumption: staff === 0 ? 'Наёмных сотрудников нет: работает сам предприниматель' : `${staff} чел. × ${groups(perStaff)} ₽ (${wage.known ? `около ${Math.round(m.salary_share * 100)}% средней зарплаты региона ${groups(wage.avg)} ₽ по Росстату` : `оценка по умолчанию, средняя зарплата ${groups(wage.avg)} ₽`}), взносы ${spheres.payroll_tax_percent}%` },
     ...(m.cogs_percent > 0 ? [{ title: m.cogs_title, amount_rub: Math.round(revenue * m.cogs_percent / 100), assumption: `${m.cogs_percent}% выручки` }] : []),
     { title: `Налог УСН ${tax}%`, amount_rub: Math.round(revenue * tax / 100), assumption: 'УСН «доходы»' },
     { title: 'Прочие расходы', amount_rub: m.other_rub, assumption: 'Коммунальные услуги, связь, эквайринг, бухгалтерия' },

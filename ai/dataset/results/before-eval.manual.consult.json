@@ -1,0 +1,366 @@
+{
+  "name": "before-eval.manual",
+  "task": "consult",
+  "split": "manual",
+  "metrics": {
+    "n": 119,
+    "schema_valid": 1.0,
+    "type_accuracy": 1.0,
+    "state.sphere_accuracy": 0.9496,
+    "state.city_accuracy": 0.9496,
+    "state.own_funds_rub_accuracy": 1.0,
+    "state.answers_accuracy": 1.0,
+    "state.experience_accuracy": 1.0,
+    "state_exact": 0.8992,
+    "type_and_state_exact": 0.8992,
+    "answers_pairs": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "invented_amounts_rate": 0.0,
+    "credit_promise_rate": 0.0,
+    "message_keeps_state": 1.0,
+    "by_scenario": {
+      "all_answers": 1.0,
+      "answer_core": 1.0,
+      "colloquial": 1.0,
+      "confirm_nearest": 1.0,
+      "correction": 1.0,
+      "credit_promise": 1.0,
+      "decline_nearest": 1.0,
+      "eval_city_spelling": 0.0,
+      "eval_generic_city": 0.333,
+      "eval_two_spheres": 0.0,
+      "eval_vending": 0.0,
+      "example_accept": 1.0,
+      "example_decline": 1.0,
+      "greeting": 1.0,
+      "mixed_attack": 1.0,
+      "negation": 1.0,
+      "offtopic": 1.0,
+      "out_of_range": 1.0,
+      "partial": 1.0,
+      "role_change": 1.0,
+      "several_sums": 1.0,
+      "short_answer": 1.0,
+      "similar_city": 1.0,
+      "skip": 1.0,
+      "staff_negative": 1.0,
+      "staff_zero": 1.0,
+      "sums_question": 1.0,
+      "undecided": 1.0,
+      "unknown_business": 1.0,
+      "vague": 1.0,
+      "zero_funds": 1.0,
+      "zero_funds_negative": 1.0
+    },
+    "by_rule": {
+      "R1_correction": 1.0,
+      "R_zero_funds": 1.0
+    },
+    "unseen_phrasing": {
+      "n": 119,
+      "type_accuracy": 1.0,
+      "state_exact": 0.8992,
+      "type_and_state_exact": 0.8992
+    },
+    "latency_ms": {
+      "mean": 9.55,
+      "p95": 5.75
+    }
+  },
+  "errors": [
+    {
+      "id": "consult.manual.106",
+      "scenario": "eval_generic_city",
+      "message": "хочу открыть пекарню у себя в городе",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Городец",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.107",
+      "scenario": "eval_generic_city",
+      "message": "пекарня у нас в городе, своих 500к",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": null,
+          "own_funds_rub": 500000,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Городец",
+          "own_funds_rub": 500000,
+          "experience": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.109",
+      "scenario": "eval_city_spelling",
+      "message": "автомойка в ростов на дону",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "car_wash",
+          "city": "Ростов-на-Дону",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "car_wash",
+          "city": "Ростов",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.110",
+      "scenario": "eval_city_spelling",
+      "message": "магазин одежды в комсомольске на амуре",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "clothing_store",
+          "city": "Комсомольск-на-Амуре",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "clothing_store",
+          "city": "Комсомольск",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.111",
+      "scenario": "eval_city_spelling",
+      "message": "кофейня, город санкт петербург",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": "Санкт-Петербург",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.112",
+      "scenario": "eval_city_spelling",
+      "message": "пекарня в петропавловске камчатском",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": "Петропавловск-Камчатский",
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "bakery",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.113",
+      "scenario": "eval_vending",
+      "message": "хочу поставить кофейные автоматы в торговом центре",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.114",
+      "scenario": "eval_vending",
+      "message": "вендинг с кофе в бизнес-центре",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.115",
+      "scenario": "eval_vending",
+      "message": "думаю про автомат с кофе у вокзала",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "coffee",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    },
+    {
+      "id": "consult.manual.116",
+      "scenario": "eval_two_spheres",
+      "message": "то ли барбершоп, то ли магазин одежды",
+      "state_in": {
+        "sphere": null,
+        "city": null,
+        "own_funds_rub": null,
+        "answers": {}
+      },
+      "gold": {
+        "type": "questions",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "pred": {
+        "type": "questions",
+        "state": {
+          "sphere": "clothing_store",
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      }
+    }
+  ]
+}

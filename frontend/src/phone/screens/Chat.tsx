@@ -63,6 +63,10 @@ export default function Chat() {
     setAnswers({})
   }
   const last = messages[messages.length - 1]
+  // Бэкенд не сообщает, работает ли ИИ, поэтому «на связи» не обещаем: показываем только то, что видели сами
+  const aiStatus = busy ? { dot: 'animate-pulse bg-accent', text: 'думает над ответом' }
+    : last?.error ? { dot: 'bg-accent', text: 'нет связи с ИИ, ответ не получен' }
+    : { dot: 'bg-muted', text: 'готов к диалогу' }
 
   return (
     <div className="flex h-full flex-col">
@@ -70,7 +74,7 @@ export default function Chat() {
         <Logo size={40} />
         <div className="min-w-0 flex-1">
           <h1 className="text-[18px] font-bold leading-tight">ИИ-консультант</h1>
-          <p className="flex items-center gap-1.5 text-[13px] text-muted"><span className={`h-1.5 w-1.5 rounded-full ${busy ? 'animate-pulse bg-accent' : 'bg-ok'}`} aria-hidden />{busy ? 'думает над ответом' : 'на связи'}</p>
+          <p className="flex items-center gap-1.5 text-[13px] text-muted" role="status"><span className={`h-1.5 w-1.5 rounded-full ${aiStatus.dot}`} aria-hidden />{aiStatus.text}</p>
         </div>
         <IconBtn label="Новый диалог" onClick={() => { newChat(); setAnswers({}) }}><path d="M12 5v14M5 12h14" /></IconBtn>
         {!wide && <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>}
@@ -273,7 +277,10 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit 
           )}
         </div>
       })}
-      {active && <button disabled={!done} onClick={() => onSubmit(reply.questions)} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white transition-opacity disabled:opacity-35">Ответить</button>}
+      {active && <div className="space-y-2">
+        <p className="text-[13px] leading-snug text-muted">{done ? 'Остальное можно пропустить: уйдёт как «—».' : 'Ответьте хотя бы на один вопрос. Чего не знаете, пропускайте.'}</p>
+        <button disabled={!done} onClick={() => onSubmit(reply.questions)} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white transition-colors disabled:bg-surface-3 disabled:text-text/60">Ответить</button>
+      </div>}
     </fieldset>
   )
 }

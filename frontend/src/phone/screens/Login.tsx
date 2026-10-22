@@ -8,21 +8,22 @@ const points = ['План запуска по вашей идее', 'Сколь�
 const field = 'h-[52px] w-full rounded-2xl bg-surface px-4 text-[16px] text-text outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent'
 
 const DEMO_ROLES = [
-  { email: DEMO_CLIENT.email, role: 'Клиент', name: DEMO_CLIENT.name },
-  { email: DEMO_ANALYST.email, role: 'Аналитик банка', name: DEMO_ANALYST.name },
+  { email: DEMO_CLIENT.email, role: 'Клиент', name: DEMO_CLIENT.name, hint: 'Чат, план, заявка на кредит' },
+  { email: DEMO_ANALYST.email, role: 'Аналитик банка', name: DEMO_ANALYST.name, hint: 'Очередь заявок и решения' },
 ]
 
 export default function Login() {
   const { signIn, signUp, notice } = useCabinet()
   const wide = useContext(Wide)
-  const [mode, setMode] = useState<'login' | 'register'>('login')
+  const conveyorOn = useContext(Conveyor) // рабочая версия /app; в телефоне на презентации выбора роли нет
+  // В рабочей версии вход начинается с выбора: Клиент, Аналитик банка или Новый пользователь
+  const [mode, setMode] = useState<'choose' | 'login' | 'register'>(conveyorOn ? 'choose' : 'login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState(USE_MOCKS ? DEMO_CLIENT.email : '')
   const [pass, setPass] = useState(USE_MOCKS ? DEMO_PASSWORD : '')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const reg = mode === 'register'
-  const conveyorOn = useContext(Conveyor) // рабочая версия /app; в телефоне на презентации панели демо-доступа нет
   const demo = (e: string) => { setError(null); setBusy(true); signIn(e, DEMO_PASSWORD).catch((err) => { setError(err instanceof ApiError ? err.message : 'Не удалось войти. Попробуйте ещё раз.'); setBusy(false) }) }
 
   async function submit(e: React.FormEvent) {
@@ -41,6 +42,41 @@ export default function Login() {
     }
   }
 
+
+  if (mode === 'choose') return (
+    <div className={wide ? 'w-full' : 'relative flex min-h-full flex-col px-6 pb-10'}>
+      <div className={wide ? 'mb-8' : 'mb-auto shrink-0 pb-6 pt-12'}>
+        {!wide && <Logo size={56} />}
+        <h1 className={`font-display font-semibold leading-tight tracking-tight ${wide ? 'text-[30px]' : 'mt-5 text-[28px]'}`}>Кабинет предпринимателя</h1>
+        <p className="mt-2 text-[15px] text-text/70">Войдите или создайте аккаунт. Тестовые роли ниже нужны для проверки, их данные синтетические.</p>
+      </div>
+      <div className="relative space-y-3">
+        {(error || notice) && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error ?? notice}</p>}
+        <button type="button" disabled={busy} onClick={() => { setMode('register'); setError(null); setName(''); setEmail(''); setPass('') }}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl bg-fill px-5 py-[18px] text-left text-white transition-colors hover:bg-brand-deep disabled:opacity-50">
+          <span><span className="block text-[18px] font-semibold">Новый пользователь</span><span className="block text-[13px] text-white/75">Создать свой аккаунт за минуту</span></span>
+          <span aria-hidden>→</span>
+        </button>
+        <button type="button" disabled={busy} onClick={() => { setMode('login'); setError(null) }}
+          className="flex w-full items-center justify-between gap-3 rounded-2xl bg-surface px-5 py-[18px] text-left ring-1 ring-white/25 transition-colors hover:bg-surface-2 disabled:opacity-50">
+          <span><span className="block text-[18px] font-semibold">Войти</span><span className="block text-[13px] text-muted">По почте и паролю, если аккаунт уже есть</span></span>
+          <span className="text-muted" aria-hidden>→</span>
+        </button>
+        <div className="pt-4">
+          <div className="flex items-center gap-3 text-[12px] text-muted"><span className="h-px flex-1 bg-white/10" /><span>Тестовый доступ: без регистрации</span><span className="h-px flex-1 bg-white/10" /></div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {DEMO_ROLES.map((r) => (
+              <button key={r.email} type="button" disabled={busy} onClick={() => demo(r.email)}
+                className="rounded-xl bg-white/[.04] px-3.5 py-2.5 text-left ring-1 ring-white/5 transition-colors hover:bg-white/[.08] disabled:opacity-50">
+                <span className="flex items-center justify-between gap-2"><span className="text-[14px] font-medium">{r.role}</span><span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">тест</span></span>
+                <span className="mt-0.5 block text-[12px] leading-snug text-muted">{r.hint}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 
   return (
     <form className={wide ? 'w-full' : 'relative flex min-h-full flex-col px-6 pb-10'} onSubmit={submit} noValidate>
@@ -70,29 +106,16 @@ export default function Login() {
       )}
       <div className="relative space-y-3">
         {(error || notice) && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error ?? notice}</p>}
-        {reg && (<><label className="sr-only" htmlFor="name">Имя</label><input id="name" className={field} value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" autoComplete="name" /></>)}
-        <label className="sr-only" htmlFor="email">Почта</label>
+        {reg && (<><label className="mb-1.5 block text-[13px] text-text/70" htmlFor="name">Имя</label><input id="name" className={field} value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" autoComplete="name" /></>)}
+        <label className="mb-1.5 block text-[13px] text-text/70" htmlFor="email">Почта</label>
         <input id="email" className={field} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Почта" autoComplete="email" />
-        <label className="sr-only" htmlFor="pass">Пароль</label>
+        <label className="mb-1.5 block text-[13px] text-text/70" htmlFor="pass">Пароль</label>
         <input id="pass" className={field} value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder={reg ? 'Пароль, от 8 символов' : 'Пароль'} autoComplete={reg ? 'new-password' : 'current-password'} />
         <Button disabled={busy}>{busy ? 'Подождите…' : reg ? 'Создать аккаунт' : 'Войти'}</Button>
         <button type="button" className="h-10 w-full text-center text-[14px] text-muted" onClick={() => { setMode(reg ? 'login' : 'register'); setError(null) }}>
           {reg ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
         </button>
-        {!reg && conveyorOn && (
-          <div className="rounded-2xl bg-white/[.04] p-4 ring-1 ring-white/5">
-            <div className="text-[13px] text-muted">Демо-доступ: войти одним нажатием</div>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {DEMO_ROLES.map((r) => (
-                <button key={r.email} type="button" disabled={busy} onClick={() => demo(r.email)}
-                  className="rounded-xl bg-surface-2 px-3.5 py-3 text-left transition-colors hover:bg-surface-3 disabled:opacity-50">
-                  <span className="block text-[15px] font-semibold">{r.role}</span>
-                  <span className="block truncate text-[12px] text-muted">{r.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {conveyorOn && <button type="button" className="h-10 w-full text-center text-[14px] text-muted" onClick={() => { setMode('choose'); setError(null) }}>← Назад к выбору</button>}
         {USE_MOCKS && !reg && !conveyorOn && <p className="text-center text-[12px] text-muted">Демо-аккаунт уже заполнен</p>}
       </div>
     </form>

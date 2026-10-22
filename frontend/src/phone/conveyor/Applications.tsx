@@ -4,7 +4,7 @@ import { conveyor } from '../../api/conveyor'
 import type { ApplicationListItem, FeedItem } from '../../types/conveyor'
 import { rub } from '../../lib/format'
 import { Card, Screen, Skeleton } from '../ui'
-import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move, statusTone } from './parts'
 import { MiniTrack } from './Track'
 import { usePolling } from '../../lib/usePolling'
 
@@ -14,9 +14,11 @@ const GROUPS: { move: Move; title: string }[] = [
   { move: 'done', title: 'Завершены' },
 ]
 
+const STRIPE: Record<string, string> = { ok: 'before:bg-ok', warn: 'before:bg-warn', bad: 'before:bg-accent', action: 'before:bg-accent-soft', bank: 'before:bg-steel/70', muted: 'before:bg-white/15' }
+
 function AppCard({ a }: { a: ApplicationListItem }) {
   return (
-    <Link to={`/applications/${a.id}`} data-span={6} className="card-ring group block rounded-[22px] bg-surface p-4 transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[.99] sm:p-5">
+    <Link to={`/applications/${a.id}`} data-span={6} className={`card-ring group relative block overflow-hidden rounded-[22px] bg-surface p-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${STRIPE[statusTone(a.status)]}  transition-[background-color,transform] duration-200 hover:bg-surface-2 active:scale-[.99] sm:p-5`}>
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
         <span className="whitespace-nowrap text-[12px] text-muted tabular-nums">{a.number}</span>
         <StatusBadge status={a.status} title={a.status_title} />

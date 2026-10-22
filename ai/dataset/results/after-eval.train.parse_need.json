@@ -1,0 +1,252 @@
+{
+  "name": "after-eval.train",
+  "task": "parse_need",
+  "split": "train",
+  "metrics": {
+    "n": 2681,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 0.9739,
+    "sphere_accuracy": 0.9735,
+    "city_accuracy": 0.9855,
+    "amount_rub_accuracy": 1.0,
+    "term_months_accuracy": 0.997,
+    "has_collateral_accuracy": 0.9922,
+    "all_fields_exact": 0.9258,
+    "recall_when_present": {
+      "purpose": 0.9692,
+      "sphere": 0.9955,
+      "city": 0.9771,
+      "amount_rub": 1.0,
+      "term_months": 0.9951,
+      "has_collateral": 0.9713
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 0.9739,
+        "pass": true
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 0.9735,
+        "pass": true
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "city": {
+        "need": 0.95,
+        "got": 0.9855,
+        "pass": true
+      }
+    },
+    "latency_ms": {
+      "mean": 15.61,
+      "p95": 25.02
+    }
+  },
+  "errors": [
+    {
+      "id": "parse_need.train.00010",
+      "text": "На зарплаты и аренду автомойки; г. Саратов; хоуч взять 350 тыс.; хочу вернуть за деесять лет; под залог ообрудования",
+      "gold": {
+        "purpose": "working_capital",
+        "sphere": "car_wash",
+        "city": "Саратов",
+        "amount_rub": 350000,
+        "term_months": 120,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": "car_wash",
+        "city": "Саратов",
+        "amount_rub": 350000,
+        "term_months": 120,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.train.00071",
+      "text": "Оборозка для бутика одежды; надо 500 000",
+      "gold": {
+        "purpose": "working_capital",
+        "sphere": "clothing_store",
+        "city": null,
+        "amount_rub": 500000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "clothing_store",
+        "city": null,
+        "amount_rub": 500000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.train.00097",
+      "text": "Привет. Нужно открыть ещё одну точку. в Перми",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.train.00098",
+      "text": "Хочу открыть еще одну токчу, в Перим",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.train.00099",
+      "text": "Добрый день. открыть ещё одну точку. я из Перми",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Пермь",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.train.00106",
+      "text": "Планирую запустить новое напраавление, я из Саратова, надо 400 000, залога нет",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": null,
+        "city": "Саратов",
+        "amount_rub": 400000,
+        "term_months": null,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": "Саратов",
+        "amount_rub": 400000,
+        "term_months": null,
+        "has_collateral": false
+      }
+    },
+    {
+      "id": "parse_need.train.00141",
+      "text": "Нуано открыть ноую точку — кофейный островок, залог датть не могу",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "coffee",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": false
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "coffee",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.train.00157",
+      "text": "Привет. на зарплаыт и аренду пекарни в Боровичах, нужен кредит на 5 млн, залог есть — гараж",
+      "gold": {
+        "purpose": "working_capital",
+        "sphere": "bakery",
+        "city": "Боровичи",
+        "amount_rub": 5000000,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "bakery",
+        "city": "Боровичи",
+        "amount_rub": 5000000,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.train.00158",
+      "text": "На зарплаты и аренду пекарни; надо пять миллионов; под залог оборудования; в городе Боровичи",
+      "gold": {
+        "purpose": "working_capital",
+        "sphere": "bakery",
+        "city": "Боровичи",
+        "amount_rub": 5000000,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": "bakery",
+        "city": "Боровичи",
+        "amount_rub": 5000000,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.train.00164",
+      "text": "подскажите, рефинансировать кредиты пекарни, город Сергиев Посзд",
+      "gold": {
+        "purpose": "refinance",
+        "sphere": "bakery",
+        "city": "Сергиев Посад",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "refinance",
+        "sphere": "bakery",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    }
+  ]
+}
