@@ -26,6 +26,7 @@ PRODUCTS={p['id']:p for p in load(CATALOG/'products.json')['products']+load(ROOT
 SCENARIOS=load(ROOT/'integrations-mock/data/companies.json')
 DEMO=load(CATALOG/'demo_applications.json')
 TEMPLATES=load(ROOT/'contracts/templates/spheres.v1.json')
+TEMPLATES['city_wages']=load(ROOT/'contracts/templates/city_wages.v1.json')
 TODAY=date(2026,10,20)
 spec=importlib.util.spec_from_file_location('external_mock',ROOT/'integrations-mock/app/__init__.py',submodule_search_locations=[str(ROOT/'integrations-mock/app')])
 module=importlib.util.module_from_spec(spec)

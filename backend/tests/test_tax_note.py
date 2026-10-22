@@ -65,3 +65,41 @@ def test_zero_staff_has_no_salaries_and_valid_plan(settings, sphere):
 def test_product_reasons_do_not_name_the_bank(settings):
     text = (settings.contracts_dir.parent / 'backend' / 'app' / 'credit_rules.py').read_text(encoding='utf-8')
     assert 'Альфа' not in text
+
+
+def wages():
+    import json
+    return json.loads((CONTRACTS.root / 'templates' / 'city_wages.v1.json').read_text(encoding='utf-8'))
+
+
+def per_head(c, h, city, sphere='coffee'):
+    body = dict(sphere=sphere, city=city, own_funds_rub=500000, answers={'staff': 1})
+    plan = c.post('/api/plans/calculate', headers=h, json=body).json()['plan']
+    return round(next(i for i in plan['finance']['monthly_items'] if i['title'] == 'Зарплаты')['amount_rub'] / 1.3), plan
+
+
+def test_salaries_follow_regional_average_wage(settings):
+    w = wages()
+    with setup(settings) as c:
+        h = register(c)
+        moscow, _ = per_head(c, h, 'Москва')
+        sakhalin, _ = per_head(c, h, 'Южно-Сахалинск')
+        spb, _ = per_head(c, h, 'Санкт-Петербург')
+        kazan, _ = per_head(c, h, 'Казань')
+        samara, _ = per_head(c, h, 'Самара')
+        assert moscow > 85000 and 70000 < sakhalin < 80000
+        assert moscow > spb > kazan > samara
+        unknown, plan = per_head(c, h, 'Юрюзань')
+        assert unknown == round(w['default_avg_salary_rub'] * 0.5)
+        pay = next(i for i in plan['finance']['monthly_items'] if i['title'] == 'Зарплаты')
+        assert 'оценка по умолчанию' in pay['assumption'] and 'Росстат' not in pay['assumption']
+        assert per_head(c, h, 'москва')[0] == moscow
+
+
+def test_rent_assumption_shows_city_rate(settings):
+    with setup(settings) as c:
+        h = register(c)
+        _, plan = per_head(c, h, 'Юрюзань')
+        rent = next(i for i in plan['finance']['monthly_items'] if i['title'] == 'Аренда')
+        assert rent['assumption'].startswith('2 100 ₽ за м² × ')
+        assert 'в Москве' not in rent['assumption'] and 'ставка Москвы 6 000 ₽' in rent['assumption']

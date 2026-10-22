@@ -140,7 +140,7 @@
       ],
       "monthly": {
         "rent_per_m2": 6000,
-        "salary_per_staff": 55000,
+        "salary_share": 0.5,
         "cogs_percent": 33,
         "other_rub": 55000,
         "cogs_title": "Закупка зерна, молока, упаковки"
@@ -279,7 +279,7 @@
       ],
       "monthly": {
         "rent_per_m2": 4500,
-        "salary_per_staff": 60000,
+        "salary_share": 0.55,
         "cogs_percent": 38,
         "other_rub": 90000,
         "cogs_title": "Сырьё и упаковка"
@@ -428,7 +428,7 @@
       ],
       "monthly": {
         "rent_per_m2": 1200,
-        "salary_per_staff": 55000,
+        "salary_share": 0.5,
         "cogs_percent": 14,
         "other_rub": 90000,
         "cogs_title": "Химия, вода, расходники"
@@ -567,7 +567,7 @@
       ],
       "monthly": {
         "rent_per_m2": 5000,
-        "salary_per_staff": 55000,
+        "salary_share": 0.5,
         "cogs_percent": 52,
         "other_rub": 80000,
         "cogs_title": "Закупка товара"
@@ -716,7 +716,7 @@
       ],
       "monthly": {
         "rent_per_m2": 4000,
-        "salary_per_staff": 50000,
+        "salary_share": 0.55,
         "cogs_percent": 18,
         "other_rub": 55000,
         "cogs_title": "Материалы"
@@ -848,7 +848,7 @@
       ],
       "monthly": {
         "rent_per_m2": 2500,
-        "salary_per_staff": 45000,
+        "salary_share": 0.4,
         "cogs_percent": 0,
         "other_rub": 35000,
         "cogs_title": "Расходники"

@@ -2,7 +2,7 @@
   "plan_id": "p-calc-1",
   "plan": {
     "title": "Кофейня, Казань",
-    "summary": "Кофе с собой: запуск — 1,4 млн ₽, на плановом уровне прибыль 269 тыс ₽ в месяц, окупаемость — около 6 мес. Расчёт по шаблону, цены — оценка.",
+    "summary": "Кофе с собой: запуск — 1,4 млн ₽, на плановом уровне прибыль 266 тыс ₽ в месяц, окупаемость — около 6 мес. Расчёт по шаблону, цены — оценка.",
     "business": {
       "sphere": "Общепит",
       "format": "Кофе с собой",
@@ -84,69 +84,69 @@
       "own_funds_rub": 500000,
       "funding_gap_rub": 854000,
       "monthly_revenue_rub": 900000,
-      "monthly_expenses_rub": 631390,
-      "monthly_profit_rub": 268610,
+      "monthly_expenses_rub": 633917,
+      "monthly_profit_rub": 266083,
       "payback_months": 6,
       "revenue_forecast": [
         {
           "month": 1,
           "revenue_rub": 405000,
-          "expenses_rub": 438340
+          "expenses_rub": 440867
         },
         {
           "month": 2,
           "revenue_rub": 540000,
-          "expenses_rub": 490990
+          "expenses_rub": 493517
         },
         {
           "month": 3,
           "revenue_rub": 675000,
-          "expenses_rub": 543640
+          "expenses_rub": 546167
         },
         {
           "month": 4,
           "revenue_rub": 765000,
-          "expenses_rub": 578740
+          "expenses_rub": 581267
         },
         {
           "month": 5,
           "revenue_rub": 855000,
-          "expenses_rub": 613840
+          "expenses_rub": 616367
         },
         {
           "month": 6,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 7,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 8,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 9,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 10,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 11,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         },
         {
           "month": 12,
           "revenue_rub": 900000,
-          "expenses_rub": 631390
+          "expenses_rub": 633917
         }
       ],
       "startup_items": [
@@ -185,12 +185,12 @@
         {
           "title": "Аренда",
           "amount_rub": 49500,
-          "assumption": "6 000 ₽ за м² в Москве × 15 м² × коэффициент города 0.55"
+          "assumption": "3 300 ₽ за м² × 15 м² (ставка Москвы 6 000 ₽ × коэффициент города 0.55)"
         },
         {
           "title": "Зарплаты",
-          "amount_rub": 175890,
-          "assumption": "3 чел., с учётом уровня зарплат в городе и страховых взносов 30%"
+          "amount_rub": 178417,
+          "assumption": "3 чел. × 45 748 ₽ (около 50% средней зарплаты региона 91 495 ₽ по Росстату), взносы 30%"
         },
         {
           "title": "Закупка зерна, молока, упаковки",
@@ -216,10 +216,10 @@
       "recommended_term_months": 36,
       "estimated_rate_percent": 23.5,
       "monthly_payment_rub": 33515,
-      "debt_load_percent": 12,
+      "debt_load_percent": 13,
       "verdict": "ok",
       "recommended_product_id": "fast",
-      "comment": "Платёж — около 12% плановой прибыли: нагрузка умеренная."
+      "comment": "Платёж — около 13% плановой прибыли: нагрузка умеренная."
     },
     "tax_note": {
       "text": "УСН: 6% с доходов или 15% с доходов минус расходы (ст. 346.20 НК РФ). Регион может снизить ставку для отдельных видов деятельности: на сайте ФНС выберите свой регион и откройте раздел «Особенности регионального законодательства» на странице налога. Федеральный МРОТ с 1 января 2026 года — 27 093 ₽, в вашем регионе он может быть выше.",

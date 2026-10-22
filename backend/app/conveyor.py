@@ -36,6 +36,7 @@ class Conveyor:
         self.dict=load(contracts.root,'dictionaries.json')
         self.products={p['id']:p for p in load(CATALOG,'products.json')['products']+load(contracts.root,'products.gov.json')['products']+load(contracts.root,'products.demo.json')['products']}
         self.templates=load(contracts.root,'templates/spheres.v1.json')
+        self.templates['city_wages']=load(contracts.root,'templates/city_wages.v1.json')  # зарплаты считаются от средней по региону
 
     def validate(self, definition, body):
         try:

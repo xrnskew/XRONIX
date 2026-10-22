@@ -24,6 +24,14 @@ def city_k(city, cfg):
     return cfg['unknown_city_k'] if pop is None else next(t['k'] for t in cfg['city_tiers'] if pop >= t['min_population'])
 
 
+def city_wage(city, cfg):
+    """Средняя зарплата региона города (Росстат); города нет в таблице — значение по умолчанию. Ключ: без регистра и «ё»."""
+    wages = cfg['city_wages']
+    key = city.strip().lower().replace('ё', 'е')
+    table = {n.strip().lower().replace('ё', 'е'): v for n, v in wages['cities'].items()}
+    return (table[key], True) if key in table else (wages['default_avg_salary_rub'], False)
+
+
 def groups(n):
     return f'{n:,}'.replace(',', ' ')
 
@@ -67,9 +75,13 @@ def calculate(req, cfg, products):
         startup_items.append(dict(title=s['title'], amount_rub=js_round(amount), assumption=s['assumption'].replace('{rub}', groups(s.get('rub', 0)))))
     startup = sum(s['amount_rub'] for s in startup_items)
     revenue = js_round(a[d['revenue']['qty']]*a[d['revenue']['price']]*d['revenue']['days_per_month'])
-    salaries = js_round(staff*m['salary_per_staff']*(0.6+0.4*k)*(1+cfg['payroll_tax_percent']/100))
-    monthly_items = [dict(title='Аренда', amount_rub=rent, assumption=f"{groups(m['rent_per_m2'])} ₽ за м² в Москве × {area:g} м² × коэффициент города {k:g}"),
-                     dict(title='Зарплаты', amount_rub=salaries, assumption='Наёмных сотрудников нет: работает сам предприниматель' if staff == 0 else f"{staff:g} чел., с учётом уровня зарплат в городе и страховых взносов {cfg['payroll_tax_percent']}%")]
+    avg, known = city_wage(req['city'], cfg)
+    per_staff = js_round(avg*m['salary_share'])
+    basis = f"около {js_round(m['salary_share']*100)}% средней зарплаты региона {groups(avg)} ₽ по Росстату" if known else f"оценка по умолчанию, средняя зарплата {groups(avg)} ₽"
+    wage_text = f"{staff:g} чел. × {groups(per_staff)} ₽ ({basis}), взносы {cfg['payroll_tax_percent']}%"
+    salaries = js_round(staff*per_staff*(1+cfg['payroll_tax_percent']/100))
+    monthly_items = [dict(title='Аренда', amount_rub=rent, assumption=f"{groups(js_round(m['rent_per_m2']*k))} ₽ за м² × {area:g} м² (ставка Москвы {groups(m['rent_per_m2'])} ₽ × коэффициент города {k:g})"),
+                     dict(title='Зарплаты', amount_rub=salaries, assumption='Наёмных сотрудников нет: работает сам предприниматель' if staff == 0 else wage_text)]
     if m['cogs_percent'] > 0:
         monthly_items.append(dict(title=m['cogs_title'], amount_rub=js_round(revenue*m['cogs_percent']/100), assumption=f"{m['cogs_percent']}% выручки"))
     monthly_items.extend([dict(title=f'Налог УСН {tax}%', amount_rub=js_round(revenue*tax/100), assumption='УСН «доходы»'),

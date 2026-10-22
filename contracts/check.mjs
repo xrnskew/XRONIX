@@ -199,4 +199,20 @@ if (annuity(c.amount_rub, c.estimated_rate_percent, c.recommended_term_months) !
   if (venueKeys !== sphereKeys) errs.push('knowledge venues: ключи не совпадают со сферами templates/spheres.v1.json')
   if (errs.length) { bad++; console.error('FAIL база знаний:', errs) } else console.log('ok   смысл базы знаний и банка фраз')
 }
+{
+  // таблица зарплат: города из справочника frontend, целые положительные значения, у каждой сферы salary_share в (0; 1]
+  const w = read('./templates/city_wages.v1.json'), errs = []
+  const known = new Set(read('../frontend/src/data/cities.json').map((c) => (Array.isArray(c) ? c[0] : c.name).toLowerCase().replace(/ё/g, 'е')))
+  if (!Number.isInteger(w.default_avg_salary_rub) || w.default_avg_salary_rub <= 0) errs.push('default_avg_salary_rub')
+  for (const [name, v] of Object.entries(w.cities)) {
+    if (!Number.isInteger(v) || v < 20000 || v > 400000) errs.push(`${name}: зарплата ${v} вне 20 000–400 000`)
+    if (!known.has(name.toLowerCase().replace(/ё/g, 'е'))) errs.push(`${name}: нет в frontend/src/data/cities.json`)
+  }
+  for (const [id, d] of Object.entries(read('./templates/spheres.v1.json').spheres)) {
+    const sh = d.monthly.salary_share
+    if (!(sh > 0 && sh <= 1)) errs.push(`${id}: salary_share ${sh}`)
+    if ('salary_per_staff' in d.monthly) errs.push(`${id}: устаревшее salary_per_staff`)
+  }
+  if (errs.length) { bad++; console.error('FAIL таблица зарплат:', errs) } else console.log('ok   таблица зарплат и salary_share сфер')
+}
 process.exit(bad ? 1 : 0)
