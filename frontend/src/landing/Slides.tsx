@@ -133,19 +133,19 @@ function Scale() {
 export function Credit() {
   return (
     <Section id="credit">
-      <SplitText text="Кредит из реальных продуктов Альфа-Банка" className={h2} />
-      <Reveal delay={450}><p className={leadCls}>Кабинет считает платёж и нагрузку на прибыль, а затем подбирает продукты банка по сумме и сроку.</p></Reveal>
+      <SplitText text="Кредитные продукты XRONIX" className={h2} />
+      <Reveal delay={450}><p className={leadCls}>Кабинет считает платёж и нагрузку на прибыль, а затем подбирает продукты по сумме и сроку. Условия смоделированы по публичным страницам банка, это демо.</p></Reveal>
 
-      <div className="mt-10 max-w-[680px] overflow-x-auto" tabIndex={0} role="region" aria-label="Кредитные продукты Альфа-Банка">
+      <div className="mt-10 max-w-[680px] overflow-x-auto" tabIndex={0} role="region" aria-label="Кредитные продукты XRONIX (демо)">
         <table className="w-full min-w-[520px] text-left text-[15px]">
-          <caption className="sr-only">Кредитные продукты Альфа-Банка для бизнеса</caption>
+          <caption className="sr-only">Кредитные продукты XRONIX для бизнеса (демо)</caption>
           <thead className="border-b border-white/15 text-[13px] text-white/55">
             <tr><th className="py-2 pr-4 font-medium">Продукт</th><th className="py-2 pr-4 font-medium">Ставка</th><th className="py-2 pr-4 font-medium">Сумма до</th><th className="py-2 font-medium">Срок</th></tr>
           </thead>
           <tbody className="divide-y divide-white/10">
             {alfaProducts.map((p, i) => (
               <Reveal key={p.id} as="tr" delay={600 + i * 110} y={14}>
-                <td className="py-3.5 pr-4 font-semibold"><a href={p.url} target="_blank" rel="noopener noreferrer" className="decoration-brand underline-offset-4 hover:underline">{p.name} ↗</a></td>
+                <td className="py-3.5 pr-4 font-semibold">{p.name}</td>
                 <td className="py-3.5 pr-4 tabular-nums">{p.rateFrom ? `от ${decimal(p.rateFrom)}%` : 'по запросу'}</td>
                 <td className="py-3.5 pr-4 tabular-nums">{short(p.amountMax)} ₽</td>
                 <td className="py-3.5 tabular-nums">{productTerm(p)}</td>
@@ -168,15 +168,12 @@ export function Credit() {
 export function Memory() {
   return (
     <Section id="memory" tint>
-      <SplitText text="ИИ учитывает ваш профиль" className={h2} />
-      <Reveal delay={450}><p className={leadCls}>Город, опыт, бюджет и ваши теги помогают в консультации. Теги вы добавляете сами и просите ИИ учесть их в чате. Идею нового бизнеса ИИ уточняет отдельно.</p></Reveal>
+      <SplitText text="ИИ спрашивает про каждый бизнес отдельно" className={h2} />
+      <Reveal delay={450}><p className={leadCls}>Город подставляется из профиля. Свои деньги и опыт ИИ уточняет в чате для каждого бизнеса: у кофейни и у автомойки они разные.</p></Reveal>
       <Reveal delay={600} className="mt-10 max-w-[600px] border-l-2 border-brand pl-6">
-        <FadeWords delay={800} className="text-[19px] leading-relaxed text-white/90" text="«Москва, начинающий предприниматель, бюджет 500 тыс ₽. Интересы: общепит. Конкретную идею обсудим в чате.»" />
-        <div className="mt-3 text-[13px] text-white/50">Пример данных профиля и ручных тегов</div>
+        <FadeWords delay={800} className="text-[19px] leading-relaxed text-white/90" text="«Самара, кофейня. Свои деньги — 900 тыс ₽, опыта в общепите нет. Добавлю в план риск и подскажу, как его снизить.»" />
+        <div className="mt-3 text-[13px] text-white/50">Пример: что ИИ уточняет в чате</div>
       </Reveal>
-      <ul className="mt-8 flex max-w-[600px] flex-wrap gap-2.5">
-        {mockProfile.tags.map((t, i) => <Reveal key={t} as="li" delay={1900 + i * 130} y={10} className="rounded-full bg-white/[.07] px-4 py-2 text-[15px] font-medium ring-1 ring-white/15">{t}</Reveal>)}
-      </ul>
     </Section>
   )
 }

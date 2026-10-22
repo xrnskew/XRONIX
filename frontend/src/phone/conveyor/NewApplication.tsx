@@ -16,6 +16,7 @@ import FounderStep from './wizard/FounderStep'
 export type { CalculatedPlan, Need } from './wizard/types'
 
 type Progress = { path: Path; step: number; company: Company | null; project: CalculatedPlan | null; need: Need; appId: string | null }
+const EMPTY_NEED: Need = { purpose: null, amount_rub: null, term_months: 24, has_collateral: false }
 const PROGRESS_KEY = 'xronix_wizard', PROGRESS_TTL = 60 * 60 * 1000
 function loadProgress(): Progress | null {
   try {
@@ -48,7 +49,7 @@ export default function NewApplication() {
     if (!planParam) return
     api.getPlan(planParam).then((r) => setPreset({ plan_id: r.plan_id, plan: r.plan })).catch(() => setPresetError('Не удалось открыть план из чата. Можно посчитать проект заново.'))
   }, [planParam])
-  const [need, setNeed] = useState<Need>(saved?.need ?? { purpose: null, amount_rub: null, term_months: 24, has_collateral: false })
+  const [need, setNeed] = useState<Need>(saved?.need ?? EMPTY_NEED)
   const [appId, setAppId] = useState<string | null>(saved?.appId ?? null)
   useEffect(() => { saveProgress({ path, step, company, project, need, appId }) }, [path, step, company, project, need, appId])
   const nav = useNavigate()
@@ -66,15 +67,15 @@ export default function NewApplication() {
     <Screen title="Новая заявка" bodyClass="wizard">
       <div data-span={12} className="flex flex-wrap items-center justify-between gap-2">
         <Steps items={steps} current={step} />
-        {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed({ purpose: null, amount_rub: null, term_months: 24, has_collateral: false }) }}>Начать заново</button>}
+        {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}>Начать заново</button>}
       </div>
       {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
-      {name === 'Цель' && <GoalStep preset={preset} onPick={(p) => { setPath(p); if (preset && p !== 'current') usePlan(preset); else setProject(null); setStep(1) }} />}
+      {name === 'Цель' && <GoalStep preset={preset} onPick={(p) => { setPath(p); if (preset && p !== 'current') usePlan(preset); else { setProject(null); setNeed(EMPTY_NEED) } setStep(1) }} />}
       {name === 'Компания' && <CompanyStep onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Проект' && <ProjectStep company={company} noBusiness={path === 'no_business'} initial={project} onBack={back} onDone={fromPlan} />}
       {name === 'Основатель' && <FounderStep onBack={back} onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Что нужно' && company && <NeedStep company={company} need={need} setNeed={setNeed} project={project} onBack={back} onDone={next} />}
-      {name === 'Продукт' && company && <ProductStep company={company} need={need} planId={project?.plan_id ?? null} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
+      {name === 'Продукт' && company && <ProductStep company={company} need={need} setNeed={setNeed} planId={project?.plan_id ?? null} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
       {name === 'Заявка' && appId && <ApplicationForm id={appId} onSubmitted={() => { clearProgress(); nav(`/applications/${appId}`) }} />}
     </Screen>
   )

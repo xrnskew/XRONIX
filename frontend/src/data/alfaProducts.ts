@@ -17,7 +17,7 @@ export interface AlfaProduct {
 }
 
 export const ALFA_AS_OF = snapshot.checkedAt
-export const ALFA_DISCLAIMER = `Условия с официальных страниц Альфа-Банка, проверены ${ALFA_AS_OF.split('-').reverse().join('.')}. Ставки «от» не являются персональным предложением; точные условия определяет банк.`
+export const ALFA_DISCLAIMER = `Продукты XRONIX (демо): условия смоделированы по публичным страницам банка (источники — в README), проверены ${ALFA_AS_OF.split('-').reverse().join('.')}. Ставки «от» не являются предложением; решение принимает аналитик XRONIX.`
 export const alfaProducts: AlfaProduct[] = snapshot.products
 export const productTerm = (p: AlfaProduct) => p.termMin == null ? `до ${p.termMax} мес.` : `${p.termMin}–${p.termMax} мес.`
 export const alfaSnapshotIsStale = () => Date.now() - Date.parse(`${ALFA_AS_OF}T00:00:00+11:00`) > 8 * 86400000
