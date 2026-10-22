@@ -134,6 +134,17 @@ PICK_QUESTIONS = [{"id": "sphere", "text": "Общепит или торговл
                    "options": ["Автомойка", "Салон красоты", "Пункт выдачи заказов"]}]
 UNDECIDED_MARKS = ("давайте подберем вместе", "посчитаем для примера", "общепит или торговля?")
 UNDECIDED_QUESTIONS = [norm(q["text"]) for q in [CATEGORY_QUESTION] + PICK_QUESTIONS]
+# Человек сам называет два варианта («то ли барбершоп, то ли магазин одежды») — сферу не выбираем молча
+# (класс 6 независимой оценки), а даём выбрать кнопкой.
+ALTERNATIVES_TEXT = "Вижу пару вариантов. Выберите, какой посчитать первым, — другой можно посчитать потом."
+ALTERNATIVES_QUESTION = "Какой вариант посчитаем?"
+
+
+def alternatives_reply(state: dict, alternatives: list, turn: "Turn") -> dict:
+    missing = [turn.core_question(k) for k, f in (("city", "city"), ("own_funds", "own_funds_rub")) if state[f] is None]
+    question = {"id": "sphere", "text": ALTERNATIVES_QUESTION, "kind": "choice",
+                "options": [kn.SPHERE_NOMN[c][:1].upper() + kn.SPHERE_NOMN[c][1:] for c in alternatives[:5]]}
+    return {"type": "questions", "text": ALTERNATIVES_TEXT, "questions": [question] + missing, "state": state}
 
 
 def undecided_level(history: list) -> int:
@@ -352,6 +363,9 @@ def respond(request: dict) -> dict:
     sphere, _ = ex.sphere_direct(body)
     proposal = None if sphere else ex.sphere_nearest(body)
     unknown = not sphere and not proposal and ex.unknown_business(body)
+    alternatives = [] if (correction or prev.get("sphere") or confirm is not None) else ex.sphere_alternatives(body)
+    if alternatives:
+        sphere, proposal, unknown = None, None, False
     if confirm is True:
         sphere = sphere or ctx["proposal"]
         unknown = unknown or sphere is None  # «да», но что предлагали — не восстановить: спросим сферу списком
@@ -386,7 +400,7 @@ def respond(request: dict) -> dict:
     # Голое «нет» на наш вопрос (основной не про деньги или анкеты) — отказ ответить, а не «не по теме».
     bare_no = bool(ctx["core"] or ctx["template_last"]) and bool(re.fullmatch(r"(нет|нету|неа)", body.strip(" .!,")))
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
-                       experience is not None, bare_no, undecided,
+                       experience is not None, bare_no, undecided, alternatives,
                        correction and history, ex.SKIP.search(body), ex.SUMS_QUESTION.search(body), ex.BUSINESS_WORDS.search(body)])
     if not informative:
         return _message("greeting" if ex.is_greeting(message) else "offtopic", prev, turn)
@@ -406,6 +420,8 @@ def respond(request: dict) -> dict:
         state["experience"] = experience
 
     # --- ответ ---
+    if alternatives and state["sphere"] is None:
+        return alternatives_reply(state, alternatives, turn)
     if undecided and state["sphere"] is None:
         return undecided_reply(state, history, body, turn, declined=example_declined)
     if state["sphere"] is None and (proposal or unknown or confirm is False):

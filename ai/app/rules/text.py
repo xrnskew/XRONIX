@@ -88,7 +88,9 @@ def numbers_in(text: str) -> list:
 # Что стоит сразу после числа и говорит, что это не деньги.
 NOT_MONEY_AFTER = re.compile(r"\s*(мес|месяц|год|года|лет|м2|м²|м\b|кв|квадрат|метр|человек|чел|гост|клиент|покупател|"
                              r"машин|заказ|сотрудник|продавц|пост|мест|кресл|раз|%|процент|минут|час|день|дн)")
-MONEY_UNIT = re.compile(r"\s*(млн\.?|миллион\w*|лям\w*|тыс\.?|тысяч\w*|тыщ\w*|к(?![а-я])|руб\w*|р\.|₽)")
+MONEY_UNIT = re.compile(r"\s*(млн\.?|миллион\w*|лям\w*|тыс\.?|тысяч\w*|тыщ\w*|кк(?![а-я])|к(?![а-я])|руб\w*|р\.|₽)")  # «2кк» — 2 млн
+# Множитель перед числом (обратный порядок): «тысяч 800», «тыщ 500», «тыс 900», «миллиона 2».
+REVERSE_MULT = r"(миллиона|миллионов|ляма|лямов|тысяч|тыщ|тыс)"
 
 
 def amounts(text: str) -> list:
@@ -101,21 +103,22 @@ def amounts(text: str) -> list:
     # Обратный порядок: «миллиона два», «тысяч триста». Только родительный падеж множителя, перед ним нет числа
     # («2 миллиона три» — это не он), после числа нет второго множителя («миллион двести тысяч» — обычный порядок).
     small_rx = "|".join(sorted(SMALL, key=len, reverse=True))
-    for m in re.finditer(r"(?<![а-я])(миллиона|миллионов|ляма|лямов|тысяч)\s+(" + small_rx + r")(?![а-я])(?!\s+(тысяч|миллион|лям))", t):
+    for m in re.finditer(r"(?<![а-я])" + REVERSE_MULT + r"\s+(" + small_rx + r")(?![а-я])(?!\s+(тысяч|миллион|лям))", t):
         before = t[:m.start()].split()
         if before and (before[-1].isdigit() or before[-1] in SMALL):
             continue
-        mult = 1000 if m.group(1) == "тысяч" else 10 ** 6
+        mult = 1000 if m.group(1).startswith("т") else 10 ** 6
         out.append((SMALL[m.group(2)] * mult, m.start(), m.end(), "words"))
         taken.append((m.start(), m.end()))
-    # То же с цифрами: «своих тысяч 700», «миллиона 2». После числа не должно быть единицы («тысяч 5 человек»).
-    for m in re.finditer(r"(?<![а-я])(миллиона|миллионов|ляма|лямов|тысяч)\s+(\d{1,3})(?![\d.,])", t):
+    # То же с цифрами: «своих тысяч 700», «миллиона 2». После числа не должно быть единицы («тысяч 5 человек»);
+    # запятая или точка после числа — конец фразы, если за ней не цифра («тысяч 800, на 3 года»).
+    for m in re.finditer(r"(?<![а-я])" + REVERSE_MULT + r"\s+(\d{1,3})(?!\d|[.,]\d)", t):
         before = t[:m.start()].split()
         tail = t[m.end():m.end() + 14]
         if (before and (before[-1].isdigit() or before[-1] in SMALL)) or NOT_MONEY_AFTER.match(tail) \
                 or MONEY_UNIT.match(tail) or any(a <= m.start() < b for a, b in taken):
             continue
-        mult = 1000 if m.group(1) == "тысяч" else 10 ** 6
+        mult = 1000 if m.group(1).startswith("т") else 10 ** 6
         out.append((int(m.group(2)) * mult, m.start(), m.end(), "short"))
         taken.append((m.start(), m.end()))
     for rx, value, kind in special:
@@ -123,6 +126,14 @@ def amounts(text: str) -> list:
             if not any(a <= m.start() < b for a, b in taken):
                 out.append((value, m.start(), m.end(), kind))
                 taken.append((m.start(), m.end()))
+    # «не хватает миллиона», «около ляма» — один миллион, если перед словом нет числа («2 миллиона», «1,5 млн»).
+    for m in re.finditer(r"(?<![а-я])(миллиона|ляма)(?![а-я])", t):
+        before = t[:m.start()].split()
+        if any(a <= m.start() < b for a, b in taken) or (before and (re.fullmatch(r"[\d.,]+", before[-1])
+                                                                     or before[-1] in SMALL or before[-1] in ("полтора", "полутора"))):
+            continue
+        out.append((1_000_000, m.start(), m.end(), "words"))
+        taken.append((m.start(), m.end()))
     for value, start, end in numbers_in(t):
         if any(a <= start < b for a, b in taken):
             continue
@@ -130,7 +141,7 @@ def amounts(text: str) -> list:
         unit = MONEY_UNIT.match(tail)
         if unit:
             u = unit.group(1)
-            mult = 10 ** 6 if u.startswith(("млн", "миллион", "лям")) else 1000 if u.startswith(("тыс", "тыщ", "к")) else 1
+            mult = 10 ** 6 if u.startswith(("млн", "миллион", "лям", "кк")) else 1000 if u.startswith(("тыс", "тыщ", "к")) else 1
             kind = "short" if mult > 1 and t[start].isdigit() else "words" if not t[start].isdigit() else "digits"
             out.append((int(round(value * mult)), start, end + unit.end(), "slang" if u.startswith("лям") else kind))
             taken.append((start, end + unit.end()))
@@ -153,19 +164,40 @@ def amounts(text: str) -> list:
 
 TERM_WORDS = [(r"полгода", 6), (r"полтора\s+года", 18), (r"лет\s+на\s+(\w+)", None), (r"на\s+год(?![а-я])", 12),
               (r"за\s+год(?![а-я])", 12), (r"(?<![а-я])год(?![а-я])", 12)]
+# «мне 19 лет», «в бизнесе 7 лет», «работаем 8 месяцев», «3 года назад» — возраст и стаж, а не срок кредита.
+NOT_TERM_BEFORE = re.compile(r"(?<![а-я])(мне|нам|ему|ей|им|возраст\w*|исполни\w*|стукнул\w*|опыт\w*|стаж\w*|работа\w*|"
+                             r"в бизнес\w*|на рынке|существу\w*)\W+(\w+\W+)?$")  # «бизнес» — после fix_typos
+NOT_TERM_AFTER = re.compile(r"\s*(назад|от роду|стажа|опыта)")
+TERM_CUE_BEFORE = re.compile(r"(?<![а-я])(на|срок\w*|растян\w*|погас\w*|выплат\w*)\s+$")  # «мне на 3 года» — срок
+# Обратный порядок: «лет на 5», «года на 3», «месяцев на 8», «срок лет 3», «срок года 4».
+UNIT_FIRST = re.compile(r"(?<![а-я])(?:(года|лет|месяц\w*|мес)\s+на\s+|срок\w*\s+(?:на\s+)?(года|лет|месяц\w*|мес)\s+)"
+                        r"(\d{1,3}|[а-я]+)(?![\d.,а-я])")
+
+
+def _not_term(t: str, start: int, end: int) -> bool:
+    """Число с «лет/года/месяцев» — возраст или стаж, а не срок: по словам перед ним в той же части фразы и после."""
+    before = re.sub(r".*[,.;!?]", "", t[max(0, start - 30):start])
+    after = re.sub(r"^\s*(год|года|лет|мес\w*)", "", t[end:end + 25])
+    if TERM_CUE_BEFORE.search(before):
+        return False
+    return bool(NOT_TERM_BEFORE.search(before) or NOT_TERM_AFTER.match(after))
 
 
 def term_months(text: str):
-    """Срок в месяцах: «на два года» -> 24, «18 мес» -> 18, «полгода» -> 6, «лет на три» -> 36."""
+    """Срок в месяцах: «на два года» -> 24, «18 мес» -> 18, «полгода» -> 6, «лет на три» -> 36, «срок лет 3» -> 36.
+    Возраст и стаж («мне 19 лет», «в бизнесе 7 лет») сроком не считаются."""
     t = norm(text)
     for value, start, end in numbers_in(t):
         tail = t[end:end + 10]
-        m = re.match(r"\s*(мес|месяц\w*)", tail)
-        if m:
-            return int(value)
-        m = re.match(r"\s*(год|года|лет)(?![а-я])", tail)
-        if m:
-            return int(round(value * 12))
+        m = re.match(r"\s*(мес|месяц\w*)", tail) or re.match(r"\s*(год|года|лет)(?![а-я])", tail)
+        if not m or _not_term(t, start, end):
+            continue
+        return int(value) if m.group(1).startswith("мес") else int(round(value * 12))
+    for m in UNIT_FIRST.finditer(t):
+        unit, word = m.group(1) or m.group(2), m.group(3)
+        n = int(word) if word.isdigit() else SMALL.get(word)
+        if n:
+            return n if unit.startswith("мес") else n * 12
     for rx, months in TERM_WORDS:
         m = re.search(rx, t)
         if m:

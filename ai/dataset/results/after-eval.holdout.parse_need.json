@@ -1,0 +1,262 @@
+{
+  "name": "after-eval.holdout",
+  "task": "parse_need",
+  "split": "holdout",
+  "metrics": {
+    "n": 296,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 0.9899,
+    "sphere_accuracy": 0.9561,
+    "city_accuracy": 0.9865,
+    "amount_rub_accuracy": 1.0,
+    "term_months_accuracy": 0.9932,
+    "has_collateral_accuracy": 1.0,
+    "all_fields_exact": 0.9324,
+    "recall_when_present": {
+      "purpose": 0.987,
+      "sphere": 0.995,
+      "city": 0.9809,
+      "amount_rub": 1.0,
+      "term_months": 0.9914,
+      "has_collateral": 1.0
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 0.9899,
+        "pass": true
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 0.9561,
+        "pass": true
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "city": {
+        "need": 0.95,
+        "got": 0.9865,
+        "pass": true
+      }
+    },
+    "unseen_phrasing": {
+      "n": 196,
+      "purpose_accuracy": 0.9898,
+      "sphere_accuracy": 0.9592,
+      "city_accuracy": 0.9949,
+      "amount_rub_accuracy": 1.0,
+      "term_months_accuracy": 0.9949,
+      "has_collateral_accuracy": 1.0,
+      "all_fields_exact": 0.9439
+    },
+    "latency_ms": {
+      "mean": 8.02,
+      "p95": 8.16
+    }
+  },
+  "errors": [
+    {
+      "id": "parse_need.holdout.00008",
+      "text": "Нужно открыть вотрой магазин в городе Ядрин, хочу вернуть за 12 месяцев",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Ядрин",
+        "amount_rub": null,
+        "term_months": 12,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Ядрин",
+        "amount_rub": null,
+        "term_months": 12,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00064",
+      "text": "добрый день. Планирую купить станки для производства; Санкт-Петербург; нужен кредит на 85 000",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": "Санкт-Петербург",
+        "amount_rub": 85000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": "other",
+        "city": "Санкт-Петербург",
+        "amount_rub": 85000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00072",
+      "text": "Нужно добавить новую услугу, Плёс",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": null,
+        "city": "Плёс",
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_direction",
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00083",
+      "text": "Привет. Планирую открыть второй магазин, хочу взять 800 000, срок 12 месяцев, Арзамас",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Арзамас",
+        "amount_rub": 800000,
+        "term_months": 12,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Арзамас",
+        "amount_rub": 800000,
+        "term_months": 12,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00086",
+      "text": "Какая погода завтра в Мосве?",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": "Москва",
+        "amount_rub": null,
+        "term_months": 6,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00110",
+      "text": "хочу открыть второй магазин; около 300 тыс.; хочу вернуть за пять лет",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": 60,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": 60,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00111",
+      "text": "привет. открыть ещё одну точку, надо 200 000 ₽, Пермь",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Пермь",
+        "amount_rub": 200000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Пермь",
+        "amount_rub": 200000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00123",
+      "text": "подскажите, Нужно запустить доставку в автошколе; примеро 750000 рублей; под залог оборудования",
+      "gold": {
+        "purpose": "new_direction",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": 750000,
+        "term_months": null,
+        "has_collateral": true
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": 750000,
+        "term_months": null,
+        "has_collateral": true
+      }
+    },
+    {
+      "id": "parse_need.holdout.00124",
+      "text": "Планирую открыть второй магазин, нужно 800к, на 24 месяца, в городе Самара",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": "Самара",
+        "amount_rub": 800000,
+        "term_months": 24,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": "Самара",
+        "amount_rub": 800000,
+        "term_months": 24,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.holdout.00128",
+      "text": "Подскажите, Планирую открыть новую точку, нужен кредит на 350 000",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 350000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "other",
+        "city": null,
+        "amount_rub": 350000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    }
+  ]
+}

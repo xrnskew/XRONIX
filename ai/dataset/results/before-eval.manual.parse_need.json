@@ -1,0 +1,262 @@
+{
+  "name": "before-eval.manual",
+  "task": "parse_need",
+  "split": "manual",
+  "metrics": {
+    "n": 54,
+    "schema_valid": 1.0,
+    "purpose_accuracy": 1.0,
+    "sphere_accuracy": 1.0,
+    "city_accuracy": 1.0,
+    "amount_rub_accuracy": 0.8519,
+    "term_months_accuracy": 0.8704,
+    "has_collateral_accuracy": 1.0,
+    "all_fields_exact": 0.7593,
+    "recall_when_present": {
+      "purpose": 1.0,
+      "sphere": 1.0,
+      "city": 1.0,
+      "amount_rub": 0.8372,
+      "term_months": 0.7778,
+      "has_collateral": 1.0
+    },
+    "thresholds": {
+      "purpose": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "sphere": {
+        "need": 0.9,
+        "got": 1.0,
+        "pass": true
+      },
+      "amount_rub": {
+        "need": 0.9,
+        "got": 0.8519,
+        "pass": false
+      },
+      "city": {
+        "need": 0.95,
+        "got": 1.0,
+        "pass": true
+      }
+    },
+    "unseen_phrasing": {
+      "n": 54,
+      "purpose_accuracy": 1.0,
+      "sphere_accuracy": 1.0,
+      "city_accuracy": 1.0,
+      "amount_rub_accuracy": 0.8519,
+      "term_months_accuracy": 0.8704,
+      "has_collateral_accuracy": 1.0,
+      "all_fields_exact": 0.7593
+    },
+    "latency_ms": {
+      "mean": 16.21,
+      "p95": 8.16
+    }
+  },
+  "errors": [
+    {
+      "id": "parse_need.manual.041",
+      "text": "накопил 300к, чтобы открыть кофейню не хватает примерно миллиона",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "coffee",
+        "city": null,
+        "amount_rub": 1000000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "coffee",
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.042",
+      "text": "хочу выйти на 200 тысяч чистыми в месяц, сколько займа понадобится?",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 200000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.043",
+      "text": "есть 1,2 млн своих, у банка нужно ещё 800 тысяч",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 800000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 1200000,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.044",
+      "text": "3кк надо на автомойку, своих 1кк",
+      "gold": {
+        "purpose": null,
+        "sphere": "car_wash",
+        "city": null,
+        "amount_rub": 3000000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": "car_wash",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.045",
+      "text": "мне 23 года, хочу взять кредит на открытие пекарни",
+      "gold": {
+        "purpose": "new_location",
+        "sphere": "bakery",
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "new_location",
+        "sphere": "bakery",
+        "city": null,
+        "amount_rub": null,
+        "term_months": 276,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.046",
+      "text": "в бизнесе 7 лет, нужно 2 млн на оборудование",
+      "gold": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 2000000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "equipment",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 2000000,
+        "term_months": 84,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.047",
+      "text": "исполнилось 45 лет, дадут кредит на 3 года?",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": 36,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.048",
+      "text": "возраст 30 лет, нужен займ 500 тысяч",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 500000,
+        "term_months": null,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 500000,
+        "term_months": 360,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.049",
+      "text": "нужно тысяч 600, лет на 5",
+      "gold": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": 600000,
+        "term_months": 60,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": null,
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": 60,
+        "has_collateral": null
+      }
+    },
+    {
+      "id": "parse_need.manual.050",
+      "text": "тыщ 300 на закупку товара, месяцев на 8",
+      "gold": {
+        "purpose": "working_capital",
+        "sphere": null,
+        "city": null,
+        "amount_rub": 300000,
+        "term_months": 8,
+        "has_collateral": null
+      },
+      "pred": {
+        "purpose": "working_capital",
+        "sphere": null,
+        "city": null,
+        "amount_rub": null,
+        "term_months": null,
+        "has_collateral": null
+      }
+    }
+  ]
+}

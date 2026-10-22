@@ -16,6 +16,8 @@ ZERO_FUNDS — дописаны 2026-10-22 по ошибке, найденной
 формулировки Саши, наши и негативные примеры. Метрики «до» сняты на них до исправления правил.
 STAFF_ZERO и UNDECIDED — так же, по бета-тесту 1 (docs/tasks/ROUND4_danya_final.md, п. 1–2): «работаю сам» -> staff 0;
 «не знаю, что открыть» — три разных ответа, выбор сферы кнопками.
+EVAL_CONSULT и EVAL_NEED — классы ошибок независимой оценки (docs/tasks/ROUND4_danya_eval_fixes.md) на своих
+формулировках; фразы самой оценки «раскрыты» и сюда не копируются.
 """
 import json
 
@@ -264,6 +266,43 @@ EXAMPLE_ANSWERS = [
      {**S("bakery", "Самара", 900000), "experience": "owner"}, [900000]),
 ]
 
+# Классы ошибок независимой оценки (docs/tasks/ROUND4_danya_eval_fixes.md), свои формулировки — фразы оценки «раскрыты»
+# и сюда не копируются. 4: «в городе» — не город; 5: город без дефиса и в другом регистре; 6: кофейный автомат и две сферы.
+EVAL_CONSULT = [
+    ("eval_generic_city", [], "хочу открыть пекарню у себя в городе", S(), "questions", S("bakery"), []),
+    ("eval_generic_city", [], "пекарня у нас в городе, своих 500к", S(), "questions", S("bakery", None, 500000), [500000]),
+    ("eval_generic_city", [], "автомойку в родном городе открыть хочу", S(), "questions", S("car_wash"), []),
+    ("eval_city_spelling", [], "автомойка в ростов на дону", S(), "questions", S("car_wash", "Ростов-на-Дону"), []),
+    ("eval_city_spelling", [], "магазин одежды в комсомольске на амуре", S(), "questions", S("clothing_store", "Комсомольск-на-Амуре"), []),
+    ("eval_city_spelling", [], "кофейня, город санкт петербург", S(), "questions", S("coffee", "Санкт-Петербург"), []),
+    ("eval_city_spelling", [], "пекарня в петропавловске камчатском", S(), "questions", S("bakery", "Петропавловск-Камчатский"), []),
+    ("eval_vending", [], "хочу поставить кофейные автоматы в торговом центре", S(), "questions", S(), []),
+    ("eval_vending", [], "вендинг с кофе в бизнес-центре", S(), "questions", S(), []),
+    ("eval_vending", [], "думаю про автомат с кофе у вокзала", S(), "questions", S(), []),
+    ("eval_two_spheres", [], "то ли барбершоп, то ли магазин одежды", S(), "questions", S(), []),
+    ("eval_two_spheres", [], "кофейня или пекарня, пока не решил, в Твери", S(), "questions", S(None, "Тверь"), []),
+    ("eval_two_spheres", [], "может шиномонтаж, а может пункт выдачи", S(), "questions", S(), []),
+]
+
+# (категория, текст, purpose, sphere, city, amount_rub, term_months, has_collateral)
+# Классы 1–3 оценки: свои деньги и доход — не сумма кредита; возраст и стаж — не срок; «тысяч 600», «лет на 5», «срок лет 3».
+EVAL_NEED = [
+    ("eval_own_money", "Нужен кредит 2 миллиона, свои 700 тысяч уже есть", None, None, None, 2000000, None, None),
+    ("eval_own_money", "накопил 300к, чтобы открыть кофейню не хватает примерно миллиона", "new_location", "coffee", None, 1000000, None, None),
+    ("eval_own_money", "хочу выйти на 200 тысяч чистыми в месяц, сколько займа понадобится?", None, None, None, None, None, None),
+    ("eval_own_money", "есть 1,2 млн своих, у банка нужно ещё 800 тысяч", None, None, None, 800000, None, None),
+    ("eval_own_money", "3кк надо на автомойку, своих 1кк", None, "car_wash", None, 3000000, None, None),
+    ("eval_age_term", "мне 23 года, хочу взять кредит на открытие пекарни", "new_location", "bakery", None, None, None, None),
+    ("eval_age_term", "в бизнесе 7 лет, нужно 2 млн на оборудование", "equipment", None, None, 2000000, None, None),
+    ("eval_age_term", "исполнилось 45 лет, дадут кредит на 3 года?", None, None, None, None, 36, None),
+    ("eval_age_term", "возраст 30 лет, нужен займ 500 тысяч", None, None, None, 500000, None, None),
+    ("eval_colloquial", "нужно тысяч 600, лет на 5", None, None, None, 600000, 60, None),
+    ("eval_colloquial", "тыщ 300 на закупку товара, месяцев на 8", "working_capital", None, None, 300000, 8, None),
+    ("eval_colloquial", "кредит на миллион, срок лет 3", None, None, None, 1000000, 36, None),
+    ("eval_colloquial", "тыс 900 бы на ремонт, года на 2", None, None, None, 900000, 24, None),
+    ("eval_colloquial", "надо тысяч 250.", None, None, None, 250000, None, None),
+]
+
 # (категория, текст, purpose, sphere, city, amount_rub, term_months, has_collateral)
 NEED = [
     ("equipment", "Нужно 2 млн на новую кофемашину и гриндер для кофейни в Самаре", "equipment", "coffee", "Самара", 2000000, None, None),
@@ -324,7 +363,8 @@ def _gold_questions(st):
 
 def consult_rows():
     rows = []
-    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS + STAFF_ZERO + UNDECIDED + EXAMPLE_ANSWERS]
+    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS + STAFF_ZERO + UNDECIDED + EXAMPLE_ANSWERS] + \
+        [(c, "manual-2026-10-22") for c in EVAL_CONSULT]
     for i, ((cat, hist, msg, before, kind, after, sums), source) in enumerate(cases):
         resp = {"type": kind, "text": NEUTRAL_TEXT, "state": after}
         if kind == "questions":
@@ -338,13 +378,14 @@ def consult_rows():
 
 def need_rows():
     rows = []
-    for i, (cat, text, purpose, sphere, city, amount, term, coll) in enumerate(NEED):
+    cases = [(c, "manual-2026-10-21") for c in NEED] + [(c, "manual-2026-10-22") for c in EVAL_NEED]
+    for i, ((cat, text, purpose, sphere, city, amount, term, coll), source) in enumerate(cases):
         resp = {"purpose": purpose, "sphere": sphere, "city": city, "amount_rub": amount, "term_months": term,
                 "has_collateral": coll}
         resp["confidence"] = {k: 0.9 for k, v in resp.items() if v is not None}
         rows.append({"id": f"parse_need.manual.{i:03d}", "seed": f"parse_need-manual-{i:03d}", "kind": cat,
                      "request": {"text": text}, "response": resp,
-                     "meta": {"unseen_phrasing": True, "source": "manual-2026-10-21"}})
+                     "meta": {"unseen_phrasing": True, "source": source}})
     return rows
 
 

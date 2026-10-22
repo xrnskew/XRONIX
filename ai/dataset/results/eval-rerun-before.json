@@ -1,0 +1,601 @@
+{
+ "c01": {
+  "type": "questions",
+  "state": {
+   "sphere": "coffee",
+   "city": null,
+   "own_funds_rub": 400000,
+   "answers": {
+    "format": "to_go"
+   }
+  },
+  "q": [
+   "city"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c03": {
+  "type": "questions",
+  "state": {
+   "sphere": "beauty_salon",
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c05": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": "Томск",
+   "own_funds_rub": 150000,
+   "answers": {}
+  },
+  "q": [
+   "sphere"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c07": {
+  "type": "questions",
+  "state": {
+   "sphere": "bakery",
+   "city": "Казань",
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c09": {
+  "type": "questions",
+  "state": {
+   "sphere": "coffee",
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c11": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c13": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Да, подходит",
+    "Нет, другой бизнес"
+   ]
+  ]
+ },
+ "c15": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c17": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": "Самара",
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c19": {
+  "type": "message",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [],
+  "options": []
+ },
+ "c21": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c23": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Общепит",
+    "Услуги",
+    "Торговля"
+   ]
+  ]
+ },
+ "c25": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Общепит",
+    "Услуги",
+    "Торговля"
+   ]
+  ]
+ },
+ "c27": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": 0,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c29": {
+  "type": "message",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [],
+  "options": []
+ },
+ "c31": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c33": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Общепит",
+    "Услуги",
+    "Торговля"
+   ]
+  ]
+ },
+ "c35": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c37": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c39": {
+  "type": "questions",
+  "state": {
+   "sphere": "pickup_point",
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c41": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": "Городец",
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "c43": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Да, подходит",
+    "Нет, другой бизнес"
+   ]
+  ]
+ },
+ "c45": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   [
+    "Да, подходит",
+    "Нет, другой бизнес"
+   ]
+  ]
+ },
+ "c47": {
+  "type": "questions",
+  "state": {
+   "sphere": null,
+   "city": null,
+   "own_funds_rub": null,
+   "answers": {}
+  },
+  "q": [
+   "sphere",
+   "city",
+   "own_funds"
+  ],
+  "options": [
+   null
+  ]
+ },
+ "n01": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": null,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n03": {
+  "purpose": "equipment",
+  "sphere": null,
+  "city": null,
+  "amount_rub": 250000,
+  "term_months": 12,
+  "has_collateral": null
+ },
+ "n05": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 500000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n07": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 600000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n09": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 280000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n11": {
+  "purpose": "equipment",
+  "sphere": "other",
+  "city": null,
+  "amount_rub": 700000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n13": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 500000,
+  "term_months": 24,
+  "has_collateral": null
+ },
+ "n15": {
+  "purpose": "working_capital",
+  "sphere": null,
+  "city": null,
+  "amount_rub": 1000000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n17": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 3000000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n19": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 2000000,
+  "term_months": 60,
+  "has_collateral": null
+ },
+ "n21": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 1000000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n23": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": null,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n25": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": null,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n27": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": null,
+  "term_months": 228,
+  "has_collateral": null
+ },
+ "n29": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 100000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n31": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 500000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n33": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 700000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n35": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 500000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n37": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 1000000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n39": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": null,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n41": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 1500000,
+  "term_months": 60,
+  "has_collateral": null
+ },
+ "n43": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 400000,
+  "term_months": null,
+  "has_collateral": null
+ },
+ "n45": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 1000000,
+  "term_months": 84,
+  "has_collateral": null
+ },
+ "n47": {
+  "purpose": null,
+  "sphere": null,
+  "city": null,
+  "amount_rub": 500000,
+  "term_months": null,
+  "has_collateral": null
+ }
+}
