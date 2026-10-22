@@ -4,10 +4,12 @@ export type CreditVerdict = 'ok' | 'risky' | 'not_recommended'
 
 export interface BudgetItem { title: string; amount_rub: number; assumption: string }
 
+// Опыт человека в бизнесе, который он обсуждает в чате (contracts/common.schema.json)
+export type Experience = 'none' | 'employee' | 'owner'
 export interface Plan {
   title: string
   summary: string
-  business: { sphere: string; format: string; city: string }
+  business: { sphere: string; format: string; city: string; experience?: Experience }
   steps: { order: number; title: string; description: string; duration_days: number | null; cost_rub: number | null }[]
   opportunities: { title: string; description: string }[]
   risks: { title: string; level: RiskLevel; mitigation: string }[]

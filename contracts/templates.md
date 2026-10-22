@@ -50,8 +50,8 @@
 12. **Тексты:**
     - `title` = `«<название сферы>, <город>»`, например «Кофейня, Казань» (без склонения города);
     - `summary` собирается из чисел расчёта, поэтому всегда совпадает с ними;
-    - `business` = `{ sphere: sphere_label, format: подпись выбранного format или title сферы, city }`;
-    - `opportunities` и `risks` — из шаблона;
+    - `business` = `{ sphere: sphere_label, format: подпись выбранного format или title сферы, city }`, плюс `experience`, если он пришёл в запросе (`plan_calc_request.experience`);
+    - `opportunities` и `risks` — из шаблона; если `experience = none`, последним в `risks` добавляется `experience_risk` из `spheres.v1.json` (при `employee`, `owner` и без поля риски не меняются). Формулы и числа плана от опыта не зависят;
     - `tags_update` = `[sphere_label строчными, city]`.
 
 ## Где используется

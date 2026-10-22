@@ -301,7 +301,8 @@
         "sphere": { "$ref": "common.schema.json#/definitions/sphere" },
         "city": { "type": "string", "minLength": 1 },
         "own_funds_rub": { "$ref": "common.schema.json#/definitions/rub" },
-        "answers": { "type": "object", "additionalProperties": { "type": ["number", "string"] } }
+        "answers": { "type": "object", "additionalProperties": { "type": ["number", "string"] } },
+        "experience": { "$ref": "common.schema.json#/definitions/experience", "description": "Необязательное: опыт в этом бизнесе. Ответ плана повторяет его в business.experience; при none в risks добавляется experience_risk" }
       }
     },
     "plan_calc_response": {

@@ -4,12 +4,12 @@ import spheres from '../data/spheres.v1.json' with { type: 'json' }
 import { cities, normalizeCity } from '../data/cities.ts'
 import { alfaProducts } from '../data/alfaProducts.ts'
 import { payment } from './creditRules.ts'
-import type { Plan } from '../types/plan.ts'
+import type { Experience, Plan } from '../types/plan.ts'
 import type { Sphere } from '../types/conveyor.ts'
 
 export interface Question { id: string; text: string; kind: 'number' | 'choice'; unit?: string | null; default: number | string; min?: number; max?: number; options?: { value: string; label: string }[] }
 export interface Template { sphere: Sphere; title: string; questions: Question[] }
-export interface CalcRequest { sphere: Sphere; city: string; own_funds_rub: number; answers: Record<string, number | string> }
+export interface CalcRequest { sphere: Sphere; city: string; own_funds_rub: number; answers: Record<string, number | string>; experience?: Experience }
 
 type StartupItem = { title: string; kind: 'fixed' | 'per_m2' | 'per_answer' | 'rent_months'; rub?: number; months?: number; answer?: string; days: number; assumption: string }
 type SphereDef = Template & {
@@ -19,6 +19,8 @@ type SphereDef = Template & {
   opportunities: Plan['opportunities']; risks: Plan['risks']
 }
 const defs = spheres.spheres as unknown as Record<string, Omit<SphereDef, 'sphere'>>
+const { title: erTitle, level: erLevel, mitigation: erMitigation } = spheres.experience_risk
+const experienceRisk: Plan['risks'][number] = { title: erTitle, level: erLevel as Plan['risks'][number]['level'], mitigation: erMitigation }
 
 export const templates = (): Template[] => Object.entries(defs).map(([sphere, d]) => ({ sphere: sphere as Sphere, title: d.title, questions: d.questions as Question[] }))
 
@@ -106,10 +108,11 @@ export function calculatePlan(req: CalcRequest): Plan {
   return {
     title: `${d.title}, ${req.city}`,
     summary: `${format}: запуск — ${shortRub(startup)}, на плановом уровне прибыль ${shortRub(profit)} в месяц, ${payback ? `окупаемость — около ${payback} мес` : 'при таких параметрах бизнес не окупается'}. Расчёт по шаблону, цены — оценка.`,
-    business: { sphere: d.sphere_label, format, city: req.city },
+    business: { sphere: d.sphere_label, format, city: req.city, ...(req.experience ? { experience: req.experience } : {}) },
     steps: d.startup.map((s, i) => ({ order: i + 1, title: s.title, description: startup_items[i].assumption, duration_days: s.days, cost_rub: startup_items[i].amount_rub })),
     opportunities: d.opportunities,
-    risks: d.risks,
+    // «нет опыта» добавляет последним риском experience_risk (contracts/templates.md); формулы от опыта не зависят
+    risks: req.experience === 'none' ? [...d.risks, experienceRisk] : d.risks,
     finance: {
       startup_cost_rub: startup, own_funds_rub: req.own_funds_rub, funding_gap_rub: gap,
       monthly_revenue_rub: revenue, monthly_expenses_rub: expenses, monthly_profit_rub: profit, payback_months: payback,

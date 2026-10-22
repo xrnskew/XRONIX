@@ -60,6 +60,10 @@
         "city": {
           "type": "string",
           "minLength": 1
+        },
+        "experience": {
+          "$ref": "common.schema.json#/definitions/experience",
+          "description": "Необязательное. Опыт человека в этом бизнесе, если его спросили в чате. При none в risks добавляется experience_risk из templates/spheres.v1.json"
         }
       }
     },

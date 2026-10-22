@@ -24,6 +24,7 @@
     "info_request_kind": { "enum": ["authority_document", "financials", "collateral", "other"] },
     "decline_reason": { "enum": ["company_inactive", "business_too_young", "overdue_90", "tax_debt", "head_disqualified", "low_score", "high_debt_load", "analyst_decision", "own_funds_low", "plan_required", "not_msp", "offer_expired"] },
     "company_status": { "enum": ["active", "liquidating", "liquidated", "bankrupt", "not_registered"], "description": "not_registered — будущий ИП: человек ещё не зарегистрировал бизнес" },
+    "experience": { "enum": ["none", "employee", "owner"], "description": "Опыт человека в сфере бизнеса, который он обсуждает в чате: нет опыта, работал наёмным, был свой бизнес. Спрашивается для каждого бизнеса, в профиль не входит" },
     "company_kind": { "enum": ["ip", "ul", "person"], "description": "person — будущий ИП по личному ИНН" }
   }
 }

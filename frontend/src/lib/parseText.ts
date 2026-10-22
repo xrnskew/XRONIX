@@ -1,6 +1,7 @@
 // Простой разбор текста предпринимателя правилами: запасной вариант, пока модель Дани недоступна (мок-режим).
 import { cities, normalizeCity } from '../data/cities.ts'
 import type { ParsedNeed, Purpose, Sphere } from '../types/conveyor.ts'
+import type { Experience } from '../types/plan.ts'
 
 export const PURPOSE_WORDS: [Purpose, RegExp][] = [
   ['new_location', /втор(ую|ой|ое)|ещё одн|еще одн|нов(ую|ой) точк|открыть|филиал/i], ['equipment', /оборудован|станок|кофемашин|печь|техник/i],
@@ -40,4 +41,15 @@ export function parseNeedText(text: string): ParsedNeed {
   r.term_months = parseTerm(text); if (r.term_months) r.confidence.term_months = 0.65
   if (/без залога/i.test(text)) { r.has_collateral = false; r.confidence.has_collateral = 0.9 } else if (/залог|поручител/i.test(text)) { r.has_collateral = true; r.confidence.has_collateral = 0.6 }
   return r
+}
+
+// Ответ на вопрос «Есть ли у вас опыт в этом бизнесе?» → значение state.experience (contracts/ai.md, правило 9).
+// Подписи вариантов из dictionaries.experiences и обычные слова; непонятный ответ — null.
+export const EXPERIENCE_OPTIONS = ['Нет опыта', 'Работал наёмным', 'Был свой бизнес']
+export function parseExperience(text: string): Experience | null {
+  const t = text.toLowerCase().replace(/ё/g, 'е')
+  if (/(был|была|есть|имел\w*|открывал\w*|владел\w*)\s+(свой|своя|свое|свою)\s+(бизнес|дел\w*|кофейн\w*|точк\w*)|свой бизнес|владелец|владел/.test(t)) return 'owner'
+  if (/наемн|работал|работала|сотрудник|бариста|менеджер/.test(t)) return 'employee'
+  if (/нет опыта|без опыта|опыта нет|новичок|не было|впервые|^\s*нет\W*$/.test(t)) return 'none'
+  return null
 }
