@@ -1,703 +1,703 @@
-docker :  Image xronix-r4-integrations-mock Building 
-At <папка замера>\run-measure.ps1:6 char:24
-+ ... e-Command { docker compose up -d --build --wait --wait-timeout 600 *> ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: ( Image xronix-r...-mock Building :String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
- Image xronix-r4-ai Building 
- Image xronix-r4-web Building 
- Image xronix-r4-backend Building 
-#1 [internal] load local bake definitions
-#1 reading from stdin 2.15kB 0.0s done
-#1 DONE 0.0s
-
-#2 [web internal] load build definition from Dockerfile
-#2 transferring dockerfile:
-#2 transferring dockerfile: 904B 0.0s done
-#2 DONE 0.3s
-
-#3 [backend internal] load build definition from Dockerfile
-#3 transferring dockerfile: 964B 0.0s done
-#3 DONE 0.3s
-
-#4 [integrations-mock internal] load build definition from Dockerfile
-#4 transferring dockerfile: 326B 0.0s done
-#4 DONE 0.3s
-
-#5 [ai internal] load build definition from Dockerfile
-#5 transferring dockerfile: 635B 0.0s done
-#5 DONE 0.3s
-
-#6 [ai internal] load metadata for docker.io/library/python:3.12-slim
-#6 DONE 6.1s
-
-#7 [backend internal] load build context
-#7 DONE 0.0s
-
-#8 [web internal] load metadata for docker.io/library/node:22-alpine
-#8 DONE 6.2s
-
-#9 [web internal] load metadata for docker.io/library/nginx:1.27-alpine
-#9 DONE 6.2s
-
-#10 [ai internal] load .dockerignore
-#10 transferring context:
-#10 transferring context: 83B 0.0s done
-#10 DONE 0.3s
-
-#11 [web internal] load .dockerignore
-#11 transferring context: 129B 0.0s done
-#11 DONE 0.3s
-
-#12 [integrations-mock internal] load .dockerignore
-#12 transferring context: 2B done
-#12 DONE 0.3s
-
-#13 [web internal] load build context
-#13 DONE 0.0s
-
-#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.2s done
-#14 ...
-
-#15 [integrations-mock internal] load build context
-#15 transferring context: 10.79kB 0.1s done
-#15 DONE 0.5s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.2s done
-#16 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0B / 249B 0.2s
-#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0B / 1.29MB 0.2s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0B / 12.12MB 0.2s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0B / 29.84MB 0.2s
-#16 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 249B / 249B 0.6s done
-#16 ...
-
-#7 [backend internal] load build context
-#7 transferring context: 646.64kB 1.4s done
-#7 DONE 1.6s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 ...
-
-#17 [ai internal] load build context
-#17 transferring context: 700.71kB 1.5s done
-#17 DONE 1.8s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 ...
-
-#13 [web internal] load build context
-#13 transferring context: 728.55kB 1.4s done
-#13 DONE 1.6s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.05MB / 1.29MB 2.7s
-#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.29MB / 1.29MB 2.8s done
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 1.05MB / 12.12MB 3.9s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 2.10MB / 29.84MB 5.1s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 2.10MB / 12.12MB 5.3s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 3.15MB / 12.12MB 6.7s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 4.19MB / 29.84MB 8.1s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 4.19MB / 12.12MB 8.3s
-#16 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 resolve docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914 0.2s done
-#18 sha256:304511616d6a6d472222f696b9045e20dc90e8043b2a8ba2acb61746595781f3 442B / 442B 0.6s done
-#18 sha256:7246d4c6a55dd0f8dd00d2e63aece3a68d91e6a5d04c4e748fc2706897d96312 1.26MB / 1.26MB 2.6s done
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 3.15MB / 56.22MB 6.5s
-#18 sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 3.15MB / 3.85MB 5.6s
-#18 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 5.24MB / 12.12MB 9.8s
-#16 ...
-
-#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0B / 15.52MB 0.8s
-#14 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 6.29MB / 29.84MB 10.5s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 6.29MB / 12.12MB 11.1s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 7.34MB / 12.12MB 12.6s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 8.39MB / 12.12MB 13.5s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 8.39MB / 29.84MB 13.5s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 9.44MB / 12.12MB 14.9s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 10.49MB / 12.12MB 16.4s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 10.49MB / 29.84MB 16.3s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 11.53MB / 12.12MB 17.8s
-#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 18.6s done
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 12.58MB / 29.84MB 19.1s
-#16 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 10.49MB / 56.22MB 16.6s
-#18 sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 3.85MB / 3.85MB 5.7s done
-#18 extracting sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 0.1s done
-#18 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 ...
-
-#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 7.34MB / 15.52MB 11.1s
-#14 sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 1.40kB / 1.40kB 1.0s done
-#14 sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 1.21kB / 1.21kB 0.4s done
-#14 sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 402B / 402B 0.4s done
-#14 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0B / 955B 0.2s
-#14 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 14.68MB / 29.84MB 21.7s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 16.78MB / 29.84MB 24.8s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 18.87MB / 29.84MB 28.2s
-#16 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 18.87MB / 56.22MB 27.0s
-#18 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 20.97MB / 29.84MB 30.0s
-#16 ...
-
-#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 13.63MB / 15.52MB 21.3s
-#14 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 955B / 955B 0.4s done
-#14 sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 629B / 629B 0.4s done
-#14 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 1.79MB / 1.79MB 3.3s done
-#14 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 3.64MB / 3.64MB 5.6s done
-#14 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0.1s done
-#14 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0.1s done
-#14 extracting sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 0.0s done
-#14 extracting sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0.0s done
-#14 extracting sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 0.0s done
-#14 extracting sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 0.0s done
-#14 extracting sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 0.0s done
-#14 ...
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 ...
-
-#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
-#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 15.52MB / 15.52MB 22.6s done
-#14 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0.3s done
-#14 DONE 33.1s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 23.07MB / 29.84MB 32.4s
-#16 ...
-
-#19 [web stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
-#19 DONE 0.1s
-
-#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 25.17MB / 29.84MB 34.3s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 27.26MB / 29.84MB 36.1s
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 38.7s done
-#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 38.7s done
-#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034
-#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0.6s done
-#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0.6s done
-#16 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.1s done
-#16 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7
-#16 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.1s done
-#16 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0.3s done
-#16 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
-#16 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
-#16 DONE 40.7s
-
-#20 [integrations-mock 2/7] WORKDIR /srv
-#20 DONE 0.2s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 26.21MB / 56.22MB 36.9s
-#18 ...
-
-#21 [backend 2/7] WORKDIR /srv/backend
-#21 DONE 0.2s
-
-#22 [ai 2/5] WORKDIR /app
-#22 DONE 0.2s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#23 [ai 3/5] COPY requirements.txt .
-#23 ...
-
-#24 [integrations-mock 3/7] COPY requirements.txt ./
-#24 DONE 0.3s
-
-#25 [backend 3/7] COPY backend/requirements.txt ./
-#25 DONE 0.2s
-
-#23 [ai 3/5] COPY requirements.txt .
-#23 DONE 0.3s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 29.36MB / 56.22MB 38.1s
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 32.51MB / 56.22MB 40.2s
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 35.65MB / 56.22MB 42.1s
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 38.80MB / 56.22MB 45.3s
-#18 ...
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 2.647 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
-#26 3.486   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
-#26 4.002 Collecting starlette==1.9.0 (from -r requirements.txt (line 2))
-#26 4.184   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
-#26 4.462 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 3))
-#26 4.662   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
-#26 6.224 Collecting SQLAlchemy==2.0.46 (from -r requirements.txt (line 4))
-#26 6.404   Downloading sqlalchemy-2.0.46-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.5 kB)
-#26 6.655 Collecting PyJWT==2.15.1 (from -r requirements.txt (line 5))
-#26 6.836   Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
-#26 7.355 Collecting pydantic==2.12.5 (from -r requirements.txt (line 6))
-#26 7.537   Downloading pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
-#26 8.004 Collecting httpx==0.28.1 (from -r requirements.txt (line 7))
-#26 8.190   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
-#26 8.436 Collecting jsonschema==4.24.0 (from -r requirements.txt (line 8))
-#26 8.613   Downloading jsonschema-4.24.0-py3-none-any.whl.metadata (7.8 kB)
-#26 8.841 Collecting python-dotenv==1.2.4 (from -r requirements.txt (line 9))
-#26 9.026   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
-#26 9.260 Collecting python-multipart==0.0.22 (from -r requirements.txt (line 10))
-#26 9.443   Downloading python_multipart-0.0.22-py3-none-any.whl.metadata (1.8 kB)
-#26 9.690 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#26 9.871   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
-#26 10.08 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#26 ...
-
-#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#27 2.751 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
-#27 3.660   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
-#27 4.152 Collecting starlette==1.9.0 (from -r requirements.txt (line 2))
-#27 4.348   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
-#27 4.627 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 3))
-#27 4.823   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
-#27 5.622 Collecting pydantic>=2.9.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#27 5.812   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
-#27 6.416 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#27 6.606   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
-#27 6.820 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#27 7.014   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
-#27 7.235 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#27 7.435   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
-#27 7.680 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#27 7.867   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
-#27 8.104 Collecting anyio<5,>=4.0.0 (from starlette==1.9.0->-r requirements.txt (line 2))
-#27 8.298   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
-#27 8.536 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 3))
-#27 8.724   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
-#27 8.941 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 3))
-#27 9.134   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
-#27 9.358 Collecting idna>=2.8 (from anyio<5,>=4.0.0->starlette==1.9.0->-r requirements.txt (line 2))
-#27 9.551   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
-#27 9.796 Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#27 9.995   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
-#27 ...
-
-#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
-#28 2.613 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
-#28 3.463   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
-#28 3.977 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 2))
-#28 4.161   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
-#28 4.442 Collecting starlette>=0.46.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 4.641   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
-#28 5.400 Collecting pydantic>=2.9.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 5.598   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
-#28 6.131 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 6.314   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
-#28 6.524 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 6.707   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
-#28 6.912 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 7.099   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
-#28 7.378 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#28 7.560   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
-#28 7.794 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 2))
-#28 7.976   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
-#28 8.185 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 2))
-#28 8.367   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
-#28 8.584 Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#28 8.766   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
-#28 ...
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 10.26   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
-#26 10.46 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#26 10.64   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
-#26 10.92 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
-#26 11.11   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
-#26 11.35 Collecting anyio<5,>=4.0.0 (from starlette==1.9.0->-r requirements.txt (line 2))
-#26 11.53   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
-#26 11.79 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 3))
-#26 11.97   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
-#26 12.18 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 3))
-#26 12.36   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
-#26 13.26 Collecting greenlet>=1 (from SQLAlchemy==2.0.46->-r requirements.txt (line 4))
-#26 13.44   Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
-#26 13.66 Collecting annotated-types>=0.6.0 (from pydantic==2.12.5->-r requirements.txt (line 6))
-#26 13.84   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
-#26 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 45.09MB / 56.22MB 53.5s
-#18 ...
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 16.61 Collecting pydantic-core==2.41.5 (from pydantic==2.12.5->-r requirements.txt (line 6))
-#26 16.79   Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
-#26 17.05 Collecting certifi (from httpx==0.28.1->-r requirements.txt (line 7))
-#26 17.23   Downloading certifi-2026.10.19-py3-none-any.whl.metadata (2.5 kB)
-#26 17.46 Collecting httpcore==1.* (from httpx==0.28.1->-r requirements.txt (line 7))
-#26 17.64   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
-#26 17.91 Collecting idna (from httpx==0.28.1->-r requirements.txt (line 7))
-#26 18.09   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
-#26 18.32 Collecting attrs>=22.2.0 (from jsonschema==4.24.0->-r requirements.txt (line 8))
-#26 18.50   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
-#26 18.73 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.24.0->-r requirements.txt (line 8))
-#26 18.91   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
-#26 19.17 Collecting referencing>=0.28.4 (from jsonschema==4.24.0->-r requirements.txt (line 8))
-#26 19.35   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
-#26 20.65 Collecting rpds-py>=0.7.1 (from jsonschema==4.24.0->-r requirements.txt (line 8))
-#26 ...
-
-#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
-#28 10.70 Collecting pydantic-core==2.50.1 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#28 10.90   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
-#28 11.27 Collecting anyio<5,>=4.0.0 (from starlette>=0.46.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#28 11.45   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
-#28 11.68 Collecting idna>=2.8 (from anyio<5,>=4.0.0->starlette>=0.46.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#28 11.87   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
-#28 12.07 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
-#28 12.52 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
-#28 12.97 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
-#28 13.16 Downloading click-8.5.0-py3-none-any.whl (125 kB)
-#28 13.70 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
-#28 13.99 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
-#28 14.36 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
-#28 15.80 Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
-#28 19.22    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 673.5 kB/s eta 0:00:00
-#28 19.41 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
-#28 19.69 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
-#28 19.96 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
-#28 20.16 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
-#28 20.37 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
-#28 20.86 Downloading idna-3.20-py3-none-any.whl (69 kB)
-#28 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 48.23MB / 56.22MB 58.3s
-#18 ...
-
-#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#27 12.73 Collecting pydantic-core==2.50.1 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
-#27 12.92   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
-#27 13.12 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
-#27 13.82 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
-#27 14.25 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
-#27 14.72 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
-#27 14.93 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
-#27 15.47 Downloading click-8.5.0-py3-none-any.whl (125 kB)
-#27 15.88 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
-#27 16.13 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
-#27 16.42 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
-#27 17.44 Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
-#27 20.72    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 697.7 kB/s eta 0:00:00
-#27 20.91 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
-#27 21.16 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
-#27 21.38 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
-#27 21.58 Downloading idna-3.20-py3-none-any.whl (69 kB)
-#27 21.70 Installing collected packages: typing-extensions, idna, h11, click, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, opentelemetry-api, anyio, starlette, pydantic, fastapi
-#27 22.55 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 click-8.5.0 fastapi-0.146.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.1 pydantic-2.14.1 pydantic-core-2.50.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
-#27 22.55 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-#27 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
-#28 20.98 Installing collected packages: typing-extensions, idna, h11, click, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, opentelemetry-api, anyio, starlette, pydantic, fastapi
-#28 21.81 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 click-8.5.0 fastapi-0.146.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.1 pydantic-2.14.1 pydantic-core-2.50.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
-#28 21.81 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-#28 22.78 
-#28 22.78 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
-#28 22.78 [notice] To update, run: pip install --upgrade pip
-#28 DONE 22.9s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#29 [ai 5/5] COPY app ./app
-#29 DONE 0.1s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#27 23.48 
-#27 23.48 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
-#27 23.48 [notice] To update, run: pip install --upgrade pip
-#27 DONE 23.6s
-
-#30 [integrations-mock 5/7] COPY app ./app
-#30 DONE 0.1s
-
-#31 [integrations-mock 6/7] COPY data ./data
-#31 DONE 0.1s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 51.38MB / 56.22MB 61.6s
-#18 ...
-
-#32 [integrations-mock 7/7] RUN useradd --uid 10001 --create-home app
-#32 DONE 0.5s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#33 [ai] exporting to image
-#33 exporting layers 0.8s done
-#33 exporting manifest sha256:c2cdb074a5b6cda1fbd986f9736928119c4591de9d9149853ad229086068b8a9 0.0s done
-#33 exporting config sha256:2d581f034b97bc9b86e4675c754ff219f1d32777f5b6a9015abb70a7024fde89 0.1s done
-#33 exporting attestation manifest sha256:e6ec9f13bf6224cf49eb27f0891c67910717d76f9ca06b87fdfab60d5b470a9c 0.1s done
-#33 exporting manifest list sha256:f6607b02dc77e4710b5a668cc3c7be706f62fd434e7ec72df72f5fb7edd0137c 0.1s done
-#33 naming to docker.io/library/xronix-r4-ai:latest done
-#33 unpacking to docker.io/library/xronix-r4-ai:latest 1.6s done
-#33 DONE 2.7s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#34 [ai] resolving provenance for metadata file
-#34 DONE 0.0s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#35 [integrations-mock] exporting to image
-#35 exporting layers 1.2s done
-#35 exporting manifest sha256:a4b12f38fc71b22780b175aeddd1691c6f6f622bc6a0d56571b24fb3df1b71f3 0.0s done
-#35 exporting config sha256:2666f154aec168e10fd1c357fac9a391ac7bdfdfcb2dee4408dba40020854502 0.0s done
-#35 exporting attestation manifest sha256:c1ff7f1ce15f75d3abd17a7509c3e01ecfb834df9f671897a35b19c9380e8a01 0.1s done
-#35 exporting manifest list sha256:5fe637265039bf72ca45168fef3ad45dfa1b11f34d30b19553a43df8caf74324 0.0s done
-#35 naming to docker.io/library/xronix-r4-integrations-mock:latest 0.0s done
-#35 unpacking to docker.io/library/xronix-r4-integrations-mock:latest 0.5s done
-#35 DONE 2.0s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 ...
-
-#36 [integrations-mock] resolving provenance for metadata file
-#36 DONE 0.0s
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 54.53MB / 56.22MB 64.5s
-#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 56.22MB / 56.22MB 65.7s done
-#18 extracting sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1
-#18 extracting sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 0.9s done
-#18 extracting sha256:7246d4c6a55dd0f8dd00d2e63aece3a68d91e6a5d04c4e748fc2706897d96312 0.1s done
-#18 DONE 70.1s
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 20.84   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
-#26 21.06 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
-#26 21.41 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
-#26 21.67 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
-#26 21.93 Downloading sqlalchemy-2.0.46-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.3 MB)
-#26 25.76    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 904.6 kB/s eta 0:00:00
-#26 25.93 Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
-#26 26.14 Downloading pydantic-2.12.5-py3-none-any.whl (463 kB)
-#26 26.69 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
-#26 26.92 Downloading jsonschema-4.24.0-py3-none-any.whl (88 kB)
-#26 27.16 Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
-#26 27.37 Downloading python_multipart-0.0.22-py3-none-any.whl (24 kB)
-#26 27.56 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
-#26 27.80 Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
-#26 29.20    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 1.7 MB/s eta 0:00:00
-#26 ...
-
-#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
-#18 extracting sha256:304511616d6a6d472222f696b9045e20dc90e8043b2a8ba2acb61746595781f3 0.0s done
-#18 DONE 70.2s
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 29.38 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
-#26 ...
-
-#37 [web build 2/6] WORKDIR /src
-#37 DONE 0.2s
-
-#38 [web build 3/6] COPY package.json package-lock.json ./
-#38 DONE 0.1s
-
-#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
-#26 29.56 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
-#26 29.75 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
-#26 30.01 Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
-#26 30.23 Downloading click-8.5.0-py3-none-any.whl (125 kB)
-#26 30.48 Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (621 kB)
-#26 30.98    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 621.4/621.4 kB 1.0 MB/s eta 0:00:00
-#26 31.17 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
-#26 31.38 Downloading idna-3.20-py3-none-any.whl (69 kB)
-#26 31.64 Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
-#26 31.90 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
-#26 32.44 Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
-#26 32.72 Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
-#26 34.53 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
-#26 35.14 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
-#26 35.38 Downloading certifi-2026.10.19-py3-none-any.whl (136 kB)
-#26 36.29 Installing collected packages: typing-extensions, rpds-py, python-multipart, python-dotenv, PyJWT, idna, h11, greenlet, click, certifi, attrs, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, referencing, pydantic-core, opentelemetry-api, httpcore, anyio, starlette, pydantic, jsonschema-specifications, httpx, jsonschema, fastapi
-#26 38.57 Successfully installed PyJWT-2.15.1 SQLAlchemy-2.0.46 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 attrs-26.1.0 certifi-2026.10.19 click-8.5.0 fastapi-0.146.0 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 jsonschema-4.24.0 jsonschema-specifications-2025.9.1 opentelemetry-api-1.45.1 pydantic-2.12.5 pydantic-core-2.41.5 python-dotenv-1.2.4 python-multipart-0.0.22 referencing-0.37.0 rpds-py-2026.9.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
-#26 38.57 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-#26 39.55 
-#26 39.55 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
-#26 39.55 [notice] To update, run: pip install --upgrade pip
-#26 DONE 39.8s
-
-#39 [web build 4/6] RUN npm ci --no-audit --no-fund
-#39 ...
-
-#40 [backend 5/7] COPY backend/app ./app
-#40 DONE 0.1s
-
-#41 [backend 6/7] COPY contracts /srv/contracts
-#41 DONE 0.1s
-
-#39 [web build 4/6] RUN npm ci --no-audit --no-fund
-#39 ...
-
-#42 [backend 7/7] RUN useradd --uid 10001 --create-home app && mkdir -p data backups && chmod 700 backups && chown app:app data backups
-#42 DONE 0.4s
-
-#39 [web build 4/6] RUN npm ci --no-audit --no-fund
-#39 ...
-
-#43 [backend] exporting to image
-#43 exporting layers
-#43 exporting layers 1.6s done
-#43 exporting manifest sha256:10f6c36873b98181787fde6fa6c03c57c5c50fb2f440284edf6c21778fd942ad 0.0s done
-#43 exporting config sha256:3906c79f30adc13c36581476ea20ee7c0af968bb45dc673a929850f17d1bb6c8 0.0s done
-#43 exporting attestation manifest sha256:f78653bbcc8662a3c79a0c22bf46ac87296045640c080cfc162072f218a22caa
-#43 exporting attestation manifest sha256:f78653bbcc8662a3c79a0c22bf46ac87296045640c080cfc162072f218a22caa 0.0s done
-#43 exporting manifest list sha256:06ff9897ebb34606a919bf50db0aaef447ffb36679f2aab74f4f45c8d7b5eab5 0.0s done
-#43 naming to docker.io/library/xronix-r4-backend:latest done
-#43 unpacking to docker.io/library/xronix-r4-backend:latest
-#43 unpacking to docker.io/library/xronix-r4-backend:latest 0.5s done
-#43 DONE 2.4s
-
-#39 [web build 4/6] RUN npm ci --no-audit --no-fund
-#39 ...
-
-#44 [backend] resolving provenance for metadata file
-#44 DONE 0.0s
-
-#39 [web build 4/6] RUN npm ci --no-audit --no-fund
-#39 26.14 
-#39 26.14 added 90 packages in 26s
-#39 26.14 npm notice
-#39 26.14 npm notice New major version of npm available! 10.9.9 -> 12.2.1
-#39 26.14 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
-#39 26.14 npm notice To update run: npm install -g npm@12.2.1
-#39 26.14 npm notice
-#39 DONE 26.3s
-
-#45 [web build 5/6] COPY . .
-#45 DONE 0.1s
-
-#46 [web build 6/6] RUN npm run build
-#46 0.324 
-#46 0.324 > xronix-frontend@0.1.0 build
-#46 0.324 > tsc -b && vite build && cp dist/index.html dist/app.html
-#46 0.324 
-#46 0.957 vite v8.3.4 building client environment for production...
-#46 0.970 transforming...
-#46 1.180 ✓ 676 modules transformed.
-#46 1.258 rendering chunks...
-#46 1.333 computing gzip size...
-#46 1.337 dist/index.html                                                1.26 kB │ gzip:   0.71 kB
-#46 1.337 dist/assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2     10.54 kB
-#46 1.337 dist/assets/onest-vietnamese-wght-normal-BBxOatbv.woff2       12.40 kB
-#46 1.337 dist/assets/unbounded-vietnamese-wght-normal-rat7GD3o.woff2   13.88 kB
-#46 1.337 dist/assets/onest-cyrillic-wght-normal-DayYxulF.woff2         15.86 kB
-#46 1.337 dist/assets/onest-symbols-wght-normal-DxQzqQfC.woff2          18.16 kB
-#46 1.337 dist/assets/onest-math-wght-normal-Bl4ZGkZl.woff2             25.48 kB
-#46 1.337 dist/assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2        28.45 kB
-#46 1.337 dist/assets/unbounded-cyrillic-wght-normal-C627f1f8.woff2     31.42 kB
-#46 1.337 dist/assets/onest-latin-wght-normal-Dun_Rd-l.woff2            33.76 kB
-#46 1.337 dist/assets/unbounded-latin-wght-normal-D5afBTBx.woff2        50.90 kB
-#46 1.337 dist/assets/unbounded-latin-ext-wght-normal-D6H-S6MW.woff2   118.34 kB
-#46 1.337 dist/assets/index-C5jkt4Wp.css                                72.49 kB │ gzip:  15.59 kB
-#46 1.337 dist/assets/ResetPassword-ooaexdyM.js                          2.22 kB │ gzip:   1.08 kB
-#46 1.337 dist/assets/Landing-B2tEeg6H.js                               48.46 kB │ gzip:  16.12 kB
-#46 1.337 dist/assets/useMediaQuery-xdGKhtnb.js                        107.71 kB │ gzip:  33.01 kB
-#46 1.337 dist/assets/DesktopApp-ByIy1Vj8.js                           115.63 kB │ gzip:  32.68 kB
-#46 1.337 dist/assets/api-i5fJ_W-O.js                                  139.22 kB │ gzip:  35.44 kB
-#46 1.337 dist/assets/index-DXXl6jVE.js                                222.83 kB │ gzip:  69.94 kB
-#46 1.337 dist/assets/ForecastChart-BFdn9J-D.js                        352.96 kB │ gzip: 103.02 kB
-#46 1.337 
-#46 1.339 ✓ built in 379ms
-#46 DONE 1.4s
-
-#47 [web stage-1 3/3] COPY --from=build /src/dist /usr/share/nginx/html
-#47 DONE 0.1s
-
-#48 [web] exporting to image
-#48 exporting layers
-#48 exporting layers 0.3s done
-#48 exporting manifest sha256:b5c30a0ebcba934ba13d49debbb2059c02a171070c1737ecf4c6297ae12fa43d 0.0s done
-#48 exporting config sha256:a277d8536e45e36a43042112d6471614ebe7062974c01a410ff6722374ec73da 0.0s done
-#48 exporting attestation manifest sha256:512b308b3b03ab09c12d90e8921c4bce9fe1d31391450ad5bc0c4dbd95a77714
-#48 exporting attestation manifest sha256:512b308b3b03ab09c12d90e8921c4bce9fe1d31391450ad5bc0c4dbd95a77714 0.0s done
-#48 exporting manifest list sha256:a20bde8d5794979be67cfddda1ccb58a4c1740a566c054930ee08a8f5286fdd6 0.0s done
-#48 naming to docker.io/library/xronix-r4-web:latest done
-#48 unpacking to docker.io/library/xronix-r4-web:latest
-#48 unpacking to docker.io/library/xronix-r4-web:latest 0.6s done
-#48 DONE 1.2s
-
-#49 [web] resolving provenance for metadata file
-#49 DONE 0.0s
- Image xronix-r4-ai Built 
- Image xronix-r4-integrations-mock Built 
- Image xronix-r4-backend Built 
- Image xronix-r4-web Built 
- Network xronix-r4_default Creating 
- Volume xronix-r4_backend-data Creating 
- Network xronix-r4_default Creating 
- Volume xronix-r4_backend-data Creating 
- Volume xronix-r4_backend-data Created 
- Volume xronix-r4_backend-data Created 
- Network xronix-r4_default Created 
- Network xronix-r4_default Created 
- Container xronix-r4-ai-1 Creating 
- Container xronix-r4-integrations-mock-1 Creating 
- Container xronix-r4-integrations-mock-1 Created 
- Container xronix-r4-backend-1 Creating 
- Container xronix-r4-ai-1 Created 
- Container xronix-r4-backend-1 Created 
- Container xronix-r4-web-1 Creating 
- Container xronix-r4-web-1 Created 
- Container xronix-r4-integrations-mock-1 Starting 
- Container xronix-r4-ai-1 Starting 
- Container xronix-r4-integrations-mock-1 Started 
- Container xronix-r4-integrations-mock-1 Waiting 
- Container xronix-r4-ai-1 Started 
- Container xronix-r4-integrations-mock-1 Healthy 
- Container xronix-r4-backend-1 Starting 
- Container xronix-r4-backend-1 Started 
- Container xronix-r4-backend-1 Waiting 
- Container xronix-r4-backend-1 Healthy 
- Container xronix-r4-web-1 Starting 
- Container xronix-r4-web-1 Started 
- Container xronix-r4-web-1 Waiting 
- Container xronix-r4-backend-1 Waiting 
- Container xronix-r4-integrations-mock-1 Waiting 
- Container xronix-r4-ai-1 Waiting 
- Container xronix-r4-integrations-mock-1 Healthy 
- Container xronix-r4-ai-1 Healthy 
- Container xronix-r4-backend-1 Healthy 
- Container xronix-r4-web-1 Healthy 
+docker :  Image xronix-r4-integrations-mock Building 
+At <папка замера>\run-measure.ps1:6 char:24
++ ... e-Command { docker compose up -d --build --wait --wait-timeout 600 *> ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ( Image xronix-r...-mock Building :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ Image xronix-r4-ai Building 
+ Image xronix-r4-web Building 
+ Image xronix-r4-backend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.15kB 0.0s done
+#1 DONE 0.0s
+
+#2 [web internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 904B 0.0s done
+#2 DONE 0.3s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 964B 0.0s done
+#3 DONE 0.3s
+
+#4 [integrations-mock internal] load build definition from Dockerfile
+#4 transferring dockerfile: 326B 0.0s done
+#4 DONE 0.3s
+
+#5 [ai internal] load build definition from Dockerfile
+#5 transferring dockerfile: 635B 0.0s done
+#5 DONE 0.3s
+
+#6 [ai internal] load metadata for docker.io/library/python:3.12-slim
+#6 DONE 6.1s
+
+#7 [backend internal] load build context
+#7 DONE 0.0s
+
+#8 [web internal] load metadata for docker.io/library/node:22-alpine
+#8 DONE 6.2s
+
+#9 [web internal] load metadata for docker.io/library/nginx:1.27-alpine
+#9 DONE 6.2s
+
+#10 [ai internal] load .dockerignore
+#10 transferring context:
+#10 transferring context: 83B 0.0s done
+#10 DONE 0.3s
+
+#11 [web internal] load .dockerignore
+#11 transferring context: 129B 0.0s done
+#11 DONE 0.3s
+
+#12 [integrations-mock internal] load .dockerignore
+#12 transferring context: 2B done
+#12 DONE 0.3s
+
+#13 [web internal] load build context
+#13 DONE 0.0s
+
+#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 resolve docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10 0.2s done
+#14 ...
+
+#15 [integrations-mock internal] load build context
+#15 transferring context: 10.79kB 0.1s done
+#15 DONE 0.5s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 resolve docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2 0.2s done
+#16 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0B / 249B 0.2s
+#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0B / 1.29MB 0.2s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0B / 12.12MB 0.2s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0B / 29.84MB 0.2s
+#16 sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 249B / 249B 0.6s done
+#16 ...
+
+#7 [backend internal] load build context
+#7 transferring context: 646.64kB 1.4s done
+#7 DONE 1.6s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 ...
+
+#17 [ai internal] load build context
+#17 transferring context: 700.71kB 1.5s done
+#17 DONE 1.8s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 ...
+
+#13 [web internal] load build context
+#13 transferring context: 728.55kB 1.4s done
+#13 DONE 1.6s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.05MB / 1.29MB 2.7s
+#16 sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 1.29MB / 1.29MB 2.8s done
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 1.05MB / 12.12MB 3.9s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 2.10MB / 29.84MB 5.1s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 2.10MB / 12.12MB 5.3s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 3.15MB / 12.12MB 6.7s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 4.19MB / 29.84MB 8.1s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 4.19MB / 12.12MB 8.3s
+#16 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 resolve docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914 0.2s done
+#18 sha256:304511616d6a6d472222f696b9045e20dc90e8043b2a8ba2acb61746595781f3 442B / 442B 0.6s done
+#18 sha256:7246d4c6a55dd0f8dd00d2e63aece3a68d91e6a5d04c4e748fc2706897d96312 1.26MB / 1.26MB 2.6s done
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 3.15MB / 56.22MB 6.5s
+#18 sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 3.15MB / 3.85MB 5.6s
+#18 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 5.24MB / 12.12MB 9.8s
+#16 ...
+
+#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0B / 15.52MB 0.8s
+#14 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 6.29MB / 29.84MB 10.5s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 6.29MB / 12.12MB 11.1s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 7.34MB / 12.12MB 12.6s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 8.39MB / 12.12MB 13.5s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 8.39MB / 29.84MB 13.5s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 9.44MB / 12.12MB 14.9s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 10.49MB / 12.12MB 16.4s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 10.49MB / 29.84MB 16.3s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 11.53MB / 12.12MB 17.8s
+#16 sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 12.12MB / 12.12MB 18.6s done
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 12.58MB / 29.84MB 19.1s
+#16 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 10.49MB / 56.22MB 16.6s
+#18 sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 3.85MB / 3.85MB 5.7s done
+#18 extracting sha256:7b229517ed222597277036d94892173207d01a731ab3a88eeb1de2e963a2c788 0.1s done
+#18 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 ...
+
+#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 7.34MB / 15.52MB 11.1s
+#14 sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 1.40kB / 1.40kB 1.0s done
+#14 sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 1.21kB / 1.21kB 0.4s done
+#14 sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 402B / 402B 0.4s done
+#14 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0B / 955B 0.2s
+#14 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 14.68MB / 29.84MB 21.7s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 16.78MB / 29.84MB 24.8s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 18.87MB / 29.84MB 28.2s
+#16 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 18.87MB / 56.22MB 27.0s
+#18 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 20.97MB / 29.84MB 30.0s
+#16 ...
+
+#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 13.63MB / 15.52MB 21.3s
+#14 sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 955B / 955B 0.4s done
+#14 sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 629B / 629B 0.4s done
+#14 sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 1.79MB / 1.79MB 3.3s done
+#14 sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 3.64MB / 3.64MB 5.6s done
+#14 extracting sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870 0.1s done
+#14 extracting sha256:61ca4f733c802afd9e05a32f0de0361b6d713b8b53292dc15fb093229f648674 0.1s done
+#14 extracting sha256:b464cfdf2a6319875aeb27359ec549790ce14d8214fcb16ef915e4530e5ed235 0.0s done
+#14 extracting sha256:d7e5070240863957ebb0b5a44a5729963c3462666baa2947d00628cb5f2d5773 0.0s done
+#14 extracting sha256:81bd8ed7ec6789b0cb7f1b47ee731c522f6dba83201ec73cd6bca1350f582948 0.0s done
+#14 extracting sha256:197eb75867ef4fcecd4724f17b0972ab0489436860a594a9445f8eaff8155053 0.0s done
+#14 extracting sha256:34a64644b756511a2e217f0508e11d1a572085d66cd6dc9a555a082ad49a3102 0.0s done
+#14 ...
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 ...
+
+#14 [web stage-1 1/3] FROM docker.io/library/nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
+#14 sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 15.52MB / 15.52MB 22.6s done
+#14 extracting sha256:39c2ddfd6010082a4a646e7ca44e95aca9bf3eaebc00f17f7ccc2954004f2a7d 0.3s done
+#14 DONE 33.1s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 23.07MB / 29.84MB 32.4s
+#16 ...
+
+#19 [web stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#19 DONE 0.1s
+
+#16 [ai 1/7] FROM docker.io/library/python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 25.17MB / 29.84MB 34.3s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 27.26MB / 29.84MB 36.1s
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 38.7s done
+#16 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 38.7s done
+#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034
+#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0.6s done
+#16 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0.6s done
+#16 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.1s done
+#16 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7
+#16 extracting sha256:be6443c06d3c9914acdca3ffb368adad23d4f282b55e71e730878ad3e3c3f75c 0.1s done
+#16 extracting sha256:b524bb3aba7394d85233f3a0a742b8f1b56179e8f61492f73d42a1ff118623b7 0.3s done
+#16 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
+#16 extracting sha256:5c397e4307db7bd392eff1d36de88b04da2a137a4b906b7e0e4657bada560645 0.0s done
+#16 DONE 40.7s
+
+#20 [integrations-mock 2/7] WORKDIR /srv
+#20 DONE 0.2s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 26.21MB / 56.22MB 36.9s
+#18 ...
+
+#21 [backend 2/7] WORKDIR /srv/backend
+#21 DONE 0.2s
+
+#22 [ai 2/5] WORKDIR /app
+#22 DONE 0.2s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#23 [ai 3/5] COPY requirements.txt .
+#23 ...
+
+#24 [integrations-mock 3/7] COPY requirements.txt ./
+#24 DONE 0.3s
+
+#25 [backend 3/7] COPY backend/requirements.txt ./
+#25 DONE 0.2s
+
+#23 [ai 3/5] COPY requirements.txt .
+#23 DONE 0.3s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 29.36MB / 56.22MB 38.1s
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 32.51MB / 56.22MB 40.2s
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 35.65MB / 56.22MB 42.1s
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 38.80MB / 56.22MB 45.3s
+#18 ...
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 2.647 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
+#26 3.486   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
+#26 4.002 Collecting starlette==1.9.0 (from -r requirements.txt (line 2))
+#26 4.184   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
+#26 4.462 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 3))
+#26 4.662   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#26 6.224 Collecting SQLAlchemy==2.0.46 (from -r requirements.txt (line 4))
+#26 6.404   Downloading sqlalchemy-2.0.46-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.5 kB)
+#26 6.655 Collecting PyJWT==2.15.1 (from -r requirements.txt (line 5))
+#26 6.836   Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+#26 7.355 Collecting pydantic==2.12.5 (from -r requirements.txt (line 6))
+#26 7.537   Downloading pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+#26 8.004 Collecting httpx==0.28.1 (from -r requirements.txt (line 7))
+#26 8.190   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#26 8.436 Collecting jsonschema==4.24.0 (from -r requirements.txt (line 8))
+#26 8.613   Downloading jsonschema-4.24.0-py3-none-any.whl.metadata (7.8 kB)
+#26 8.841 Collecting python-dotenv==1.2.4 (from -r requirements.txt (line 9))
+#26 9.026   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+#26 9.260 Collecting python-multipart==0.0.22 (from -r requirements.txt (line 10))
+#26 9.443   Downloading python_multipart-0.0.22-py3-none-any.whl.metadata (1.8 kB)
+#26 9.690 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#26 9.871   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#26 10.08 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#26 ...
+
+#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#27 2.751 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
+#27 3.660   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
+#27 4.152 Collecting starlette==1.9.0 (from -r requirements.txt (line 2))
+#27 4.348   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
+#27 4.627 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 3))
+#27 4.823   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#27 5.622 Collecting pydantic>=2.9.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#27 5.812   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+#27 6.416 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#27 6.606   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#27 6.820 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#27 7.014   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#27 7.235 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#27 7.435   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#27 7.680 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#27 7.867   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+#27 8.104 Collecting anyio<5,>=4.0.0 (from starlette==1.9.0->-r requirements.txt (line 2))
+#27 8.298   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#27 8.536 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 3))
+#27 8.724   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#27 8.941 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 3))
+#27 9.134   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#27 9.358 Collecting idna>=2.8 (from anyio<5,>=4.0.0->starlette==1.9.0->-r requirements.txt (line 2))
+#27 9.551   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#27 9.796 Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#27 9.995   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#27 ...
+
+#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#28 2.613 Collecting fastapi==0.146.0 (from -r requirements.txt (line 1))
+#28 3.463   Downloading fastapi-0.146.0-py3-none-any.whl.metadata (26 kB)
+#28 3.977 Collecting uvicorn==0.54.0 (from -r requirements.txt (line 2))
+#28 4.161   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#28 4.442 Collecting starlette>=0.46.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 4.641   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
+#28 5.400 Collecting pydantic>=2.9.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 5.598   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+#28 6.131 Collecting typing-extensions>=4.8.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 6.314   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#28 6.524 Collecting typing-inspection>=0.4.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 6.707   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#28 6.912 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 7.099   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#28 7.378 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#28 7.560   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+#28 7.794 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 2))
+#28 7.976   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#28 8.185 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 2))
+#28 8.367   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#28 8.584 Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#28 8.766   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#28 ...
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 10.26   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#26 10.46 Collecting annotated-doc>=0.0.2 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#26 10.64   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#26 10.92 Collecting opentelemetry-api>=1.44.0 (from fastapi==0.146.0->-r requirements.txt (line 1))
+#26 11.11   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+#26 11.35 Collecting anyio<5,>=4.0.0 (from starlette==1.9.0->-r requirements.txt (line 2))
+#26 11.53   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#26 11.79 Collecting click>=7.0 (from uvicorn==0.54.0->-r requirements.txt (line 3))
+#26 11.97   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#26 12.18 Collecting h11>=0.8 (from uvicorn==0.54.0->-r requirements.txt (line 3))
+#26 12.36   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#26 13.26 Collecting greenlet>=1 (from SQLAlchemy==2.0.46->-r requirements.txt (line 4))
+#26 13.44   Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+#26 13.66 Collecting annotated-types>=0.6.0 (from pydantic==2.12.5->-r requirements.txt (line 6))
+#26 13.84   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#26 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 45.09MB / 56.22MB 53.5s
+#18 ...
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 16.61 Collecting pydantic-core==2.41.5 (from pydantic==2.12.5->-r requirements.txt (line 6))
+#26 16.79   Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+#26 17.05 Collecting certifi (from httpx==0.28.1->-r requirements.txt (line 7))
+#26 17.23   Downloading certifi-2026.10.19-py3-none-any.whl.metadata (2.5 kB)
+#26 17.46 Collecting httpcore==1.* (from httpx==0.28.1->-r requirements.txt (line 7))
+#26 17.64   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#26 17.91 Collecting idna (from httpx==0.28.1->-r requirements.txt (line 7))
+#26 18.09   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#26 18.32 Collecting attrs>=22.2.0 (from jsonschema==4.24.0->-r requirements.txt (line 8))
+#26 18.50   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+#26 18.73 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.24.0->-r requirements.txt (line 8))
+#26 18.91   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+#26 19.17 Collecting referencing>=0.28.4 (from jsonschema==4.24.0->-r requirements.txt (line 8))
+#26 19.35   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+#26 20.65 Collecting rpds-py>=0.7.1 (from jsonschema==4.24.0->-r requirements.txt (line 8))
+#26 ...
+
+#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#28 10.70 Collecting pydantic-core==2.50.1 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#28 10.90   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+#28 11.27 Collecting anyio<5,>=4.0.0 (from starlette>=0.46.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#28 11.45   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#28 11.68 Collecting idna>=2.8 (from anyio<5,>=4.0.0->starlette>=0.46.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#28 11.87   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#28 12.07 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
+#28 12.52 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#28 12.97 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#28 13.16 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#28 13.70 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#28 13.99 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#28 14.36 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#28 15.80 Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+#28 19.22    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 673.5 kB/s eta 0:00:00
+#28 19.41 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
+#28 19.69 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#28 19.96 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#28 20.16 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#28 20.37 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#28 20.86 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#28 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 48.23MB / 56.22MB 58.3s
+#18 ...
+
+#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#27 12.73 Collecting pydantic-core==2.50.1 (from pydantic>=2.9.0->fastapi==0.146.0->-r requirements.txt (line 1))
+#27 12.92   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+#27 13.12 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
+#27 13.82 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
+#27 14.25 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#27 14.72 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#27 14.93 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#27 15.47 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#27 15.88 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#27 16.13 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#27 16.42 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#27 17.44 Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+#27 20.72    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 697.7 kB/s eta 0:00:00
+#27 20.91 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#27 21.16 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#27 21.38 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#27 21.58 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#27 21.70 Installing collected packages: typing-extensions, idna, h11, click, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, opentelemetry-api, anyio, starlette, pydantic, fastapi
+#27 22.55 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 click-8.5.0 fastapi-0.146.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.1 pydantic-2.14.1 pydantic-core-2.50.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+#27 22.55 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#27 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#28 [ai 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#28 20.98 Installing collected packages: typing-extensions, idna, h11, click, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, opentelemetry-api, anyio, starlette, pydantic, fastapi
+#28 21.81 Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 click-8.5.0 fastapi-0.146.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.1 pydantic-2.14.1 pydantic-core-2.50.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+#28 21.81 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#28 22.78 
+#28 22.78 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
+#28 22.78 [notice] To update, run: pip install --upgrade pip
+#28 DONE 22.9s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#29 [ai 5/5] COPY app ./app
+#29 DONE 0.1s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#27 [integrations-mock 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#27 23.48 
+#27 23.48 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
+#27 23.48 [notice] To update, run: pip install --upgrade pip
+#27 DONE 23.6s
+
+#30 [integrations-mock 5/7] COPY app ./app
+#30 DONE 0.1s
+
+#31 [integrations-mock 6/7] COPY data ./data
+#31 DONE 0.1s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 51.38MB / 56.22MB 61.6s
+#18 ...
+
+#32 [integrations-mock 7/7] RUN useradd --uid 10001 --create-home app
+#32 DONE 0.5s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#33 [ai] exporting to image
+#33 exporting layers 0.8s done
+#33 exporting manifest sha256:c2cdb074a5b6cda1fbd986f9736928119c4591de9d9149853ad229086068b8a9 0.0s done
+#33 exporting config sha256:2d581f034b97bc9b86e4675c754ff219f1d32777f5b6a9015abb70a7024fde89 0.1s done
+#33 exporting attestation manifest sha256:e6ec9f13bf6224cf49eb27f0891c67910717d76f9ca06b87fdfab60d5b470a9c 0.1s done
+#33 exporting manifest list sha256:f6607b02dc77e4710b5a668cc3c7be706f62fd434e7ec72df72f5fb7edd0137c 0.1s done
+#33 naming to docker.io/library/xronix-r4-ai:latest done
+#33 unpacking to docker.io/library/xronix-r4-ai:latest 1.6s done
+#33 DONE 2.7s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#34 [ai] resolving provenance for metadata file
+#34 DONE 0.0s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#35 [integrations-mock] exporting to image
+#35 exporting layers 1.2s done
+#35 exporting manifest sha256:a4b12f38fc71b22780b175aeddd1691c6f6f622bc6a0d56571b24fb3df1b71f3 0.0s done
+#35 exporting config sha256:2666f154aec168e10fd1c357fac9a391ac7bdfdfcb2dee4408dba40020854502 0.0s done
+#35 exporting attestation manifest sha256:c1ff7f1ce15f75d3abd17a7509c3e01ecfb834df9f671897a35b19c9380e8a01 0.1s done
+#35 exporting manifest list sha256:5fe637265039bf72ca45168fef3ad45dfa1b11f34d30b19553a43df8caf74324 0.0s done
+#35 naming to docker.io/library/xronix-r4-integrations-mock:latest 0.0s done
+#35 unpacking to docker.io/library/xronix-r4-integrations-mock:latest 0.5s done
+#35 DONE 2.0s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 ...
+
+#36 [integrations-mock] resolving provenance for metadata file
+#36 DONE 0.0s
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 54.53MB / 56.22MB 64.5s
+#18 sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 56.22MB / 56.22MB 65.7s done
+#18 extracting sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1
+#18 extracting sha256:8776aa3d2ba7247a375d06dcec03856b99dbb0e16e904a5672d3bf08c852d4f1 0.9s done
+#18 extracting sha256:7246d4c6a55dd0f8dd00d2e63aece3a68d91e6a5d04c4e748fc2706897d96312 0.1s done
+#18 DONE 70.1s
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 20.84   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+#26 21.06 Downloading fastapi-0.146.0-py3-none-any.whl (144 kB)
+#26 21.41 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
+#26 21.67 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#26 21.93 Downloading sqlalchemy-2.0.46-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.3 MB)
+#26 25.76    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 904.6 kB/s eta 0:00:00
+#26 25.93 Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
+#26 26.14 Downloading pydantic-2.12.5-py3-none-any.whl (463 kB)
+#26 26.69 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#26 26.92 Downloading jsonschema-4.24.0-py3-none-any.whl (88 kB)
+#26 27.16 Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+#26 27.37 Downloading python_multipart-0.0.22-py3-none-any.whl (24 kB)
+#26 27.56 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#26 27.80 Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#26 29.20    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 1.7 MB/s eta 0:00:00
+#26 ...
+
+#18 [web build 1/6] FROM docker.io/library/node:22-alpine@sha256:fe4f6d74e20370acb04ad889077d14d0f64a9c8ea6a42bc60cddf1e844699914
+#18 extracting sha256:304511616d6a6d472222f696b9045e20dc90e8043b2a8ba2acb61746595781f3 0.0s done
+#18 DONE 70.2s
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 29.38 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#26 ...
+
+#37 [web build 2/6] WORKDIR /src
+#37 DONE 0.2s
+
+#38 [web build 3/6] COPY package.json package-lock.json ./
+#38 DONE 0.1s
+
+#26 [backend 4/7] RUN pip install --no-cache-dir -r requirements.txt
+#26 29.56 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#26 29.75 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#26 30.01 Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+#26 30.23 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#26 30.48 Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (621 kB)
+#26 30.98    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 621.4/621.4 kB 1.0 MB/s eta 0:00:00
+#26 31.17 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#26 31.38 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#26 31.64 Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+#26 31.90 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#26 32.44 Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+#26 32.72 Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+#26 34.53 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#26 35.14 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#26 35.38 Downloading certifi-2026.10.19-py3-none-any.whl (136 kB)
+#26 36.29 Installing collected packages: typing-extensions, rpds-py, python-multipart, python-dotenv, PyJWT, idna, h11, greenlet, click, certifi, attrs, annotated-types, annotated-doc, uvicorn, typing-inspection, SQLAlchemy, referencing, pydantic-core, opentelemetry-api, httpcore, anyio, starlette, pydantic, jsonschema-specifications, httpx, jsonschema, fastapi
+#26 38.57 Successfully installed PyJWT-2.15.1 SQLAlchemy-2.0.46 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 attrs-26.1.0 certifi-2026.10.19 click-8.5.0 fastapi-0.146.0 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.20 jsonschema-4.24.0 jsonschema-specifications-2025.9.1 opentelemetry-api-1.45.1 pydantic-2.12.5 pydantic-core-2.41.5 python-dotenv-1.2.4 python-multipart-0.0.22 referencing-0.37.0 rpds-py-2026.9.1 starlette-1.9.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.54.0
+#26 38.57 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#26 39.55 
+#26 39.55 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
+#26 39.55 [notice] To update, run: pip install --upgrade pip
+#26 DONE 39.8s
+
+#39 [web build 4/6] RUN npm ci --no-audit --no-fund
+#39 ...
+
+#40 [backend 5/7] COPY backend/app ./app
+#40 DONE 0.1s
+
+#41 [backend 6/7] COPY contracts /srv/contracts
+#41 DONE 0.1s
+
+#39 [web build 4/6] RUN npm ci --no-audit --no-fund
+#39 ...
+
+#42 [backend 7/7] RUN useradd --uid 10001 --create-home app && mkdir -p data backups && chmod 700 backups && chown app:app data backups
+#42 DONE 0.4s
+
+#39 [web build 4/6] RUN npm ci --no-audit --no-fund
+#39 ...
+
+#43 [backend] exporting to image
+#43 exporting layers
+#43 exporting layers 1.6s done
+#43 exporting manifest sha256:10f6c36873b98181787fde6fa6c03c57c5c50fb2f440284edf6c21778fd942ad 0.0s done
+#43 exporting config sha256:3906c79f30adc13c36581476ea20ee7c0af968bb45dc673a929850f17d1bb6c8 0.0s done
+#43 exporting attestation manifest sha256:f78653bbcc8662a3c79a0c22bf46ac87296045640c080cfc162072f218a22caa
+#43 exporting attestation manifest sha256:f78653bbcc8662a3c79a0c22bf46ac87296045640c080cfc162072f218a22caa 0.0s done
+#43 exporting manifest list sha256:06ff9897ebb34606a919bf50db0aaef447ffb36679f2aab74f4f45c8d7b5eab5 0.0s done
+#43 naming to docker.io/library/xronix-r4-backend:latest done
+#43 unpacking to docker.io/library/xronix-r4-backend:latest
+#43 unpacking to docker.io/library/xronix-r4-backend:latest 0.5s done
+#43 DONE 2.4s
+
+#39 [web build 4/6] RUN npm ci --no-audit --no-fund
+#39 ...
+
+#44 [backend] resolving provenance for metadata file
+#44 DONE 0.0s
+
+#39 [web build 4/6] RUN npm ci --no-audit --no-fund
+#39 26.14 
+#39 26.14 added 90 packages in 26s
+#39 26.14 npm notice
+#39 26.14 npm notice New major version of npm available! 10.9.9 -> 12.2.1
+#39 26.14 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+#39 26.14 npm notice To update run: npm install -g npm@12.2.1
+#39 26.14 npm notice
+#39 DONE 26.3s
+
+#45 [web build 5/6] COPY . .
+#45 DONE 0.1s
+
+#46 [web build 6/6] RUN npm run build
+#46 0.324 
+#46 0.324 > xronix-frontend@0.1.0 build
+#46 0.324 > tsc -b && vite build && cp dist/index.html dist/app.html
+#46 0.324 
+#46 0.957 vite v8.3.4 building client environment for production...
+#46 0.970 transforming...
+#46 1.180 ✓ 676 modules transformed.
+#46 1.258 rendering chunks...
+#46 1.333 computing gzip size...
+#46 1.337 dist/index.html                                                1.26 kB │ gzip:   0.71 kB
+#46 1.337 dist/assets/onest-cyrillic-ext-wght-normal-DOFToQv1.woff2     10.54 kB
+#46 1.337 dist/assets/onest-vietnamese-wght-normal-BBxOatbv.woff2       12.40 kB
+#46 1.337 dist/assets/unbounded-vietnamese-wght-normal-rat7GD3o.woff2   13.88 kB
+#46 1.337 dist/assets/onest-cyrillic-wght-normal-DayYxulF.woff2         15.86 kB
+#46 1.337 dist/assets/onest-symbols-wght-normal-DxQzqQfC.woff2          18.16 kB
+#46 1.337 dist/assets/onest-math-wght-normal-Bl4ZGkZl.woff2             25.48 kB
+#46 1.337 dist/assets/onest-latin-ext-wght-normal-QAhDxQuo.woff2        28.45 kB
+#46 1.337 dist/assets/unbounded-cyrillic-wght-normal-C627f1f8.woff2     31.42 kB
+#46 1.337 dist/assets/onest-latin-wght-normal-Dun_Rd-l.woff2            33.76 kB
+#46 1.337 dist/assets/unbounded-latin-wght-normal-D5afBTBx.woff2        50.90 kB
+#46 1.337 dist/assets/unbounded-latin-ext-wght-normal-D6H-S6MW.woff2   118.34 kB
+#46 1.337 dist/assets/index-C5jkt4Wp.css                                72.49 kB │ gzip:  15.59 kB
+#46 1.337 dist/assets/ResetPassword-ooaexdyM.js                          2.22 kB │ gzip:   1.08 kB
+#46 1.337 dist/assets/Landing-B2tEeg6H.js                               48.46 kB │ gzip:  16.12 kB
+#46 1.337 dist/assets/useMediaQuery-xdGKhtnb.js                        107.71 kB │ gzip:  33.01 kB
+#46 1.337 dist/assets/DesktopApp-ByIy1Vj8.js                           115.63 kB │ gzip:  32.68 kB
+#46 1.337 dist/assets/api-i5fJ_W-O.js                                  139.22 kB │ gzip:  35.44 kB
+#46 1.337 dist/assets/index-DXXl6jVE.js                                222.83 kB │ gzip:  69.94 kB
+#46 1.337 dist/assets/ForecastChart-BFdn9J-D.js                        352.96 kB │ gzip: 103.02 kB
+#46 1.337 
+#46 1.339 ✓ built in 379ms
+#46 DONE 1.4s
+
+#47 [web stage-1 3/3] COPY --from=build /src/dist /usr/share/nginx/html
+#47 DONE 0.1s
+
+#48 [web] exporting to image
+#48 exporting layers
+#48 exporting layers 0.3s done
+#48 exporting manifest sha256:b5c30a0ebcba934ba13d49debbb2059c02a171070c1737ecf4c6297ae12fa43d 0.0s done
+#48 exporting config sha256:a277d8536e45e36a43042112d6471614ebe7062974c01a410ff6722374ec73da 0.0s done
+#48 exporting attestation manifest sha256:512b308b3b03ab09c12d90e8921c4bce9fe1d31391450ad5bc0c4dbd95a77714
+#48 exporting attestation manifest sha256:512b308b3b03ab09c12d90e8921c4bce9fe1d31391450ad5bc0c4dbd95a77714 0.0s done
+#48 exporting manifest list sha256:a20bde8d5794979be67cfddda1ccb58a4c1740a566c054930ee08a8f5286fdd6 0.0s done
+#48 naming to docker.io/library/xronix-r4-web:latest done
+#48 unpacking to docker.io/library/xronix-r4-web:latest
+#48 unpacking to docker.io/library/xronix-r4-web:latest 0.6s done
+#48 DONE 1.2s
+
+#49 [web] resolving provenance for metadata file
+#49 DONE 0.0s
+ Image xronix-r4-ai Built 
+ Image xronix-r4-integrations-mock Built 
+ Image xronix-r4-backend Built 
+ Image xronix-r4-web Built 
+ Network xronix-r4_default Creating 
+ Volume xronix-r4_backend-data Creating 
+ Network xronix-r4_default Creating 
+ Volume xronix-r4_backend-data Creating 
+ Volume xronix-r4_backend-data Created 
+ Volume xronix-r4_backend-data Created 
+ Network xronix-r4_default Created 
+ Network xronix-r4_default Created 
+ Container xronix-r4-ai-1 Creating 
+ Container xronix-r4-integrations-mock-1 Creating 
+ Container xronix-r4-integrations-mock-1 Created 
+ Container xronix-r4-backend-1 Creating 
+ Container xronix-r4-ai-1 Created 
+ Container xronix-r4-backend-1 Created 
+ Container xronix-r4-web-1 Creating 
+ Container xronix-r4-web-1 Created 
+ Container xronix-r4-integrations-mock-1 Starting 
+ Container xronix-r4-ai-1 Starting 
+ Container xronix-r4-integrations-mock-1 Started 
+ Container xronix-r4-integrations-mock-1 Waiting 
+ Container xronix-r4-ai-1 Started 
+ Container xronix-r4-integrations-mock-1 Healthy 
+ Container xronix-r4-backend-1 Starting 
+ Container xronix-r4-backend-1 Started 
+ Container xronix-r4-backend-1 Waiting 
+ Container xronix-r4-backend-1 Healthy 
+ Container xronix-r4-web-1 Starting 
+ Container xronix-r4-web-1 Started 
+ Container xronix-r4-web-1 Waiting 
+ Container xronix-r4-backend-1 Waiting 
+ Container xronix-r4-integrations-mock-1 Waiting 
+ Container xronix-r4-ai-1 Waiting 
+ Container xronix-r4-integrations-mock-1 Healthy 
+ Container xronix-r4-ai-1 Healthy 
+ Container xronix-r4-backend-1 Healthy 
+ Container xronix-r4-web-1 Healthy 

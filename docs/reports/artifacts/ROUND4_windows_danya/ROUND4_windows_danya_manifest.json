@@ -42,93 +42,93 @@
                   },
                   {
                       "file":  "compose-images.txt",
-                      "bytes":  800,
-                      "sha256":  "f89fd2ac0402019610c6d3686a3c6e395f2569ed61d6d72509f5662dc433895f"
+                      "bytes":  795,
+                      "sha256":  "c0442e3d188da742dff481412ac7fd6ea6b605f95bc29e8729e75fe0ef2e181a"
                   },
                   {
                       "file":  "df-after.txt",
-                      "bytes":  284,
-                      "sha256":  "b9ad78f742a29213e45699977287dc317a1ddcc40c7ddb6045ac08f6c6a42a51"
+                      "bytes":  279,
+                      "sha256":  "1133745380a4b5999ce5cf719381b3f6f1bb1cde04c5fe10825f9744bf30136d"
                   },
                   {
                       "file":  "df-before.txt",
-                      "bytes":  264,
-                      "sha256":  "5cc690775092cf0b0953b8ec356c99c22d76d4c196452423fdb58947b4f1f543"
+                      "bytes":  259,
+                      "sha256":  "1a4f3a905964093abc729bfafb12b0f7d433f4f064487b0793af0c5f0ff4193b"
                   },
                   {
                       "file":  "images-before.txt",
-                      "bytes":  59,
-                      "sha256":  "74adcd502d5275cdb34290c40f4fa5590282603ea1f80674f733220c1f69711d"
+                      "bytes":  58,
+                      "sha256":  "70d2a09f6628339d5c83ef53c7d7ed77bd98dce283766448500cfba69052261d"
                   },
                   {
                       "file":  "ps.txt",
-                      "bytes":  845,
-                      "sha256":  "b9948ba0a069b36867472679b742b4aa63d9466dbf618195525be8da98458c19"
+                      "bytes":  840,
+                      "sha256":  "1e5cc4eeee886dd10fae2c7105823a23d9f73e82752dc65ed80f31333135f86c"
                   },
                   {
                       "file":  "ps-final.txt",
-                      "bytes":  845,
-                      "sha256":  "1664af9a9dcafda5bdbeae97ddbebff17a54f50bcdc98194b27e62e0103842f1"
+                      "bytes":  840,
+                      "sha256":  "96ea9f1b9c81a58369b07b4910e77d5ecd58f03dd00921888c80ebc89e14a6eb"
                   },
                   {
                       "file":  "revision.txt",
-                      "bytes":  43,
-                      "sha256":  "a5e4cb568fbdb5eafb56b9d759bc88ec27afd584301bb2240f8e9f3feae86b7d"
+                      "bytes":  42,
+                      "sha256":  "47c6527881bc08f5824526dbb4feab50b61a72ce24953539e46e97ebfb415992"
                   },
                   {
                       "file":  "run-measure.ps1",
-                      "bytes":  911,
-                      "sha256":  "f48c955f1a97a8c8c37697b8433e9ee19f7c13e11b935cdc1947a26768d66603"
+                      "bytes":  898,
+                      "sha256":  "9c8bff7ff79920c076a2456e7efb9b0ba8e1582488b7f46f3883a34f0f1714c7"
                   },
                   {
                       "file":  "start-ai-log.txt",
-                      "bytes":  770,
-                      "sha256":  "fc5502993cffec4d6c27de64602c3c4fc4c075cc512d0397b06f81c1ea6dc12a"
+                      "bytes":  752,
+                      "sha256":  "16c4f8317439de7d323e1440815a5317979e33a37353c011d2a2cad3d0467289"
                   },
                   {
                       "file":  "stats-ai-stopped.txt",
-                      "bytes":  504,
-                      "sha256":  "5121ed694f2906b123a85f2694716054c2022d50b5e857a7c31d3fb9be422431"
+                      "bytes":  500,
+                      "sha256":  "37c7b71ec2898425cd8cfc7174ab1c3bdbf7de69acd56eefde516654a9a35542"
                   },
                   {
                       "file":  "stats-final.txt",
-                      "bytes":  629,
-                      "sha256":  "ad8897570f5261e587bc51389e4d9951b32c7734b5d8c62456940f1c18052244"
+                      "bytes":  624,
+                      "sha256":  "363b1ae2530595b7e48864628f4fefcc0c1bf1071d79f0c985f1b98f95cabd75"
                   },
                   {
                       "file":  "stats-healthy.txt",
-                      "bytes":  629,
-                      "sha256":  "5993334eee8ecb7cc6995911f08ab9608d6e2c369dcd75e49e5978dce5331296"
+                      "bytes":  624,
+                      "sha256":  "20d7a15a42419657451b2f7b63efdc1c3419461e052654eec42a15be553e2a4b"
                   },
                   {
                       "file":  "stop-ai-log.txt",
-                      "bytes":  426,
-                      "sha256":  "959f529820ba1eb1f31d0529ab72eed9e406d2d2f9b22ffa32d69edc07b18fa3"
+                      "bytes":  418,
+                      "sha256":  "fd2377b53fcc1e13d15d11bf46e6f1be4a755385350a11517b4e9e016e1c1e5e"
                   },
                   {
                       "file":  "timing.txt",
-                      "bytes":  38,
-                      "sha256":  "133ae3f5160ad3519b0e85f20fa77743664879fa3427ca3f1f2e0b7ce73ff8c5"
+                      "bytes":  37,
+                      "sha256":  "539b327f09ccbc1fc3ac4aed64b4b3bdbe96b8c6b01e8d3d97b77a754d6c0c94"
                   },
                   {
                       "file":  "timing-ai-restart.txt",
-                      "bytes":  34,
-                      "sha256":  "d400e70e70fe066943da659d434d067ce1419e69198da04afc1d2237ad7d0a8d"
+                      "bytes":  33,
+                      "sha256":  "51d7d315ca199ebc3c0d1c086146ba06c1cee324b9dd9044ccf5b6f08b2e9ea5"
                   },
                   {
                       "file":  "up-log.txt",
-                      "bytes":  44768,
-                      "sha256":  "1c86004f7656508e478d3ca4155cb505a1b785c0cb0c3cc500bc175562148c46"
+                      "bytes":  44065,
+                      "sha256":  "5a64dba9a751e4b9e6dc42666b2dca1802d3aefad10d9201870bab45283a71e4"
                   },
                   {
                       "file":  "ver-compose.txt",
-                      "bytes":  32,
-                      "sha256":  "c64bf2dca86839773be98ff17254bcbe88282397b49e22bdc4476c4563917629"
+                      "bytes":  31,
+                      "sha256":  "d79f5c74b957e5b6428d0eb823466d330c65e5d85d44c6fbf1bda0f15a87cdb0"
                   },
                   {
                       "file":  "ver-docker.txt",
-                      "bytes":  812,
-                      "sha256":  "4bfbae2db2b18b4a36d1de1ff9a3c34c61cdacae7becd0f5ad2f85d075ab1a8f"
+                      "bytes":  785,
+                      "sha256":  "b31d5eb784d5db788d80212139d2cae28c32ca476def1b924d92e780c2b4f687"
                   }
               ]
 }
