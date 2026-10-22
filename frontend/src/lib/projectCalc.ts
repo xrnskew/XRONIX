@@ -20,6 +20,7 @@ type SphereDef = Template & {
 }
 const defs = spheres.spheres as unknown as Record<string, Omit<SphereDef, 'sphere'>>
 const { title: erTitle, level: erLevel, mitigation: erMitigation } = spheres.experience_risk
+const taxNote = spheres.tax_note as NonNullable<Plan['tax_note']>
 const experienceRisk: Plan['risks'][number] = { title: erTitle, level: erLevel as Plan['risks'][number]['level'], mitigation: erMitigation }
 
 export const templates = (): Template[] => Object.entries(defs).map(([sphere, d]) => ({ sphere: sphere as Sphere, title: d.title, questions: d.questions as Question[] }))
@@ -119,6 +120,7 @@ export function calculatePlan(req: CalcRequest): Plan {
       revenue_forecast, startup_items, monthly_items,
     },
     credit,
+    tax_note: { text: taxNote.text, sources: taxNote.sources, checked_at: taxNote.checked_at },
     tags_update: [d.sphere_label.toLowerCase(), req.city],
   }
 }

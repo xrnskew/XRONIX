@@ -220,3 +220,15 @@ test('опыт: разбор ответа, риск «нет опыта», чи�
   assert.deepEqual(none.finance, plain.finance); assert.deepEqual(none.credit, plain.credit)
   for (const k of Object.keys(contract('templates/spheres.v1.json').spheres)) assert.ok(calculatePlan({ ...base, sphere: k, experience: 'none' }).risks.length <= 8, k)
 })
+
+test('налоговая справка: копия из шаблонов, в каждой сфере, без региональных цифр', () => {
+  const { comment, ...t } = contract('templates/spheres.v1.json').tax_note
+  assert.ok(comment); assert.ok(t.text.length <= 500 && t.sources.length >= 1 && /^\d{4}-\d{2}-\d{2}$/.test(t.checked_at))
+  assert.match(t.text, /27 093/); assert.match(t.text, /346\.20/)
+  for (const k of Object.keys(contract('templates/spheres.v1.json').spheres)) {
+    const p = calculatePlan({ sphere: k, city: 'Самара', own_funds_rub: 500000, answers: {} })
+    assert.deepEqual(p.tax_note, t, k)
+  }
+  const a = calculatePlan({ sphere: 'coffee', city: 'Казань', own_funds_rub: 500000, answers: {} }), b = calculatePlan({ sphere: 'coffee', city: 'Казань', own_funds_rub: 500000, answers: {} })
+  assert.deepEqual(a.finance, b.finance)
+})

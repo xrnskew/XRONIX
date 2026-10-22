@@ -38,6 +38,7 @@ export interface Plan {
     recommended_product_id?: 'fast' | 'secured' | 'mortgage' | 'revolving' | null
     comment: string
   }
+  tax_note?: { text: string; sources: { title: string; url: string }[]; checked_at: string }
   tags_update: string[]
 }
 
