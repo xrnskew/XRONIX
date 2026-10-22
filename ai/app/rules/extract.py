@@ -43,6 +43,7 @@ KEYWORDS = set(UNITS) | set(TENS) | set(HUNDREDS) | set(MULT) | set("""
 день дней давайте деталей детали детальнее сколько стоит стоимость запуск запуска зарабатывать окупится знаю можно
 свое своя свою свой своей своего своему своим твое твой этот этого этой если есть естественно ещё еще
 опыт опыта опытом наёмным наемным найму бизнес
+двое трое четверо пятеро шестеро семеро сама одна никого
 """.split())
 
 
@@ -256,12 +257,30 @@ ANSWER_CUES = {
     "posts": (r"(пост\w*)", r"(постов)"),
     "work_places": (r"(рабоч\w* мест\w*|кресл\w*|мест(?![а-я]))", r"(рабочих мест|кресел)"),
 }
-QA_KEYS = {"format": r"формат", "area_m2": r"площад", "avg_check_rub": r"чек", "staff": r"сотрудник|продавц|штат",
+QA_KEYS = {"format": r"формат", "area_m2": r"площад", "avg_check_rub": r"чек", "staff": r"сотрудник|продавц|штат|мастер|работник|персонал",
            "posts": r"пост", "cars_per_day": r"машин", "work_places": r"рабоч\w* мест|кресл", "orders_per_day": r"заказ\w* в день|заказов",
            "fee_per_order_rub": r"доход|с одного заказа|с заказа", "customers_per_day": r"гост|покупател|клиент|человек"}
 FORMAT_CUES = {"to_go": r"с собой|навынос|на вынос|без посадки|островок|окно",
                "cafe": r"посадк|с залом|зал(?![а-я])|столик|мест\w* для гостей|кафе с|кафе-кофейн"}
 DONT_KNOW = re.compile(r"не знаю|не решил|затрудня|пока нет|посчитайте сами|по умолчанию|хз|без понятия|пропущ|не важно")
+
+# staff — наёмные сотрудники: «работаю сам», «я один» — 0 (contracts/templates.md, п. 5; min 0 в шаблонах).
+_WORKERS = r"(сотрудник|работник|персонал|продавц|мастер|помощник|наёмн|наемн)\w*"
+_SELF = r"(сам|сама|один|одна)(?![а-я])(?!\s+(год|раз|день|месяц|час|сотрудник|продавц|мастер|работник))"
+STAFF_ZERO = re.compile(rf"(?<![а-я0-9])без (наёмных |наемных )?{_WORKERS}|"
+                        rf"(?<![а-я0-9]){_WORKERS} (не будет|нет|не нужн\w*|не планиру\w*|не беру|ноль|0(?![\d,.]))|"
+                        rf"(?<![а-я0-9])(нет|ноль|0) (наёмных |наемных )?{_WORKERS}|"
+                        rf"(?<![а-я0-9])(работа\w*|буду|стою|встану|справлюсь|торгую|стригу|мою)\s+{_SELF}|"
+                        rf"(?<![а-я0-9])(сам|сама|один|одна)\s+(буду\s+)?(работа\w*|справлюсь|торгую|встану|стою|за прилавком|стричь)|"
+                        r"(?<![а-я0-9])я (один|одна)(?![а-я])|(?<![а-я0-9])только я(?![а-я])|своими силами|в одиночку")
+# Короткий ответ на сам вопрос о сотрудниках («Сколько будет сотрудников? сама»): здесь можно и без слов про работу.
+STAFF_ZERO_ANSWER = re.compile(r"(нет|нету|никого|ни одного|нисколько|сам|сама|ноль|0)( пока)?( никого)?")
+COLLECTIVE = {"двое": 2, "трое": 3, "четверо": 4, "пятеро": 5, "шестеро": 6, "семеро": 7}
+
+
+def _collective(text: str) -> str:
+    """«двое» -> «2»: собирательные числа в анкете бывают только про людей."""
+    return re.sub(r"(?<![а-я])(" + "|".join(COLLECTIVE) + r")(?![а-я])", lambda m: str(COLLECTIVE[m.group(1)]), text)
 
 
 def _question(sphere: str, qid: str):
@@ -303,20 +322,24 @@ def template_answers(sphere: str, text: str, asked=()) -> dict:
             h = norm(head)
             qid = next((k for k, rx in QA_KEYS.items() if k in qs and re.search(rx, h)), None)
             if qid and ans.strip():
-                if DONT_KNOW.search(norm(ans)):
+                a = norm(ans)
+                if qid == "staff" and (STAFF_ZERO.search(a) or STAFF_ZERO_ANSWER.fullmatch(a.strip(" .!,"))):
+                    out[qid] = 0
+                    continue
+                if DONT_KNOW.search(a):
                     continue
                 q = qs[qid]
                 if q["kind"] == "choice":
                     v = _choice(sphere, ans)
                 else:
-                    v = _number(ans)
+                    v = _number(_collective(a))
                     v = v if v is not None and _in_range(q, v) else None
                 if v is not None:
                     out[qid] = v
                 continue
         free_lines.append(line)
     # 2) Свободный текст: число и подсказка рядом с ним.
-    free = norm(" ".join(free_lines))
+    free = _collective(norm(" ".join(free_lines)))
     if "format" in qs and "format" not in out:
         v = _choice(sphere, free)
         if v:
@@ -347,6 +370,9 @@ def template_answers(sphere: str, text: str, asked=()) -> dict:
         q = qs[qid]
         if _in_range(q, int(value)):
             out[qid] = int(value)
+    # «работать буду сам», «продавцов не будет» — 0 только со словами про работу или сотрудников («сам себе хозяин» — нет).
+    if "staff" in qs and "staff" not in out and STAFF_ZERO.search(free):
+        out["staff"] = 0
     return out
 
 

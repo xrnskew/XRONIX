@@ -14,6 +14,8 @@
 
 ZERO_FUNDS — дописаны 2026-10-22 по ошибке, найденной Сашей («денег пока нет» не понималось как ноль своих денег):
 формулировки Саши, наши и негативные примеры. Метрики «до» сняты на них до исправления правил.
+STAFF_ZERO и UNDECIDED — так же, по бета-тесту 1 (docs/tasks/ROUND4_danya_final.md, п. 1–2): «работаю сам» -> staff 0;
+«не знаю, что открыть» — три разных ответа, выбор сферы кнопками.
 """
 import json
 
@@ -182,6 +184,63 @@ ZERO_FUNDS = [
      S("bakery", "Самара", 900000), "ready", {**S("bakery", "Самара", 900000), "experience": "none"}, [900000]),
 ]
 
+# Бета-тест 1 (ROUND4_danya_final.md, п. 1): staff — наёмные сотрудники, «работаю сам», «я один» — 0 (templates.md, п. 5).
+STAFF = "Сколько будет сотрудников?"
+BAKERY_TPL = [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, *TPL["bakery"])]
+STAFF_ZERO = [
+    *[("staff_zero", hist, f"{STAFF} {ans}", before, "ready", {**before, "answers": {"staff": 0}}, sums)
+      for ans, (hist, before, sums) in zip(
+          ["0", "ноль", "без сотрудников", "никого", "работаю сам", "я один", "сам", "сама"],
+          [(BAKERY_TPL, S("bakery", "Самара", 900000), [900000]),
+           ([user("Кофейня в Твери, 400 тысяч"), asst(INTRO_TPL, *TPL["coffee"], STAFF)], S("coffee", "Тверь", 400000), [400000]),
+           ([user("Магазин одежды в Омске, миллион"), asst(INTRO_TPL, *TPL["clothing_store"])], S("clothing_store", "Омск", 1000000), [1000000]),
+           ([user("ПВЗ в Курске, 200 тысяч"), asst(INTRO_TPL, *TPL["pickup_point"])], S("pickup_point", "Курск", 200000), [200000]),
+           ([user("Автомойка в Омске, 2 млн"), asst(INTRO_TPL, *TPL["car_wash"], STAFF)], S("car_wash", "Омск", 2000000), [2000000]),
+           ([user("Барбершоп в Королёве, 500 тысяч"), asst(INTRO_TPL, *TPL["beauty_salon"], STAFF)], S("beauty_salon", "Королёв", 500000), [500000]),
+           (BAKERY_TPL, S("bakery", "Самара", 900000), [900000]),
+           ([user("Салон красоты в Сочи, полмиллиона"), asst(INTRO_TPL, *TPL["beauty_salon"], STAFF)], S("beauty_salon", "Сочи", 500000), [500000])])],
+    ("staff_zero", [], "хочу пекарню, работать буду сам", S(), "questions", S("bakery", None, None, staff=0), []),
+    ("staff_zero", [], "Магазин одежды в Туле, своих 500 тысяч, продавцов не будет, сама за прилавком", S(), "questions",
+     S("clothing_store", "Тула", 500000, staff=0), [500000]),
+    ("staff_zero", BAKERY_TPL, "работаю один, площадь 40", S("bakery", "Самара", 900000), "ready",
+     S("bakery", "Самара", 900000, area_m2=40, staff=0), [900000]),
+    # Негативные: «сам» не про работу, «нет» на вопрос не о сотрудниках, обычные числа.
+    ("staff_negative", [], "Сам себе хозяин, хочу кофейню в Казани, есть 300 тысяч", S(), "questions",
+     S("coffee", "Казань", 300000), [300000]),
+    ("staff_negative", BAKERY_TPL, "я сам решу потом, площадь 50", S("bakery", "Самара", 900000), "ready",
+     S("bakery", "Самара", 900000, area_m2=50), [900000]),
+    ("staff_negative", [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, AREA)], "нет", S("bakery", "Самара", 900000), "ready",
+     S("bakery", "Самара", 900000), [900000]),
+    ("staff_negative", BAKERY_TPL, f"{STAFF} 2 сотрудника", S("bakery", "Самара", 900000), "ready",
+     S("bakery", "Самара", 900000, staff=2), [900000]),
+    ("staff_negative", BAKERY_TPL, f"{STAFF} двое", S("bakery", "Самара", 900000), "ready",
+     S("bakery", "Самара", 900000, staff=2), [900000]),
+    # Правило 9 не путается: «нет» в раунде с опытом — опыт, а не 0 сотрудников; обе строки «Вопрос? Ответ» — оба ответа.
+    ("staff_negative", [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, EXPERIENCE, AREA, STAFF)], "нет",
+     S("bakery", "Самара", 900000), "ready", {**S("bakery", "Самара", 900000), "experience": "none"}, [900000]),
+    ("staff_zero", [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, EXPERIENCE, AREA, STAFF)],
+     f"{EXPERIENCE_Q['text']} Нет опыта\n{STAFF} сама", S("bakery", "Самара", 900000), "ready",
+     {**S("bakery", "Самара", 900000, staff=0), "experience": "none"}, [900000]),
+]
+
+# Бета-тест 1 (п. 2): «не знаю», «что-то прибыльное» — категории -> пример сферы -> шесть сфер кнопками.
+UNDECIDED_TEXT = ("Давайте подберём вместе. Могу посчитать кофейню, пекарню, автомойку, магазин одежды, салон красоты или "
+                  "пункт выдачи. Что ближе: общепит, услуги или торговля?")
+STEP1 = [user("не знаю"), asst(UNDECIDED_TEXT, "Что ближе? Варианты: Общепит / Услуги / Торговля", CITY, FUNDS)]
+STEP2 = STEP1 + [user("что-то прибыльное"), asst("Например, пекарня.", "Посчитаем для примера пекарню? Варианты: Да, давайте / "
+                                                 "Нет, другой бизнес", CITY, FUNDS)]
+STEP3 = STEP2 + [user("посоветуйте"), asst("Выберите, пожалуйста, одну из шести сфер кнопкой ниже.",
+                                           "Общепит или торговля? Варианты: Кофейня / Пекарня / Магазин одежды",
+                                           "Или услуги? Варианты: Автомойка / Салон красоты / Пункт выдачи заказов")]
+UNDECIDED = [
+    ("undecided", [], "Хочу свой бизнес, но не знаю, что выбрать", S(), "questions", S(), []),
+    ("undecided", [], "Какой бизнес сейчас самый прибыльный в Самаре?", S(), "questions", S(None, "Самара"), []),
+    ("undecided", STEP1, "Общепит", S(), "questions", S(), []),
+    ("undecided", STEP2, "Да, давайте", S(), "questions", S("bakery"), []),
+    ("undecided", STEP2, "Нет, другой бизнес", S(), "questions", S(), []),
+    ("undecided", STEP3, "Или услуги? Автомойка", S(), "questions", S("car_wash"), []),
+]
+
 # (категория, текст, purpose, sphere, city, amount_rub, term_months, has_collateral)
 NEED = [
     ("equipment", "Нужно 2 млн на новую кофемашину и гриндер для кофейни в Самаре", "equipment", "coffee", "Самара", 2000000, None, None),
@@ -242,7 +301,7 @@ def _gold_questions(st):
 
 def consult_rows():
     rows = []
-    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS]
+    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS + STAFF_ZERO + UNDECIDED]
     for i, ((cat, hist, msg, before, kind, after, sums), source) in enumerate(cases):
         resp = {"type": kind, "text": NEUTRAL_TEXT, "state": after}
         if kind == "questions":
