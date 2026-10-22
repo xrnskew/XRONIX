@@ -64,7 +64,7 @@ export default function Queue() {
                   <td className="whitespace-nowrap px-4 py-3 tabular-nums"><Link to={`/bank/${q.id}`} className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>{q.number}</Link></td>
                   <td className="px-4 py-3"><div className="font-medium">{q.company_name}</div><div className="text-[12px] text-muted tabular-nums">ИНН {q.inn}</div></td>
                   <td className="px-4 py-3">{productNames[q.product_id]}</td>
-                  <td className="px-4 py-3 tabular-nums">{rub(q.amount_rub)}<div className="text-[12px] text-muted">{q.term_months} мес.</div></td>
+                  <td className="whitespace-nowrap px-4 py-3 tabular-nums">{rub(q.amount_rub)}<div className="text-[12px] text-muted">{q.term_months} мес.</div></td>
                   <td className={`px-4 py-3 text-[16px] font-semibold ${gradeTone(q.grade)}`}>{q.grade ?? '—'}</td>
                   <td className="px-4 py-3"><StatusBadge status={q.status} title={statuses[q.status].title} /></td>
                   <td className="whitespace-nowrap px-4 py-3 tabular-nums text-muted">{waited(q.waiting_minutes)}</td>

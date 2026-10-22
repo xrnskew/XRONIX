@@ -19,7 +19,15 @@ export type Move = 'you' | 'bank' | 'done'
 export const whoseMove = (s: Status): Move =>
   (['draft', 'info_requested', 'approved', 'counter_offer', 'signing'] as Status[]).includes(s) ? 'you'
     : (['submitted', 'checking', 'scoring', 'manual_review'] as Status[]).includes(s) ? 'bank' : 'done'
-const tone = (s: Status): Tone => s === 'funded' ? 'ok' : s === 'declined' ? 'bad' : { you: 'action', bank: 'bank', done: 'muted' }[whoseMove(s)] as Tone
+// Цвет статуса по смыслу: зелёный — хорошая новость, жёлтый — нужны ваши данные или решение, красный — отказ,
+// сталь — банк работает, серый — закрыто. «Чей ход» читается по тексту и блоку «Ваш ход».
+export const statusTone = (s: Status): Tone =>
+  s === 'funded' || s === 'approved' || s === 'signing' ? 'ok'
+    : s === 'declined' ? 'bad'
+      : s === 'info_requested' || s === 'counter_offer' ? 'warn'
+        : s === 'draft' ? 'action'
+          : ({ you: 'action', bank: 'bank', done: 'muted' }[whoseMove(s)] as Tone)
+const tone = statusTone
 export const StatusBadge = ({ status, title }: { status: Status; title: string }) => <span className="whitespace-nowrap"><Badge tone={tone(status)} dot>{title}</Badge></span>
 
 export function Label({ text, hint, children, warn }: { text: string; hint?: string; children: ReactNode; warn?: boolean }) {

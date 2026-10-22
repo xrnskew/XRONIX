@@ -5,7 +5,11 @@ import { conveyor } from '../../api/conveyor'
 import { AUTO_STATUSES, type Application, type Offer } from '../../types/conveyor'
 import { decimal, rub } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
-import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, whoseMove } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, statusTone, whoseMove } from './parts'
+
+// Блок «Ваш ход» окрашен по смыслу статуса: зелёный — одобрено, жёлтый — нужны данные или решение, красный — остальное
+const MOVE_BOX: Record<string, string> = { ok: 'bg-ok/10 ring-1 ring-ok/30', warn: 'bg-warn/10 ring-1 ring-warn/30', action: 'bg-accent/10 ring-1 ring-accent/30', bad: 'bg-accent/10 ring-1 ring-accent/30' }
+const MOVE_LABEL: Record<string, string> = { ok: 'text-ok', warn: 'text-warn', action: 'text-accent-soft', bad: 'text-accent-soft' }
 import { ConveyorTrack } from './Track'
 import { useCountUp } from '../../lib/useCountUp'
 import { usePolling } from '../../lib/usePolling'
@@ -49,8 +53,8 @@ export default function ApplicationView() {
             <div className="text-[13px] text-muted">Что сейчас происходит</div>
             <p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p>
           </div>
-          <div className={`rounded-2xl p-4 ${yourMove ? 'bg-accent/10 ring-1 ring-accent/30' : 'bg-surface-2/60'}`}>
-            <div className={`text-[13px] ${yourMove ? 'text-accent-soft' : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
+          <div className={`rounded-2xl p-4 transition-colors ${yourMove ? MOVE_BOX[statusTone(app.status)] ?? MOVE_BOX.action : 'bg-surface-2/60'}`}>
+            <div className={`text-[13px] ${yourMove ? MOVE_LABEL[statusTone(app.status)] ?? MOVE_LABEL.action : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
             <p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p>
           </div>
         </div>
@@ -89,7 +93,7 @@ export default function ApplicationView() {
         <ol className="relative ml-1.5 border-l border-white/10">
           {[...app.timeline].reverse().map((t, i) => (
             <li key={`${t.at}-${i}`} className="relative pb-4 pl-5 last:pb-0">
-              <span className={`absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-surface ${i === 0 ? 'bg-accent' : t.actor === 'client' ? 'bg-text/60' : 'bg-steel/70'}`} aria-hidden />
+              <span className={`absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-surface ${i === 0 ? ({ ok: 'bg-ok', warn: 'bg-warn', bad: 'bg-accent' } as Record<string, string>)[statusTone(app.status)] ?? 'bg-accent' : t.actor === 'client' ? 'bg-text/60' : 'bg-steel/70'}`} aria-hidden />
               <div className={`text-[15px] leading-snug ${i === 0 ? 'font-medium' : 'text-text/85'}`}>{t.text}</div>
               <div className="mt-0.5 text-[12px] text-muted">{dateRu(t.at)} · {t.actor === 'client' ? 'вы' : t.actor === 'analyst' ? 'специалист банка' : 'банк, автоматически'}</div>
             </li>

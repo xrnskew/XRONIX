@@ -60,7 +60,7 @@ export default function PlanScreen() {
         <div className={`grid grid-cols-3 gap-2 ${wide ? '' : 'mt-5'}`}>
           <Big label="На старт" {...shortParts(p.finance.startup_cost_rub)} wide={wide} />
           <Big label="Прибыль в мес." {...shortParts(p.finance.monthly_profit_rub)} tone="ok" wide={wide} />
-          <Big label="Окупится за" value={p.finance.payback_months == null ? '—' : String(p.finance.payback_months)} unit="мес." wide={wide} />
+          <Big label="Окупится за" value={p.finance.payback_months == null ? '—' : String(p.finance.payback_months)} unit="мес." tone={p.finance.payback_months == null ? 'bad' : p.finance.payback_months <= 12 ? 'ok' : p.finance.payback_months <= 24 ? 'warn' : 'bad'} wide={wide} />
         </div>
       </div>
 
@@ -68,8 +68,8 @@ export default function PlanScreen() {
         <SectionTitle>Из чего складывается бюджет</SectionTitle>
         <p className="mb-4 text-[13px] text-muted">Предварительная оценка. Допущения указаны под каждой статьёй; перед запуском уточните цены у арендодателя и поставщиков. Суммы в шагах запуска уже входят в смету.</p>
         <div className="grid gap-6 min-[900px]:grid-cols-2">
-          <Budget title="На запуск, разово" items={p.finance.startup_items} total={p.finance.startup_cost_rub} />
-          <Budget title="Расходы в месяц" items={p.finance.monthly_items} total={p.finance.monthly_expenses_rub} />
+          <Budget title="На запуск, разово" items={p.finance.startup_items} total={p.finance.startup_cost_rub} bar="bg-gradient-to-r from-accent/80 to-accent-soft/70" />
+          <Budget title="Расходы в месяц" items={p.finance.monthly_items} total={p.finance.monthly_expenses_rub} bar="bg-gradient-to-r from-steel/80 to-steel/50" />
         </div>
       </Card>
 
@@ -134,25 +134,28 @@ export default function PlanScreen() {
 
 const Legend = ({ c, t }: { c: string; t: string }) => <span className="flex items-center gap-1.5"><span className={`h-2 w-2 rounded-full ${c}`} />{t}</span>
 
-const Big = ({ label, value, unit, tone, wide }: { label: string; value: string; unit: string; tone?: 'ok'; wide?: boolean }) => {
+const Big = ({ label, value, unit, tone, wide }: { label: string; value: string; unit: string; tone?: 'ok' | 'warn' | 'bad'; wide?: boolean }) => {
   const n = parseFloat(value.replace(',', '.'))
   const decimals = value.includes(',') ? 1 : 0
   const shown = useCountUp(Number.isFinite(n) ? n : 0)
   return (
     <div className="min-w-0">
-      <div className={`font-display ${wide ? 'text-[40px]' : 'text-[22px]'} font-semibold leading-none tabular-nums ${tone === 'ok' ? 'text-ok' : ''}`}>{Number.isFinite(n) ? shown.toFixed(decimals).replace('.', ',') : value}</div>
+      <div className={`font-display ${wide ? 'text-[40px]' : 'text-[22px]'} font-semibold leading-none tabular-nums ${tone === 'ok' ? 'text-ok' : tone === 'warn' ? 'text-warn' : tone === 'bad' ? 'text-accent' : ''}`}>{Number.isFinite(n) ? shown.toFixed(decimals).replace('.', ',') : value}</div>
       <div className={`mt-1 text-text/55 ${wide ? 'text-[13px]' : 'text-[11px]'}`}>{unit}</div>
       <div className={`mt-2 leading-tight text-text/70 ${wide ? 'text-[14px]' : 'text-[12px]'}`}>{label}</div>
     </div>
   )
 }
 
-function Budget({ title, items, total }: { title: string; items?: BudgetItem[]; total: number }) {
+function Budget({ title, items, total, bar }: { title: string; items?: BudgetItem[]; total: number; bar: string }) {
+  const max = Math.max(1, ...(items ?? []).map((i) => i.amount_rub))
   return <section>
     <h3 className="mb-3 text-[16px] font-semibold">{title}</h3>
     {items?.length ? <dl className="space-y-3">{items.map((item, index) => <div key={index}>
       <div className="flex items-start justify-between gap-4 text-[14px]"><dt>{item.title}</dt><dd className="shrink-0 font-semibold tabular-nums">{rub(item.amount_rub)}</dd></div>
       <p className="mt-1 text-[12px] leading-snug text-muted">{item.assumption}</p>
+      {/* доля статьи от самой крупной: сразу видно, куда уходят деньги */}
+      <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[.06]" aria-hidden><div className={`fill-in h-full rounded-full ${bar}`} style={{ width: `${Math.max(2, Math.round(item.amount_rub / max * 100))}%`, animationDelay: `${index * 60}ms` }} /></div>
     </div>)}</dl> : <p className="text-[13px] text-muted">В этом плане подробная смета не сохранена. Попросите в чате пересчитать план с расшифровкой расходов.</p>}
     <div className="mt-4 flex justify-between gap-4 border-t border-line pt-3 text-[15px] font-semibold"><span>Итого</span><span>{rub(total)}</span></div>
   </section>
