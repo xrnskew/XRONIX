@@ -132,10 +132,10 @@ export default function Finance() {
         <SectionTitle>Кредитные продукты XRONIX (демо)</SectionTitle>
         <ul className={wide ? 'grid gap-3 min-[1100px]:grid-cols-2' : 'space-y-3'}>
           {matches.map(({ product: p, fits, reasons }) => (
-            <li key={p.id} className={`flex flex-col rounded-2xl bg-surface-2 p-4 ring-1 ${fits ? 'ring-white/10' : 'ring-white/5'}`}>
+            <li key={p.id} className={`flex flex-col rounded-2xl bg-surface-2 p-4 ring-1 transition-shadow ${p.id === selectedId ? 'ring-2 ring-accent/70 shadow-[0_10px_30px_-14px_rgba(255,69,56,.55)]' : fits ? 'ring-white/10' : 'ring-white/5'}`}>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="text-[15px] font-semibold leading-tight">{p.name}</div>
+                  <div className="text-[15px] font-semibold leading-tight">{p.name}{p.id === selectedId && <span className="ml-2 align-middle text-[11px] font-medium text-accent-soft">в расчёте</span>}</div>
                   <div className="mt-0.5 text-[12px] text-muted">{p.short}</div>
                 </div>
                 <span className="shrink-0 whitespace-nowrap"><Badge tone={!fits ? 'muted' : p.collateral ? 'warn' : 'ok'}>{!fits ? 'Вне диапазона' : p.collateral ? 'Нужен залог' : 'Без залога'}</Badge></span>

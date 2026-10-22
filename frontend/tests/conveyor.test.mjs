@@ -243,3 +243,24 @@ test('ноль сотрудников: зарплат нет, расчёт ос�
     assert.ok(p.finance.monthly_expenses_rub < withStaff.finance.monthly_expenses_rub, k)
   }
 })
+
+test('зарплаты считаются от средней зарплаты региона (Росстат), аренда показывает ставку города', () => {
+  const wages = contract('templates/city_wages.v1.json')
+  assert.ok(Object.keys(wages.cities).length >= 100 && wages.default_avg_salary_rub > 0)
+  const share = contract('templates/spheres.v1.json').spheres.coffee.monthly.salary_share
+  const perHead = (city) => {
+    const p = calculatePlan({ sphere: 'coffee', city, own_funds_rub: 500000, answers: { staff: 1 } })
+    return Math.round(p.finance.monthly_items.find((i) => i.title === 'Зарплаты').amount_rub / 1.3)
+  }
+  // ориентиры бета-теста: Москва около 90 тыс., Южно-Сахалинск около 70–75 тыс., Казань и Самара заметно ниже
+  assert.equal(perHead('Москва'), Math.round(wages.cities['Москва'] * share))
+  assert.ok(perHead('Москва') > 85_000 && perHead('Южно-Сахалинск') > 70_000 && perHead('Южно-Сахалинск') < 80_000)
+  assert.ok(perHead('Москва') > perHead('Санкт-Петербург') && perHead('Санкт-Петербург') > perHead('Казань') && perHead('Казань') > perHead('Самара'))
+  assert.equal(perHead('Юрюзань'), Math.round(wages.default_avg_salary_rub * share), 'город не из таблицы — значение по умолчанию')
+  assert.equal(perHead('москва'), perHead('Москва'), 'регистр не важен'); assert.equal(perHead('Южно-Сахалинск'), perHead('южно-сахалинск'))
+  // пояснение аренды называет ставку города, а не только Москвы
+  const rent = calculatePlan({ sphere: 'coffee', city: 'Юрюзань', own_funds_rub: 500000, answers: {} }).finance.monthly_items.find((i) => i.title === 'Аренда')
+  assert.match(rent.assumption, /^2 100 ₽ за м² × \d+ м² \(ставка Москвы 6 000 ₽ × коэффициент города 0\.35\)$/)
+  const pay = calculatePlan({ sphere: 'coffee', city: 'Юрюзань', own_funds_rub: 500000, answers: {} }).finance.monthly_items.find((i) => i.title === 'Зарплаты')
+  assert.match(pay.assumption, /оценка по умолчанию/); assert.doesNotMatch(pay.assumption, /Росстат/)
+})
