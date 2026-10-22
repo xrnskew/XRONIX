@@ -41,8 +41,8 @@ export default function Queue() {
       {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">{EMPTY[filter]}</p></Card>}
       {items && items.length > 0 && (
         <ul data-span={12} className="space-y-2.5 md:hidden">
-          {items.map((q) => (
-            <li key={q.id}>
+          {items.map((q, n) => (
+            <li key={q.id} className="stagger" style={{ '--i': n } as React.CSSProperties}>
               <Link to={`/bank/${q.id}`} className="card-ring block rounded-[22px] bg-surface p-4 active:bg-surface-2">
                 <div className="flex items-center justify-between gap-3 text-[12px] text-muted tabular-nums"><span>{q.number}</span><span>ждёт {waited(q.waiting_minutes)}</span></div>
                 <div className="mt-1.5 flex items-start justify-between gap-3">
@@ -63,8 +63,8 @@ export default function Queue() {
               <tr>{['Заявка', 'Компания', 'Продукт', 'Сумма и срок', 'Класс', 'Статус', 'Ждёт'].map((h) => <th key={h} className="px-4 py-3 font-medium">{h}</th>)}</tr>
             </thead>
             <tbody>
-              {items.map((q) => (
-                <tr key={q.id} onClick={() => nav(`/bank/${q.id}`)} className="cursor-pointer border-t border-white/5 transition-colors hover:bg-surface-2">
+              {items.map((q, n) => (
+                <tr key={q.id} style={{ '--i': n } as React.CSSProperties} onClick={() => nav(`/bank/${q.id}`)} className="stagger cursor-pointer border-t border-white/5 transition-colors hover:bg-surface-2">
                   <td className="whitespace-nowrap px-4 py-3 tabular-nums"><Link to={`/bank/${q.id}`} className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>{q.number}</Link></td>
                   <td className="px-4 py-3"><div className="font-medium">{q.company_name}</div><div className="text-[12px] text-muted tabular-nums">ИНН {q.inn}</div></td>
                   <td className="px-4 py-3">{productNames[q.product_id]}</td>

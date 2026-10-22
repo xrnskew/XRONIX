@@ -8,12 +8,16 @@ import { decimal, rub } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../../phone/ui'
 import { ErrorText, MoneyInput, StatusBadge, dateRu, ghostBtn, input, memberRoles, primaryBtn, productNames, purposes } from '../../phone/conveyor/parts'
 import { usePolling } from '../../lib/usePolling'
-import { statuses, declineReasons, infoKinds, gradeTone } from './shared'
+import { statuses, declineReasons, infoKinds, gradeTone, gradeToneClass } from './shared'
 
 // Карточка заявки: данные, проверки и журнал слева; рекомендация, решение и скоринг справа
 const checkTitle: Record<Check['kind'], string> = { completeness: 'Полнота и корректность', egrul: 'ЕГРЮЛ / ЕГРИП', fns: 'ФНС «Прозрачный бизнес»', bki: 'Бюро кредитных историй' }
 const resultTone: Record<Check['result'], string> = { ok: 'bg-ok', warn: 'bg-warn', fail: 'bg-accent', error: 'bg-muted' }
 const resultText: Record<Check['result'], string> = { ok: 'в порядке', warn: 'обратить внимание', fail: 'не пройдена', error: 'сервис недоступен' }
+const resultCard: Record<Check['result'], string> = { ok: 'bg-surface-2', warn: 'tint tone-warn', fail: 'tint tone-bad', error: 'bg-surface-2' }
+// Тон рекомендации: одобрить — зелёный, другие условия и запрос данных — жёлтый, отказ — красный
+const recTone: Record<string, string> = { approve: 'tone-ok', counter: 'tone-warn', request_info: 'tone-warn', decline: 'tone-bad' }
+const recLabel: Record<string, string> = { approve: 'Одобрить', counter: 'Другие условия', request_info: 'Запросить данные', decline: 'Отказать' }
 
 export default function CardView() {
   const { id = '' } = useParams()
@@ -61,8 +65,8 @@ export default function CardView() {
           {!data.checks.length && <p className="text-[14px] text-muted">Проверки ещё не выполнялись.</p>}
           <ul className="space-y-2">
             {data.checks.map((ch) => (
-              <li key={ch.kind} className="rounded-xl bg-surface-2 p-3">
-                <details>
+              <li key={ch.kind} className={`rounded-xl p-3 ${resultCard[ch.result]}`}>
+                <details open={ch.result === 'fail' || ch.result === 'warn'}>
                   <summary className="flex cursor-pointer list-none items-start gap-3">
                     <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${resultTone[ch.result]}`} aria-hidden />
                     <span className="min-w-0 flex-1"><span className="text-[14px] font-medium">{checkTitle[ch.kind]}</span><span className="text-[13px] text-muted"> · {resultText[ch.result]}</span><span className="block text-[14px] leading-snug">{ch.summary}</span></span>
@@ -89,14 +93,15 @@ export default function CardView() {
       </div>
       <div data-span={5} className="stack space-y-4 self-start min-[1100px]:sticky min-[1100px]:top-0">
         {data.recommendation && (
-          <Card>
+          <Card className={`tint ${recTone[data.recommendation.kind] ?? 'tone-muted'}`}>
             <SectionTitle>Рекомендация системы</SectionTitle>
+            <p className="mb-2 inline-block rounded-full px-2.5 py-0.5 text-[12px] font-semibold" style={{ background: 'color-mix(in srgb, var(--tone) 18%, transparent)', color: 'var(--tone)' }}>{recLabel[data.recommendation.kind] ?? data.recommendation.kind}</p>
             <p className="text-[14px] leading-snug">{data.recommendation.text}</p>
             {data.recommendation.amount_rub != null && <p className="mt-2 text-[13px] text-muted">{rub(data.recommendation.amount_rub)} на {data.recommendation.term_months} мес. под {decimal(data.recommendation.rate_percent)}%</p>}
           </Card>
         )}
         {a.status === 'manual_review' ? <Decision data={data} onDone={setData} onConflict={load} /> : <Outcome data={data} />}
-        <Card>
+        <Card className={sc ? `tint ${gradeToneClass(sc.grade)}` : a.status === 'declined' ? 'tint tone-bad' : ''}>
           <SectionTitle>Скоринг</SectionTitle>
           {!sc ? <p className="text-[14px] text-muted">{a.status === 'declined' ? 'Не считался: сработал стоп-фактор на проверке.' : 'Ещё не посчитан.'}</p> : (
             <>
@@ -105,6 +110,7 @@ export default function CardView() {
                 <div><div className="text-[12px] text-muted">Класс</div><div className={`font-display text-[40px] font-semibold leading-none ${gradeTone(sc.grade)}`}>{sc.grade}</div></div>
                 <Stat label="Нагрузка" value={sc.debt_load_percent == null ? '—' : `${decimal(sc.debt_load_percent)}%`} tone={sc.debt_load_percent != null && sc.debt_load_percent > 50 ? 'bad' : undefined} />
               </div>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[.07]" role="img" aria-label={`Балл ${sc.score} из 100`}><div className="fill-in h-full rounded-full" style={{ width: `${Math.max(2, Math.min(100, sc.score))}%`, background: 'var(--tone)' }} /></div>
               <table className="mt-4 w-full text-[13px]">
                 <tbody>
                   <tr className="text-muted"><td className="py-1">Базовый балл</td><td /><td className="py-1 text-right tabular-nums">50</td></tr>
@@ -127,8 +133,9 @@ const Info = ({ label, value }: { label: string; value: ReactNode }) => <div><dt
 
 function Outcome({ data }: { data: BankApplication }) {
   const a = data.application
+  const tone = a.decline ? 'tint tone-bad' : a.offer ? 'tint tone-ok' : a.info_request ? 'tint tone-warn' : ''
   return (
-    <Card>
+    <Card className={tone}>
       <SectionTitle>Итог</SectionTitle>
       <p className="text-[14px]">{a.status_info.title}. {a.status_info.now}</p>
       {a.offer && <p className="mt-2 text-[14px] tabular-nums">{a.offer.kind === 'counter' ? 'Встречное предложение' : 'Условия'}: {rub(a.offer.amount_rub)}, {a.offer.term_months} мес., {decimal(a.offer.rate_percent)}%, платёж {rub(a.offer.monthly_payment_rub)}</p>}

@@ -154,6 +154,17 @@ input[type="range"] { height: 4px; }
 .wizard > :nth-child(3) { animation-delay: 40ms; }
 .wizard > :nth-child(n+4) { animation-delay: 80ms; }
 
+/* Списки (заявки, лента, очередь аналитика): элементы появляются по очереди. --i — номер, потолок 8 шагов, чтобы длинный список не тянулся.
+   fill-mode backwards: после показа действуют обычные стили, поэтому hover и active:scale карточек работают */
+.stagger { animation: appear .32s var(--ease-out) backwards; animation-delay: calc(min(var(--i, 0), 8) * 55ms); }
+
+/* Акценты карточки аналитика: цвет задаёт смысл (хорошо / внимание / плохо), шкала заполняется слева */
+.tone-ok { --tone: var(--color-ok); }
+.tone-warn { --tone: var(--color-warn); }
+.tone-bad { --tone: var(--color-accent); }
+.tone-muted { --tone: var(--color-muted); }
+.tint { background: linear-gradient(135deg, color-mix(in srgb, var(--tone) 14%, transparent), transparent 55%), var(--color-surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 35%, transparent); }
+
 @media (prefers-reduced-motion: reduce) {
-  .appear, .belt, .node-pulse, .fill-in, .pop, .wizard > * { animation: none; }
+  .appear, .belt, .node-pulse, .fill-in, .pop, .stagger, .wizard > * { animation: none; }
 }
