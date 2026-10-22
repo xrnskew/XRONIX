@@ -89,7 +89,9 @@ def _checked(model, payload: dict) -> dict:
 async def consult(req: ConsultRequest):
     out = _checked(ConsultResponse, rules_consult.respond(req.model_dump(exclude_unset=False)))
     # experience необязательное: если в запросе его не было и он не узнан, state возвращается без него, как пришёл.
-    if "experience" not in req.state.model_fields_set and out["state"].get("experience") is None:
+    # В раунде с вопросом об опыте — experience: null, как в примерах consult.response.experience.json и questions.json.
+    asks_experience = any(q["id"] == "experience" for q in out.get("questions") or [])
+    if "experience" not in req.state.model_fields_set and out["state"].get("experience") is None and not asks_experience:
         out["state"].pop("experience", None)
     return out
 

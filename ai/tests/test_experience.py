@@ -41,7 +41,7 @@ class Experience(unittest.TestCase):
         q = r["questions"]
         self.assertEqual((q[0]["id"], q[0]["kind"], q[0]["options"]), ("experience", "choice", self.labels))
         self.assertLessEqual(len(q), 4)  # maxItems consult.schema.json
-        self.assertNotIn("experience", r["state"])  # в запросе не было — в ответе не появляется, пока не узнали
+        self.assertIsNone(r["state"]["experience"])  # спросили, ещё не знаем: null, как в примере контракта
 
     def test_answers_by_label_and_words(self):
         r, hist = self.first_round()
@@ -98,8 +98,7 @@ class Experience(unittest.TestCase):
         ex = json.loads((CONTRACTS / "examples" / "consult.response.experience.json").read_text(encoding="utf-8"))
         r = self.consult("Хочу открыть кофейню в Казани, есть около 300 тысяч", EMPTY)
         self.assertEqual(r["questions"][0]["options"], ex["questions"][0]["options"])
-        self.assertEqual({k: v for k, v in r["state"].items() if k != "experience"},
-                         {k: v for k, v in ex["state"].items() if k != "experience"})
+        self.assertEqual(r["state"], ex["state"])  # вместе с experience: null
 
 
 if __name__ == "__main__":
