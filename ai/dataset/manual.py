@@ -11,10 +11,14 @@
 
 В эталоне сравниваются только type и state (consult) и поля разбора (parse-need). Текст и вопросы эталона —
 нейтральные заглушки по контракту: их содержание оценщик не сравнивает.
+
+ZERO_FUNDS — дописаны 2026-10-22 по ошибке, найденной Сашей («денег пока нет» не понималось как ноль своих денег):
+формулировки Саши, наши и негативные примеры. Метрики «до» сняты на них до исправления правил.
 """
 import json
 
 from .common import DATA_DIR
+from .consult import EXPERIENCE_Q
 
 # ---------- что видел человек: реплики консультанта, как бэкенд кладёт их в history ----------
 
@@ -155,6 +159,29 @@ CONSULT = [
      S("bakery", "Самара"), []),
 ]
 
+EXPERIENCE = f"{EXPERIENCE_Q['text']} Варианты: {' / '.join(EXPERIENCE_Q['options'])}"
+ASKED_FUNDS = [user("Кофейня в Казани"), asst(INTRO_CORE, FUNDS)]
+
+# «Денег нет» в разных формах = own_funds_rub 0, но только рядом со словами про деньги (или в ответ на вопрос о них).
+ZERO_FUNDS = [
+    ("zero_funds", [], "Хочу салон красоты в Твери, денег пока нет", S(), "questions", S("beauty_salon", "Тверь", 0), [0]),
+    ("zero_funds", [], "хочу пекарню, денег пока нет", S(), "questions", S("bakery", None, 0), [0]),
+    ("zero_funds", [], "нет денег, но есть идея автомойки", S(), "questions", S("car_wash", None, 0), [0]),
+    ("zero_funds", [], "Кофейня в Самаре, своих средств пока нет", S(), "questions", S("coffee", "Самара", 0), [0]),
+    ("zero_funds", [], "Открою ПВЗ в Омске, денег у меня нет совсем", S(), "questions", S("pickup_point", "Омск", 0), [0]),
+    ("zero_funds", [], "Магазин одежды в Туле без своих денег, накоплений нет", S(), "questions",
+     S("clothing_store", "Тула", 0), [0]),
+    *[("zero_funds", ASKED_FUNDS, msg, S("coffee", "Казань"), "questions", S("coffee", "Казань", 0), [0])
+      for msg in ["денег пока нет", "денег нет", "своих денег нет", "пока нет денег", "ничего нет", "без денег",
+                  "нет своих", "ноль", "средств нет", "ни копейки"]],
+    # Негативные: «нет» без контекста денег и «нет опыта» — не ноль своих денег.
+    ("zero_funds_negative", [user("Хочу пекарню"), asst(INTRO_CORE, CITY)], "нет", S("bakery"), "questions", S("bakery"), []),
+    ("zero_funds_negative", [], "Хочу кофейню в Казани, нет опыта", S(), "questions", S("coffee", "Казань"), []),
+    ("zero_funds_negative", [], "Барбершоп в Королёве, опыта ноль", S(), "questions", S("beauty_salon", "Королёв"), []),
+    ("zero_funds_negative", [user("Пекарня в Самаре, 900 тысяч"), asst(INTRO_TPL, EXPERIENCE, *TPL["bakery"][:3])], "нет",
+     S("bakery", "Самара", 900000), "ready", {**S("bakery", "Самара", 900000), "experience": "none"}, [900000]),
+]
+
 # (категория, текст, purpose, sphere, city, amount_rub, term_months, has_collateral)
 NEED = [
     ("equipment", "Нужно 2 млн на новую кофемашину и гриндер для кофейни в Самаре", "equipment", "coffee", "Самара", 2000000, None, None),
@@ -215,14 +242,15 @@ def _gold_questions(st):
 
 def consult_rows():
     rows = []
-    for i, (cat, hist, msg, before, kind, after, sums) in enumerate(CONSULT):
+    cases = [(c, "manual-2026-10-21") for c in CONSULT] + [(c, "manual-2026-10-22") for c in ZERO_FUNDS]
+    for i, ((cat, hist, msg, before, kind, after, sums), source) in enumerate(cases):
         resp = {"type": kind, "text": NEUTRAL_TEXT, "state": after}
         if kind == "questions":
             resp["questions"] = _gold_questions(after)
-        rows.append({"id": f"consult.manual.{i:03d}", "seed": f"consult-manual-{i:03d}", "scenario": cat,
-                     "rules": ["R1_correction"] if cat == "correction" else [],
+        rules = ["R1_correction"] if cat == "correction" else ["R_zero_funds"] if cat.startswith("zero_funds") else []
+        rows.append({"id": f"consult.manual.{i:03d}", "seed": f"consult-manual-{i:03d}", "scenario": cat, "rules": rules,
                      "request": {"history": hist, "message": msg, "state": before}, "response": resp,
-                     "meta": {"user_amounts": sums, "unseen_phrasing": True, "source": "manual-2026-10-21"}})
+                     "meta": {"user_amounts": sums, "unseen_phrasing": True, "source": source}})
     return rows
 
 

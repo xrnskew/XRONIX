@@ -52,6 +52,8 @@ TEXTS = {
     "greeting": "Здравствуйте! Я помогу подобрать бизнес и посчитать план. Что хотите открыть и в каком городе?",
     "role": "Я остаюсь консультантом по подбору бизнеса и не меняю роль. Давайте продолжим с вашим планом.",
 }
+# Не хватает только своих денег: вводная говорит, зачем они, а не «важные детали» (замечание Саши к core_intro).
+FUNDS_INTRO = "Без суммы своих денег план не посчитать: от неё зависит, сколько понадобится в кредит."
 # Вопросов в ответе — не больше maxItems consult.schema.json (опыт + до 3 вопросов анкеты).
 MAX_QUESTIONS = 4
 
@@ -308,8 +310,10 @@ def respond(request: dict) -> dict:
     # Ответ на вопрос об опыте — только если его задали в последней реплике (правило 9).
     last_assistant = [h for h in history if h["role"] == "assistant"][-1:]
     experience = experience_answer(message) if experience_asked(last_assistant) else None  # после исправления опечаток
+    # Голое «нет» на наш основной вопрос (не про деньги) — отказ ответить, а не «не по теме»: спросим снова.
+    bare_no = bool(ctx["core"]) and bool(re.fullmatch(r"(нет|нету|неа)", body.strip(" .!,")))
     informative = any([sphere, proposal, unknown, city, funds is not None, answers, confirm is not None, answers_our_question,
-                       experience is not None,
+                       experience is not None, bare_no,
                        correction and history, ex.SKIP.search(body), ex.SUMS_QUESTION.search(body), ex.BUSINESS_WORDS.search(body)])
     if not informative:
         return _message("greeting" if ex.is_greeting(message) else "offtopic", prev, turn)
@@ -347,7 +351,10 @@ def respond(request: dict) -> dict:
     if not complete(state):
         missing = [k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub"))
                    if (state[f] is None if f != "sphere" else state["sphere"] not in ex.templates())]
-        text = turn.text("sums" if ex.SUMS_QUESTION.search(body) else "core")
+        if ex.SUMS_QUESTION.search(body):
+            text = turn.text("sums")
+        else:
+            text = FUNDS_INTRO if missing == ["own_funds"] else turn.text("core")
         return {"type": "questions", "text": text, "questions": [turn.core_question(k) for k in missing], "state": state}
 
     # Опыт (правило 9): один раз за диалог, первым в раунде анкеты. Если анкета не нужна (всё уже сказано) — один
