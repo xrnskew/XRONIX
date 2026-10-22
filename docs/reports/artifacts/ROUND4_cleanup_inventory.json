@@ -1,0 +1,332 @@
+{
+  "checked_at": "2026-10-22T02:34:52.520771+00:00",
+  "account": "client@xronix.demo",
+  "reported_window_utc": [
+    "2026-10-22T02:00:00Z",
+    "2026-10-22T03:00:00Z"
+  ],
+  "read_only": true,
+  "applications": [
+    {
+      "id": "51ef83a6-2ce8-5a9d-a69c-fbd94c01356b",
+      "number": "Z-2026-000001",
+      "status": "funded",
+      "created_at": "2026-10-20T09:39:29.308050Z",
+      "updated_at": "2026-10-20T10:00:29.308050Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "secured",
+      "amount_rub": 6000000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "d3224b3a-7a8b-55f3-84ac-18a8e42cd388",
+      "number": "Z-2026-000002",
+      "status": "declined",
+      "created_at": "2026-10-21T06:51:29.359731Z",
+      "updated_at": "2026-10-21T07:00:29.359731Z",
+      "company": "ООО «Ромашка Трейд»",
+      "product": "fast",
+      "amount_rub": 1000000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "2d539785-1fb5-5438-89f3-113a2320eb02",
+      "number": "Z-2026-000003",
+      "status": "counter_offer",
+      "created_at": "2026-10-21T08:48:29.444535Z",
+      "updated_at": "2026-10-21T09:00:29.444535Z",
+      "company": "ИП Лебедев Андрей Сергеевич",
+      "product": "fast",
+      "amount_rub": 2000000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "240f450c-4889-5247-9ed5-2ac9a551d16e",
+      "number": "Z-2026-000004",
+      "status": "info_requested",
+      "created_at": "2026-10-21T09:51:29.492911Z",
+      "updated_at": "2026-10-21T10:00:29.492911Z",
+      "company": "ООО «Альфа-Сервис Плюс»",
+      "product": "fast",
+      "amount_rub": 900000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "d3ff63b2-3036-5af1-a116-2047d9301531",
+      "number": "Z-2026-000005",
+      "status": "manual_review",
+      "created_at": "2026-10-21T11:01:29.578333Z",
+      "updated_at": "2026-10-21T11:13:29.578333Z",
+      "company": "ООО «Вектор Логистик»",
+      "product": "secured",
+      "amount_rub": 12000000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "f13c9dbb-32bf-5f07-84f4-c9b1cb64eea6",
+      "number": "Z-2026-000006",
+      "status": "manual_review",
+      "created_at": "2026-10-21T11:26:29.651311Z",
+      "updated_at": "2026-10-21T11:38:29.651311Z",
+      "company": "ИП Лебедев Андрей Сергеевич",
+      "product": "fast",
+      "amount_rub": 2000000,
+      "plan_id": null,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "1f4a211f-b517-5c5a-b655-59255bdb2a30",
+      "number": "Z-2026-000007",
+      "status": "approved",
+      "created_at": "2026-10-21T11:39:29.718672Z",
+      "updated_at": "2026-10-21T11:51:29.718672Z",
+      "company": "Мария Новикова (будущий ИП)",
+      "product": "start",
+      "amount_rub": 2160000,
+      "plan_id": "26d44a74-08dc-5b5e-8705-1da3ffb400ab",
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "20708c95-48d4-4f70-a5f1-1b6b4a62a306",
+      "number": "Z-2026-000008",
+      "status": "funded",
+      "created_at": "2026-10-21T12:02:04.179623Z",
+      "updated_at": "2026-10-21T12:02:11.727270Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "f552e18b-2d46-48f1-99e9-0e658e0ba838",
+      "number": "Z-2026-000009",
+      "status": "draft",
+      "created_at": "2026-10-22T01:51:53.001076Z",
+      "updated_at": "2026-10-22T01:51:53.001089Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "4d10a81e-6a88-4590-8ee1-3cc080cd0e58",
+      "number": "Z-2026-000010",
+      "status": "approved",
+      "created_at": "2026-10-22T01:52:59.856347Z",
+      "updated_at": "2026-10-22T01:53:09.513561Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "e6d97bfb-d80d-43f4-90f9-3afbdaad1b69",
+      "number": "Z-2026-000011",
+      "status": "signing",
+      "created_at": "2026-10-22T01:53:24.908556Z",
+      "updated_at": "2026-10-22T01:53:36.737076Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "34a6ca10-9ebb-4730-b3c6-a97a9155ffa9",
+      "number": "Z-2026-000012",
+      "status": "signing",
+      "created_at": "2026-10-22T01:54:20.806681Z",
+      "updated_at": "2026-10-22T01:54:32.638644Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "42545666-f37e-4a00-9441-10bcee67dd0a",
+      "number": "Z-2026-000013",
+      "status": "funded",
+      "created_at": "2026-10-22T01:55:20.444653Z",
+      "updated_at": "2026-10-22T01:55:35.046260Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "0fcde31c-80c3-4abc-9959-cc95e867f283",
+      "number": "Z-2026-000014",
+      "status": "funded",
+      "created_at": "2026-10-22T02:25:44.776137Z",
+      "updated_at": "2026-10-22T02:26:01.655626Z",
+      "company": "ООО «Северная выпечка»",
+      "product": "fast",
+      "amount_rub": 1500000,
+      "plan_id": null,
+      "seed": false,
+      "in_reported_window": true
+    }
+  ],
+  "chats": [
+    {
+      "id": "b02475f7-8a22-5c3f-af1a-c42d60479afe",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-21T12:00:29.662342Z",
+      "plan_id": "26d44a74-08dc-5b5e-8705-1da3ffb400ab",
+      "first_message_at": null,
+      "messages": 0,
+      "seed": true,
+      "in_reported_window": false
+    },
+    {
+      "id": "a74e6b38-3edb-4c6c-b72b-066289524640",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-21T12:02:12.160097Z",
+      "plan_id": "5011a3b3-bc57-4a47-9f67-60934b89fde4",
+      "first_message_at": "2026-10-21T12:02:12.063319Z",
+      "messages": 2,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "c5e93da3-2fff-482c-a5b5-d8906de59b27",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-22T01:42:35.081095Z",
+      "plan_id": "01d80e61-4834-4578-ade7-d61f9f4f91f7",
+      "first_message_at": "2026-10-22T01:42:34.739146Z",
+      "messages": 4,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "9de2ba0f-90ff-44fb-8713-975104abd66b",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-22T01:56:03.590149Z",
+      "plan_id": "2ed2e914-58f9-4d39-a06f-bdf152e100bc",
+      "first_message_at": "2026-10-22T01:55:57.442372Z",
+      "messages": 4,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "53f7ade3-69ca-4191-8600-4a628814e1b5",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-22T01:56:31.734159Z",
+      "plan_id": "55154d5f-3afe-489a-8456-40ae5ea62ea0",
+      "first_message_at": "2026-10-22T01:56:25.580316Z",
+      "messages": 4,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "089383e9-404c-43f9-8d25-31793fcb18bc",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-22T01:57:01.084667Z",
+      "plan_id": "8d8f9433-bd70-43ff-a2e6-d229ce722866",
+      "first_message_at": "2026-10-22T01:56:54.932828Z",
+      "messages": 4,
+      "seed": false,
+      "in_reported_window": false
+    },
+    {
+      "id": "203ede39-f98e-435e-9db4-f87fd9134295",
+      "title": "Пекарня, Самара",
+      "updated_at": "2026-10-22T02:26:33.248053Z",
+      "plan_id": "f84f1b6f-04aa-4fcc-8db4-51d754b12983",
+      "first_message_at": "2026-10-22T02:26:27.399774Z",
+      "messages": 4,
+      "seed": false,
+      "in_reported_window": true
+    }
+  ],
+  "plans": [
+    {
+      "id": "26d44a74-08dc-5b5e-8705-1da3ffb400ab",
+      "chat_id": "b02475f7-8a22-5c3f-af1a-c42d60479afe",
+      "created_at": "2026-10-21T12:00:29.664755Z",
+      "title": "Пекарня, Самара",
+      "seed": true,
+      "in_reported_window": false,
+      "referenced_by": [
+        "1f4a211f-b517-5c5a-b655-59255bdb2a30"
+      ]
+    },
+    {
+      "id": "5011a3b3-bc57-4a47-9f67-60934b89fde4",
+      "chat_id": "a74e6b38-3edb-4c6c-b72b-066289524640",
+      "created_at": "2026-10-21T12:02:12.161753Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": false,
+      "referenced_by": []
+    },
+    {
+      "id": "01d80e61-4834-4578-ade7-d61f9f4f91f7",
+      "chat_id": "c5e93da3-2fff-482c-a5b5-d8906de59b27",
+      "created_at": "2026-10-22T01:42:35.083118Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": false,
+      "referenced_by": []
+    },
+    {
+      "id": "2ed2e914-58f9-4d39-a06f-bdf152e100bc",
+      "chat_id": "9de2ba0f-90ff-44fb-8713-975104abd66b",
+      "created_at": "2026-10-22T01:56:03.591542Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": false,
+      "referenced_by": []
+    },
+    {
+      "id": "55154d5f-3afe-489a-8456-40ae5ea62ea0",
+      "chat_id": "53f7ade3-69ca-4191-8600-4a628814e1b5",
+      "created_at": "2026-10-22T01:56:31.735530Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": false,
+      "referenced_by": []
+    },
+    {
+      "id": "8d8f9433-bd70-43ff-a2e6-d229ce722866",
+      "chat_id": "089383e9-404c-43f9-8d25-31793fcb18bc",
+      "created_at": "2026-10-22T01:57:01.085957Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": false,
+      "referenced_by": []
+    },
+    {
+      "id": "f84f1b6f-04aa-4fcc-8db4-51d754b12983",
+      "chat_id": "203ede39-f98e-435e-9db4-f87fd9134295",
+      "created_at": "2026-10-22T02:26:33.249503Z",
+      "title": "Пекарня, Самара",
+      "seed": false,
+      "in_reported_window": true,
+      "referenced_by": []
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-22T02:37:42.640774+00:00",
+  "deleted_ids": {
+    "applications": [
+      "f552e18b-2d46-48f1-99e9-0e658e0ba838",
+      "4d10a81e-6a88-4590-8ee1-3cc080cd0e58",
+      "e6d97bfb-d80d-43f4-90f9-3afbdaad1b69",
+      "34a6ca10-9ebb-4730-b3c6-a97a9155ffa9",
+      "42545666-f37e-4a00-9441-10bcee67dd0a",
+      "0fcde31c-80c3-4abc-9959-cc95e867f283"
+    ],
+    "chats": [
+      "c5e93da3-2fff-482c-a5b5-d8906de59b27",
+      "9de2ba0f-90ff-44fb-8713-975104abd66b",
+      "53f7ade3-69ca-4191-8600-4a628814e1b5",
+      "089383e9-404c-43f9-8d25-31793fcb18bc",
+      "203ede39-f98e-435e-9db4-f87fd9134295"
+    ],
+    "plans": [
+      "01d80e61-4834-4578-ade7-d61f9f4f91f7",
+      "2ed2e914-58f9-4d39-a06f-bdf152e100bc",
+      "55154d5f-3afe-489a-8456-40ae5ea62ea0",
+      "8d8f9433-bd70-43ff-a2e6-d229ce722866",
+      "f84f1b6f-04aa-4fcc-8db4-51d754b12983"
+    ]
+  },
+  "deleted_counts": {
+    "feed_items": 26,
+    "documents": 0,
+    "offers": 5,
+    "scoring_results": 5,
+    "check_results": 20,
+    "application_events": 32,
+    "applications": 6,
+    "generations": 8,
+    "messages": 20,
+    "plans": 5,
+    "chats": 5
+  },
+  "all_other_rows_unchanged": true,
+  "foreign_key_check": "ok",
+  "env_unchanged": true,
+  "jwt_unchanged": true,
+  "seed_applications_preserved": 7,
+  "prior_application_000008_preserved": true,
+  "backup_verified": true
+}

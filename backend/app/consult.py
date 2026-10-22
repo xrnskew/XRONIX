@@ -69,6 +69,20 @@ def amount(text, require_context=False):
     return next(iter(values)) if len(values)==1 else None
 
 
+def experience_value(text):
+    """Match the frontend reference, using only the answer to the experience question."""
+    text=text.strip().casefold().replace('ё','е')
+    if text in ('none','employee','owner'):
+        return text
+    if re.search(r'(был|была|есть|имел\w*|открывал\w*|владел\w*)\s+(свой|своя|свое|свою)\s+(бизнес|дел\w*|кофейн\w*|точк\w*)|свой бизнес|владелец|владел',text) or re.fullmatch(r'был[а]?[.!]?',text):
+        return 'owner'
+    if re.search(r'наемн|работал|работала|сотрудник|бариста|менеджер',text):
+        return 'employee'
+    if re.search(r'нет опыта|без опыта|опыта нет|новичок|не было|впервые|^\s*нет\W*$',text):
+        return 'none'
+    return None
+
+
 class Consult:
     def __init__(self,app,settings,contracts,sessions):
         self.app,self.settings,self.contracts,self.sessions=app,settings,contracts,sessions
@@ -107,7 +121,7 @@ class Consult:
             # Both service and client envelopes must be valid; incompatible output uses the fallback.
             self.contracts.validate('reply',{k:v for k,v in result.items() if k!='state'})
 
-    def fallback(self,text,state,previous,answers):
+    def fallback(self,text,state,previous,answers,experience_asked=False):
         st=copy.deepcopy(state)
         low=text.lower()
         st['city']=(st['city'] or '').strip() or None
@@ -125,12 +139,17 @@ class Consult:
             city_rows=json.loads((project_calc.DATA/'cities.json').read_text(encoding='utf-8'))
             st['city']=next(n for n,_,_ in city_rows if normalized(n)==found)
         asked={q['id'] for q in (previous.reply.get('questions',[]) if previous else [])}
+        if 'experience' in asked:
+            answer=next((a['answer'] for a in answers if a['question_id']=='experience'),text if not answers else '')
+            # Only the answer is user evidence; the question contains all three labels.
+            st['experience']=experience_value(answer)
+            experience_asked=True
         for a in answers:
             if a['question_id']=='city' and a['answer'].strip():st['city']=a['answer'].strip()[:60]
         if 'city' in asked and not found and not answers and text.strip():st['city']=text.strip()[:60]
         funds_text=next((a['answer'] for a in answers if a['question_id']=='own_funds'),text)
         explicit_answer='own_funds' in asked or any(a['question_id']=='own_funds' for a in answers)
-        if explicit_answer or FUNDS_CONTEXT.search(funds_text):
+        if explicit_answer or ('experience' not in asked and not answers and FUNDS_CONTEXT.search(funds_text)):
             money=amount(funds_text,require_context=not explicit_answer)
             if money is not None:st['own_funds_rub']=money
             elif re.search(r'своих нет|ноль|без своих|^нет\b|^0$',funds_text,re.I):st['own_funds_rub']=0
@@ -139,6 +158,10 @@ class Consult:
             q=dict(id='sphere',text='Что открываем? '+', '.join(d['title'] for d in self.c.templates['spheres'].values())+'.',kind='text')
         elif not st['city']:q=dict(id='city',text='В каком городе открываетесь?',kind='text')
         elif st['own_funds_rub'] is None:q=dict(id='own_funds',text='Сколько своих денег готовы вложить в запуск? Если нет — напишите «нет».',kind='text')
+        elif not experience_asked and st.get('experience') is None:
+            st['experience']=None
+            q=dict(id='experience',text='Есть ли у вас опыт в этом бизнесе?',kind='choice',
+                   options=[item['title'] for item in self.c.dict['experiences'].values()])
         else:return dict(type='ready',text='Считаю план по шаблону.',state=st)
         return dict(type='questions',text='Уточните, пожалуйста:',questions=[q],state=st)
 
@@ -164,6 +187,8 @@ class Consult:
             state=copy.deepcopy(chat.consult_state) or dict(sphere=None,city=user.city,own_funds_rub=None,answers={})
             # Backend-only preference; never add fields to the AI state contract.
             refused=state.pop('credit_refused',False)
+            experience_asked=state.pop('experience_asked',False) or any(
+                q['id']=='experience' for m in messages if m.role=='assistant' for q in m.reply.get('questions',[]))
             # Conditional examples in an assistant's funds question are not user facts.
             # Keep the original question in history/UI, but use an unambiguous label here.
             current=body.text+('' if not answers else '\n'+'\n'.join(
@@ -181,11 +206,12 @@ class Consult:
                 result=await self.call('consult',payload)
                 self.validate_state(result,state)
             except (httpx.HTTPError,TimeoutError,ValueError,ValidationError,KeyError,TypeError):
-                result=self.fallback(current,state,previous,answers)
-            chat.consult_state={**copy.deepcopy(result['state']),'credit_refused':refused}
+                result=self.fallback(current,state,previous,answers,experience_asked)
+            experience_asked=experience_asked or any(q['id']=='experience' for q in result.get('questions',[]))
+            chat.consult_state={**copy.deepcopy(result['state']),'credit_refused':refused,'experience_asked':experience_asked}
             if result['type']=='ready':
                 st=result['state']
-                plan=project_calc.calculate(dict(sphere=st['sphere'],city=st['city'],own_funds_rub=st['own_funds_rub'],answers=st['answers']),self.c.templates,self.c.products)
+                plan=project_calc.calculate(dict(sphere=st['sphere'],city=st['city'],own_funds_rub=st['own_funds_rub'],answers=st['answers'],experience=st.get('experience')),self.c.templates,self.c.products)
                 plan=planning.apply_preferences(plan,dict(history=[],message='без кредита' if refused else ''))
                 self.contracts.validate('plan',plan)
                 plan_id=uid();s.add(Plan(id=plan_id,user_id=user.id,chat_id=chat_id,body=plan))

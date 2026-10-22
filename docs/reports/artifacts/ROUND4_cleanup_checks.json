@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-22T02:41:32.539568+00:00",
+  "client_cookie_login": "ok",
+  "application_numbers": [
+    "Z-2026-000008",
+    "Z-2026-000007",
+    "Z-2026-000006",
+    "Z-2026-000005",
+    "Z-2026-000004",
+    "Z-2026-000003",
+    "Z-2026-000002",
+    "Z-2026-000001"
+  ],
+  "chat_ids": [
+    "a74e6b38-3edb-4c6c-b72b-066289524640",
+    "b02475f7-8a22-5c3f-af1a-c42d60479afe"
+  ],
+  "analyst_cookie_login": "ok",
+  "manual_queue": "Vector and Lebedev preserved"
+}

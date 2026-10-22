@@ -167,6 +167,8 @@ def test_fallback_chat_restart_state_and_template_plan(settings):
         assert r.json()['questions'][0]['id']=='own_funds'
     with client(settings) as c:
         r=send(c,h,id,'500 тыс');assert r.status_code==200,r.text
+        assert r.json()['questions'][0]['id']=='experience'
+        r=send(c,h,id,'Нет опыта');assert r.status_code==200,r.text
         assert r.json()['type']=='plan';CONTRACTS.validate('reply',r.json());check_plan(r.json()['plan'])
         p=r.json();assert p['plan']['finance']['own_funds_rub']==500000
         assert c.get('/api/plans/'+p['plan_id'],headers=h).json()['plan']==p['plan']

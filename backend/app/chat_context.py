@@ -10,7 +10,7 @@ ALIASES = {'location': 'city', 'own_funds': 'budget_rub', 'budget': 'budget_rub'
 
 def profile_facts(user):
     return {key: {'value': getattr(user, key), 'source': 'profile', 'message_id': None}
-            for key in ('city', 'experience', 'budget_rub') if getattr(user, key) is not None}
+            for key in ('city',) if getattr(user, key) is not None}
 
 
 def money_value(value):
@@ -73,6 +73,8 @@ def context_payload(user, facts):
     profile = {'name': user.name, 'city': None, 'experience': None, 'budget_rub': None}
     for key in ('city', 'experience', 'budget_rub'):
         if key in facts:
+            if key in ('experience', 'budget_rub') and facts[key].get('source') == 'profile':
+                continue
             value = facts[key]['value']
             if key != 'budget_rub' or isinstance(value, int):
                 profile[key] = value

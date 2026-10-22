@@ -43,7 +43,30 @@
             "beauty_salon": { "$ref": "#/definitions/fact" },
             "pickup_point": { "$ref": "#/definitions/fact" }
           }
-        }
+        },
+        "registered_businesses": {
+          "type": "object", "additionalProperties": false,
+          "description": "Сколько ИП и компаний с ОКВЭД сферы зарегистрировано в городе (Единый реестр МСП ФНС). Ключи — коды сфер templates/spheres.v1.json. Это зарегистрированные, а не работающие точки; в тексте только «около N»",
+          "properties": {
+            "coffee": { "$ref": "#/definitions/fact" },
+            "bakery": { "$ref": "#/definitions/fact" },
+            "car_wash": { "$ref": "#/definitions/fact" },
+            "clothing_store": { "$ref": "#/definitions/fact" },
+            "beauty_salon": { "$ref": "#/definitions/fact" },
+            "pickup_point": { "$ref": "#/definitions/fact" }
+          }
+        },
+        "footfall": {
+          "type": "object", "additionalProperties": false,
+          "description": "Признаки проходимости по OpenStreetMap (данные неполные, в тексте только «около N»)",
+          "properties": {
+            "malls": { "$ref": "#/definitions/fact" },
+            "universities": { "$ref": "#/definitions/fact" },
+            "business_centers": { "$ref": "#/definitions/fact" }
+          }
+        },
+        "income_per_capita_rub": { "$ref": "#/definitions/fact", "description": "Среднедушевые денежные доходы в месяц, рубли (Росстат, обычно по региону)" },
+        "retail_turnover_per_capita_rub": { "$ref": "#/definitions/fact", "description": "Оборот розничной торговли на душу населения в месяц, рубли (Росстат, обычно по региону)" }
       }
     },
     "cities_file": {

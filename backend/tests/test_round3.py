@@ -92,7 +92,11 @@ def test_fallback_funds_context_and_ambiguity(settings,text,expected):
         with c.app.app.state.sessions() as s:assert s.get(Chat,cid).consult_state['own_funds_rub']==expected
         if expected is None:
             assert r.json()['type']=='questions' and r.json()['questions'][0]['id']=='own_funds'
-        else:assert r.json()['plan']['finance']['own_funds_rub']==expected
+        else:
+            assert r.json()['questions'][0]['id']=='experience'
+            r=send(c,h,cid,'Посчитайте по умолчанию')
+            assert r.status_code==200,r.text
+            assert r.json()['plan']['finance']['own_funds_rub']==expected
 
 
 @pytest.mark.parametrize('mode,status',[('json',400),('size',413),('rate',429)])
@@ -181,6 +185,8 @@ def test_consult_credit_preference_survives_restart_and_can_be_changed(settings)
     with client(settings) as c:
         assert send(c,h,cid,'Казань').json()['questions'][0]['id']=='own_funds'
         r=send(c,h,cid,'500 тысяч');assert r.status_code==200,r.text
+        assert r.json()['questions'][0]['id']=='experience'
+        r=send(c,h,cid,'Был свой бизнес');assert r.status_code==200,r.text
         p=r.json();assert p['type']=='plan' and p['plan']['credit']['needed'] is False
         assert 'отказались' in p['plan']['credit']['comment'];CONTRACTS.validate('reply',p)
         assert c.get('/api/plans/'+p['plan_id'],headers=h).json()['plan']==p['plan']

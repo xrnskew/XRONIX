@@ -1,0 +1,64 @@
+npm notice run check
+npm notice run node check.mjs
+ok   контрольные суммы: 14 записей с ИНН
+ok   график application.approved.json
+ok   скоринг в примере
+ok   справочники совпадают со схемами
+ok   plan.coffee.json
+ok   plan.no-credit.json
+ok   reply.message.json
+ok   reply.questions.json
+ok   reply.plan.front.json
+ok   reply.message.json
+ok   reply.questions.json
+ok   reply.plan.ai.json
+ok   request.respond.json
+ok   request.summarize.json
+ok   response.summarize.json
+ok   user.json
+ok   error.json
+ok   need.request.json
+ok   need.response.json
+ok   need.empty.json
+ok   consult.request.json
+ok   consult.request.answers.json
+ok   consult.response.questions.json
+ok   consult.response.ready.json
+ok   consult.response.experience.json
+ok   registry.company.json
+ok   company.json
+ok   company.create.json
+ok   match.request.json
+ok   match.response.json
+ok   application.create.json
+ok   application.patch.json
+ok   application.draft.json
+ok   application.approved.json
+ok   application.declined.json
+ok   application.info_requested.json
+ok   template.coffee.json
+ok   plan.calc.request.json
+ok   plan.calc.response.json
+ok   bank.application.json
+ok   decision.counter.json
+ok   decision.request_info.json
+ok   bank.stats.json
+ok   fns.json
+ok   bki.request.json
+ok   bki.report.json
+ok   knowledge.cities.json
+ok   knowledge.phrases.json
+ok   application.list.json#0
+ok   application.list.json#1
+ok   application.list.json#2
+ok   application.list.json#3
+ok   feed.json#0
+ok   feed.json#1
+ok   bank.queue.json#0
+ok   reply.plan.front.json отклонён ai-reply.schema.json
+ok   reply.plan.ai.json отклонён reply.schema.json
+ok   смысл plan.coffee.json
+ok   смысл plan.no-credit.json
+ok   смысл plan.calc.response.json
+ok   аннуитет в примере
+ok   смысл базы знаний и банка фраз

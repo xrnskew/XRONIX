@@ -107,5 +107,13 @@ def calculate(req, cfg, products):
                 opportunities=copy.deepcopy(d['opportunities']), risks=copy.deepcopy(d['risks']),
                 finance=dict(startup_cost_rub=startup, own_funds_rub=req['own_funds_rub'], funding_gap_rub=gap, monthly_revenue_rub=revenue, monthly_expenses_rub=expenses, monthly_profit_rub=profit, payback_months=payback, revenue_forecast=forecast, startup_items=startup_items, monthly_items=monthly_items),
                 credit=credit, tags_update=[d['sphere_label'].lower()[:30], req['city'][:30]])
+    experience = req.get('experience')
+    if experience is not None:
+        if experience not in ('none', 'employee', 'owner'):
+            raise ValueError('Выберите допустимый вариант опыта в этом бизнесе.')
+        plan['business']['experience'] = experience
+        if experience == 'none':
+            risk = cfg['experience_risk']
+            plan['risks'] = plan['risks'][:7] + [{key: risk[key] for key in ('title', 'level', 'mitigation')}]
     check_plan(plan)
     return plan

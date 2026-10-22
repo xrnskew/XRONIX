@@ -42,6 +42,9 @@ with TestClient(app) as c:
     cid=c.post('/api/chats',headers=headers).json()['chat_id']
     reply=c.post('/api/chats/'+cid+'/messages',headers=headers,json=dict(text='Хочу пекарню в городе Самара, своих 900 тысяч'))
     assert reply.status_code==200,reply.text
+    assert reply.json()['questions'][0]['id']=='experience'
+    reply=c.post('/api/chats/'+cid+'/messages',headers=headers,json=dict(text='Нет опыта'))
+    assert reply.status_code==200,reply.text
     assert reply.json()['type']=='plan'
     assert reply.json()['plan']['business']['city']=='Самара'
     assert reply.json()['plan']['finance']['own_funds_rub']==900000

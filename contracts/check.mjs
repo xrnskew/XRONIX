@@ -71,6 +71,7 @@ cases.push(
   ['consult.request.answers.json', def('consult', 'request')],
   ['consult.response.questions.json', def('consult', 'response')],
   ['consult.response.ready.json', def('consult', 'response')],
+  ['consult.response.experience.json', def('consult', 'response')],
   ['registry.company.json', def('conveyor', 'registry_company')],
   ['company.json', def('conveyor', 'company')],
   ['company.create.json', def('conveyor', 'company_create')],
@@ -164,7 +165,7 @@ const sc = read('./examples/bank.application.json').scoring
 if (sc.score !== Math.min(100, Math.max(0, 50 + sc.factors.reduce((s, f) => s + f.points, 0)))) fail('scoring.score != 50 + сумма факторов (в рамках 0–100)')
 else console.log('ok   скоринг в примере')
 const dict = read('./dictionaries.json'), common = read('./schemas/common.schema.json').definitions
-for (const [k, enumName] of [['statuses', 'status'], ['purposes', 'purpose'], ['spheres', 'sphere'], ['member_roles', 'member_role'], ['collateral_kinds', 'collateral_kind'], ['info_request_kinds', 'info_request_kind'], ['decline_reasons', 'decline_reason']]) {
+for (const [k, enumName] of [['statuses', 'status'], ['purposes', 'purpose'], ['spheres', 'sphere'], ['member_roles', 'member_role'], ['collateral_kinds', 'collateral_kind'], ['info_request_kinds', 'info_request_kind'], ['decline_reasons', 'decline_reason'], ['experiences', 'experience']]) {
   const a = Object.keys(dict[k]).sort().join(), b = [...common[enumName].enum].sort().join()
   if (a !== b) fail(`dictionaries.${k} не совпадает с common.${enumName}`)
 }

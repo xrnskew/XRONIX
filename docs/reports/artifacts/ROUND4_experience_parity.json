@@ -1,0 +1,311 @@
+{
+  "frontend_reference": "origin/dev@cb6e9d2 read-only archive",
+  "cases": [
+    {
+      "request": {
+        "sphere": "coffee",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "coffee",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "coffee",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "coffee",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "bakery",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "bakery",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "bakery",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "bakery",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "car_wash",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "car_wash",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "car_wash",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "car_wash",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "clothing_store",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "clothing_store",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "clothing_store",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "clothing_store",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "beauty_salon",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "beauty_salon",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "beauty_salon",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "beauty_salon",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "pickup_point",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {}
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "pickup_point",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "none"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "pickup_point",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "employee"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    },
+    {
+      "request": {
+        "sphere": "pickup_point",
+        "city": "Казань",
+        "own_funds_rub": 500000,
+        "answers": {},
+        "experience": "owner"
+      },
+      "finance_equal": true,
+      "credit_equal": true,
+      "business_equal": true,
+      "risks_equal": true
+    }
+  ]
+}
