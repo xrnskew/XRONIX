@@ -58,3 +58,15 @@ HTTPS-проверка в 12:02 UTC / 23:02 по Сахалину: оба дем
 Оба демо-входа и me работают; cookie JSON только user, атрибуты HttpOnly/Secure/SameSite=Strict. Preflight 200, ошибки 400/413 имеют разрешающий credentialed CORS для https://xronix.ru. Вектор и Лебедев остаются в manual_review. Прежняя проверочная выдача funded с платежом 78933 ₽ сохранена. Подбор 40 млн / 36 мес. без залога возвращает только gov_guarantee; запасной чат со структурированным ответом 900000 возвращает план со своими 900000 ₽.
 
 Результаты: [HTTPS smoke](../../docs/reports/artifacts/ROUND3_production_final_checks.json), [сохранность](../../docs/reports/artifacts/ROUND3_production_preservation.json). Публичный xronix.ru при браузерной проверке всё ещё показывал моки; настоящий браузерный сеанс с API ждёт переключения frontend Сашей. Последующая новая выкладка вновь требует отдельного разрешения.
+
+## Выкладка опыта bd65d9f · 22.10.2026
+
+По новой просьбе выложить принятую 352-тестами версию обновлён **только backend до bd65d9f**. Время старта: **04:24:51 UTC / 15:24:51 Asia/Sakhalin 22 октября**. Fast-forward собственной ветки с 01bbb4b; frontend/AI/зависимости/systemd/Caddy не менялись. Режим прежний: CONSULT_CHAT=true, SEED_DEMO=true, CORS=https://xronix.ru, локальный integrations-mock, AI 18001 отсутствует — запасной диалог. Схема 5, NRestarts=0, оба сервиса active.
+
+До остановки проверено отсутствие активных чатов/генераций. После штатной остановки выполнены новый manual backup и verify. Приватные копия .env/unit, прежний SHA, manifest, путь к backup — `/srv/xronix/backend/data/deploy-20261022-experience/`,0700/0600. Все прежние строки 13 бизнес-таблиц сохранены, включая users 18, chats 33, messages 140, plans 29, applications 8 и их связи; .env/JWT совпали. [Протокол сохранности](../../docs/reports/artifacts/ROUND4_experience_production_preservation.json).
+
+HTTPS smoke 04:25 UTC: оба cookie-входа→200/JSON только user, me работает, cookie HttpOnly/Secure/SameSite=Strict; credentialed CORS соответствует https://xronix.ru. Вектор/Лебедев на месте, 000001…000008 сохранены, прежняя funded 000008 с платежом 78933₽ не изменилась. Новых заявок не создавалось.
+
+Новый чат: вопрос своих средств→900000→отдельный choice об опыте→«Нет опыта»→plan business.experience=none, own_funds_rub=900000, последний риск «Нет опыта в этой сфере», всего≤8. Второй временный чат: ответ«нет» на свои деньги даёт 0₽, но **не** заполняет опыт — задаётся отдельный вопрос; «Был свой бизнес»→owner, без риска отсутствия опыта. Оба временных чата и их планы удалены штатным API; исходные множества UUID заявок/чатов после проверки совпали. [Результаты](../../docs/reports/artifacts/ROUND4_experience_production_checks.json).
+
+Это HTTPS/API-проверка. Полный повтор с живого frontend (оба входа/cookies/выдача/опыт) Саша выполняет после сообщения о выкладке. Сайт уже работает с настоящим API, смены его конфигурации не требуется. Открытые независимая оценка/человеческая вычитка/Windows-артефакты/прогон 25октября этой поставкой не закрываются.

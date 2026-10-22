@@ -1,0 +1,56 @@
+{
+  "users": {
+    "preserved_rows": 18,
+    "current_rows": 18
+  },
+  "chats": {
+    "preserved_rows": 33,
+    "current_rows": 33
+  },
+  "messages": {
+    "preserved_rows": 140,
+    "current_rows": 140
+  },
+  "plans": {
+    "preserved_rows": 29,
+    "current_rows": 29
+  },
+  "companies": {
+    "preserved_rows": 6,
+    "current_rows": 6
+  },
+  "company_members": {
+    "preserved_rows": 6,
+    "current_rows": 6
+  },
+  "applications": {
+    "preserved_rows": 8,
+    "current_rows": 8
+  },
+  "application_events": {
+    "preserved_rows": 43,
+    "current_rows": 43
+  },
+  "check_results": {
+    "preserved_rows": 30,
+    "current_rows": 30
+  },
+  "scoring_results": {
+    "preserved_rows": 6,
+    "current_rows": 6
+  },
+  "offers": {
+    "preserved_rows": 4,
+    "current_rows": 4
+  },
+  "documents": {
+    "preserved_rows": 0,
+    "current_rows": 0
+  },
+  "feed_items": {
+    "preserved_rows": 35,
+    "current_rows": 35
+  },
+  "env_unchanged": true,
+  "jwt_unchanged": true
+}

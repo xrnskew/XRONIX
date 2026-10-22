@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-10-22T04:25:56.160909+00:00",
+  "release": "bd65d9f",
+  "base_url": "https://api.xronix.ru",
+  "origin": "https://xronix.ru",
+  "checks": {
+    "client_login": {
+      "status": 200,
+      "json_keys": [
+        "user"
+      ],
+      "cookie_attributes": [
+        "HttpOnly",
+        "Max-Age=86400",
+        "Path=/",
+        "SameSite=strict",
+        "Secure"
+      ]
+    },
+    "analyst_login": {
+      "status": 200,
+      "json_keys": [
+        "user"
+      ],
+      "cookie_attributes": [
+        "HttpOnly",
+        "Max-Age=86400",
+        "Path=/",
+        "SameSite=strict",
+        "Secure"
+      ]
+    },
+    "applications_before": [
+      "Z-2026-000008",
+      "Z-2026-000007",
+      "Z-2026-000006",
+      "Z-2026-000005",
+      "Z-2026-000004",
+      "Z-2026-000003",
+      "Z-2026-000002",
+      "Z-2026-000001"
+    ],
+    "queue": {
+      "vector": true,
+      "lebedev": true
+    },
+    "prior_funded": {
+      "status": "funded",
+      "monthly_payment_rub": 78933
+    },
+    "experience_cases": [
+      {
+        "funds_answer": "900000",
+        "experience_answer": "Нет опыта",
+        "experience": "none",
+        "own_funds_rub": 900000,
+        "experience_risk": true,
+        "question_after_funds": true
+      },
+      {
+        "funds_answer": "нет",
+        "experience_answer": "Был свой бизнес",
+        "experience": "owner",
+        "own_funds_rub": 0,
+        "experience_risk": false,
+        "question_after_funds": true
+      }
+    ],
+    "temporary_chats_and_plans_removed": true,
+    "original_demo_ids_preserved": true
+  }
+}
