@@ -115,5 +115,8 @@ def calculate(req, cfg, products):
         if experience == 'none':
             risk = cfg['experience_risk']
             plan['risks'] = plan['risks'][:7] + [{key: risk[key] for key in ('title', 'level', 'mitigation')}]
+    note = cfg.get('tax_note')
+    if note:
+        plan['tax_note'] = {key: copy.deepcopy(note[key]) for key in ('text', 'sources', 'checked_at')}
     check_plan(plan)
     return plan
