@@ -90,7 +90,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 3,
-          "min": 1,
+          "min": 0,
           "max": 30
         }
       ],
@@ -229,7 +229,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 5,
-          "min": 1,
+          "min": 0,
           "max": 40
         }
       ],
@@ -377,7 +377,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 4,
-          "min": 1,
+          "min": 0,
           "max": 40
         }
       ],
@@ -517,7 +517,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 3,
-          "min": 1,
+          "min": 0,
           "max": 20
         }
       ],
@@ -665,7 +665,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 5,
-          "min": 1,
+          "min": 0,
           "max": 40
         }
       ],
@@ -805,7 +805,7 @@
           "kind": "number",
           "unit": "чел.",
           "default": 2,
-          "min": 1,
+          "min": 0,
           "max": 10
         }
       ],

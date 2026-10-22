@@ -69,7 +69,7 @@ def calculate(req, cfg, products):
     revenue = js_round(a[d['revenue']['qty']]*a[d['revenue']['price']]*d['revenue']['days_per_month'])
     salaries = js_round(staff*m['salary_per_staff']*(0.6+0.4*k)*(1+cfg['payroll_tax_percent']/100))
     monthly_items = [dict(title='Аренда', amount_rub=rent, assumption=f"{groups(m['rent_per_m2'])} ₽ за м² в Москве × {area:g} м² × коэффициент города {k:g}"),
-                     dict(title='Зарплаты', amount_rub=salaries, assumption=f"{staff:g} чел., с учётом уровня зарплат в городе и страховых взносов {cfg['payroll_tax_percent']}%")]
+                     dict(title='Зарплаты', amount_rub=salaries, assumption='Наёмных сотрудников нет: работает сам предприниматель' if staff == 0 else f"{staff:g} чел., с учётом уровня зарплат в городе и страховых взносов {cfg['payroll_tax_percent']}%")]
     if m['cogs_percent'] > 0:
         monthly_items.append(dict(title=m['cogs_title'], amount_rub=js_round(revenue*m['cogs_percent']/100), assumption=f"{m['cogs_percent']}% выручки"))
     monthly_items.extend([dict(title=f'Налог УСН {tax}%', amount_rub=js_round(revenue*tax/100), assumption='УСН «доходы»'),

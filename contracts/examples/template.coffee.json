@@ -51,7 +51,7 @@
       "kind": "number",
       "unit": "чел.",
       "default": 3,
-      "min": 1,
+      "min": 0,
       "max": 30
     }
   ]

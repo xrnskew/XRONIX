@@ -45,3 +45,23 @@ def test_chat_plan_carries_tax_note(settings):
         assert result['type'] == 'plan', result
         CONTRACTS.validate('plan', result['plan'])
         assert result['plan']['tax_note']['checked_at']
+
+
+@pytest.mark.parametrize('sphere', SPHERES)
+def test_zero_staff_has_no_salaries_and_valid_plan(settings, sphere):
+    with setup(settings) as c:
+        h = register(c)
+        body = dict(sphere=sphere, city='Самара', own_funds_rub=900000, answers={'staff': 0})
+        response = c.post('/api/plans/calculate', headers=h, json=body)
+        assert response.status_code == 201, response.text
+        plan = response.json()['plan']
+        CONTRACTS.validate('plan', plan)
+        salaries = next(i for i in plan['finance']['monthly_items'] if i['title'] == 'Зарплаты')
+        assert salaries['amount_rub'] == 0 and 'сам предприниматель' in salaries['assumption']
+        base = c.post('/api/plans/calculate', headers=h, json=dict(body, answers={})).json()['plan']
+        assert plan['finance']['monthly_expenses_rub'] < base['finance']['monthly_expenses_rub']
+
+
+def test_product_reasons_do_not_name_the_bank(settings):
+    text = (settings.contracts_dir.parent / 'backend' / 'app' / 'credit_rules.py').read_text(encoding='utf-8')
+    assert 'Альфа' not in text

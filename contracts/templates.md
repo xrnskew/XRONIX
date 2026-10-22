@@ -22,7 +22,7 @@
 
    В `assumption` подстрока `{rub}` заменяется на `rub` в формате `150 000`. `startup_cost_rub` = сумма статей.
 4. **Выручка на плановом уровне** `revenue = round(answers[revenue.qty] × answers[revenue.price] × revenue.days_per_month)`.
-5. **Зарплаты** со страховыми взносами `salaries = round(staff × monthly.salary_per_staff × (0.6 + 0.4 × k) × (1 + payroll_tax_percent / 100))`.
+5. **Зарплаты** со страховыми взносами `salaries = round(staff × monthly.salary_per_staff × (0.6 + 0.4 × k) × (1 + payroll_tax_percent / 100))`. Сотрудников может быть 0 (работает сам предприниматель): тогда `salaries = 0`, а пояснение в плане — «Наёмных сотрудников нет: работает сам предприниматель». Доход предпринимателя — это прибыль плана.
 6. **Месячные статьи** `monthly_items` на плановом уровне, без платежа по кредиту, в таком порядке:
    - «Аренда» — `rent`;
    - «Зарплаты» — `salaries`;

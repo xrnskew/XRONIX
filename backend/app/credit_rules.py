@@ -70,7 +70,7 @@ def match_products(req, months, products, rules, person=False, plan=None, today=
                 share = rules['start']['min_own_share']
                 reasons.append(f"Своих денег должно быть не меньше {share*100:g}% стоимости запуска: {rub(math.ceil(plan['startup_cost_rub']*share))}, у вас {rub(plan['own_funds_rub'])}.")
         elif person:
-            reasons.append('Продукт Альфа-Банка для действующего бизнеса: нужны зарегистрированные ИП или компания.')
+            reasons.append('Продукт для действующего бизнеса: нужны зарегистрированные ИП или компания.')
         elif months is not None and p['minBusinessMonths'] and months < p['minBusinessMonths']:
             reasons.append(f"Бизнес должен работать не меньше {p['minBusinessMonths']} месяцев, у вас {age_text(months).rstrip('.')}.")
         can = p['id'] in rules['applicable_products']
