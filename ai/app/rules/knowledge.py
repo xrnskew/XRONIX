@@ -22,6 +22,10 @@ SPHERE_MANY = {"coffee": "кофеен", "bakery": "пекарен", "car_wash":
 SOURCE_GENT = {"Росстат": "Росстата", "справочник городов России": "справочника городов России"}
 MIN_VENUES = 10  # меньше — в OSM почти наверняка не всё, число не называем
 MAX_TEXT = 600
+# Признак проходимости (поле footfall базы), который важен сфере, и порог, ниже которого число не называем.
+# Новые факты идут через подстановки контракта: числа — {venues} («около 80»), суммы — {salary} («59 000 ₽»).
+PLACE_FOR = {"clothing_store": "malls", "beauty_salon": "malls", "coffee": "universities", "bakery": "business_centers"}
+PLACE_MIN = {"malls": 5, "universities": 5, "business_centers": 10}
 
 
 def _load(name: str):
@@ -109,6 +113,20 @@ def fact_values(state: dict, fact: str) -> dict:
     if fact == "salary" and c.get("avg_salary_rub"):
         f = c["avg_salary_rub"]
         return {"salary": rub(salary_value(f)), "source": _source(sources, f)}
+    if fact == "registered":
+        f = (c.get("registered_businesses") or {}).get(sphere)
+        if not f or f["value"] < MIN_VENUES:
+            return {}
+        return {"venues": venues_text(f["value"]), "source": _source(sources, f)}
+    if fact == "places":
+        kind = PLACE_FOR.get(sphere)
+        f = (c.get("footfall") or {}).get(kind) if kind else None
+        if not f or f["value"] < PLACE_MIN[kind]:
+            return {}
+        return {"venues": venues_text(f["value"]), "source": _source(sources, f), "_kind": kind}
+    if fact in ("income", "retail"):
+        f = c.get({"income": "income_per_capita_rub", "retail": "retail_turnover_per_capita_rub"}[fact])
+        return {"salary": rub(salary_value(f)), "source": _source(sources, f)} if f else {}
     return {}
 
 
@@ -123,8 +141,11 @@ def allowed_amounts(city) -> set:
     if city not in cities():
         return set()
     c, _ = cities()[city]
-    out = {salary_value(c["avg_salary_rub"])} if c.get("avg_salary_rub") else set()
-    out |= {int(venues_text(f["value"]).split()[-1]) for f in (c.get("venues") or {}).values() if f["value"] >= MIN_VENUES}
+    money = [c.get(k) for k in ("avg_salary_rub", "income_per_capita_rub", "retail_turnover_per_capita_rub")]
+    out = {salary_value(f) for f in money if f}
+    counts = [*(c.get("venues") or {}).values(), *(c.get("registered_businesses") or {}).values(),
+              *(c.get("footfall") or {}).values()]
+    out |= {int(venues_text(f["value"]).split()[-1]) for f in counts if f["value"] >= min(MIN_VENUES, *PLACE_MIN.values())}
     return out
 
 
@@ -179,3 +200,8 @@ def dialog_key(history: list, message: str) -> str:
 def said_competition(history: list) -> bool:
     """Факт о конкуренции — один раз за диалог: он всегда со ссылкой на OpenStreetMap."""
     return any("OpenStreetMap" in h["content"] for h in history if h["role"] == "assistant")
+
+
+def said_registered(history: list) -> bool:
+    """Факт о зарегистрированных бизнесах — один раз за диалог: он всегда со ссылкой на ФНС."""
+    return any("ФНС" in h["content"] for h in history if h["role"] == "assistant")

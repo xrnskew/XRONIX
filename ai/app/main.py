@@ -87,7 +87,11 @@ def _checked(model, payload: dict) -> dict:
 
 @app.post("/ai/consult")
 async def consult(req: ConsultRequest):
-    return _checked(ConsultResponse, rules_consult.respond(req.model_dump()))
+    out = _checked(ConsultResponse, rules_consult.respond(req.model_dump(exclude_unset=False)))
+    # experience необязательное: если в запросе его не было и он не узнан, state возвращается без него, как пришёл.
+    if "experience" not in req.state.model_fields_set and out["state"].get("experience") is None:
+        out["state"].pop("experience", None)
+    return out
 
 
 @app.post("/ai/parse-need")

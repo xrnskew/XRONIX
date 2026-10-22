@@ -13,7 +13,7 @@
 import copy
 import random
 
-from .common import (TEMPLATES, TEMPLATE_SPHERES, Picker, add_typos, amount_text, casual, city_phrase,
+from .common import (DICTIONARIES, TEMPLATES, TEMPLATE_SPHERES, Picker, add_typos, amount_text, casual, city_phrase,
                      small_number_text)
 
 # ---------- Словари формулировок ----------
@@ -109,6 +109,12 @@ CORE_QUESTIONS = {
     "own_funds": {"id": "own_funds", "text": "Сколько своих денег готовы вложить в запуск? Если своих нет, напишите «нет».", "kind": "text"},
 }
 
+# Правило 9 ai.md: вопрос об опыте — один раз за диалог, первым в раунде анкеты (подписи — dictionaries.experiences).
+EXPERIENCE_Q = {"id": "experience", "text": "Есть ли у вас опыт в этом бизнесе?", "kind": "choice",
+                "options": [v["title"] for v in DICTIONARIES["experiences"].values()]}
+EXPERIENCE_FREE = {"none": ["опыта нет", "без опыта", "нет опыта"], "employee": ["работал наёмным", "работала по найму"],
+                   "owner": ["был свой бизнес", "раньше был свой бизнес"]}
+
 RULES = {
     "R1_keep_state": "state из запроса возвращается целиком, известное не теряется",
     "R1_correction": "старое значение меняется, только если человек его явно поправил",
@@ -128,6 +134,7 @@ RULES = {
     "R_no_sums": "не называть сумм и не считать план",
     "R_zero_funds": "«своих нет» — own_funds_rub = 0",
     "R_profile_city": "город из профиля уже в state",
+    "R9_experience": "вопрос об опыте — один раз, первым в раунде анкеты; ответ — none/employee/owner",
 }
 
 
@@ -160,7 +167,8 @@ def complete(state: dict) -> bool:
 # ---------- Ожидаемый ответ по правилам ----------
 
 def expected(prev: dict, facts: dict, flag: str = None, rng: random.Random = None, proposal: str = None,
-             unknown_sphere: bool = False, sums_question: bool = False, template_asked: bool = False) -> dict:
+             unknown_sphere: bool = False, sums_question: bool = False, template_asked: bool = False,
+             experience_asked: bool = False) -> dict:
     """prev — state до сообщения; facts — что человек сообщил: sphere/city/own_funds_rub/answers (поправки тоже).
     flag: offtopic | greeting | role | credit — ответ message, state без изменений.
     proposal: код ближайшей сферы, которую надо предложить (бизнес не из списка).
@@ -181,6 +189,8 @@ def expected(prev: dict, facts: dict, flag: str = None, rng: random.Random = Non
         state["answers"] = {}  # ответы анкеты относятся к прежней сфере
     for qid, val in facts.get("answers", {}).items():
         state["answers"][qid] = val
+    if facts.get("experience"):
+        state["experience"] = facts["experience"]
 
     if proposal or unknown_sphere:
         questions = []
@@ -204,11 +214,13 @@ def expected(prev: dict, facts: dict, flag: str = None, rng: random.Random = Non
         return {"type": "questions", "text": text, "questions": [CORE_QUESTIONS[k] for k in missing], "state": state}
 
     if not template_asked:
-        # Анкету ещё не спрашивали (по истории): один раунд вопросов. Он необязателен — если всё уже известно, сразу ready.
+        # Анкету ещё не спрашивали (по истории): один раунд — первым вопрос об опыте (правило 9), затем до 3 вопросов
+        # анкеты. Если анкета не нужна, раунд — один вопрос об опыте; если и он уже был — сразу ready.
         pending = [q for q in template_questions(state["sphere"]) if q["id"] not in state["answers"]]
-        if pending:
-            return {"type": "questions", "text": rng.choice(TEXTS["template"]),
-                    "questions": [question_for(state["sphere"], q) for q in pending[:4]], "state": state}
+        ask_exp = not experience_asked and state.get("experience") is None
+        questions = ([EXPERIENCE_Q] if ask_exp else []) + [question_for(state["sphere"], q) for q in pending[:4 - ask_exp]]
+        if questions:
+            return {"type": "questions", "text": rng.choice(TEXTS["template"]), "questions": questions, "state": state}
     return {"type": "ready", "text": rng.choice(TEXTS["ready"]), "state": state}
 
 
@@ -433,6 +445,7 @@ class Seed:
         self.rules += ["R4_ready", "R3_answers_ids", "R2_sphere_code"]
         if "format" in ans:
             self.rules.append("R3_choice_value")
+        self.rules.append("R9_experience")  # анкета не нужна — раунд из одного вопроса об опыте
 
     def _plan_first_partial(self):
         self.prev = empty_state()
@@ -499,7 +512,7 @@ class Seed:
     def _plan_answer_template(self):
         self.prev = _rand_state(self.rng, self._city, complete_core=True)
         sphere = self.prev["sphere"]
-        asked = [q for q in template_questions(sphere)][:4]
+        asked = [q for q in template_questions(sphere)][:3]
         self.asked = asked
         k = self.rng.randint(1, len(asked))
         chosen = self.rng.sample(asked, k)
@@ -513,6 +526,11 @@ class Seed:
             else:
                 ans[q["id"]] = pick_answer_value(q, self.rng)
         self.facts = {"answers": ans}
+        # Ответ на вопрос об опыте из того же раунда — примерно в половине примеров.
+        self.exp = self.rng.choice(list(EXPERIENCE_FREE)) if self.rng.random() < 0.5 else None
+        if self.exp:
+            self.facts["experience"] = self.exp
+            self.rules.append("R9_experience")
         self.oor, self.unknown, self.entry, self.history_kind = oor, unknown, None, "template"
         self.rules += ["R4_ready", "R3_answers_ids", "R1_keep_state"]
         if any(q["kind"] == "choice" and q["id"] in ans for q in chosen):
@@ -524,7 +542,7 @@ class Seed:
 
     def _plan_ready_direct(self):
         self.prev = _rand_state(self.rng, self._city, complete_core=True)
-        self.asked = template_questions(self.prev["sphere"])[:4]
+        self.asked = template_questions(self.prev["sphere"])[:3]
         self.facts, self.entry, self.oor, self.history_kind = {"answers": {}}, None, {}, "template"
         self.rules += ["R4_ready", "R3_unsaid", "R1_keep_state"]
 
@@ -555,7 +573,7 @@ class Seed:
             self.facts["sphere"] = new
         self.oor, self.history_kind = {}, "template" if full else "core"
         if full:
-            self.asked = template_questions(self.prev["sphere"])[:4]
+            self.asked = template_questions(self.prev["sphere"])[:3]
         self.rules += ["R1_correction", "R1_keep_state"]
 
     def _plan_nearest(self):
@@ -601,7 +619,7 @@ class Seed:
         has_any = any(self.prev[k] is not None for k in ("sphere", "city", "own_funds_rub"))
         self.history_kind = ("template" if complete(self.prev) else "core") if has_any and self.rng.random() < 0.7 else None
         if self.history_kind == "template":
-            self.asked = template_questions(self.prev["sphere"])[:4]
+            self.asked = template_questions(self.prev["sphere"])[:3]
         self.rules += rules + ["R1_keep_state"]
 
     def _plan_offtopic(self):
@@ -626,7 +644,7 @@ class Seed:
         has_any = any(self.prev[k] is not None for k in ("sphere", "city", "own_funds_rub"))
         self.history_kind = ("template" if full else "core") if has_any else None
         if full:
-            self.asked = template_questions(self.prev["sphere"])[:4]
+            self.asked = template_questions(self.prev["sphere"])[:3]
         self.sums = True
         self.rules += ["R_no_sums", "R1_keep_state", "R4_ready"]
 
@@ -638,7 +656,8 @@ class Seed:
         return expected(self.prev, self.facts, flag=flag, rng=rng,
                         proposal=self.proposal if self.scenario == "nearest" else None,
                         unknown_sphere=self.scenario == "no_near" or (self.scenario == "confirm_nearest" and not self.yes),
-                        sums_question=getattr(self, "sums", False), template_asked=self.history_kind == "template")
+                        sums_question=getattr(self, "sums", False), template_asked=self.history_kind == "template",
+                        experience_asked=self.history_kind == "template")
 
     def _history(self, rng) -> list:
         """Правдоподобная история, согласованная с prev: что человек говорил и что спрашивал консультант."""
@@ -661,7 +680,7 @@ class Seed:
             prior = expected(before, {}, rng=rng)
         else:
             prior = {"type": "questions", "text": rng.choice(TEXTS["template"]),
-                     "questions": [question_for(prev["sphere"], q) for q in self.asked]}
+                     "questions": [EXPERIENCE_Q] + [question_for(prev["sphere"], q) for q in self.asked]}
         hist = [{"role": "user", "content": surface(first, rng)}, {"role": "assistant", "content": render_assistant(prior)}]
         self.prior_questions = prior.get("questions", [])
         return hist
@@ -743,6 +762,12 @@ class Seed:
             for q in self.unknown:
                 ph = rng.choice(["не знаю", "пока не знаю", "затрудняюсь", "посчитайте сами"])
                 (pairs.append((question_for(sphere, q)["text"], ph)) if qa else free.append(f"{question_for(sphere, q)['text'].rstrip('?').lower()} — {ph}"))
+            if getattr(self, "exp", None):
+                label = DICTIONARIES["experiences"][self.exp]["title"]
+                if qa:
+                    pairs.insert(0, (EXPERIENCE_Q["text"], label))
+                else:
+                    free.insert(0, rng.choice(EXPERIENCE_FREE[self.exp]))
             if qa:
                 return qa_message(pairs)
             return surface(", ".join(free), rng, tuple(prot))

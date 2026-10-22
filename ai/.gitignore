@@ -2,3 +2,6 @@
 .venv/
 __pycache__/
 test_outputs/
+
+# Архив реестра МСП ФНС (2,2 ГБ): скачивается knowledge/collect_fns.py, в git — только подсчёт по городам
+knowledge/raw/fns/*.zip

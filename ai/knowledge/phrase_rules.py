@@ -5,8 +5,18 @@
 длина, вопрос заканчивается «?», обращение на «вы». Тест tests/test_knowledge.py гоняет и настоящий checkPhrases.
 """
 import re
+from pathlib import Path
 
-PLACEHOLDERS = ["city", "in_city", "sphere", "sphere_many", "population", "salary", "venues", "own_funds", "source"]
+CHECK_MJS = Path(__file__).resolve().parents[2] / "contracts" / "check.mjs"
+
+
+def contract_placeholders() -> list:
+    """Разрешённые подстановки — ровно PHRASE_PLACEHOLDERS из contracts/check.mjs (контракт меняет Саша)."""
+    m = re.search(r"PHRASE_PLACEHOLDERS = \[(.*?)\]", CHECK_MJS.read_text(encoding="utf-8"), re.S)
+    return re.findall(r"'([a-z_]+)'", m.group(1))
+
+
+PLACEHOLDERS = contract_placeholders()
 SPHERES = {"coffee": "кофейня", "bakery": "пекарня", "car_wash": "автомойка", "clothing_store": "магазин одежды",
            "beauty_salon": "салон красоты", "pickup_point": "пункт выдачи заказов"}
 
@@ -77,7 +87,42 @@ _RISKS = ("Риск сферы «{title}», о котором стоит под�
 _WHAT = {"coffee": "кофейню", "bakery": "пекарню", "car_wash": "автомойку", "clothing_store": "магазин одежды",
          "beauty_salon": "салон красоты", "pickup_point": "пункт выдачи заказов маркетплейсов"}
 
+# Новые факты (ROUND4_knowledge.md): через подстановки контракта — числа {venues} («около 80»), суммы {salary}.
+# Слоты включаются, только когда контракт знает их подстановки (PLACEHOLDERS берётся из contracts/check.mjs).
+_EXTRA = {
+    "registered_fact": ("Сколько бизнесов с профилем сферы зарегистрировано в городе по реестру МСП ФНС (один раз за диалог)",
+                        "Одна короткая фраза, как живой консультант: по данным {source} {in_city} зарегистрировано "
+                        "{venues} компаний и ИП с профилем «{sphere}». Это регистрации, а не работающие точки: не пиши "
+                        "«работает», «открыто», «пекарен», «салонов». Пиши только «по данным {source}». {venues} уже "
+                        "содержит «около», {sphere} — в именительном падеже, только в кавычках после «с профилем».",
+                        {"in_city", "venues", "sphere", "source"}, {"in_city", "venues", "sphere", "source"}, False),
+    "places_malls": ("Сколько в городе торговых центров по OpenStreetMap: для одежды и салонов красоты",
+                     "Одна короткая фраза: {in_city} {venues} торговых центров по данным {source}, а для {sphere_many} "
+                     "это главный поток покупателей, место в ТЦ или рядом стоит рассмотреть. {venues} уже содержит «около».",
+                     {"in_city", "venues", "source"}, {"in_city", "venues", "source", "sphere_many"}, False),
+    "places_universities": ("Сколько в городе вузов и колледжей по OpenStreetMap: для кофеен",
+                            "Одна короткая фраза: {in_city} {venues} вузов и колледжей по данным {source}, а студенты — "
+                            "частые гости кофеен, место рядом с учёбой даёт поток. {venues} уже содержит «около».",
+                            {"in_city", "venues", "source"}, {"in_city", "venues", "source"}, False),
+    "places_business_centers": ("Сколько в городе офисных зданий и бизнес-центров по OpenStreetMap: для пекарен",
+                                "Одна короткая фраза: {in_city} {venues} офисных зданий и бизнес-центров по данным "
+                                "{source}; утром и в обед офисные работники — хороший поток для пекарни рядом. "
+                                "{venues} уже содержит «около».",
+                                {"in_city", "venues", "source"}, {"in_city", "venues", "source"}, False),
+    "income_fact": ("Среднедушевой денежный доход по региону (Росстат): ориентир для среднего чека",
+                    "Одна короткая фраза, которая начинается словами «По данным {source},»: средний доход на человека "
+                    "в регионе — около {salary} в месяц, от этого стоит отталкиваться при выборе цен. {salary} — уже "
+                    "сумма с ₽, здесь это доход, а не зарплата.", {"salary", "source"}, {"salary", "source"}, False),
+    "retail_fact": ("Оборот розничной торговли на душу населения по региону (Росстат): насколько активно тратят",
+                    "Одна короткая фраза, которая начинается словами «По данным {source},»: в регионе каждый человек "
+                    "в среднем тратит в магазинах около {salary} в месяц, это показывает спрос. {salary} — уже сумма "
+                    "с ₽, здесь это траты, а не зарплата.", {"salary", "source"}, {"salary", "source"}, False),
+    "ask_experience": ("Вопрос об опыте в этом бизнесе (правило 9 ai.md). Варианты ответа сервис добавит сам",
+                       "Короткий прямой вопрос: есть ли у человека опыт в этом бизнесе — работал ли он в такой сфере "
+                       "или вёл свой бизнес. Слово «опыт» обязательно. Варианты не перечислять.", set(), set(), True),
+}
 SLOTS = dict(_BASE)
+SLOTS.update({k: v for k, v in _EXTRA.items() if v[3] <= set(PLACEHOLDERS)})
 for _sp, _title in SPHERES.items():
     SLOTS[f"{_sp}_tip"] = (_TIPS[0].format(title=_title), _TIPS[1].format(what=_WHAT[_sp]), set(), set(), False)
     SLOTS[f"{_sp}_risk"] = (_RISKS[0].format(title=_title), _RISKS[1].format(what=_WHAT[_sp]), set(), set(), False)
@@ -90,7 +135,9 @@ def slot_sphere(slot: str):
 
 MIN_VARIANTS, MAX_VARIANTS = 5, 15
 # Самые заметные слоты (замечание Саши о тоне): без канцелярита и короче.
-LIVELY = {"template_intro": 140, "ready_intro": 110, "city_competition": 210}
+LIVELY = {"template_intro": 140, "ready_intro": 110, "city_competition": 210, "registered_fact": 200,
+          "places_malls": 200, "places_universities": 200, "places_business_centers": 200, "income_fact": 200,
+          "retail_fact": 200}
 BUREAUCRATIC = re.compile(r"(?<![а-яё])(следует|необходим\w*|рекоменду\w*|данн(ый|ая|ое|ые|ого|ой|ых|ом)|согласно|"
                           r"функционир\w*|осуществ\w*|явля\w*|наличи\w*|свидетельств\w*|представлен\w*|"
                           r"персонали\w*|персонифиц\w*|детализ\w*|калькуляц\w*|вводн\w*|в рамках|ввиду|"
@@ -123,7 +170,7 @@ def check_variant(slot: str, text: str) -> list:
         e.append(f"подстановки не для этого слота: {sorted(used - allowed)}")
     if required - used:
         e.append(f"нет обязательных подстановок: {sorted(required - used)}")
-    if re.search(r"(около|примерно|приблизительно)\s+\{venues\}", text, re.I):
+    if re.search(r"(около|примерно|приблизительно|порядка|ориентировочно|где-то)\s+\{venues\}", text, re.I):
         e.append("«около» перед {venues}: оно уже в подстановке")
     limit = LIVELY.get(slot) or (160 if question else 300)
     if slot in LIVELY and (m := BUREAUCRATIC.search(text)):
@@ -138,7 +185,7 @@ def check_variant(slot: str, text: str) -> list:
         e.append("{sphere} в именительном («пекарня»): «в сфере {sphere}» не склоняется")
     # «Росстата» склоняется, поэтому для зарплаты — только «по данным {source}». В конкуренции источник — OpenStreetMap,
     # он не склоняется, и там годится любое место.
-    if slot == "salary_fact" and not re.search(r"(данным|данных|сведениям|сведений|информации|статистик[аи]|источника|"
+    if slot in ("salary_fact", "income_fact", "retail_fact") and not re.search(r"(данным|данных|сведениям|сведений|информации|статистик[аи]|источника|"
                                             r"подсчётам|подсчетам)\s+\{source\}|\(\{source\}\)", text):
         e.append("{source} в родительном падеже: «по данным {source}»")
     if _INFORMAL.search(text):

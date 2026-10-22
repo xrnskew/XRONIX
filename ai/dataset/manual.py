@@ -81,7 +81,7 @@ CONSULT = [
     ("several_sums", [], "Кофе с собой у метро в Москве, вложу полтора миллиона, чек рублей 300", S(), "questions",
      S("coffee", "Москва", 1500000, format="to_go", avg_check_rub=300), [1500000, 300]),
     ("all_answers", [], "Автомойка на 4 поста в Челябинске, 3 млн своих, машин 50 в день, средний чек 1000, "
-     "площадь 300 метров, 5 сотрудников", S(), "ready",
+     "площадь 300 метров, 5 сотрудников", S(), "questions",  # правило 9 (раунд 4): анкета не нужна -> вопрос об опыте
      S("car_wash", "Челябинск", 3000000, posts=4, area_m2=300, cars_per_day=50, avg_check_rub=1000, staff=5), [3000000, 1000]),
     ("similar_city", [], "Пекарня в Кирове, 600 тысяч своих", S(), "questions", S("bakery", "Киров", 600000), [600000]),
     ("colloquial", [], "мойка в Челнах, есть 2 ляма", S(), "questions", S("car_wash", "Набережные Челны", 2000000), [2000000]),
@@ -205,12 +205,12 @@ TEMPLATES_CORE = {"sphere": SPHERE, "city": CITY, "own_funds": FUNDS}
 
 def _gold_questions(st):
     """Нейтральные вопросы эталона по контракту: недостающее основное или анкета. Оценщик их не сравнивает."""
-    from .consult import question_for, template_questions
+    from .consult import EXPERIENCE_Q, question_for, template_questions
     missing = [k for k, f in (("sphere", "sphere"), ("city", "city"), ("own_funds", "own_funds_rub")) if st[f] is None]
     if missing:
         return [{"id": k, "text": TEMPLATES_CORE[k], "kind": "text"} for k in missing]
     pending = [q for q in template_questions(st["sphere"]) if q["id"] not in st["answers"]]
-    return [question_for(st["sphere"], q) for q in pending[:4]] or [{"id": "city", "text": CITY, "kind": "text"}]
+    return [EXPERIENCE_Q] + [question_for(st["sphere"], q) for q in pending[:3]]
 
 
 def consult_rows():

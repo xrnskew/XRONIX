@@ -50,5 +50,16 @@
   "other": {
    "title": "Другое"
   }
+ },
+ "experiences": {
+  "none": {
+   "title": "Нет опыта"
+  },
+  "employee": {
+   "title": "Работал наёмным"
+  },
+  "owner": {
+   "title": "Был свой бизнес"
+  }
  }
 }
