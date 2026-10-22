@@ -299,5 +299,31 @@ class Rendering(unittest.TestCase):
         self.assertEqual(kn.join(["а" * 400, "б" * 300, "в" * 100]), "а" * 400 + " " + "в" * 100)
 
 
+class Universities(unittest.TestCase):
+    """Замечание Саши: вузы и колледжи — по названиям, корпуса и повторы в OSM — одно заведение."""
+
+    def test_same_institution_counted_once(self):
+        from knowledge.collect_osm_places import institutions
+        els = [{"tags": t} for t in [
+            {"name": "Самарский национальный исследовательский университет имени академика С.П. Королёва (Самарский университет)"},
+            {"name": "Самарский национальный исследовательский университет им. академика С.П. Королева"},
+            {"name": "Самарский университет, Корпус №1"},
+            {"name": "Самарский авиационный техникум. Учебный корпус", "operator": "Самарский университет"},
+            {"name": "Самарский государственный колледж"}, {"name": "Самарский государственный колледж"},
+            {"name": "Общежитие №1 Самарского государственного медицинского университета"},
+            {"name": "УПК питания, Столовая"}, {},
+            {"name": "Самарский техникум кулинарного искусства", "operator": "Министерство образования Самарской области"},
+        ]]
+        # университет (полное имя), «самарский университет», колледж, техникум; без имени, общежитие, столовая — нет
+        self.assertEqual(institutions(els), 4)
+
+    def test_real_base_counts(self):
+        kb = json.loads((DATA / "knowledge.cities.json").read_text(encoding="utf-8"))
+        uni = {c["name"]: c["footfall"]["universities"]["value"] for c in kb["cities"]}
+        self.assertEqual(len(uni), 100)
+        self.assertLess(uni["Самара"], 104)  # было по объектам OSM
+        self.assertGreaterEqual(min(uni.values()), kn.PLACE_MIN["universities"])
+
+
 if __name__ == "__main__":
     unittest.main()

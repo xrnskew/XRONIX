@@ -32,7 +32,7 @@ python -m knowledge.build --offline    # только из knowledge/raw, без
 ## Дополнительные факты (предложение команды)
 
 ```sh
-python -m knowledge.collect_osm_places       # OSM: торговые центры, вузы и колледжи, офисные здания и БЦ (граница — из collect_osm)
+python -m knowledge.collect_osm_places       # OSM: торговые центры, офисные здания и БЦ; вузы и колледжи — по названиям (raw/osm/education.json, ~1 мин на город)
 python -m knowledge.collect_rosstat_extra    # Росстат: доходы на душу (2025), оборот розницы на душу (2024)
 python -m knowledge.collect_fns              # ФНС: архив реестра МСП в knowledge/raw/fns/ -> counts.json (~6 мин)
 ```

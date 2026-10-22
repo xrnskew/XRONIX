@@ -107,14 +107,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 672,
+    "business_centers": {
+     "value": 5300,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 5300,
+    "universities": {
+     "value": 495,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -225,14 +225,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 441,
+    "business_centers": {
+     "value": 1650,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 1650,
+    "universities": {
+     "value": 324,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -343,14 +343,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 92,
+    "business_centers": {
+     "value": 295,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 295,
+    "universities": {
+     "value": 76,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -461,14 +461,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 107,
+    "business_centers": {
+     "value": 392,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 392,
+    "universities": {
+     "value": 88,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -579,14 +579,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 115,
+    "business_centers": {
+     "value": 202,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 202,
+    "universities": {
+     "value": 82,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -697,14 +697,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 86,
+    "business_centers": {
+     "value": 265,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 265,
+    "universities": {
+     "value": 50,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -815,14 +815,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 97,
+    "business_centers": {
+     "value": 138,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 138,
+    "universities": {
+     "value": 64,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -933,14 +933,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 60,
+    "business_centers": {
+     "value": 200,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 200,
+    "universities": {
+     "value": 46,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1051,14 +1051,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 104,
+    "business_centers": {
+     "value": 73,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 73,
+    "universities": {
+     "value": 68,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1169,14 +1169,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 65,
+    "business_centers": {
+     "value": 107,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 107,
+    "universities": {
+     "value": 54,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1287,14 +1287,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 86,
+    "business_centers": {
+     "value": 69,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 69,
+    "universities": {
+     "value": 70,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1405,14 +1405,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 84,
+    "business_centers": {
+     "value": 261,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 261,
+    "universities": {
+     "value": 54,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1523,14 +1523,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 75,
+    "business_centers": {
+     "value": 239,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 239,
+    "universities": {
+     "value": 53,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1641,14 +1641,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 87,
+    "business_centers": {
+     "value": 61,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 61,
+    "universities": {
+     "value": 69,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1759,14 +1759,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 59,
+    "business_centers": {
+     "value": 353,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 353,
+    "universities": {
+     "value": 42,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1877,14 +1877,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 68,
+    "business_centers": {
+     "value": 49,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 49,
+    "universities": {
+     "value": 48,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -1995,14 +1995,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 77,
+    "business_centers": {
+     "value": 50,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 50,
+    "universities": {
+     "value": 53,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2113,14 +2113,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 47,
+    "business_centers": {
+     "value": 99,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 99,
+    "universities": {
+     "value": 36,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2231,14 +2231,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 22,
+    "business_centers": {
+     "value": 95,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 95,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2349,14 +2349,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 36,
+    "business_centers": {
+     "value": 165,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 165,
+    "universities": {
+     "value": 29,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2467,14 +2467,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 41,
+    "business_centers": {
+     "value": 24,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 24,
+    "universities": {
+     "value": 37,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2585,14 +2585,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 44,
+    "business_centers": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 11,
+    "universities": {
+     "value": 36,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2703,14 +2703,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 35,
+    "business_centers": {
+     "value": 48,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 48,
+    "universities": {
+     "value": 35,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2821,14 +2821,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 41,
+    "business_centers": {
+     "value": 72,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 72,
+    "universities": {
+     "value": 33,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -2939,14 +2939,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 37,
+    "business_centers": {
+     "value": 83,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 83,
+    "universities": {
+     "value": 26,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3057,14 +3057,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 50,
+    "business_centers": {
+     "value": 23,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 23,
+    "universities": {
+     "value": 38,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3175,14 +3175,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 66,
+    "business_centers": {
+     "value": 57,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 57,
+    "universities": {
+     "value": 53,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3293,14 +3293,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 38,
+    "business_centers": {
+     "value": 54,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 54,
+    "universities": {
+     "value": 25,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3411,14 +3411,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 87,
+    "business_centers": {
+     "value": 179,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 179,
+    "universities": {
+     "value": 48,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3529,14 +3529,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 31,
+    "business_centers": {
+     "value": 141,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 141,
+    "universities": {
+     "value": 28,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3647,14 +3647,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 41,
+    "business_centers": {
+     "value": 29,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 29,
+    "universities": {
+     "value": 32,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3765,14 +3765,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 59,
+    "business_centers": {
+     "value": 24,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 24,
+    "universities": {
+     "value": 49,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -3883,14 +3883,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 24,
+    "business_centers": {
+     "value": 10,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 10,
+    "universities": {
+     "value": 19,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4001,14 +4001,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 42,
+    "business_centers": {
+     "value": 105,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 105,
+    "universities": {
+     "value": 32,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4119,14 +4119,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 12,
+    "business_centers": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 11,
+    "universities": {
+     "value": 12,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4237,14 +4237,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 32,
+    "business_centers": {
+     "value": 66,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 66,
+    "universities": {
+     "value": 28,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4355,14 +4355,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 42,
+    "business_centers": {
+     "value": 44,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 44,
+    "universities": {
+     "value": 28,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4473,14 +4473,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 27,
+    "business_centers": {
+     "value": 25,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 25,
+    "universities": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4591,14 +4591,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 71,
+    "business_centers": {
+     "value": 39,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 39,
+    "universities": {
+     "value": 58,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4709,14 +4709,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 32,
+    "business_centers": {
+     "value": 1,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 1,
+    "universities": {
+     "value": 24,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4827,14 +4827,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 29,
+    "business_centers": {
+     "value": 39,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 39,
+    "universities": {
+     "value": 22,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -4945,14 +4945,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 79,
+    "business_centers": {
+     "value": 75,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 75,
+    "universities": {
+     "value": 34,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5063,14 +5063,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 27,
+    "business_centers": {
+     "value": 48,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 48,
+    "universities": {
+     "value": 20,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5181,14 +5181,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 58,
+    "business_centers": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 18,
+    "universities": {
+     "value": 44,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5299,14 +5299,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 43,
+    "business_centers": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 14,
+    "universities": {
+     "value": 29,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5417,14 +5417,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 46,
+    "business_centers": {
+     "value": 31,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 31,
+    "universities": {
+     "value": 38,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5535,14 +5535,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 15,
+    "business_centers": {
+     "value": 38,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 38,
+    "universities": {
+     "value": 13,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5653,14 +5653,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 25,
+    "business_centers": {
+     "value": 276,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 276,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5771,14 +5771,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 31,
+    "business_centers": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 15,
+    "universities": {
+     "value": 24,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -5889,14 +5889,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 40,
+    "business_centers": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 15,
+    "universities": {
+     "value": 30,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6007,14 +6007,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 20,
+    "business_centers": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 15,
+    "universities": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6125,14 +6125,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 71,
+    "business_centers": {
+     "value": 22,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 22,
+    "universities": {
+     "value": 52,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6243,14 +6243,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 30,
+    "business_centers": {
+     "value": 245,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 245,
+    "universities": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6361,14 +6361,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 24,
+    "business_centers": {
+     "value": 98,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 98,
+    "universities": {
+     "value": 20,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6479,14 +6479,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 38,
+    "business_centers": {
+     "value": 116,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 116,
+    "universities": {
+     "value": 35,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6597,14 +6597,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 22,
+    "business_centers": {
+     "value": 3,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 3,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6715,14 +6715,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 32,
+    "business_centers": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 9,
+    "universities": {
+     "value": 23,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6833,14 +6833,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 21,
+    "business_centers": {
+     "value": 27,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 27,
+    "universities": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -6951,14 +6951,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 32,
+    "business_centers": {
+     "value": 10,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 10,
+    "universities": {
+     "value": 29,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7069,14 +7069,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 16,
+    "business_centers": {
+     "value": 31,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 31,
+    "universities": {
+     "value": 13,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7187,14 +7187,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 19,
+    "business_centers": {
+     "value": 10,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 10,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7305,14 +7305,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 26,
+    "business_centers": {
+     "value": 25,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 25,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7423,14 +7423,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 24,
+    "business_centers": {
+     "value": 284,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 284,
+    "universities": {
+     "value": 16,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7541,14 +7541,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 17,
+    "business_centers": {
+     "value": 1,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 1,
+    "universities": {
+     "value": 16,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7659,14 +7659,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 30,
+    "business_centers": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 21,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7777,14 +7777,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 59,
+    "business_centers": {
+     "value": 47,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 47,
+    "universities": {
+     "value": 52,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -7895,14 +7895,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 53,
+    "business_centers": {
+     "value": 0,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 0,
+    "universities": {
+     "value": 44,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8013,14 +8013,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 16,
+    "business_centers": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 21,
+    "universities": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8131,14 +8131,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 21,
+    "business_centers": {
+     "value": 28,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 28,
+    "universities": {
+     "value": 16,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8249,14 +8249,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 23,
+    "business_centers": {
+     "value": 4,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 4,
+    "universities": {
+     "value": 16,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8367,14 +8367,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 26,
+    "business_centers": {
+     "value": 43,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 43,
+    "universities": {
+     "value": 24,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8485,14 +8485,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 19,
+    "business_centers": {
+     "value": 139,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 139,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8603,14 +8603,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 12,
+    "business_centers": {
+     "value": 7,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 7,
+    "universities": {
+     "value": 10,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8721,14 +8721,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 30,
+    "business_centers": {
+     "value": 45,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 45,
+    "universities": {
+     "value": 16,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8839,14 +8839,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 7,
+    "business_centers": {
+     "value": 69,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 69,
+    "universities": {
+     "value": 6,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -8957,14 +8957,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 12,
+    "business_centers": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 15,
+    "universities": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9075,14 +9075,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 38,
+    "business_centers": {
+     "value": 0,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 0,
+    "universities": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9193,14 +9193,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 22,
+    "business_centers": {
+     "value": 3,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 3,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9311,14 +9311,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 17,
+    "business_centers": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 18,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9429,14 +9429,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 34,
+    "business_centers": {
+     "value": 63,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 63,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9547,14 +9547,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 22,
+    "business_centers": {
+     "value": 63,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 63,
+    "universities": {
+     "value": 20,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9665,14 +9665,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 32,
+    "business_centers": {
+     "value": 35,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 35,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9783,14 +9783,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 15,
+    "business_centers": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 9,
+    "universities": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -9901,14 +9901,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 19,
+    "business_centers": {
+     "value": 4,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 4,
+    "universities": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10019,14 +10019,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 11,
+    "business_centers": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 9,
+    "universities": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10137,14 +10137,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 29,
+    "business_centers": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 9,
+    "universities": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10255,14 +10255,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 12,
+    "business_centers": {
+     "value": 20,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 20,
+    "universities": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10373,14 +10373,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 9,
+    "business_centers": {
+     "value": 1,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 1,
+    "universities": {
+     "value": 7,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10491,14 +10491,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 28,
+    "business_centers": {
+     "value": 7,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 7,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10609,14 +10609,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 19,
+    "business_centers": {
+     "value": 9,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 9,
+    "universities": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10727,14 +10727,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 23,
+    "business_centers": {
+     "value": 133,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 133,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10845,14 +10845,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 9,
+    "business_centers": {
+     "value": 7,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 7,
+    "universities": {
+     "value": 8,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -10963,14 +10963,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 33,
+    "business_centers": {
+     "value": 21,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 21,
+    "universities": {
+     "value": 22,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11081,14 +11081,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 22,
+    "business_centers": {
+     "value": 30,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 30,
+    "universities": {
+     "value": 18,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11199,14 +11199,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 6,
+    "business_centers": {
+     "value": 46,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 46,
+    "universities": {
+     "value": 6,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11317,14 +11317,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 18,
+    "business_centers": {
+     "value": 5,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 5,
+    "universities": {
+     "value": 15,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11435,13 +11435,13 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 11,
+    "business_centers": {
+     "value": 7,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
+    "universities": {
      "value": 7,
      "source": "osm",
      "year": 2026,
@@ -11553,14 +11553,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 8,
+    "business_centers": {
+     "value": 1,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 1,
+    "universities": {
+     "value": 8,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11671,14 +11671,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 16,
+    "business_centers": {
+     "value": 11,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 11,
+    "universities": {
+     "value": 8,
      "source": "osm",
      "year": 2026,
      "scope": "city"
@@ -11789,14 +11789,14 @@
      "year": 2026,
      "scope": "city"
     },
-    "universities": {
-     "value": 23,
+    "business_centers": {
+     "value": 14,
      "source": "osm",
      "year": 2026,
      "scope": "city"
     },
-    "business_centers": {
-     "value": 14,
+    "universities": {
+     "value": 17,
      "source": "osm",
      "year": 2026,
      "scope": "city"

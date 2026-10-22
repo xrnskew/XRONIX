@@ -28,8 +28,8 @@ SPHERES = {
 
 
 # Признаки проходимости из OSM (collect_osm_places) -> поле footfall: (файл кеша, набор тегов, теги, которые складываем).
-FOOTFALL = {"malls": ("places", ["shop_mall"]), "universities": ("places", ["amenity_university", "amenity_college"]),
-            "business_centers": ("offices", ["business_centers"])}
+# Вузы и колледжи — отдельно: число разных заведений по названию (collect_osm_places.institutions), а не объектов.
+FOOTFALL = {"malls": ("places", ["shop_mall"]), "business_centers": ("offices", ["business_centers"])}
 
 
 def schema_fields() -> set:
@@ -62,6 +62,10 @@ def extended_facts(name: str, region: str, data: dict, fields: set) -> dict:
             if got:
                 footfall[key] = {"value": sum(got[t] for t in tags), "source": "osm", "year": int(raw["retrieved_at"][:4]),
                                  "scope": "city"}
+        edu = data.get("education", {}).get(name)
+        if edu:
+            footfall["universities"] = {"value": collect_osm_places.institutions(edu["elements"]), "source": "osm",
+                                        "year": int(edu["retrieved_at"][:4]), "scope": "city"}
         if footfall:
             out["footfall"] = footfall
     # Доходы — руб. в месяц (как в Росстате); розница — годовой оборот на душу / 12, в схеме она в месяц.
@@ -95,6 +99,7 @@ def assemble() -> dict:
     ]
     fields = schema_fields()
     data = {"places": load_json(collect_osm_places.OUT, {}), "offices": load_json(collect_osm_places.OUT_OFFICES, {}),
+            "education": load_json(collect_osm_places.OUT_EDU, {}),
             "income": load_json(RAW_DIR / "rosstat" / "income.json"), "retail": load_json(RAW_DIR / "rosstat" / "retail.json"),
             "fns": load_json(collect_fns.OUT)}
     data["fns_codes"] = fns_region_codes(data["fns"]) if data["fns"] else {}
