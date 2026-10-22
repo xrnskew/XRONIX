@@ -20,6 +20,7 @@ type SphereDef = Template & {
 }
 const defs = spheres.spheres as unknown as Record<string, Omit<SphereDef, 'sphere'>>
 const { title: erTitle, level: erLevel, mitigation: erMitigation } = spheres.experience_risk
+const taxNote = spheres.tax_note as NonNullable<Plan['tax_note']>
 const experienceRisk: Plan['risks'][number] = { title: erTitle, level: erLevel as Plan['risks'][number]['level'], mitigation: erMitigation }
 
 export const templates = (): Template[] => Object.entries(defs).map(([sphere, d]) => ({ sphere: sphere as Sphere, title: d.title, questions: d.questions as Question[] }))
@@ -70,7 +71,7 @@ export function calculatePlan(req: CalcRequest): Plan {
   const variable = (rev: number) => Math.round(rev * m.cogs_percent / 100) + Math.round(rev * tax / 100)
   const monthly_items = [
     { title: 'Аренда', amount_rub: rent, assumption: `${groups(m.rent_per_m2)} ₽ за м² в Москве × ${area} м² × коэффициент города ${k}` },
-    { title: 'Зарплаты', amount_rub: salaries, assumption: `${staff} чел., с учётом уровня зарплат в городе и страховых взносов ${spheres.payroll_tax_percent}%` },
+    { title: 'Зарплаты', amount_rub: salaries, assumption: staff === 0 ? 'Наёмных сотрудников нет: работает сам предприниматель' : `${staff} чел., с учётом уровня зарплат в городе и страховых взносов ${spheres.payroll_tax_percent}%` },
     ...(m.cogs_percent > 0 ? [{ title: m.cogs_title, amount_rub: Math.round(revenue * m.cogs_percent / 100), assumption: `${m.cogs_percent}% выручки` }] : []),
     { title: `Налог УСН ${tax}%`, amount_rub: Math.round(revenue * tax / 100), assumption: 'УСН «доходы»' },
     { title: 'Прочие расходы', amount_rub: m.other_rub, assumption: 'Коммунальные услуги, связь, эквайринг, бухгалтерия' },
@@ -119,6 +120,7 @@ export function calculatePlan(req: CalcRequest): Plan {
       revenue_forecast, startup_items, monthly_items,
     },
     credit,
+    tax_note: { text: taxNote.text, sources: taxNote.sources, checked_at: taxNote.checked_at },
     tags_update: [d.sphere_label.toLowerCase(), req.city],
   }
 }

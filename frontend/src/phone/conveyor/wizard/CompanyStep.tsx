@@ -6,6 +6,9 @@ import { innHint } from '../../../lib/inn'
 import { Card, Chip, SectionTitle } from '../../ui'
 import { ErrorText, Label, input, memberRoles, primaryBtn } from '../parts'
 
+// Тестовые ИНН из README: проверяющему не нужно искать настоящий ИНН с верной контрольной суммой
+const TEST_COMPANIES: [string, string][] = [['Северная выпечка', '7715881399'], ['ИП Лебедев', '777309114120'], ['Вектор Логистик', '7768151886']]
+
 // Шаг мастера: 1. Компания по ИНН
 export default function CompanyStep({ onDone }: { onDone: (c: Company) => void }) {
   const [list, setList] = useState<Company[] | null>(null)
@@ -56,6 +59,12 @@ export default function CompanyStep({ onDone }: { onDone: (c: Company) => void }
                 onChange={(e) => { setInn(e.target.value); setFound(null); setBlurred(false) }} onBlur={() => setBlurred(true)} aria-invalid={!!hint} aria-describedby="inn-hint" />
             </Label>
             <p id="inn-hint" className="mt-1 min-h-[18px] text-[12px] text-accent">{hint}</p>
+            <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-muted" role="group" aria-label="Тестовые ИНН">
+              <span>Нет своего ИНН? Тестовая компания:</span>
+              {TEST_COMPANIES.map(([title, value]) => (
+                <button key={value} type="button" className="rounded-full bg-surface-2 px-2.5 py-1 text-text transition-colors hover:bg-surface-3" onClick={() => { setInn(value); setFound(null); setBlurred(true) }}>{title}</button>
+              ))}
+            </div>
           </div>
           <button className={`${primaryBtn} sm:mt-[22px]`} disabled={!canSearch || busy}>{busy && !found ? 'Ищем…' : 'Найти'}</button>
         </form>

@@ -14,7 +14,7 @@ const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 export default function Finance() {
   const { plan, planId, planLoading, planError, reloadPlan } = useCabinet()
   // рабочая версия: заявка в конвейер по этому плану — главное действие; сайт банка — запасной путь
-  const applyTo = useContext(Conveyor) && planId && planId !== 'demo' ? `/new?plan=${encodeURIComponent(planId)}` : null
+  const canApply = useContext(Conveyor) && planId && planId !== 'demo'
   const nav = useNavigate()
   const wide = useContext(Wide)
   const initialProduct = alfaProducts.find((p) => p.id === plan?.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
@@ -34,6 +34,8 @@ export default function Finance() {
     setSelectedId(selected.id); setAmount(params.amount); setMonths(params.months)
   }
   const matches = useMemo(() => matchProducts(amount, months), [amount, months])
+  // в заявку уходят сумма и срок, выбранные в калькуляторе, а не рекомендация плана
+  const applyTo = canApply ? `/new?plan=${encodeURIComponent(planId)}&amount=${Math.round(amount)}&term=${months}` : null
 
   if (planLoading && !plan) return <Screen title="Финансы и кредит"><Skeleton /></Screen>
   if (planError && !plan)
@@ -123,14 +125,11 @@ export default function Finance() {
         <p className="text-[12px] leading-snug text-muted">Предварительный аннуитетный расчёт по обычной ставке «от» выбранного продукта, без платных услуг. Нагрузка — доля платежа в ожидаемой прибыли. Банк может предложить другую ставку и график.</p>
         <div className="flex flex-wrap items-center gap-3">
           {applyTo && <button onClick={() => nav(applyTo)} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-fill px-5 py-3 text-[14px] font-semibold text-white hover:bg-brand-deep">Подать заявку по этому плану</button>}
-          <a href={selected.url} target="_blank" rel="noopener noreferrer" className={applyTo
-            ? 'inline-flex min-h-11 items-center justify-center rounded-xl bg-surface-2 px-5 py-3 text-center text-[14px] font-semibold text-text hover:bg-surface-3'
-            : 'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-fill px-5 py-3 text-center text-[14px] font-semibold text-white hover:bg-brand-deep'}>Условия и заявка в Альфа-Банке ↗</a>
         </div>
       </Card>
 
       <Card id="alfa-products" delay={3}>
-        <SectionTitle>Кредиты Альфа-Банка для бизнеса</SectionTitle>
+        <SectionTitle>Кредитные продукты XRONIX (демо)</SectionTitle>
         <ul className={wide ? 'grid gap-3 min-[1100px]:grid-cols-2' : 'space-y-3'}>
           {matches.map(({ product: p, fits, reasons }) => (
             <li key={p.id} className={`flex flex-col rounded-2xl bg-surface-2 p-4 ring-1 ${fits ? 'ring-white/10' : 'ring-white/5'}`}>
@@ -149,16 +148,14 @@ export default function Finance() {
               <p className="mt-2.5 text-[12px] leading-snug text-muted">{p.note}</p>
               <p className={`mt-2 text-[12px] ${fits ? 'text-ok' : 'text-warn'}`}>{fits ? 'В диапазоне суммы и срока' : reasons.join(', ')}</p>
               {p.minBusinessMonths != null && <p className="mt-1 text-[12px] text-muted">Бизнес зарегистрирован от {p.minBusinessMonths} мес.</p>}
-              <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть в Альфа-Банке: ${p.name}`}
-                className="mt-4 flex min-h-11 items-center justify-center gap-2 rounded-xl bg-surface-3 px-3 py-3 text-center text-[14px] font-semibold text-text transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">Открыть в Альфа-Банке <span aria-hidden>↗</span></a>
             </li>
           ))}
         </ul>
         <div className="mt-3 rounded-2xl bg-warn/10 p-3 text-[12px] leading-snug text-warn">
-          Для этих продуктов банк указывает стаж бизнеса от 9 месяцев. Для нового бизнеса есть отдельная программа под залог — <a href="https://alfabank.ru/sme/profits/lombardnyj_kredit/" target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2">«Деньги на дело» ↗</a>. Возможность получения кредита уточняйте в банке.
+          Для этих продуктов нужен бизнес старше 9 месяцев. Для нового бизнеса есть демо-продукт «Старт»: он доступен в мастере заявки.
         </div>
         <p className="mt-3 text-[11px] leading-snug text-muted">{ALFA_DISCLAIMER}</p>
-        {alfaSnapshotIsStale() && <p className="mt-2 text-[12px] text-warn">Данные требуют обновления. Проверьте текущие условия по ссылке на сайте банка.</p>}
+        {alfaSnapshotIsStale() && <p className="mt-2 text-[12px] text-warn">Данные требуют обновления. Условия в демо смоделированы на указанную дату.</p>}
       </Card>
     </Screen>
   )

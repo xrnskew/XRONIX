@@ -100,7 +100,7 @@ export default function Landing() {
           </div>
         </header>
 
-        <Hero onTry={tryIt} onHow={() => goTo('how')} />
+        <Hero onTry={tryIt} onHow={() => { if (!auto) resume(); goTo('how') }} />
         <Problem />
         <How activeStep={live && slides[current].id === 'how' ? demoStep : 0} />
         <PlanSlide />
