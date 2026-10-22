@@ -1,0 +1,945 @@
+{
+  "service_commit": "311e8608d7e5d6ee0d2e938a870b67d16a7d6c68",
+  "ai_tree": "5555f1e1916cb803524499ceb01337a31d38fd86",
+  "input_sha256": "99ca3e60dcdb8ff21ebe1cffe67812b197179ed96b4ac8b347718741ffe4cce0",
+  "base_url": "http://127.0.0.1:18001",
+  "started_at": "2026-10-22T11:53:44.664014+00:00",
+  "rows": [
+    {
+      "id": "c01",
+      "endpoint": "consult",
+      "text": "хочу открыть кофейню в южно сахалинске, небольшую такую чтоб кофе с собой продавать. своих есть 400к примерно",
+      "source": "набор Саши №1",
+      "expected": "сфера coffee, город Южно-Сахалинск, свои деньги 400000; ответ по теме",
+      "request": {
+        "history": [],
+        "message": "хочу открыть кофейню в южно сахалинске, небольшую такую чтоб кофе с собой продавать. своих есть 400к примерно",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Мне нужны некоторые сведения для построения вашего финансового плана.\",\"questions\":[{\"id\":\"city\",\"text\":\"Какой именно город выбираете для старта бизнеса?\",\"kind\":\"text\"}],\"state\":{\"sphere\":\"coffee\",\"city\":null,\"own_funds_rub\":400000,\"answers\":{\"format\":\"to_go\"}}}",
+      "elapsed_ms": 53.86
+    },
+    {
+      "id": "c03",
+      "endpoint": "consult",
+      "text": "хочу заняться маникюром, сейчас дома делаю а хочу свое помещение снять",
+      "source": "набор Саши №3",
+      "expected": "сфера beauty_salon; город и свои деньги не названы (не придумывать)",
+      "request": {
+        "history": [],
+        "message": "хочу заняться маникюром, сейчас дома делаю а хочу свое помещение снять",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Пару моментов надо уточнить прежде, чем мы перейдем к расчетам.\",\"questions\":[{\"id\":\"city\",\"text\":\"Подскажите, пожалуйста, в каком городе будете открывать дело?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какой объём личных финансов готов потратить на запуск проекта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":\"beauty_salon\",\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.35
+    },
+    {
+      "id": "c05",
+      "endpoint": "consult",
+      "text": "хочу бизнес какой нибудь чтоб много не вкладывать. живу в томске, накопил 150 тысяч",
+      "source": "набор Саши №5",
+      "expected": "сфера не названа (не придумывать); город Томск; свои деньги 150000",
+      "request": {
+        "history": [],
+        "message": "хочу бизнес какой нибудь чтоб много не вкладывать. живу в томске, накопил 150 тысяч",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Есть пара важных аспектов, которые стоит обговорить заранее.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой формат предпринимательства изучаете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":\"Томск\",\"own_funds_rub\":150000,\"answers\":{}}}",
+      "elapsed_ms": 3.6
+    },
+    {
+      "id": "c07",
+      "endpoint": "consult",
+      "text": "Мы с женой хотим открыть маленькую пекарню в Казани, булочки хлеб всякое такое",
+      "source": "набор Саши №7",
+      "expected": "сфера bakery, город Казань; свои деньги не названы в этой фразе",
+      "request": {
+        "history": [],
+        "message": "Мы с женой хотим открыть маленькую пекарню в Казани, булочки хлеб всякое такое",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Нам нужно обсудить важные детали перед подготовкой плана.\",\"questions\":[{\"id\":\"own_funds\",\"text\":\"Из собственного бюджета какую сумму выделите для старта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":\"bakery\",\"city\":\"Казань\",\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.6
+    },
+    {
+      "id": "c09",
+      "endpoint": "consult",
+      "text": "думаю купить аппарат с кофе и поставить в больнице. это вообще прибыльно?",
+      "source": "набор Саши №9",
+      "expected": "кофейный автомат — не кофейня из шести сфер: сфера может остаться пустой; ошибка — молча принять за кофейню без пояснения; город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "думаю купить аппарат с кофе и поставить в больнице. это вообще прибыльно?",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Оценить окупаемость получится после того, как узнаем подробности проекта.\",\"questions\":[{\"id\":\"city\",\"text\":\"Подскажите, пожалуйста, в каком городе будете открывать дело?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Без привлечения кредита какая сумма ваших денег участвует в открытии? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":\"coffee\",\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.14
+    },
+    {
+      "id": "c11",
+      "endpoint": "consult",
+      "text": "планируем цветочный магазин на первом этаже дома, рядом остановка",
+      "source": "набор Саши №11",
+      "expected": "цветочный магазин не входит в шесть сфер: сфера не заполнена (ошибка — подставить магазин одежды); город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "планируем цветочный магазин на первом этаже дома, рядом остановка",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Понимаю, ваше дело сложно классифицировать. Но предлагаю взглянуть на альтернативные отрасли.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какую сферу деятельности предпочитаете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какому городу отдаёте предпочтение для открытия бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какую сумму своих денег планируете вложить на старте? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.38
+    },
+    {
+      "id": "c13",
+      "endpoint": "consult",
+      "text": "хочу открыть шиномонтаж в своем гараже. гараж есть, оборудования нет",
+      "source": "набор Саши №13",
+      "expected": "шиномонтаж не входит в шесть сфер: сфера не заполнена (ошибка — автомойка); город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "хочу открыть шиномонтаж в своем гараже. гараж есть, оборудования нет",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Запрошенного шаблона не обнаружено, зато вы можете выбрать близкий по тематике.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Ближе всего по расчёту — автомойку. Считаем так?\",\"kind\":\"choice\",\"options\":[\"Да, подходит\",\"Нет, другой бизнес\"]},{\"id\":\"city\",\"text\":\"Подскажите, пожалуйста, в каком городе будете открывать дело?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Собственные ресурсы в каком объёме вкладываете на старте? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.13
+    },
+    {
+      "id": "c15",
+      "endpoint": "consult",
+      "text": "Хочу открыть зоомагазин с кормами и всякой мелочью, район спальный",
+      "source": "набор Саши №15",
+      "expected": "зоомагазин не входит в шесть сфер: сфера не заполнена (ошибка — магазин одежды); город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "Хочу открыть зоомагазин с кормами и всякой мелочью, район спальный",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Для нестандартных проектов рекомендуем выбрать одну из представленных категорий.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой сегмент рынка вас привлекает? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какой город выбрали для своего будущего бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какую сумму своих денег планируете вложить на старте? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.38
+    },
+    {
+      "id": "c17",
+      "endpoint": "consult",
+      "text": "хочу открыть небольшой компьютерный клуб на 10 компов в Самаре",
+      "source": "набор Саши №17",
+      "expected": "компьютерный клуб не входит в шесть сфер: сфера не заполнена; город Самара; свои деньги не названы в этой фразе",
+      "request": {
+        "history": [],
+        "message": "хочу открыть небольшой компьютерный клуб на 10 компов в Самаре",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"К сожалению, для вашего вида деятельности готового шаблона нет. Давайте рассмотрим другие сферы, где мы можем произвести расчет.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой проект мечтаете реализовать? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Сколько собственных средств вы готовы инвестировать в запуск бизнеса? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":\"Самара\",\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.47
+    },
+    {
+      "id": "c19",
+      "endpoint": "consult",
+      "text": "Хочу купить грузовую газель и заниматься перевозками, заказы вроде есть",
+      "source": "набор Саши №19",
+      "expected": "перевозки не входят в шесть сфер: сфера не заполнена; город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "Хочу купить грузовую газель и заниматься перевозками, заказы вроде есть",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"message\",\"text\":\"Специализируюсь исключительно на помощи в открытии своего дела и расчете затрат. Какую сферу рассматриваете?\",\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.06
+    },
+    {
+      "id": "c21",
+      "endpoint": "consult",
+      "text": "хочу чето открыть не знаю что. денег 100к. город небольшой",
+      "source": "набор Саши №21",
+      "expected": "сфера не названа; свои деньги 100000; город не назван (только «небольшой»); ответ помогает определиться, не придумывает сферу",
+      "request": {
+        "history": [],
+        "message": "хочу чето открыть не знаю что. денег 100к. город небольшой",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Пока не располагаем шаблоном именно под ваш тип бизнеса, однако готовы предложить варианты для расчетов.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой сегмент рынка вас привлекает? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Ваш будущий бизнес будет располагаться в каком городе?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какой объём личных финансов готов потратить на запуск проекта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.3
+    },
+    {
+      "id": "c23",
+      "endpoint": "consult",
+      "text": "Я работаю на заводе, хочу уйти и на себя работать. Не знаю чем заняться",
+      "source": "набор Саши №23",
+      "expected": "сфера, город, деньги не названы; ответ уместный, ведёт к выбору сферы",
+      "request": {
+        "history": [],
+        "message": "Я работаю на заводе, хочу уйти и на себя работать. Не знаю чем заняться",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Предлагаю вместе разобраться в паре моментов перед стартом расчетов.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой вид бизнеса вы рассматриваете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какой именно город выбираете для старта бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Сколько собственных средств вы готовы инвестировать в запуск бизнеса? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.37
+    },
+    {
+      "id": "c25",
+      "endpoint": "consult",
+      "text": "Хочу какой-нибудь прибыльный бизнес с доходом от 200 тысяч чистыми",
+      "source": "набор Саши №25",
+      "expected": "сфера, город не названы; 200 тысяч — желаемый доход, не свои деньги (ошибка — записать как own_funds); ответ уместный",
+      "request": {
+        "history": [],
+        "message": "Хочу какой-нибудь прибыльный бизнес с доходом от 200 тысяч чистыми",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Сначала давайте уточним несколько деталей, чтобы расчёт получился точным.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой вид бизнеса вы рассматриваете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какой город выбрали для своего будущего бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Сколько собственных средств вы готовы инвестировать в запуск бизнеса? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.34
+    },
+    {
+      "id": "c27",
+      "endpoint": "consult",
+      "text": "я студент хочу чето свое сделать. время есть денег нет",
+      "source": "набор Саши №27",
+      "expected": "сфера, город не названы; свои деньги: «денег нет» допустимо 0 или не заполнено; ответ уместный",
+      "request": {
+        "history": [],
+        "message": "я студент хочу чето свое сделать. время есть денег нет",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Пару моментов надо уточнить прежде, чем мы перейдем к расчетам.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой бизнес хотите запустить? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"В каком городе планируете открыть свой бизнес?\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":0,\"answers\":{}}}",
+      "elapsed_ms": 2.65
+    },
+    {
+      "id": "c29",
+      "endpoint": "consult",
+      "text": "Хочу вложиться в какую нибудь тему которая реально работает",
+      "source": "набор Саши №29",
+      "expected": "сфера, город, деньги не названы; ответ уместный",
+      "request": {
+        "history": [],
+        "message": "Хочу вложиться в какую нибудь тему которая реально работает",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"message\",\"text\":\"К сожалению, не смогу помочь с данным вопросом. Моя задача — предложить варианты бизнеса и рассчитать план запуска. Поделитесь, пожалуйста, вашим направлением.\",\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.3
+    },
+    {
+      "id": "c31",
+      "endpoint": "consult",
+      "text": "Я вообще ничего в бизнесе не понимаю но хочу попробовать",
+      "source": "набор Саши №31",
+      "expected": "сфера, город, деньги не названы; ответ уместный и понятный новичку",
+      "request": {
+        "history": [],
+        "message": "Я вообще ничего в бизнесе не понимаю но хочу попробовать",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Для расчёта плана мне потребуется немного дополнительной информации.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой бизнес хотите запустить? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Ваш будущий бизнес будет располагаться в каком городе?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какой объём личных финансов готов потратить на запуск проекта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.31
+    },
+    {
+      "id": "c33",
+      "endpoint": "consult",
+      "text": "хочу просто свой магазин. какой пока не решил",
+      "source": "набор Саши №33",
+      "expected": "сфера не заполнена (магазин не обязательно одежды; ошибка — clothing_store); город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "хочу просто свой магазин. какой пока не решил",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Прошу вас ответить на несколько вопросов для точного расчета плана.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой формат предпринимательства изучаете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Подскажите, пожалуйста, в каком городе будете открывать дело?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Сколько собственных средств вы готовы инвестировать в запуск бизнеса? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.32
+    },
+    {
+      "id": "c35",
+      "endpoint": "consult",
+      "text": "У меня есть помещение 25 квадратов, стоит пустое. Что можно туда поставить?",
+      "source": "набор Саши №35",
+      "expected": "сфера, город, деньги не названы; 25 м² не ломает разбор; ответ уместный",
+      "request": {
+        "history": [],
+        "message": "У меня есть помещение 25 квадратов, стоит пустое. Что можно туда поставить?",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Нужна ваша помощь с некоторыми деталями для успешного планирования.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой тип предприятия вам интересен? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какому городу отдаёте предпочтение для открытия бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Из собственного бюджета какую сумму выделите для старта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.38
+    },
+    {
+      "id": "c37",
+      "endpoint": "consult",
+      "text": "Мне нужен бизнес который окупится быстро, максимум за полгода",
+      "source": "набор Саши №37",
+      "expected": "сфера, город, деньги не названы; ответ уместный (без обещаний окупаемости)",
+      "request": {
+        "history": [],
+        "message": "Мне нужен бизнес который окупится быстро, максимум за полгода",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Сначала давайте уточним несколько деталей, чтобы расчёт получился точным.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой вид бизнеса вы рассматриваете? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какой именно город выбираете для старта бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Сколько собственных средств вы готовы инвестировать в запуск бизнеса? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.73
+    },
+    {
+      "id": "c39",
+      "endpoint": "consult",
+      "text": "Я пока думаю, может пункт выдачи, может что-то с машинами",
+      "source": "набор Саши №39",
+      "expected": "сфера не определена (двойной выбор); допустимо уточнение; ошибка — молча выбрать pickup_point; город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "Я пока думаю, может пункт выдачи, может что-то с машинами",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Есть пара важных аспектов, которые стоит обговорить заранее.\",\"questions\":[{\"id\":\"city\",\"text\":\"Какой город рассматриваете для открытия своего дела?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Для открытия бизнеса собственными средствами располагаете какой суммой? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":\"pickup_point\",\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.11
+    },
+    {
+      "id": "c41",
+      "endpoint": "consult",
+      "text": "хачу аткрыть кафешку у нас в городе. там возле школы место свободное",
+      "source": "набор Саши №41",
+      "expected": "опечатки не мешают; кафе — не кофейня из шести сфер: сфера может остаться пустой, допустимо coffee с пояснением; город не назван («у нас в городе»); деньги не названы",
+      "request": {
+        "history": [],
+        "message": "хачу аткрыть кафешку у нас в городе. там возле школы место свободное",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Специального шаблона для вашей идеи нет, зато много других интересных направлений.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой проект мечтаете реализовать? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Собственные ресурсы в каком объёме вкладываете на старте? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":\"Городец\",\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 4.17
+    },
+    {
+      "id": "c43",
+      "endpoint": "consult",
+      "text": "у меня идея открыть магазин всякой фигни с китая типо аксессуары",
+      "source": "набор Саши №43",
+      "expected": "магазин аксессуаров не входит в шесть сфер: сфера не заполнена (ошибка — clothing_store без пояснения); город и деньги не названы",
+      "request": {
+        "history": [],
+        "message": "у меня идея открыть магазин всякой фигни с китая типо аксессуары",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Уточняемого вами шаблона нет, рассмотрим аналогичные предложения?\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Ближе всего по расчёту — магазин одежды. Считаем так?\",\"kind\":\"choice\",\"options\":[\"Да, подходит\",\"Нет, другой бизнес\"]},{\"id\":\"city\",\"text\":\"Ваш будущий бизнес будет располагаться в каком городе?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какой объём личных финансов готов потратить на запуск проекта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.92
+    },
+    {
+      "id": "c45",
+      "endpoint": "consult",
+      "text": "йо хочу сделать кальянку в своем городе. есть помещение у знакомого",
+      "source": "набор Саши №45",
+      "expected": "кальянная не входит в шесть сфер: сфера не заполнена; город не назван; деньги не названы",
+      "request": {
+        "history": [],
+        "message": "йо хочу сделать кальянку в своем городе. есть помещение у знакомого",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Предложенного вами формата нет, зато доступен расчет по схожей деятельности.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Ближе всего по расчёту — кофейню. Считаем так?\",\"kind\":\"choice\",\"options\":[\"Да, подходит\",\"Нет, другой бизнес\"]},{\"id\":\"city\",\"text\":\"Какой город выбрали для своего будущего бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какой объём личных финансов готов потратить на запуск проекта? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 3.45
+    },
+    {
+      "id": "c47",
+      "endpoint": "consult",
+      "text": "магаз автозапчастей хочу открыть, шарю в машинах",
+      "source": "набор Саши №47",
+      "expected": "магазин автозапчастей не входит в шесть сфер: сфера не заполнена (ошибка — автомойка); город и деньги не названы в этой фразе",
+      "request": {
+        "history": [],
+        "message": "магаз автозапчастей хочу открыть, шарю в машинах",
+        "state": {
+          "sphere": null,
+          "city": null,
+          "own_funds_rub": null,
+          "answers": {}
+        }
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"type\":\"questions\",\"text\":\"Предлагаю вместе разобраться в паре моментов перед стартом расчетов.\",\"questions\":[{\"id\":\"sphere\",\"text\":\"Какой тип предприятия вам интересен? Сейчас считаю: кофейня, пекарня, автомойка, магазин одежды, салон красоты, пункт выдачи заказов.\",\"kind\":\"text\"},{\"id\":\"city\",\"text\":\"Какой именно город выбираете для старта бизнеса?\",\"kind\":\"text\"},{\"id\":\"own_funds\",\"text\":\"Какие собственные накопления сможете направить на открытие дела? Если своих нет, напишите «нет».\",\"kind\":\"text\"}],\"state\":{\"sphere\":null,\"city\":null,\"own_funds_rub\":null,\"answers\":{}}}",
+      "elapsed_ms": 2.75
+    },
+    {
+      "id": "n01",
+      "endpoint": "parse-need",
+      "text": "мне надо еще тысяч 800, желательно года на 3 чтоб не сильно душило",
+      "source": "набор Саши №1",
+      "expected": "сумма 800000, срок 36 мес.; цель и залог не названы (не придумывать)",
+      "request": {
+        "text": "мне надо еще тысяч 800, желательно года на 3 чтоб не сильно душило"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{}}",
+      "elapsed_ms": 5.69
+    },
+    {
+      "id": "n03",
+      "endpoint": "parse-need",
+      "text": "тысяч 250 надо, на оборудование и аренду, можно на год?",
+      "source": "набор Саши №3",
+      "expected": "сумма 250000, срок 12 мес.; цель оборудование (или оборот, аренда); залог не назван",
+      "request": {
+        "text": "тысяч 250 надо, на оборудование и аренду, можно на год?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":\"equipment\",\"sphere\":null,\"city\":null,\"amount_rub\":250000,\"term_months\":12,\"has_collateral\":null,\"confidence\":{\"purpose\":0.9,\"amount_rub\":0.93,\"term_months\":0.9}}",
+      "elapsed_ms": 3.02
+    },
+    {
+      "id": "n05",
+      "endpoint": "parse-need",
+      "text": "а кредит на бизнес можно без ип взять? тысяч 500",
+      "source": "набор Саши №5",
+      "expected": "сумма 500000; срок, цель и залог не названы",
+      "request": {
+        "text": "а кредит на бизнес можно без ип взять? тысяч 500"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":500000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.6
+    },
+    {
+      "id": "n07",
+      "endpoint": "parse-need",
+      "text": "Денег своих 600 тысяч, не хватает еще около полутора миллионов",
+      "source": "набор Саши №7",
+      "expected": "сумма около 1500000 (не хватает полутора миллионов; 600000 — свои, не сумма кредита); срок, цель, залог не названы",
+      "request": {
+        "text": "Денег своих 600 тысяч, не хватает еще около полутора миллионов"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":600000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.6}}",
+      "elapsed_ms": 2.69
+    },
+    {
+      "id": "n09",
+      "endpoint": "parse-need",
+      "text": "на автомат нужно 280 тыщ, своих 50 есть, остальное в кредит",
+      "source": "набор Саши №9",
+      "expected": "сумма 230000 (остальное в кредит; допустимо 280000 с пониманием, что свои 50000 есть); цель оборудование; срок и залог не названы",
+      "request": {
+        "text": "на автомат нужно 280 тыщ, своих 50 есть, остальное в кредит"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":280000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.31
+    },
+    {
+      "id": "n11",
+      "endpoint": "parse-need",
+      "text": "надо 700 тысяч, на цветы холодильник и ремонт",
+      "source": "набор Саши №11",
+      "expected": "сумма 700000; цель оборудование или оборот (любая допустима); срок и залог не названы",
+      "request": {
+        "text": "надо 700 тысяч, на цветы холодильник и ремонт"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":\"equipment\",\"sphere\":\"other\",\"city\":null,\"amount_rub\":700000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"purpose\":0.9,\"sphere\":0.9,\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.18
+    },
+    {
+      "id": "n13",
+      "endpoint": "parse-need",
+      "text": "500 тысяч нужно, желательно на 2 года",
+      "source": "набор Саши №13",
+      "expected": "сумма 500000, срок 24 мес.; цель и залог не названы",
+      "request": {
+        "text": "500 тысяч нужно, желательно на 2 года"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":500000,\"term_months\":24,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93,\"term_months\":0.9}}",
+      "elapsed_ms": 2.08
+    },
+    {
+      "id": "n15",
+      "endpoint": "parse-need",
+      "text": "Миллион на товар и аренду, срок года 4",
+      "source": "набор Саши №15",
+      "expected": "сумма 1000000, срок 48 мес.; цель оборот (товар, аренда); залог не назван",
+      "request": {
+        "text": "Миллион на товар и аренду, срок года 4"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":\"working_capital\",\"sphere\":null,\"city\":null,\"amount_rub\":1000000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"purpose\":0.88,\"amount_rub\":0.85}}",
+      "elapsed_ms": 2.7
+    },
+    {
+      "id": "n17",
+      "endpoint": "parse-need",
+      "text": "На все нужно миллиона 3 наверное, своих только 300к",
+      "source": "набор Саши №17",
+      "expected": "сумма около 3000000 (всего нужно) или 2700000 (за вычетом своих 300000); срок, цель, залог не названы",
+      "request": {
+        "text": "На все нужно миллиона 3 наверное, своих только 300к"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":3000000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.6}}",
+      "elapsed_ms": 2.41
+    },
+    {
+      "id": "n19",
+      "endpoint": "parse-need",
+      "text": "На машину нужно 2 миллиона на 5 лет",
+      "source": "набор Саши №19",
+      "expected": "сумма 2000000, срок 60 мес.; цель оборудование (транспорт); залог не назван",
+      "request": {
+        "text": "На машину нужно 2 миллиона на 5 лет"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":2000000,\"term_months\":60,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93,\"term_months\":0.9}}",
+      "elapsed_ms": 2.46
+    },
+    {
+      "id": "n21",
+      "endpoint": "parse-need",
+      "text": "а можно взять лям и потом из прибыли отдавать?",
+      "source": "набор Саши №21",
+      "expected": "сумма 1000000; срок, цель, залог не названы",
+      "request": {
+        "text": "а можно взять лям и потом из прибыли отдавать?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":1000000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.85}}",
+      "elapsed_ms": 3.07
+    },
+    {
+      "id": "n23",
+      "endpoint": "parse-need",
+      "text": "мне бы тыщ 500 где то взять, но чтоб платить немного",
+      "source": "набор Саши №23",
+      "expected": "сумма 500000; срок, цель, залог не названы («платить немного» — не срок)",
+      "request": {
+        "text": "мне бы тыщ 500 где то взять, но чтоб платить немного"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{}}",
+      "elapsed_ms": 2.94
+    },
+    {
+      "id": "n25",
+      "endpoint": "parse-need",
+      "text": "готов взять кредит но не больше миллиона",
+      "source": "набор Саши №25",
+      "expected": "сумма не больше 1000000 (допустимо 1000000 как верхняя граница или пусто); срок, цель, залог не названы",
+      "request": {
+        "text": "готов взять кредит но не больше миллиона"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{}}",
+      "elapsed_ms": 1.89
+    },
+    {
+      "id": "n27",
+      "endpoint": "parse-need",
+      "text": "а мне 19 лет кредит для бизнеса вообще дают?",
+      "source": "набор Саши №27",
+      "expected": "суммы нет (не придумывать); срок, цель, залог не названы; вопрос про возраст не превращается в параметры",
+      "request": {
+        "text": "а мне 19 лет кредит для бизнеса вообще дают?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":228,\"has_collateral\":null,\"confidence\":{\"term_months\":0.9}}",
+      "elapsed_ms": 1.9
+    },
+    {
+      "id": "n29",
+      "endpoint": "parse-need",
+      "text": "сколько нужно денег чтоб получать хотя бы 100к в месяц?",
+      "source": "набор Саши №29",
+      "expected": "суммы нет (100 тысяч — доход, не сумма кредита); срок, цель, залог не названы",
+      "request": {
+        "text": "сколько нужно денег чтоб получать хотя бы 100к в месяц?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":100000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.63
+    },
+    {
+      "id": "n31",
+      "endpoint": "parse-need",
+      "text": "если занять 500 тысяч, когда они окупятся?",
+      "source": "набор Саши №31",
+      "expected": "сумма 500000; срок, цель, залог не названы",
+      "request": {
+        "text": "если занять 500 тысяч, когда они окупятся?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":500000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.66
+    },
+    {
+      "id": "n33",
+      "endpoint": "parse-need",
+      "text": "денег надо ну тысяч 700 наверно",
+      "source": "набор Саши №33",
+      "expected": "сумма 700000; срок, цель, залог не названы",
+      "request": {
+        "text": "денег надо ну тысяч 700 наверно"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":700000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.62
+    },
+    {
+      "id": "n35",
+      "endpoint": "parse-need",
+      "text": "если надо могу взять кредит полмиллиона",
+      "source": "набор Саши №35",
+      "expected": "сумма 500000; срок, цель, залог не названы",
+      "request": {
+        "text": "если надо могу взять кредит полмиллиона"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":500000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.82}}",
+      "elapsed_ms": 2.47
+    },
+    {
+      "id": "n37",
+      "endpoint": "parse-need",
+      "text": "миллион готов взять, но не хочу огромных платежей",
+      "source": "набор Саши №37",
+      "expected": "сумма 1000000; срок не назван; цель и залог не названы",
+      "request": {
+        "text": "миллион готов взять, но не хочу огромных платежей"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":1000000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.85}}",
+      "elapsed_ms": 2.82
+    },
+    {
+      "id": "n39",
+      "endpoint": "parse-need",
+      "text": "кредит можно сразу одобрить а потом решить куда потратить?",
+      "source": "набор Саши №39",
+      "expected": "суммы нет; срок, цель, залог не названы",
+      "request": {
+        "text": "кредит можно сразу одобрить а потом решить куда потратить?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":null,\"term_months\":null,\"has_collateral\":null,\"confidence\":{}}",
+      "elapsed_ms": 2.77
+    },
+    {
+      "id": "n41",
+      "endpoint": "parse-need",
+      "text": "нужно 1.5 ляма на 5 лет можн?",
+      "source": "набор Саши №41",
+      "expected": "сумма 1500000, срок 60 мес.; цель и залог не названы",
+      "request": {
+        "text": "нужно 1.5 ляма на 5 лет можн?"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":1500000,\"term_months\":60,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.82,\"term_months\":0.9}}",
+      "elapsed_ms": 2.49
+    },
+    {
+      "id": "n43",
+      "endpoint": "parse-need",
+      "text": "надо 400к где взять под норм проц",
+      "source": "набор Саши №43",
+      "expected": "сумма 400000; срок, цель, залог не названы",
+      "request": {
+        "text": "надо 400к где взять под норм проц"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":400000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.41
+    },
+    {
+      "id": "n45",
+      "endpoint": "parse-need",
+      "text": "лям дадут? лет на 7 чтоб платеж маленький",
+      "source": "набор Саши №45",
+      "expected": "сумма 1000000, срок 84 мес.; цель и залог не названы",
+      "request": {
+        "text": "лям дадут? лет на 7 чтоб платеж маленький"
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":1000000,\"term_months\":84,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.85,\"term_months\":0.9}}",
+      "elapsed_ms": 2.51
+    },
+    {
+      "id": "n47",
+      "endpoint": "parse-need",
+      "text": "2кк нужно. своих 500к есть...",
+      "source": "набор Саши №47",
+      "expected": "сумма 2000000 (допустимо 1500000 за вычетом своих 500000); срок, цель, залог не названы",
+      "request": {
+        "text": "2кк нужно. своих 500к есть..."
+      },
+      "correct": null,
+      "reviewer": null,
+      "reason": null,
+      "status": 200,
+      "response_text": "{\"purpose\":null,\"sphere\":null,\"city\":null,\"amount_rub\":500000,\"term_months\":null,\"has_collateral\":null,\"confidence\":{\"amount_rub\":0.93}}",
+      "elapsed_ms": 2.44
+    }
+  ]
+}
