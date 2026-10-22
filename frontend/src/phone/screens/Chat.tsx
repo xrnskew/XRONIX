@@ -97,7 +97,7 @@ export default function Chat() {
           <p className="mb-3 text-[13px] text-muted">Выберите город: от него зависят аренда, спрос и расчёты плана.</p>
           <CityPicker value={cityDraft} onChange={setCityDraft} onSelect={chooseCity} disabled={citySaving} />
           <button type="button" onClick={() => chooseCity(cityDraft)} disabled={!cityDraft.trim() || citySaving}
-            className="mt-3 h-10 rounded-xl bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-35">{citySaving ? 'Сохраняем…' : 'Выбрать город'}</button>
+            className="mt-3 h-10 rounded-xl bg-fill px-4 text-[14px] font-semibold text-white disabled:bg-surface-3 disabled:text-text/60">{citySaving ? 'Сохраняем…' : 'Выбрать город'}</button>
           {cityError && <p role="alert" className="mt-2 text-[13px] text-accent">{cityError}</p>}
         </div>
       </div>}

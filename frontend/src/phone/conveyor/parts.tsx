@@ -6,7 +6,7 @@ import { Badge, type Tone } from '../ui'
 // Общие кусочки экранов конвейера: поля ввода, статусы, справочники.
 
 export const input = 'h-12 w-full rounded-xl bg-surface-2 px-3.5 text-[15px] text-text outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent'
-export const primaryBtn = 'h-12 rounded-xl bg-fill px-5 text-[15px] font-semibold text-white transition-opacity hover:bg-brand-deep disabled:opacity-35'
+export const primaryBtn = 'h-12 rounded-xl bg-fill px-5 text-[15px] font-semibold text-white transition-opacity hover:bg-brand-deep disabled:bg-surface-3 disabled:text-text/60'
 export const ghostBtn = 'h-12 rounded-xl bg-surface-2 px-5 text-[15px] font-semibold text-text transition-colors hover:bg-surface-3 disabled:opacity-35'
 
 export const purposes = dict.purposes as Record<string, { title: string; hint: string; plan?: boolean }>

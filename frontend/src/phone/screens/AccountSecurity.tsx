@@ -44,7 +44,7 @@ export default function AccountSecurity() {
             <label className="block text-[13px] text-muted">Повторите новый<input className={`${input} mt-1`} type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required minLength={8} maxLength={1024} /></label>
           </div>
           {error && <p role="alert" className="text-[13px] text-accent">{error}</p>}
-          <button disabled={busy} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white disabled:opacity-35">{busy ? 'Подождите…' : 'Сменить пароль'}</button>
+          <button disabled={busy} className="h-11 rounded-xl bg-fill px-5 text-[14px] font-semibold text-white disabled:bg-surface-3 disabled:text-text/60">{busy ? 'Подождите…' : 'Сменить пароль'}</button>
         </form>
       )}
       <div className="flex items-center justify-between gap-4 border-t border-white/5 px-4 py-3.5 sm:px-5">

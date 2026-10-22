@@ -4,13 +4,14 @@ import { bank } from '../../api/bank'
 import type { BankStats, Status } from '../../types/conveyor'
 import { decimal } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../../phone/ui'
-import { ErrorText, whoseMove } from '../../phone/conveyor/parts'
+import { ErrorText, statusTone } from '../../phone/conveyor/parts'
 import { statuses } from './shared'
 
 // Сводка: заявки по статусам, доля автоматических решений, время до решения
-// Цвет полосы — чей ход по заявкам в этом статусе, как у значков статуса
-const barTone = (k: Status) => k === 'funded' ? 'bg-ok' : k === 'declined' ? 'bg-accent/45' : { you: 'bg-accent', bank: 'bg-steel', done: 'bg-muted/60' }[whoseMove(k)]
-const BAR_LEGEND: [string, string][] = [['bg-steel', 'у банка'], ['bg-accent', 'у клиента'], ['bg-ok', 'выдано'], ['bg-accent/45', 'отказ'], ['bg-muted/60', 'закрыто']]
+// Цвет полосы — тот же смысл, что у значков статуса (statusTone): зелёный — хорошая новость, жёлтый — ждём клиента, красный — отказ, сталь — работает банк
+const BAR: Record<ReturnType<typeof statusTone>, string> = { ok: 'bg-ok', warn: 'bg-warn', bad: 'bg-accent', action: 'bg-accent-soft', bank: 'bg-steel', muted: 'bg-muted/60' }
+const barTone = (k: Status) => BAR[statusTone(k)]
+const BAR_LEGEND: [string, string][] = [['bg-steel', 'у банка'], ['bg-warn', 'ждём клиента'], ['bg-ok', 'одобрено и выдано'], ['bg-accent', 'отказ'], ['bg-muted/60', 'закрыто']]
 
 export default function Stats() {
   const [s, setS] = useState<BankStats | null>(null)

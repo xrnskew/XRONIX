@@ -53,8 +53,8 @@ export const Button = ({ children, onClick, variant = 'primary', disabled }: { c
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] disabled:opacity-40 ${
-      variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep' : 'bg-surface-2 text-text active:bg-surface-3'
+    className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] ${
+      variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep disabled:bg-surface-3 disabled:text-text/60 disabled:shadow-none' : 'bg-surface-2 text-text active:bg-surface-3 disabled:opacity-40'
     }`}
   >
     {children}
