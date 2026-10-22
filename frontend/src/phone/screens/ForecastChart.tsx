@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Plan } from '../../types/plan'
 import { rub } from '../../lib/format'
 
@@ -8,6 +8,7 @@ export default function ForecastChart({ data, wide }: { data: Plan['finance']['r
     <ResponsiveContainer>
       <BarChart data={data} barGap={2} maxBarSize={wide ? 26 : undefined}>
         <CartesianGrid stroke="#2c2c31" vertical={false} />
+        <YAxis width={wide ? 64 : 56} tick={{ fill: '#8d8d95', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => (v >= 1_000_000 ? `${+(v / 1_000_000).toFixed(1)} млн` : v >= 1000 ? `${Math.round(v / 1000)} тыс` : String(v))} />
         <XAxis dataKey="month" tick={{ fill: '#8d8d95', fontSize: 11 }} axisLine={false} tickLine={false} />
         <Tooltip cursor={{ fill: '#ffffff08' }} contentStyle={{ background: '#232327', border: 0, borderRadius: 12, fontSize: 12 }} formatter={(v) => rub(Number(v))} labelFormatter={(l) => `Месяц ${l}`} />
         <Bar dataKey="revenue_rub" name="Выручка" fill="#ff4538" radius={[4, 4, 0, 0]} />

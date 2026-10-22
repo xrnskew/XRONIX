@@ -106,10 +106,10 @@ export default function Login() {
       )}
       <div className="relative space-y-3">
         {(error || notice) && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error ?? notice}</p>}
-        {reg && (<><label className="sr-only" htmlFor="name">Имя</label><input id="name" className={field} value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" autoComplete="name" /></>)}
-        <label className="sr-only" htmlFor="email">Почта</label>
+        {reg && (<><label className="mb-1.5 block text-[13px] text-text/70" htmlFor="name">Имя</label><input id="name" className={field} value={name} onChange={(e) => setName(e.target.value)} placeholder="Имя" autoComplete="name" /></>)}
+        <label className="mb-1.5 block text-[13px] text-text/70" htmlFor="email">Почта</label>
         <input id="email" className={field} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Почта" autoComplete="email" />
-        <label className="sr-only" htmlFor="pass">Пароль</label>
+        <label className="mb-1.5 block text-[13px] text-text/70" htmlFor="pass">Пароль</label>
         <input id="pass" className={field} value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder={reg ? 'Пароль, от 8 символов' : 'Пароль'} autoComplete={reg ? 'new-password' : 'current-password'} />
         <Button disabled={busy}>{busy ? 'Подождите…' : reg ? 'Создать аккаунт' : 'Войти'}</Button>
         <button type="button" className="h-10 w-full text-center text-[14px] text-muted" onClick={() => { setMode(reg ? 'login' : 'register'); setError(null) }}>

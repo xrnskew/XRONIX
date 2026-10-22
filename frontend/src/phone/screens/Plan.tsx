@@ -64,7 +64,11 @@ export default function PlanScreen() {
         </div>
       </div>
 
-      <Card span={12}>
+      <nav aria-label="Разделы плана" data-span={12} className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1">
+        {SECTIONS.map(([id, label]) => <button key={id} type="button" onClick={() => jumpTo(id)} className="min-h-9 shrink-0 rounded-full bg-surface-2 px-3.5 text-[14px] hover:bg-surface-3">{label}</button>)}
+      </nav>
+
+      <Card id="plan-budget" span={12}>
         <SectionTitle>Из чего складывается бюджет</SectionTitle>
         <p className="mb-4 text-[13px] text-muted">Предварительная оценка. Допущения указаны под каждой статьёй; перед запуском уточните цены у арендодателя и поставщиков. Суммы в шагах запуска уже входят в смету.</p>
         <div className="grid gap-6 min-[900px]:grid-cols-2">
@@ -73,9 +77,9 @@ export default function PlanScreen() {
         </div>
       </Card>
 
-      <Card delay={1} span={12}>
+      <Card id="plan-forecast" delay={1} span={12}>
         <SectionTitle>Выручка и расходы за первый год</SectionTitle>
-        <div className="mb-2 flex gap-4 text-[12px] text-muted"><Legend c="bg-accent" t="Выручка" /><Legend c="bg-[#5a5a63]" t="Расходы" /></div>
+        <div className="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-muted"><Legend c="bg-accent" t="Выручка" /><Legend c="bg-[#5a5a63]" t="Расходы" /><span className="ml-auto">₽ в месяц, по месяцам года</span></div>
         <div className={wide ? 'h-56' : 'h-36'} aria-label="Прогноз выручки и расходов по месяцам" role="img">
           <Suspense fallback={<div className="h-full animate-pulse rounded-xl bg-surface-2/50" />}><ForecastChart data={p.finance.revenue_forecast} wide={wide} /></Suspense>
         </div>
@@ -120,7 +124,7 @@ export default function PlanScreen() {
         </ul>
       </Card>
       {p.tax_note && (
-        <Card delay={5} span={12}>
+        <Card id="plan-taxes" delay={5} span={12}>
           <SectionTitle>Налоги</SectionTitle>
           <p className="text-[14px] leading-relaxed text-muted">{p.tax_note.text}</p>
           <p className="mt-2 text-[12px] text-muted">
@@ -130,6 +134,18 @@ export default function PlanScreen() {
       )}
     </Screen>
   )
+}
+
+const SECTIONS: [string, string][] = [['plan-budget', 'Бюджет'], ['plan-forecast', 'Выручка'], ['plan-steps', 'Шаги'], ['plan-risks', 'Риски'], ['plan-taxes', 'Налоги']]
+
+// Прокручиваем ближайший прокручиваемый контейнер, а не страницу: scrollIntoView двигает и презентацию слева
+function jumpTo(id: string) {
+  const el = document.getElementById(id)
+  if (!el) return
+  let box: HTMLElement | null = el.parentElement
+  while (box && !(box.scrollHeight > box.clientHeight && /(auto|scroll)/.test(getComputedStyle(box).overflowY))) box = box.parentElement
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (box) box.scrollTo({ top: box.scrollTop + el.getBoundingClientRect().top - box.getBoundingClientRect().top - 12, behavior: reduce ? 'auto' : 'smooth' })
 }
 
 const Legend = ({ c, t }: { c: string; t: string }) => <span className="flex items-center gap-1.5"><span className={`h-2 w-2 rounded-full ${c}`} />{t}</span>
