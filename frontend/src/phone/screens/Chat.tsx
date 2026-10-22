@@ -57,7 +57,9 @@ export default function Chat() {
     finally { setCitySaving(false) }
   }
   const submitAnswers = (qs: Question[]) => {
-    submit(qs.map((q) => `${q.text} ${answers[q.id] ?? '—'}`).join('\n'), qs.map((q) => ({ question_id: q.id, answer: answers[q.id] ?? '' })))
+    // в текст уходят все вопросы (пропущенные — как «—»), в answers только отвеченные: пустой ответ backend отклоняет
+    const given = (q: Question) => answers[q.id]?.trim()
+    submit(qs.map((q) => `${q.text} ${given(q) || '—'}`).join('\n'), qs.filter(given).map((q) => ({ question_id: q.id, answer: given(q)! })))
     setAnswers({})
   }
   const last = messages[messages.length - 1]
