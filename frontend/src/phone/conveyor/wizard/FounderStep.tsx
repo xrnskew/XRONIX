@@ -37,6 +37,10 @@ export default function FounderStep({ onBack, onDone }: { onBack: () => void; on
               onChange={(e) => { setInn(e.target.value); setBlurred(false) }} onBlur={() => setBlurred(true)} aria-invalid={!!hint} aria-describedby="person-inn-hint" />
           </Label>
           <p id="person-inn-hint" className="mt-1 min-h-[18px] text-[12px] text-accent">{hint}</p>
+          <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-muted">
+            <span>Нет личного ИНН?</span>
+            <button type="button" className="rounded-full bg-surface-2 px-2.5 py-1 text-text transition-colors hover:bg-surface-3" onClick={() => { setInn('772519083310'); setBlurred(true) }}>Подставить тестовый</button>
+          </div>
         </div>
         <button className={`${primaryBtn} sm:mt-[22px]`} disabled={!ok || busy}>{busy ? 'Сохраняем…' : 'Продолжить'}</button>
       </form>

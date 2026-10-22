@@ -14,7 +14,7 @@ const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 export default function Finance() {
   const { plan, planId, planLoading, planError, reloadPlan } = useCabinet()
   // рабочая версия: заявка в конвейер по этому плану — главное действие; сайт банка — запасной путь
-  const applyTo = useContext(Conveyor) && planId && planId !== 'demo' ? `/new?plan=${encodeURIComponent(planId)}` : null
+  const canApply = useContext(Conveyor) && planId && planId !== 'demo'
   const nav = useNavigate()
   const wide = useContext(Wide)
   const initialProduct = alfaProducts.find((p) => p.id === plan?.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
@@ -34,6 +34,8 @@ export default function Finance() {
     setSelectedId(selected.id); setAmount(params.amount); setMonths(params.months)
   }
   const matches = useMemo(() => matchProducts(amount, months), [amount, months])
+  // в заявку уходят сумма и срок, выбранные в калькуляторе, а не рекомендация плана
+  const applyTo = canApply ? `/new?plan=${encodeURIComponent(planId)}&amount=${Math.round(amount)}&term=${months}` : null
 
   if (planLoading && !plan) return <Screen title="Финансы и кредит"><Skeleton /></Screen>
   if (planError && !plan)
