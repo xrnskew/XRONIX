@@ -21,7 +21,7 @@ export default function NeedStep({ company, need, setNeed, project, onBack, onDo
   const rec = project ? { purpose: 'new_location' as Purpose, amount: project.plan.credit.amount_rub ?? (project.plan.finance.funding_gap_rub || null), term: project.plan.credit.recommended_term_months ?? 36 } : null
   const Rec = ({ same, shown, onReset }: { same: boolean; shown: string; onReset: () => void }): ReactNode => !rec ? null : same
     ? <p className="mt-1 text-[12px] font-medium text-ok">Рекомендовано по вашему плану</p>
-    : <p className="mt-1 text-[12px] text-muted">По плану рекомендовано: {shown}. <button type="button" onClick={onReset} className="ml-1.5 inline-flex h-7 items-center rounded-lg bg-surface-2 px-2.5 text-[12px] font-semibold text-text transition-colors hover:bg-surface-3">Вернуть</button></p>
+    : <p className="mt-1 text-[12px] text-muted">По плану рекомендовано: {shown}. <button type="button" onClick={onReset} className="ml-1 font-medium text-accent-soft transition-colors hover:text-text">Вернуть</button></p>
 
   const parse = async () => {
     setParsing(true); setNote('')
