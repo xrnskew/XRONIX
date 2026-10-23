@@ -16,7 +16,7 @@ export default function Login() {
   const { signIn, signUp, notice } = useCabinet()
   const wide = useContext(Wide)
   const conveyorOn = useContext(Conveyor) // рабочая версия /app; в телефоне на презентации выбора роли нет
-  // В рабочей версии вход начинается с выбора: Клиент, Аналитик банка или Новый пользователь
+  // В рабочей версии вход начинается с выбора: две демо-роли одной кнопкой, свой вход и регистрация — ссылкой ниже
   const [mode, setMode] = useState<'choose' | 'login' | 'register'>(conveyorOn ? 'choose' : 'login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState(USE_MOCKS ? DEMO_CLIENT.email : '')
@@ -48,32 +48,24 @@ export default function Login() {
       <div className={wide ? 'mb-8' : 'mb-auto shrink-0 pb-6 pt-12'}>
         {!wide && <Logo size={56} />}
         <h1 className={`font-display font-semibold leading-tight tracking-tight ${wide ? 'text-[30px]' : 'mt-5 text-[28px]'}`}>Кабинет предпринимателя</h1>
-        <p className="mt-2 text-[15px] text-text/70">Войдите или создайте аккаунт. Тестовые роли ниже нужны для проверки, их данные синтетические.</p>
+        <p className="mt-2 text-[15px] text-text/70">Посмотрите кабинет глазами клиента или аналитика банка. Свой аккаунт можно создать ниже.</p>
       </div>
       <div className="relative space-y-3">
         {(error || notice) && <p role="alert" className="rounded-xl bg-accent/12 px-3.5 py-2.5 text-[14px] leading-snug text-accent">{error ?? notice}</p>}
-        <button type="button" disabled={busy} onClick={() => { setMode('register'); setError(null); setName(''); setEmail(''); setPass('') }}
-          className="flex w-full items-center justify-between gap-3 rounded-2xl bg-fill px-5 py-[18px] text-left text-white transition-colors hover:bg-brand-deep disabled:opacity-50">
-          <span><span className="block text-[18px] font-semibold">Новый пользователь</span><span className="block text-[13px] text-white/75">Создать свой аккаунт за минуту</span></span>
-          <span aria-hidden>→</span>
-        </button>
+        {DEMO_ROLES.map((r, i) => (
+          <button key={r.email} type="button" disabled={busy} onClick={() => demo(r.email)}
+            className={`flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-[18px] text-left transition-colors disabled:opacity-50 ${i === 0 ? 'bg-fill text-white hover:bg-brand-deep' : 'glass hover:bg-surface-2'}`}>
+            <span>
+              <span className="block text-[18px] font-semibold">{r.role}</span>
+              <span className={`block text-[13px] ${i === 0 ? 'text-white/75' : 'text-muted'}`}>{r.hint}</span>
+              <span className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wide ${i === 0 ? 'bg-white/20' : 'bg-white/10 text-muted'}`}>демо, без пароля</span>
+            </span>
+            <span className={i === 0 ? '' : 'text-muted'} aria-hidden>→</span>
+          </button>
+        ))}
+        <p className="pt-1 text-center text-[12px] text-muted">Данные в демо синтетические, заявки и планы вымышленные.</p>
         <button type="button" disabled={busy} onClick={() => { setMode('login'); setError(null) }}
-          className="flex w-full items-center justify-between gap-3 rounded-2xl bg-surface px-5 py-[18px] text-left ring-1 ring-white/25 transition-colors hover:bg-surface-2 disabled:opacity-50">
-          <span><span className="block text-[18px] font-semibold">Войти</span><span className="block text-[13px] text-muted">По почте и паролю, если аккаунт уже есть</span></span>
-          <span className="text-muted" aria-hidden>→</span>
-        </button>
-        <div className="pt-4">
-          <div className="flex items-center gap-3 text-[12px] text-muted"><span className="h-px flex-1 bg-white/10" /><span>Тестовый доступ: без регистрации</span><span className="h-px flex-1 bg-white/10" /></div>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {DEMO_ROLES.map((r) => (
-              <button key={r.email} type="button" disabled={busy} onClick={() => demo(r.email)}
-                className="rounded-xl bg-white/[.04] px-3.5 py-2.5 text-left ring-1 ring-white/5 transition-colors hover:bg-white/[.08] disabled:opacity-50">
-                <span className="flex items-center justify-between gap-2"><span className="text-[14px] font-medium">{r.role}</span><span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-muted">тест</span></span>
-                <span className="mt-0.5 block text-[12px] leading-snug text-muted">{r.hint}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+          className="h-11 w-full text-center text-[15px] font-medium text-text/80 underline-offset-4 hover:text-text hover:underline disabled:opacity-50">Войти или зарегистрироваться</button>
       </div>
     </div>
   )
