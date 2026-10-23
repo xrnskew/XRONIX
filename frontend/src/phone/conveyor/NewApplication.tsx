@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../../api'
 import { useCabinet } from '../CabinetContext'
+import { latestPlanId } from '../../lib/planAlias'
 import type { Company } from '../../types/conveyor'
 import { Icon, Screen } from '../ui'
 import { ErrorText, Steps, miniBtn } from './parts'
@@ -50,7 +51,7 @@ export default function NewApplication() {
   const { plan: myPlan, planId } = useCabinet()
   useEffect(() => {
     if (!planParam) return
-    api.getPlan(planParam).then((r) => setPreset({ plan_id: r.plan_id, plan: r.plan })).catch(() => setPresetError('Не удалось открыть план из чата. Можно посчитать проект заново.'))
+    api.getPlan(latestPlanId(planParam)).then((r) => setPreset({ plan_id: r.plan_id, plan: r.plan })).catch(() => setPresetError('Не удалось открыть план из чата. Можно посчитать проект заново.'))
   }, [planParam])
   const [need, setNeed] = useState<Need>(saved?.need ?? EMPTY_NEED)
   const [appId, setAppId] = useState<string | null>(saved?.appId ?? null)

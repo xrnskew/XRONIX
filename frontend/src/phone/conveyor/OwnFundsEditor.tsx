@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { errorText } from '../../api'
 import { rub } from '../../lib/format'
+import { recordSuccessor } from '../../lib/planAlias'
 import { ReplanError, recalcWithOwnFunds } from '../../lib/replan'
 import type { Plan } from '../../types/plan'
 import { ErrorText, Label, MoneyInput, miniBtn, primaryBtn } from './parts'
@@ -23,6 +24,7 @@ export default function OwnFundsEditor({ planId, plan, needed, open, onOpenChang
     try {
       const gapBefore = plan.finance.funding_gap_rub
       const next = await recalcWithOwnFunds(planId, value)
+      recordSuccessor(planId, next.plan_id, next.plan) // прежний план в чате и ссылках теперь ведёт на этот
       const message = `План пересчитан: своих ${rub(next.plan.finance.own_funds_rub)}, не хватает ${rub(next.plan.finance.funding_gap_rub)} (было ${rub(gapBefore)}).`
       setDone(message)
       onRecalculated(next, message)

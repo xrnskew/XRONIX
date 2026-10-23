@@ -1,4 +1,5 @@
 import type { AiReply, Answer, ChatDetail, ChatMessage, Plan, PlanRecord, PlanSummary } from '../types/plan'
+import { knownPlan, latestPlanId } from '../lib/planAlias.ts'
 import { uid } from '../lib/uid.ts'
 
 export interface SessionApi {
@@ -62,7 +63,13 @@ export class CabinetSession {
   private selectReply(conversation: Conversation) {
     const reply = [...conversation.messages].reverse().find((m) => m.reply?.type === 'plan')?.reply
     this.planChatId = conversation.id
-    this.update({ plan: reply?.type === 'plan' ? reply.plan : null, planId: reply?.type === 'plan' ? reply.plan_id : null, planLoading: false, planError: null })
+    if (reply?.type !== 'plan') { this.update({ plan: null, planId: null, planLoading: false, planError: null }); return }
+    // план из чата мог быть пересчитан (другие свои деньги): показываем актуальный, а не тот, что навсегда записан в сообщении
+    const latest = latestPlanId(reply.plan_id)
+    if (latest === reply.plan_id) { this.update({ plan: reply.plan, planId: reply.plan_id, planLoading: false, planError: null }); return }
+    const have = knownPlan(latest)
+    this.update({ plan: have, planId: latest, planLoading: !have, planError: null })
+    if (!have) void this.openPlan(latest)
   }
   reset = () => {
     this.generation++
@@ -171,7 +178,10 @@ export class CabinetSession {
     return true
   }
 
-  openPlan = async (id: string, cached?: Plan): Promise<void> => {
+  openPlan = async (requested: string, given?: Plan): Promise<void> => {
+    // если план пересчитывали, открываем последний в цепочке; переданный готовый план относится к исходному и не годится
+    const id = latestPlanId(requested)
+    const cached = id === requested ? given : knownPlan(id) ?? undefined
     const request = ++this.planRequest
     const generation = this.generation
     if (cached) { this.planChatId = this.active.id; this.update({ plan: cached, planId: id, planLoading: false, planError: null }); return }

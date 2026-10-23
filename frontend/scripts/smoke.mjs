@@ -110,6 +110,15 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
   await p.getByRole('button', { name: 'Изменить свои средства' }).first().click(); await p.waitForTimeout(400)
   await p.locator('#own-funds').fill('800000'); await p.getByRole('button', { name: 'Пересчитать план' }).click(); await p.waitForTimeout(3500)
   check('«Финансы и кредит»: свои средства меняются и пересчитывают план', /800\s000/.test(await text(p)) && /План пересчитан/.test(await text(p)))
+  // рассинхрон: старый чат хранит прежний план, а после пересчёта везде должен быть актуальный
+  await p.goto(`${U}#/chat`); await p.waitForTimeout(900)
+  await p.getByRole('button', { name: 'Все диалоги', exact: true }).click(); await p.waitForTimeout(900)
+  await p.getByRole('button', { name: /пекарн/i }).first().click(); await p.waitForTimeout(2200)
+  check('старый чат после пересчёта: карточка плана показывает актуальные цифры', /План обновлён: свои деньги 800\s000/.test(await text(p)))
+  await p.locator('aside').getByRole('link', { name: /Финансы/ }).click(); await p.waitForTimeout(1500)
+  const fin = (await text(p)).replace(/\n/g, ' ')
+  check('«Финансы и кредит» после открытия старого чата не откатываются на прежнюю сумму', /Свои средства\s+800\s000/.test(fin))
+  await p.getByRole('button', { name: 'Начать заново' }).count()
   await p.close()
 }
 

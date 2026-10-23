@@ -1,14 +1,15 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
-import type { AiReply, Answer, ChatMessage, ChatSummary, Question } from '../../types/plan'
+import type { AiReply, Answer, ChatMessage, ChatSummary, Plan, Question } from '../../types/plan'
 import { Chip, Conveyor, EmptyState, Logo, Wide, Icon } from '../ui'
 import { useCabinet } from '../CabinetContext'
-import { shortParts } from '../../lib/format'
+import { rub, shortParts } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
 import { submittedAnswers } from '../answers'
 import { LOSS_WARNING, isLossMaking } from '../../lib/planWarnings'
 import { detectSphere, hintFor } from '../../lib/questionHints'
+import { knownPlan, latestPlanId, rememberPlan } from '../../lib/planAlias'
 import { planPath } from '../PlanRoute'
 
 // Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
@@ -265,7 +266,19 @@ const BAR = ['bg-accent', 'bg-accent-soft', 'bg-steel', 'bg-warn', 'bg-ok']
 
 // «План готов»: главные цифры, цвет окупаемости и из чего складывается стартовый бюджет
 function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type: 'plan' }>; onOpen: () => void; onCredit?: () => void }) {
-  const f = reply.plan.finance, loss = isLossMaking(reply.plan)
+  // план из этого сообщения могли пересчитать (другие свои деньги): показываем актуальный, в сообщении навсегда записан прежний
+  const latestId = latestPlanId(reply.plan_id)
+  const [latest, setLatest] = useState<Plan | null>(latestId === reply.plan_id ? null : knownPlan(latestId))
+  useEffect(() => {
+    if (latestId === reply.plan_id) { setLatest(null); return }
+    const have = knownPlan(latestId)
+    if (have) { setLatest(have); return }
+    let alive = true
+    api.getPlan(latestId).then((r) => { rememberPlan(latestId, r.plan); if (alive) setLatest(r.plan) }).catch(() => {})
+    return () => { alive = false }
+  }, [latestId, reply.plan_id])
+  const shown = latest ?? reply.plan
+  const f = shown.finance, loss = isLossMaking(shown)
   const items = [...(f.startup_items ?? [])].sort((a, b) => b.amount_rub - a.amount_rub)
   const total = items.reduce((n, i) => n + i.amount_rub, 0)
   const top = items.slice(0, 4), rest = items.slice(4).reduce((n, i) => n + i.amount_rub, 0)
@@ -275,7 +288,8 @@ function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type:
       <div className="flex items-center gap-2 text-[13px] font-medium text-ok">
         <span className="pop flex h-5 w-5 items-center justify-center rounded-full bg-ok/15" aria-hidden><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>План готов
       </div>
-      <div className="text-[20px] font-semibold leading-tight tracking-tight">{reply.plan.title}</div>
+      <div className="text-[20px] font-semibold leading-tight tracking-tight">{shown.title}</div>
+      {latest && <p className="-mt-2 text-[12px] font-medium text-ok">План обновлён: свои деньги {rub(f.own_funds_rub)}, не хватает {rub(f.funding_gap_rub)}</p>}
       <div className="grid grid-cols-3 gap-3">
         <div><div className="text-[12px] text-muted">На старт</div><div className="mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums">{money(f.startup_cost_rub)}</div></div>
         <div><div className="text-[12px] text-muted">Прибыль в мес.</div><div className={`mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums ${f.monthly_profit_rub > 0 ? 'text-ok' : 'text-accent'}`}>{money(f.monthly_profit_rub)}</div></div>
