@@ -93,9 +93,10 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     catch { setNotice('Не удалось завершить сессию на сервере. Проверьте соединение и повторите выход.') }
   }, [reset])
 
-  const enter = useCallback(async (u: Profile) => {
+  // restore: сессия найдена при открытии сайта — возвращаем последний диалог; явный вход начинает с чистого экрана, прошлые диалоги — по кнопке «Все диалоги»
+  const enter = useCallback(async (u: Profile, restore: boolean) => {
     let savedChat: string | null = null
-    try { savedChat = sessionStorage.getItem(`xronix_chat_${u.id}`) } catch { /* storage unavailable */ }
+    if (restore) { try { savedChat = localStorage.getItem(`xronix_chat_${u.id}`) } catch { /* storage unavailable */ } }
     reset(); setUser(u); setNotice(null); setStatus('in')
     await reloadPlan()
     if (savedChat) { try { await session.openChat(savedChat) } catch { /* removed chat */ } }
@@ -110,7 +111,7 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     if (!restoreSession || (USE_MOCKS && !getToken())) return
     const generation = authGeneration.current
     let mounted = true
-    api.getMe().then((u) => { if (mounted && generation === authGeneration.current) return enter(u) }).catch((e) => {
+    api.getMe().then((u) => { if (mounted && generation === authGeneration.current) return enter(u, true) }).catch((e) => {
       if (!mounted || generation !== authGeneration.current) return
       if (!(e instanceof ApiError && e.code === 'UNAUTHORIZED')) setNotice(errorText(e))
       setStatus('out')
@@ -122,13 +123,13 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
     if (!user?.id || demo || status !== 'in') return
     try {
       const key = `xronix_chat_${user.id}`
-      if (state.chatId) sessionStorage.setItem(key, state.chatId)
-      else sessionStorage.removeItem(key)
+      if (state.chatId) localStorage.setItem(key, state.chatId) // переживает закрытие вкладки и браузера
+      else localStorage.removeItem(key)
     } catch { /* storage unavailable */ }
   }, [user?.id, state.chatId, demo, status])
 
-  const signIn: Ctx['signIn'] = async (email, password) => { await enter((await api.login({ email, password })).user) }
-  const signUp: Ctx['signUp'] = async (name, email, password) => { await enter((await api.register({ name, email, password })).user) }
+  const signIn: Ctx['signIn'] = async (email, password) => { await enter((await api.login({ email, password })).user, false) }
+  const signUp: Ctx['signUp'] = async (name, email, password) => { await enter((await api.register({ name, email, password })).user, false) }
   const saveProfile: Ctx['saveProfile'] = async (patch) => { const generation = authGeneration.current; const updated = await api.patchMe(patch); if (generation === authGeneration.current) setUser(updated) }
 
   // ---- автопоказ: ничего не вызывает у бэкенда, только заготовленные данные ----

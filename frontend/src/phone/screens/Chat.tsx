@@ -92,7 +92,7 @@ export default function Chat() {
           <p className="flex items-center gap-1.5 text-[13px] text-muted" role="status"><span className={`h-1.5 w-1.5 rounded-full ${aiStatus.dot}`} aria-hidden />{aiStatus.text}</p>
         </div>
         <IconBtn label="Новый диалог" onClick={() => { newChat(); setAnswers({}) }}><path d="M12 5v14M5 12h14" /></IconBtn>
-        {!wide && <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>}
+        <IconBtn label="Все диалоги" onClick={() => setView('list')}><path d="M4 6h16M4 12h16M4 18h10" /></IconBtn>
       </header>
 
       {needsCity && <div className={`${wide ? 'px-8' : 'px-4'} max-h-[50%] overflow-y-auto overscroll-contain pb-3`}>
