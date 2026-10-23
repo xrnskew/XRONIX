@@ -7,6 +7,8 @@ cd frontend
 npm install
 npm run dev      # http://localhost:5173
 npm run build
+npm test          # unit-тесты
+npm run smoke    # дымовая проверка экранов на моках (нужны запущенный npm run dev -- --port 5199 и Playwright)
 ```
 
 ## Режимы

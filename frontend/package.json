@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build && cp dist/index.html dist/app.html",
     "preview": "vite preview",
+    "smoke": "node scripts/smoke.mjs",
     "refresh:alfa": "python3 scripts/refresh_alfa.py",
     "test": "node --experimental-strip-types --test tests/*.test.mjs && python3 -m unittest discover -s tests -p \"test_*.py\""
   },

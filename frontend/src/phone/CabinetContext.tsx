@@ -66,7 +66,9 @@ export function CabinetProvider({ children, restoreSession = true }: { children:
 
   const [session] = useState(() => new CabinetSession(api, greeting, errorText))
   const state = useSyncExternalStore(session.subscribe, session.getSnapshot)
-  const { reloadPlan, openPlan, send, retry, newChat, openChat, deleteChat } = session
+  const { reloadPlan, openPlan, send, retry, openChat, deleteChat } = session
+  // Новый диалог сбрасывает план текущего чата, но «План» и «Финансы» в меню остаются доступны: подгружаем последний сохранённый план
+  const newChat = useCallback(() => { session.newChat(); if (!demoRef.current) void session.reloadPlan() }, [session])
   const setPlan = (plan: Plan | null) => session.present({ plan })
   const setMessages = (messages: ChatMessage[]) => session.present({ messages })
   const setBusy = (busy: boolean) => session.present({ busy })
