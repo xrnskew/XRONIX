@@ -1,8 +1,10 @@
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, EmptyState, Screen, SectionTitle, Skeleton, Stat, Wide, Conveyor } from '../ui'
 import { useCabinet } from '../CabinetContext'
+import { planPath } from '../PlanRoute'
+import OwnFundsEditor from '../conveyor/OwnFundsEditor'
 import { annuity, decimal, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, alfaProducts, alfaSnapshotIsStale, matchProducts, productTerm } from '../../data/alfaProducts'
 
@@ -12,10 +14,13 @@ const loadTone = (n: number) => (n > 50 ? 'bad' : n > 35 ? 'warn' : 'ok')
 const toneColor = { ok: '#3ddc84', warn: '#ffb020', bad: '#ff4538' }
 
 export default function Finance() {
-  const { plan, planId, planLoading, planError, reloadPlan } = useCabinet()
+  const { plan, planId, planLoading, planError, reloadPlan, openPlan } = useCabinet()
+  const [ownOpen, setOwnOpen] = useState(false)
   // рабочая версия: заявка в конвейер по этому плану — главное действие; сайт банка — запасной путь
   const canApply = useContext(Conveyor) && planId && planId !== 'demo'
   const nav = useNavigate()
+  // после пересчёта страница перерисовывается (грузится новый план), поэтому сообщение приходит через состояние навигации
+  const replanned = (useLocation().state as { replanned?: string } | null)?.replanned
   const wide = useContext(Wide)
   const initialProduct = alfaProducts.find((p) => p.id === plan?.credit.recommended_product_id && p.rateFrom != null && p.id !== 'revolving') ?? alfaProducts[0]
   const initial = creditParameters(initialProduct, plan?.credit.amount_rub ?? 1000000, plan?.credit.recommended_term_months ?? 24)
@@ -65,11 +70,18 @@ export default function Finance() {
   const load = f.monthly_profit_rub > 0 ? Math.round((payment / f.monthly_profit_rub) * 100) : 100
   const v = creditAssessment(selected, amount, months, load)
   const ownShare = f.startup_cost_rub > 0 ? Math.min(100, Math.round((f.own_funds_rub / f.startup_cost_rub) * 100)) : 100
+  // редактор своих средств и сообщение о пересчёте нужны и на экране «кредит не нужен»: иначе вернуть сумму обратно было бы нельзя
+  const ownEditor = canApply && planId ? (
+    <OwnFundsEditor planId={planId} plan={plan} open={ownOpen} onOpenChange={setOwnOpen}
+      onRecalculated={(c, message) => { void openPlan(c.plan_id, c.plan); nav(planPath('/finance', c.plan_id), { replace: true, state: { replanned: message } }); setOwnOpen(false) }} />
+  ) : null
+  const replannedBanner = replanned ? <p role="status" className="rounded-2xl bg-ok/10 p-4 text-[14px] font-medium text-ok ring-1 ring-ok/25">{replanned}</p> : null
 
   if (!c.needed)
     return (
       <Screen title="Финансы и кредит">
         {unconfirmedMetro(plan) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
+        {replannedBanner}
         <Card>
           <Badge tone={f.funding_gap_rub > 0 ? "warn" : "ok"}>{f.funding_gap_rub > 0 ? "Финансирование без кредита" : "Кредит не нужен"}</Badge>
           <p className="mt-2 text-[14px] leading-snug text-muted">{c.comment}</p>
@@ -79,6 +91,7 @@ export default function Finance() {
             {f.funding_gap_rub > 0 && <Stat label="Нужно найти без кредита" value={rub(f.funding_gap_rub)} tone="warn" />}
           </div>
           {f.funding_gap_rub > 0 && <p className="mt-3 text-[14px] text-muted">Уменьшите стартовый бюджет, запускайтесь поэтапно или рассмотрите вклад партнёра. До покрытия нехватки средств план не обеспечен финансированием.</p>}
+          {ownEditor}
         </Card>
       </Screen>
     )
@@ -86,6 +99,7 @@ export default function Finance() {
   return (
     <Screen title="Финансы и кредит">
       {unconfirmedMetro(plan) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
+      {replannedBanner}
       <Card delay={0} span={7}>
         <SectionTitle>Откуда взять {short(f.startup_cost_rub)} ₽</SectionTitle>
         <div className="flex h-3 overflow-hidden rounded-full bg-surface-3" role="img" aria-label={`Свои средства ${ownShare}%, не хватает ${100 - ownShare}%`}>
@@ -96,6 +110,7 @@ export default function Finance() {
           <Stat label="Свои средства" value={rub(f.own_funds_rub)} tone="ok" />
           <Stat label="Не хватает" value={rub(f.funding_gap_rub)} tone="bad" />
         </div>
+        {ownEditor}
       </Card>
 
       <Card className={`flex items-center gap-4 ${wide ? 'gap-6 p-6' : ''}`} delay={1} span={5}>

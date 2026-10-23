@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { errorText } from '../../../api'
 import { conveyor } from '../../../api/conveyor'
 import type { Company, MatchItem } from '../../../types/conveyor'
 import { decimal, rub } from '../../../lib/format'
-import { Badge, Card } from '../../ui'
-import { ErrorText, ghostBtn, primaryBtn, purposes } from '../parts'
-import { type Need } from './types'
+import { Badge, Card, Icon } from '../../ui'
+import { useCabinet } from '../../CabinetContext'
+import { BLOCKER_TITLE, sortedReasons, summarizeBlockers, type ReasonLevel } from '../../../lib/creditReasons'
+import OwnFundsEditor from '../OwnFundsEditor'
+import { ErrorText, ghostBtn, miniBtn, primaryBtn, purposes } from '../parts'
+import { type Need, type CalculatedPlan } from './types'
 import type { Purpose } from '../../../types/conveyor'
 
 type Suggestion = { key: string; title: string; detail: string; patch: Partial<Need> }
@@ -14,7 +18,25 @@ const closest = <T,>(xs: T[], value: (x: T) => number, to: number) => [...xs].so
 const roundTo = (n: number, step: number) => Math.max(step, Math.round(n / step) * step)
 
 // Шаг мастера: 3. Подбор продукта
-export default function ProductStep({ company, need, setNeed, planId, onBack, onDone }: { company: Company; need: Need; setNeed: (n: Need) => void; planId: string | null; onBack: () => void; onDone: (applicationId: string) => void }) {
+// Иконки причин: можно исправить (предупреждение), зависит от типа бизнеса (замок), пояснение (i)
+const REASON_ICON: Record<ReasonLevel, string> = {
+  fix: 'M12 8v5M12 16.5v.5M12 3l9 16H3z',
+  structural: 'M7 11V8a5 5 0 0110 0v3M5 11h14v9H5z',
+  info: 'M12 8v.01M11 12h1v5h1M12 21a9 9 0 100-18 9 9 0 000 18z',
+}
+const REASON_CLS: Record<ReasonLevel, string> = {
+  fix: 'bg-warn/10 text-text ring-1 ring-warn/25',
+  structural: 'bg-white/[.04] text-muted',
+  info: 'bg-steel/10 text-steel',
+}
+const REASON_ICON_CLS: Record<ReasonLevel, string> = { fix: 'text-warn', structural: 'text-muted', info: 'text-steel' }
+
+export default function ProductStep({ company, need, setNeed, planId, project, onPlanChange, onBack, onDone }: { company: Company; need: Need; setNeed: (n: Need) => void; planId: string | null; project: CalculatedPlan | null; onPlanChange: (c: CalculatedPlan) => void; onBack: () => void; onDone: (applicationId: string) => void }) {
+  const nav = useNavigate()
+  const { newChat } = useCabinet()
+  const [editorOpen, setEditorOpen] = useState(false)
+  const alertRef = useRef<HTMLDivElement>(null)
+  const openEditor = () => { setEditorOpen(true); alertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }
   const [items, setItems] = useState<MatchItem[] | null>(null)
   const [error, setError] = useState('')
   const [creating, setCreating] = useState<string | null>(null)
@@ -62,43 +84,102 @@ export default function ProductStep({ company, need, setNeed, planId, onBack, on
 
   const fits = items?.filter((i) => i.eligible && i.can_apply) ?? []
   const rest = items?.filter((i) => !(i.eligible && i.can_apply)) ?? []
+  const blockers = summarizeBlockers(rest)
+  const ownNeeded = blockers.find((b) => b.kind === 'own_funds')?.ownFundsNeeded ?? null
   const Group = ({ title, n }: { title: string; n: number }) => <h2 data-span={12} className="flex items-baseline gap-2 pt-2 text-[15px] font-semibold">{title}<span className="text-[13px] font-normal text-muted tabular-nums">{n}</span></h2>
-  const card = (m: MatchItem, fit: boolean) => (
-    <Card key={m.product_id} span={6} className={fit ? 'ring-1 ring-ok/30' : ''}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-[16px] font-semibold leading-snug">{m.name}</div>
-          <span className="mt-1 inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] text-muted">Продукт XRONIX (демо)</span>
-          {m.gov && (
-            <span className="mt-2 block rounded-xl bg-steel/12 px-3 py-2 text-[12px] leading-snug text-steel">
-              <span className="block font-medium">Господдержка: половину риска берёт Корпорация МСП</span>
-              {m.valid_until && <span className="block text-steel/75">Акция до {new Date(`${m.valid_until}T00:00:00`).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</span>}
-            </span>
-          )}
+
+  // Что человек может сделать прямо в причине отказа
+  const actionFor = (kind: string): { label: string; run: () => void } | null =>
+    kind === 'collateral' ? { label: 'Добавить залог', run: () => setNeed({ ...need, has_collateral: true }) }
+    : kind === 'own_funds' && project ? { label: 'Изменить свои средства', run: openEditor }
+    : kind === 'plan' ? { label: 'Посчитать в чате', run: () => { newChat(); nav('/chat') } }
+    : kind === 'amount' || kind === 'term' || kind === 'purpose' ? { label: 'Изменить параметры', run: onBack }
+    : null
+
+  const card = (m: MatchItem, fit: boolean) => {
+    const rows = sortedReasons(m.reasons)
+    const fixable = rows.some((r) => r.level === 'fix')
+    return (
+      <Card key={m.product_id} span={6} className={fit ? 'ring-1 ring-ok/30' : fixable ? 'ring-1 ring-warn/25' : ''}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[16px] font-semibold leading-snug">{m.name}</div>
+            <span className="mt-1 inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] text-muted">Продукт XRONIX (демо)</span>
+            {m.gov && (
+              <span className="mt-2 block rounded-xl bg-steel/12 px-3 py-2 text-[12px] leading-snug text-steel">
+                <span className="block font-medium">Господдержка: половину риска берёт Корпорация МСП</span>
+                {m.valid_until && <span className="block text-steel/75">Акция до {new Date(`${m.valid_until}T00:00:00`).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</span>}
+              </span>
+            )}
+          </div>
+          {fit ? <Badge tone="ok" dot>Подходит</Badge> : fixable ? <Badge tone="warn" dot>Можно исправить</Badge> : <Badge tone="muted" dot>Не подходит</Badge>}
         </div>
-        {fit && <Badge tone="ok" dot>Подходит</Badge>}
-      </div>
-      <div className="mt-4 flex flex-wrap items-end gap-x-6 gap-y-2">
-        <div><div className="text-[12px] text-muted">Платёж в месяц</div><div className={`tabular-nums ${fit ? 'font-display text-[26px] font-semibold leading-tight tracking-tight' : 'text-[15px] font-semibold'}`}>{m.monthly_payment_rub != null ? `≈ ${rub(m.monthly_payment_rub)}` : '—'}</div></div>
-        <div><div className="text-[12px] text-muted">Ставка</div><div className="text-[15px] font-semibold tabular-nums">{m.rate_from_percent != null ? `от ${decimal(m.rate_from_percent)}%` : 'по запросу'}</div></div>
-      </div>
-      {m.reasons.length > 0 && <ul className="mt-3 space-y-1 text-[13px] leading-snug text-muted">{m.reasons.map((r) => <li key={r} className="flex gap-2"><span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-current" aria-hidden />{r}</li>)}</ul>}
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        {fit && <button onClick={() => apply(m)} disabled={!!creating} className={primaryBtn}>{creating === m.product_id ? 'Создаём…' : 'Подать заявку'}</button>}
-      </div>
-    </Card>
-  )
+        <div className="mt-4 flex flex-wrap items-end gap-x-6 gap-y-2">
+          <div><div className="text-[12px] text-muted">Платёж в месяц</div><div className={`tabular-nums ${fit ? 'font-display text-[26px] font-semibold leading-tight tracking-tight' : 'text-[15px] font-semibold'}`}>{m.monthly_payment_rub != null ? `≈ ${rub(m.monthly_payment_rub)}` : '—'}</div></div>
+          <div><div className="text-[12px] text-muted">Ставка</div><div className="text-[15px] font-semibold tabular-nums">{m.rate_from_percent != null ? `от ${decimal(m.rate_from_percent)}%` : 'по запросу'}</div></div>
+        </div>
+        {rows.length > 0 && (
+          <ul className="mt-4 space-y-2">
+            {rows.map((r) => {
+              const act = r.level === 'fix' ? actionFor(r.kind) : null
+              return (
+                <li key={r.text} className={`flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-[13px] leading-snug ${REASON_CLS[r.level]}`}>
+                  <span className={`mt-px shrink-0 ${REASON_ICON_CLS[r.level]}`} aria-hidden><Icon d={REASON_ICON[r.level]} size={16} /></span>
+                  <span className="min-w-0 flex-1">
+                    <span className={r.level === 'fix' ? 'font-medium' : ''}>{r.text}</span>
+                    {r.level === 'structural' && <span className="mt-0.5 block text-[12px] text-muted/80">Не зависит от суммы, срока и залога.</span>}
+                    {act && <button type="button" onClick={act.run} className="mt-1.5 block text-[13px] font-semibold text-accent-soft transition-colors hover:text-text">{act.label} →</button>}
+                  </span>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {fit && <button onClick={() => apply(m)} disabled={!!creating} className={primaryBtn}>{creating === m.product_id ? 'Создаём…' : 'Подать заявку'}</button>}
+        </div>
+      </Card>
+    )
+  }
   return (
     <>
       <div data-span={12} className="flex flex-wrap items-center gap-2 text-[14px]">
         <span className="rounded-full bg-surface-2 px-3.5 py-1.5 font-display font-semibold tabular-nums">{rub(need.amount_rub)}</span>
         <span className="rounded-full bg-surface-2 px-3.5 py-1.5">{need.term_months} мес.</span>
         <span className="rounded-full bg-surface-2 px-3.5 py-1.5">{purposes[need.purpose!].title}</span>
+        <span className="rounded-full bg-surface-2 px-3.5 py-1.5">{need.has_collateral ? 'Есть залог' : 'Без залога'}</span>
         <span className="rounded-full bg-surface-2 px-3.5 py-1.5 text-muted">{company.registry.name}</span>
       </div>
-      {items && !fits.length && <p data-span={12} className="text-[14px] leading-snug text-warn">С такими параметрами подходящего кредита нет. Причины — под каждым продуктом. Можно вернуться и поменять сумму, срок или залог.</p>}
+      {items && !fits.length && (
+        <Card span={12} className="tint tone-bad">
+          <div ref={alertRef} className="flex items-start gap-3.5">
+            <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent" aria-hidden><Icon d="M12 8v5M12 16.5v.5M12 3l9 16H3z" size={22} /></span>
+            <div className="min-w-0 flex-1">
+              <h2 role="alert" className="text-[20px] font-semibold leading-tight">Подходящего кредита пока нет</h2>
+              <p className="mt-1 text-[14px] leading-snug text-text/80">С такими параметрами ни один из {items.length} продуктов не подошёл. Ниже — что именно мешает и что можно изменить.</p>
+              {blockers.length > 0 && (
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {blockers.map((b) => {
+                    const act = actionFor(b.kind)
+                    return (
+                      <li key={b.kind} className="flex items-center gap-2 rounded-xl bg-warn/10 py-1.5 pl-3 pr-1.5 text-[13px] ring-1 ring-warn/25">
+                        <span><span className="font-semibold">{BLOCKER_TITLE[b.kind]}</span> <span className="text-muted">· {b.count} из {items.length}</span></span>
+                        {act && <button type="button" onClick={act.run} className="rounded-lg bg-surface-2 px-2.5 py-1 text-[12px] font-semibold hover:bg-surface-3">{act.label}</button>}
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+              {project && planId && (
+                <OwnFundsEditor planId={planId} plan={project.plan} needed={ownNeeded} open={editorOpen} onOpenChange={setEditorOpen}
+                  onRecalculated={(c) => { onPlanChange(c); setEditorOpen(false) }} />
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
       {noFit && (
-        <Card span={12}>
+        <Card span={12} className="tint tone-warn">
           <div className="text-[15px] font-semibold">Что можно изменить, чтобы кредит подошёл</div>
           {!tips && <p className="mt-2 text-[13px] text-muted">Подбираем варианты…</p>}
           {tips && !tips.length && <p className="mt-2 text-[13px] leading-snug text-muted">По одному параметру подходящего варианта нет. Попробуйте изменить сразу несколько условий или обратитесь к специалисту.</p>}

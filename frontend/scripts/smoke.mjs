@@ -93,6 +93,23 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
   check('«Подробный расчёт» открывает «Финансы и кредит»', /Откуда взять/.test(await text(p)))
   await p.goto(`${U}#/new`); await p.waitForTimeout(1000)
   check('из финансов возврат в мастер на тот же шаг', /На что нужны деньги/.test(await text(p)))
+
+  // подбор продукта: заметное «подходящего кредита нет», причины с действиями, пересчёт плана при изменении своих средств
+  await p.locator('#amount').fill('5000000'); await p.getByRole('button', { name: 'Подобрать кредит' }).click(); await p.waitForTimeout(2500)
+  const noFit = await text(p)
+  check('подбор: заметное уведомление «Подходящего кредита пока нет» и главные причины', /Подходящего кредита пока нет/.test(noFit) && /Сумма вне допустимого диапазона/.test(noFit) && /Нужен залог или поручитель/.test(noFit))
+  check('подбор: причины отказа с иконками и действиями («Добавить залог →»)', /Можно исправить/.test(noFit) && /Добавить залог →/.test(noFit) && /Не зависит от суммы, срока и залога/.test(noFit))
+  await p.getByRole('button', { name: 'Изменить свои средства', exact: true }).first().click(); await p.waitForTimeout(400)
+  await p.locator('#own-funds').fill('90000'); await p.getByRole('button', { name: 'Пересчитать план' }).click(); await p.waitForTimeout(3500)
+  const replan = await text(p)
+  check('свои средства: план пересчитан на 90 000 ₽, появилась причина «Не хватает своих денег»', /План пересчитан: своих 90\s000/.test(replan) && /Не хватает своих денег/.test(replan))
+  await p.getByRole('button', { name: 'Изменить свои средства', exact: true }).first().click(); await p.waitForTimeout(400)
+  await p.getByRole('button', { name: /^Указать/ }).first().click(); await p.getByRole('button', { name: 'Пересчитать план' }).click(); await p.waitForTimeout(3500)
+  check('«Указать нужную сумму» и пересчёт: причина про свои деньги ушла', !/Не хватает своих денег/.test(await text(p)))
+  await p.goto(`${U}#/finance`); await p.waitForTimeout(1500)
+  await p.getByRole('button', { name: 'Изменить свои средства' }).first().click(); await p.waitForTimeout(400)
+  await p.locator('#own-funds').fill('800000'); await p.getByRole('button', { name: 'Пересчитать план' }).click(); await p.waitForTimeout(3500)
+  check('«Финансы и кредит»: свои средства меняются и пересчитывают план', /800\s000/.test(await text(p)) && /План пересчитан/.test(await text(p)))
   await p.close()
 }
 

@@ -85,7 +85,7 @@ export default function NewApplication() {
       {name === 'Проект' && <ProjectStep company={company} noBusiness={path === 'no_business'} initial={project} onBack={back} onDone={fromPlan} />}
       {name === 'Основатель' && <FounderStep onBack={back} onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Что нужно' && company && <NeedStep company={company} need={need} setNeed={setNeed} project={project} onBack={back} onDone={next} />}
-      {name === 'Продукт' && company && <ProductStep company={company} need={need} setNeed={setNeed} planId={project?.plan_id ?? null} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
+      {name === 'Продукт' && company && <ProductStep company={company} need={need} setNeed={setNeed} planId={project?.plan_id ?? null} project={project} onPlanChange={(c) => { setProject(c); setNeed({ ...need, amount_rub: c.plan.credit.amount_rub ?? (c.plan.finance.funding_gap_rub || null), term_months: c.plan.credit.recommended_term_months ?? need.term_months }) }} onBack={back} onDone={(id) => { setAppId(id); next() }} />}
       {name === 'Заявка' && appId && <ApplicationForm id={appId} onSubmitted={() => { clearProgress(); nav(`/applications/${appId}`) }} />}
     </Screen>
   )
