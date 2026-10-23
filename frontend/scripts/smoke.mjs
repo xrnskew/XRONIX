@@ -80,6 +80,16 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
   check('кнопка по плану: шаги Цель → Основатель, без «Проект»', /Основатель/.test(wiz) && !/Цель\s+\d\s+Проект/.test(wiz))
   await p.goto(`${U}#/profile`); await p.waitForTimeout(600); await p.goto(`${U}#/new`); await p.waitForTimeout(900)
   check('возврат в мастер: тот же шаг «Основатель»', /Основатель/.test(await text(p)))
+  await p.getByRole('button', { name: /Подставить тестовый/ }).click(); await p.waitForTimeout(300)
+  await p.getByRole('button', { name: 'Продолжить' }).click(); await p.waitForTimeout(1500)
+  const need = await text(p)
+  check('«Что нужно»: цель, сумма и срок подписаны «Рекомендовано по вашему плану»', (need.match(/Рекомендовано по вашему плану/g) || []).length === 3)
+  await p.locator('#amount').fill('1000000'); await p.waitForTimeout(300)
+  check('«Что нужно»: изменили сумму — «По плану рекомендовано» и «Вернуть»', /По плану рекомендовано/.test(await text(p)) && (await p.getByRole('button', { name: 'Вернуть' }).count()) === 1)
+  await p.getByRole('button', { name: /Подробный расчёт/ }).click(); await p.waitForTimeout(1300)
+  check('«Подробный расчёт» открывает «Финансы и кредит»', /Откуда взять/.test(await text(p)))
+  await p.goto(`${U}#/new`); await p.waitForTimeout(1000)
+  check('из финансов возврат в мастер на тот же шаг', /На что нужны деньги/.test(await text(p)))
   await p.close()
 }
 
