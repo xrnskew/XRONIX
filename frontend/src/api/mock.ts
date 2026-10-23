@@ -10,6 +10,9 @@ import { DEMO_ANALYST, DEMO_CLIENT, demoAccount } from './demoAccounts'
 
 // Мок-бэкенд в памяти: те же вызовы и формы ответов, что в /contracts/api.md.
 // Подсказка для демо: сообщение со словом «!ошибка» вернёт ошибку ИИ, чтобы показать экран ошибки.
+// ответ приходит строкой «Вопрос? Ответ»: берём только ответ
+const answerOf = (text: string) => (text.split('\n').pop() ?? '').split('?').pop()?.trim() ?? ''
+const bareNumber = (t: string) => { const m = t.replace(/\s/g, '').match(/^\d{4,}$/); return m ? Number(m[0]) : null }
 const delay = (ms = 600) => new Promise((r) => setTimeout(r, ms))
 const now = () => new Date().toISOString()
 
@@ -96,7 +99,7 @@ export const mockApi: Api = {
     if (sphere) st.sphere = sphere
     st.city = findCity(text) ?? st.city ?? (user.city?.trim() || null)
     const amount = parseAmount(text)
-    if (c.asked === 'own_funds') st.own_funds_rub = amount ?? (/нет|ноль|без своих|^0/i.test(text.split('\n').pop() ?? '') ? 0 : st.own_funds_rub)
+    if (c.asked === 'own_funds') st.own_funds_rub = amount ?? bareNumber(answerOf(text)) ?? (/нет|ноль|без своих|^0/i.test(answerOf(text)) ? 0 : st.own_funds_rub)
     else if (amount != null && /есть|свои|своих|накоп|отлож|вложить|бюджет/i.test(text)) st.own_funds_rub = amount
     // Опыт: ответ на заданный вопрос или явные слова в сообщении; непонятный ответ — null, повторно не спрашиваем
     // ответ приходит строкой «Вопрос? Ответ» — разбираем только ответ, слова вопроса не мешают

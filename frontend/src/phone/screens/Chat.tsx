@@ -76,10 +76,12 @@ export default function Chat() {
     catch (e) { setCityError(e instanceof ApiError ? e.message : 'Не удалось сохранить город. Попробуйте ещё раз.') }
     finally { setCitySaving(false) }
   }
+  // «Если своих нет, напишите «нет»» из вопроса про деньги ИИ принимал за ответ «нет» и записывал 0 ₽: в текст кладём нейтральную форму
+  const questionLine = (q: Question) => (q.id === 'own_funds' ? 'Сколько своих денег готовы вложить?' : q.text)
   const submitAnswers = (qs: Question[]) => {
     // в текст уходят все вопросы (пропущенные — как «—»), в answers только отвеченные: пустой ответ backend отклоняет
     const given = (q: Question) => answers[q.id]?.trim()
-    submit(qs.map((q) => `${q.text} ${given(q) || '—'}`).join('\n'), qs.filter(given).map((q) => ({ question_id: q.id, answer: given(q)! })))
+    submit(qs.map((q) => `${questionLine(q)} ${given(q) || '—'}`).join('\n'), qs.filter(given).map((q) => ({ question_id: q.id, answer: given(q)! })))
     setAnswers({})
   }
   const last = messages[messages.length - 1]
