@@ -76,8 +76,8 @@ const sets: Record<string, Item[]> = {
   arch: [
     { slot: 'a', kind: 'chip', text: 'JWT' },
     { slot: 'b', kind: 'check', text: 'JSON по схеме' },
-    { slot: 'c', kind: 'chip', text: 'GigaChat' },
-    { slot: 'd', kind: 'check', text: 'Токен только на сервере', lock: true },
+    { slot: 'c', kind: 'chip', text: 'Правила и база фактов' },
+    { slot: 'd', kind: 'check', text: 'Без внешней сети и ключей', lock: true },
   ],
   team: [
     { slot: 'a', kind: 'stat', value: '3', label: 'человека в команде' },

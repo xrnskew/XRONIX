@@ -183,13 +183,13 @@ function Diagram() {
   const nodes = [
     { t: 'Фронтенд', s: 'React' },
     { t: 'Бэкенд', s: 'база, память, проверка' },
-    { t: 'ИИ-сервис', s: 'промпты, JSON' },
-    { t: 'GigaChat', s: 'модель' },
+    { t: 'ИИ-сервис', s: 'правила, JSON' },
+    { t: 'База фактов', s: 'Росстат, OpenStreetMap' },
   ]
   const links = ['JWT', 'HTTP', 'API']
   const fade = (i: number) => ({ opacity: on ? 1 : 0, transition: on ? `opacity .7s ease ${500 + i * 280}ms` : 'none' })
   return (
-    <svg viewBox="0 0 740 134" className="mt-12 w-full max-w-[740px]" role="img" aria-label="Схема: фронтенд, бэкенд, ИИ-сервис, GigaChat">
+    <svg viewBox="0 0 740 134" className="mt-12 w-full max-w-[740px]" role="img" aria-label="Схема: фронтенд, бэкенд, ИИ-сервис, база фактов">
       <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L7 4L0 8z" fill="#fff" opacity=".6" /></marker></defs>
       {nodes.map((n, k) => (
         <g key={n.t} transform={`translate(${k * 196}, 30)`}>
@@ -212,7 +212,7 @@ function Diagram() {
           <text x={k * 196 + 173} y="56" textAnchor="middle" fontSize="12" fill="#fff" style={{ ...fade(k * 2 + 1), opacity: on ? 0.65 : 0 }}>{l}</text>
         </g>
       ))}
-      <text x="418" y="126" textAnchor="middle" fontSize="12.5" fill="#fff" style={{ opacity: on ? 0.65 : 0, transition: on ? 'opacity .8s ease 2s' : 'none' }}>замок: здесь хранится токен GigaChat</text>
+      <text x="418" y="126" textAnchor="middle" fontSize="12.5" fill="#fff" style={{ opacity: on ? 0.65 : 0, transition: on ? 'opacity .8s ease 2s' : 'none' }}>замок: ИИ-сервис без внешней сети и ключей</text>
     </svg>
   )
 }
@@ -221,7 +221,7 @@ export function Arch() {
   return (
     <Section id="arch">
       <SplitText text="Фронт не ходит в ИИ напрямую" className={h2} />
-      <Reveal delay={450}><p className={leadCls}>Токен GigaChat живёт только на сервере. Бэкенд собирает контекст, проверяет JSON и хранит данные. ИИ-сервис ничего не хранит.</p></Reveal>
+      <Reveal delay={450}><p className={leadCls}>ИИ-сервис работает на правилах и локальной базе фактов: без внешних нейросетей, ключей и платных API. Бэкенд собирает контекст, проверяет JSON и хранит данные. ИИ-сервис ничего не хранит.</p></Reveal>
       <Diagram />
     </Section>
   )
@@ -231,7 +231,7 @@ export function Team() {
   const people = [
     ['Александр', 'Frontend, капитан', 'Лендинг и кабинет'],
     ['Илья', 'Backend', 'Авторизация, база, память, проверка ответов ИИ'],
-    ['Даня', 'AI', 'GigaChat, вопросы, строгий JSON-план'],
+    ['Даня', 'AI', 'Правила диалога, база фактов, строгий JSON-план'],
   ]
   return (
     <Section id="team" tint>
