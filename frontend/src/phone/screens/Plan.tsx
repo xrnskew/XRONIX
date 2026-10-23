@@ -60,7 +60,7 @@ export default function PlanScreen() {
         </div>
         <div className={`grid grid-cols-3 gap-2 ${wide ? '' : 'mt-5'}`}>
           <Big label="На старт" {...shortParts(p.finance.startup_cost_rub)} wide={wide} />
-          <Big label="Прибыль в мес." {...shortParts(p.finance.monthly_profit_rub)} tone="ok" wide={wide} />
+          <Big label="Прибыль в мес." {...shortParts(p.finance.monthly_profit_rub)} tone={p.finance.monthly_profit_rub > 0 ? 'ok' : 'bad'} wide={wide} />
           <Big label="Окупится за" value={p.finance.payback_months == null ? '—' : String(p.finance.payback_months)} unit="мес." tone={p.finance.payback_months == null ? 'bad' : p.finance.payback_months <= 12 ? 'ok' : p.finance.payback_months <= 24 ? 'warn' : 'bad'} wide={wide} />
         </div>
       </div>

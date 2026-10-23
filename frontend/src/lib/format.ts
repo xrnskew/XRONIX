@@ -14,9 +14,11 @@ export function annuity(amount: number, ratePercent: number, months: number) {
 
 // Крупное число и единица раздельно: «1,5» и «млн ₽» (для больших цифр на карточках)
 export function shortParts(n: number): { value: string; unit: string } {
-  if (n >= 1_000_000) return { value: (n / 1_000_000).toFixed(1).replace('.0', '').replace('.', ','), unit: 'млн ₽' }
-  if (n >= 1000) return { value: String(Math.round(n / 1000)), unit: 'тыс ₽' }
-  return { value: String(n), unit: '₽' }
+  // убыток: знак «−» перед числом, дальше те же единицы, что у прибыли («−675 тыс ₽»)
+  const sign = n < 0 ? '−' : '', a = Math.abs(n)
+  if (a >= 1_000_000) return { value: sign + (a / 1_000_000).toFixed(1).replace('.0', '').replace('.', ','), unit: 'млн ₽' }
+  if (a >= 1000) return { value: sign + String(Math.round(a / 1000)), unit: 'тыс ₽' }
+  return { value: sign + String(a), unit: '₽' }
 }
 
 // Русское склонение: plural(3, ['шаг', 'шага', 'шагов']) -> 'шага'

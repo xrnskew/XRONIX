@@ -272,8 +272,8 @@ function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type:
       <div className="text-[20px] font-semibold leading-tight tracking-tight">{reply.plan.title}</div>
       <div className="grid grid-cols-3 gap-3">
         <div><div className="text-[12px] text-muted">На старт</div><div className="mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums">{money(f.startup_cost_rub)}</div></div>
-        <div><div className="text-[12px] text-muted">Прибыль в мес.</div><div className="mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums text-ok">{money(f.monthly_profit_rub)}</div></div>
-        <div><div className="text-[12px] text-muted">Окупаемость</div><div className={`mt-0.5 text-[16px] font-semibold ${paybackTone(f.payback_months)}`}>{f.payback_months ?? '—'} мес.</div></div>
+        <div><div className="text-[12px] text-muted">Прибыль в мес.</div><div className={`mt-0.5 whitespace-nowrap text-[16px] font-semibold tabular-nums ${f.monthly_profit_rub > 0 ? 'text-ok' : 'text-accent'}`}>{money(f.monthly_profit_rub)}</div></div>
+        <div><div className="text-[12px] text-muted">Окупаемость</div><div className={`mt-0.5 text-[16px] font-semibold ${paybackTone(f.payback_months)}`}>{f.payback_months == null ? 'не окупается' : `${f.payback_months} мес.`}</div></div>
       </div>
       {total > 0 && (
         <div>
