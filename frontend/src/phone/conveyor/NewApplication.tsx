@@ -54,6 +54,9 @@ export default function NewApplication() {
   useEffect(() => { saveProgress({ path, step, company, project, need, appId }) }, [path, step, company, project, need, appId])
   const nav = useNavigate()
   const steps = preset && path !== 'current' ? PATHS[path].filter((s) => s !== 'Проект') : PATHS[path], name = steps[step]
+  // до выбора цели число шагов зависит от пути: «5–6», а не пять шагов степпера, которые верны только для одного пути
+  const lens = (Object.keys(PATHS) as Path[]).map((k) => (preset && k !== 'current' ? PATHS[k].filter((s) => s !== 'Проект') : PATHS[k]).length)
+  const stepRange = Math.min(...lens) === Math.max(...lens) ? String(lens[0]) : `${Math.min(...lens)}–${Math.max(...lens)}`
   const next = () => setStep(step + 1), back = () => setStep(step - 1)
 
   const usePlan = (c: CalculatedPlan) => {
@@ -66,7 +69,9 @@ export default function NewApplication() {
   return (
     <Screen title="Новая заявка" bodyClass="wizard">
       <div data-span={12} className="flex flex-wrap items-center justify-between gap-2">
-        <Steps items={steps} current={step} />
+        {name === 'Цель'
+          ? <p className="text-[14px] text-muted"><span className="font-semibold text-text">Шаг 1 из {stepRange}.</span> Выберите цель, остальные шаги зависят от неё.</p>
+          : <Steps items={steps} current={step} />}
         {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}>Начать заново</button>}
       </div>
       {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
