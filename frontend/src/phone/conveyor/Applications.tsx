@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { conveyor } from '../../api/conveyor'
 import type { ApplicationListItem, FeedItem } from '../../types/conveyor'
 import { rub } from '../../lib/format'
-import { Card, EmptyState, Screen, Skeleton } from '../ui'
+import { Card, EmptyState, Screen, Skeleton, Widget } from '../ui'
+import { SatCard } from '../../landing/Satellites'
 import { ErrorText, StatusBadge, dateRu, ghostBtn, primaryBtn, productNames, whoseMove, type Move, statusTone } from './parts'
 import { MiniTrack } from './Track'
 import { usePolling } from '../../lib/usePolling'
@@ -53,6 +54,18 @@ export function Applications() {
           </EmptyState>
         </Card>
       )}
+      {items && items.length > 0 && (() => {
+        const mine = items.filter((a) => whoseMove(a.status) === 'you'), bank = items.filter((a) => whoseMove(a.status) === 'bank'), ok = items.filter((a) => a.status === 'funded' || a.status === 'approved')
+        return (
+          <div data-span={12} className="flex flex-wrap items-start gap-4">
+            <Widget d={0}><SatCard it={{ slot: 'a', kind: 'stat', value: String(items.length), label: `всего заявок, ${bank.length} у банка` }} /></Widget>
+            <Widget d={1}>{mine[0]
+              ? <Link to={`/applications/${mine[0].id}`} className="block"><SatCard it={{ slot: 'a', kind: 'stat', value: String(mine.length), label: `ждут вас: ${mine[0].number} →` }} /></Link>
+              : <SatCard it={{ slot: 'a', kind: 'check', text: 'От вас ничего не нужно' }} />}</Widget>
+            {ok.length > 0 && <Widget d={2}><SatCard it={{ slot: 'a', kind: 'stat', value: String(ok.length), label: `одобрено и выдано, ${rub(ok.reduce((n, a) => n + a.amount_rub, 0))}`, ok: true }} /></Widget>}
+          </div>
+        )
+      })()}
       {items && items.length > 0 && GROUPS.map((g, gi) => {
         const before = GROUPS.slice(0, gi).reduce((n, h) => n + items.filter((a) => whoseMove(a.status) === h.move).length, 0)
         const list = items.filter((a) => whoseMove(a.status) === g.move).sort((x, y) => y.updated_at.localeCompare(x.updated_at))

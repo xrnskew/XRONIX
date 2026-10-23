@@ -9,14 +9,14 @@ import { alfaProducts } from '../data/alfaProducts'
 // Показываются от 1280 px (решает Landing): на более узких экранах рядом с телефоном нет места.
 
 type Slot = 'a' | 'b' | 'c' | 'd'
-type Item =
+export type Item =
   | { slot: Slot; kind: 'user' | 'ai'; text: string }
   | { slot: Slot; kind: 'stat'; value: string; label: string; ok?: boolean }
   | { slot: Slot; kind: 'chip'; text: string; active?: boolean }
   | { slot: Slot; kind: 'check'; text: string; lock?: boolean }
   | { slot: Slot; kind: 'typing' }
   | { slot: Slot; kind: 'gauge'; value: number }
-  | { slot: Slot; kind: 'bars' }
+  | { slot: Slot; kind: 'bars'; data?: { month: number; revenue_rub: number; expenses_rub: number }[] }
 
 // Карточки стоят колонкой СЛЕВА от телефона и не заходят на экран: экран должен оставаться читаемым.
 // Под колонку Landing сдвигает телефон вправо на RAIL/2. Небольшой сдвиг dx делает колонку «живой».
@@ -109,7 +109,7 @@ export default function Satellites({ slide, show, k = 1 }: { slide: string; show
         <div key={shown + it.slot} className="absolute" style={{ ...slotStyle(it.slot, k), width: 'max-content', transformOrigin: 'right center', transform: `translateZ(${SLOTS[it.slot].z * k}px) scale(${k})` }}>
           <div className="sat-float" style={{ animationDelay: `${-i * 1.7}s`, animationDuration: `${5.5 + i * 0.9}s` }}>
             <div className={`sat ${phase === 'in' ? 'sat-in' : 'sat-out'}`} style={{ animationDelay: phase === 'in' ? `${120 + i * 110}ms` : '0ms' }}>
-              <Card it={it} />
+              <SatCard it={it} />
             </div>
           </div>
         </div>
@@ -118,9 +118,9 @@ export default function Satellites({ slide, show, k = 1 }: { slide: string; show
   )
 }
 
-const box = 'rounded-2xl bg-[#141416]/95 px-4 py-3 text-white shadow-[0_24px_40px_-14px_rgba(0,0,0,.8)] ring-1 ring-white/10'
+export const box = 'rounded-2xl bg-[#141416]/95 px-4 py-3 text-white shadow-[0_24px_40px_-14px_rgba(0,0,0,.8)] ring-1 ring-white/10'
 
-function Card({ it }: { it: Item }) {
+export function SatCard({ it }: { it: Item }) {
   switch (it.kind) {
     case 'user':
       return <div className="max-w-[190px] rounded-[18px] rounded-br-md bg-fill px-4 py-2.5 text-[14px] font-medium leading-snug text-white shadow-[0_18px_34px_-12px_rgba(224,42,30,.7)]">{it.text}</div>
@@ -158,7 +158,7 @@ function Card({ it }: { it: Item }) {
       )
     }
     case 'bars': {
-      const data = mockPlan.finance.revenue_forecast
+      const data = it.data ?? mockPlan.finance.revenue_forecast
       const max = Math.max(...data.map((m) => Math.max(m.revenue_rub, m.expenses_rub)))
       return (
         <div className={box}>

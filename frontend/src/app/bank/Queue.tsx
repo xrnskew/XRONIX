@@ -4,7 +4,8 @@ import { errorText } from '../../api'
 import { bank } from '../../api/bank'
 import type { QueueItem, Status } from '../../types/conveyor'
 import { rub } from '../../lib/format'
-import { Card, Screen, Skeleton } from '../../phone/ui'
+import { Card, Screen, Skeleton, Widget } from '../../phone/ui'
+import { SatCard } from '../../landing/Satellites'
 import { ErrorText, StatusBadge, productNames } from '../../phone/conveyor/parts'
 import { usePolling } from '../../lib/usePolling'
 import { statuses, gradeTone } from './shared'
@@ -36,6 +37,17 @@ export default function Queue() {
       <div data-span={12} className="flex flex-wrap gap-2">
         {FILTERS.map((f, i) => <button key={f.label} onClick={() => setFilter(i)} aria-pressed={filter === i} className={`min-h-9 rounded-full px-3.5 text-[14px] transition-colors ${filter === i ? 'bg-fill text-white' : 'bg-surface-2 hover:bg-surface-3'}`}>{f.label}{all && <span className={`ml-1.5 tabular-nums ${filter === i ? 'text-white/80' : 'text-muted'}`}>{all.filter((q) => inFilter(i, q)).length}</span>}</button>)}
       </div>
+      {all && all.length > 0 && (() => {
+        const wait = all.filter((q) => q.status === 'manual_review'), longest = wait.reduce((m, q) => Math.max(m, q.waiting_minutes), 0)
+        const gradeA = all.filter((q) => q.grade === 'A').length
+        return (
+          <div data-span={12} className="flex flex-wrap items-start gap-4">
+            <Widget d={0}><SatCard it={{ slot: 'a', kind: 'stat', value: String(wait.length), label: `ждут решения из ${all.length}` }} /></Widget>
+            <Widget d={1}>{wait.length ? <SatCard it={{ slot: 'a', kind: 'stat', value: waited(longest), label: 'дольше всех ждёт' }} /> : <SatCard it={{ slot: 'a', kind: 'check', text: 'Очередь пуста' }} />}</Widget>
+            <Widget d={2}><SatCard it={{ slot: 'a', kind: 'stat', value: String(gradeA), label: 'заявок класса A', ok: true }} /></Widget>
+          </div>
+        )
+      })()}
       <ErrorText>{error}</ErrorText>
       {!items && !error && <Skeleton />}
       {items?.length === 0 && <Card span={12}><p className="text-[15px] text-muted">{EMPTY[filter]}</p></Card>}

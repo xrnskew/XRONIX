@@ -13,6 +13,9 @@ import { Applications, Feed } from '../phone/conveyor/Applications'
 import BankApp from './bank/BankApp'
 import { Conveyor, Icon, Logo, Wide } from '../phone/ui'
 import { useMediaQuery } from '../lib/useMediaQuery'
+import Orbs from './Orbs'
+import NextStepFloat from '../phone/NextStepFloat'
+import ChatRail from '../phone/ChatRail'
 import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 import Sidebar from './Sidebar'
 
@@ -117,7 +120,7 @@ function Shell() {
             <Route path="/applications/:id" element={<ApplicationView />} />
             <Route path="/new" element={<FreshWizard />} />
             <Route path="/feed" element={<Feed />} />
-            <Route path="/chat" element={<div className="mx-auto h-full max-w-[880px]"><Chat /></div>} />
+            <Route path="/chat" element={<div className="mx-auto flex h-full max-w-[1180px] justify-center gap-5 px-2"><div className="h-full min-w-0 max-w-[820px] flex-1"><Chat /></div><ChatRail /></div>} />
             <Route path="/plan" element={<PlanRoute><PlanScreen /></PlanRoute>} />
             <Route path="/finance" element={<PlanRoute><Finance /></PlanRoute>} />
             <Route path="/profile" element={<ProfileScreen />} />
@@ -125,6 +128,7 @@ function Shell() {
           </Routes>
           </div>
         </main>
+        <NextStepFloat />
         {/* узкий экран: боковой панели нет, разделы внизу, как в телефоне */}
         <nav className="mx-3 mb-4 grid grid-cols-5 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
           {tabs.map((t) => (
@@ -145,7 +149,7 @@ export default function DesktopApp() {
     <Wide.Provider value={wide}><Conveyor.Provider value>
       <div className="relative min-h-svh text-text">
         <AppShader />
-        <div className="ambient" aria-hidden />
+        <Orbs />
         <HashRouter>
           <CabinetProvider>
             <ShaderSync />
