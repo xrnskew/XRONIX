@@ -14,8 +14,12 @@ const EXP: Record<string, string> = { none: 'Опыта нет', employee: 'Ра
 const slot = 'a' as const
 
 export default function ChatRail() {
-  const { messages, plan, planId, busy, user } = useCabinet()
+  const { messages, planId: openedPlanId, plan: openedPlan, busy, user } = useCabinet()
   const nav = useNavigate()
+  // план берём из самого диалога: в кабинете мог остаться план другого, ранее открытого чата
+  const planReply = [...messages].reverse().find((m) => m.reply?.type === 'plan')?.reply
+  const plan = planReply?.type === 'plan' ? (openedPlanId === planReply.plan_id && openedPlan ? openedPlan : planReply.plan) : null
+  const planId = planReply?.type === 'plan' ? planReply.plan_id : null
   const users = messages.filter((m) => m.role === 'user')
   const given = (id: string) => users.flatMap((m) => m.answers ?? []).filter((a) => a.question_id === id).pop()?.answer
   const sphereKey = detectSphere(users.map((m) => m.text ?? ''))
