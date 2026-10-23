@@ -1,7 +1,7 @@
 import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Badge, Button, Card, Screen, SectionTitle, Skeleton, Stat, Wide, Conveyor } from '../ui'
+import { Badge, Button, Card, EmptyState, Screen, SectionTitle, Skeleton, Stat, Wide, Conveyor } from '../ui'
 import { useCabinet } from '../CabinetContext'
 import { annuity, decimal, rub, short } from '../../lib/format'
 import { ALFA_DISCLAIMER, alfaProducts, alfaSnapshotIsStale, matchProducts, productTerm } from '../../data/alfaProducts'
@@ -50,9 +50,10 @@ export default function Finance() {
   if (!plan)
     return (
       <Screen title="Финансы и кредит">
-        <Card className="space-y-3 py-8 text-center">
-          <p className="mx-auto max-w-[240px] text-[15px] leading-snug text-muted">Расчёт появится, когда будет готов план.</p>
-          <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
+        <Card>
+          <EmptyState icon="M3 7h18v10H3zM12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM6.5 10v.01M17.5 14v.01" title="Расчёта пока нет" text="Он появится, когда будет готов план: сколько своих денег, сколько не хватает и какой платёж потянет бизнес.">
+            <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
+          </EmptyState>
         </Card>
       </Screen>
     )

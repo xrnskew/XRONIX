@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../../api'
 import type { AiReply, Answer, ChatMessage, ChatSummary, Question } from '../../types/plan'
 import { Chip, Conveyor, EmptyState, Logo, Wide, Icon } from '../ui'
@@ -43,7 +43,10 @@ export default function Chat() {
   const [citySaving, setCitySaving] = useState(false)
   const [cityError, setCityError] = useState('')
   const needsCity = !demo && !!user && !user.city?.trim()
-  const [view, setView] = useState<'chat' | 'list'>('chat')
+  const loc = useLocation()
+  // из боковой панели: «Все диалоги →» открывает список, выбор диалога — сам чат
+  const [view, setView] = useState<'chat' | 'list'>((loc.state as { list?: boolean } | null)?.list ? 'list' : 'chat')
+  useEffect(() => { setView((loc.state as { list?: boolean } | null)?.list ? 'list' : 'chat') }, [loc.key]) // eslint-disable-line react-hooks/exhaustive-deps
   const [text, setText] = useState('')
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const list = useRef<HTMLDivElement>(null)
