@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../../api'
+import { useCabinet } from '../CabinetContext'
 import type { Company } from '../../types/conveyor'
 import { Screen } from '../ui'
 import { ErrorText, Steps } from './parts'
@@ -15,7 +16,7 @@ import FounderStep from './wizard/FounderStep'
 
 export type { CalculatedPlan, Need } from './wizard/types'
 
-type Progress = { path: Path; step: number; company: Company | null; project: CalculatedPlan | null; need: Need; appId: string | null }
+type Progress = { path: Path; step: number; company: Company | null; project: CalculatedPlan | null; need: Need; appId: string | null; usedPlan?: boolean }
 const EMPTY_NEED: Need = { purpose: null, amount_rub: null, term_months: 24, has_collateral: false }
 const PROGRESS_KEY = 'xronix_wizard', PROGRESS_TTL = 60 * 60 * 1000
 function loadProgress(): Progress | null {
@@ -45,17 +46,19 @@ export default function NewApplication() {
   const [project, setProject] = useState<CalculatedPlan | null>(saved?.project ?? null)
   const [preset, setPreset] = useState<CalculatedPlan | null>(null)
   const [presetError, setPresetError] = useState('')
+  const [usedPlan, setUsedPlan] = useState(saved?.usedPlan ?? false) // заявка идёт по готовому плану (кнопка на карточке плана): шаг «Проект» пропускаем
+  const { plan: myPlan, planId } = useCabinet()
   useEffect(() => {
     if (!planParam) return
     api.getPlan(planParam).then((r) => setPreset({ plan_id: r.plan_id, plan: r.plan })).catch(() => setPresetError('Не удалось открыть план из чата. Можно посчитать проект заново.'))
   }, [planParam])
   const [need, setNeed] = useState<Need>(saved?.need ?? EMPTY_NEED)
   const [appId, setAppId] = useState<string | null>(saved?.appId ?? null)
-  useEffect(() => { saveProgress({ path, step, company, project, need, appId }) }, [path, step, company, project, need, appId])
+  useEffect(() => { saveProgress({ path, step, company, project, need, appId, usedPlan }) }, [path, step, company, project, need, appId, usedPlan])
   const nav = useNavigate()
-  const steps = preset && path !== 'current' ? PATHS[path].filter((s) => s !== 'Проект') : PATHS[path], name = steps[step]
+  const steps = usedPlan ? PATHS[path].filter((s) => s !== 'Проект') : PATHS[path], name = steps[step]
   // до выбора цели число шагов зависит от пути: «5–6», а не пять шагов степпера, которые верны только для одного пути
-  const lens = (Object.keys(PATHS) as Path[]).map((k) => (preset && k !== 'current' ? PATHS[k].filter((s) => s !== 'Проект') : PATHS[k]).length)
+  const lens = (Object.keys(PATHS) as Path[]).map((k) => PATHS[k].length)
   const stepRange = Math.min(...lens) === Math.max(...lens) ? String(lens[0]) : `${Math.min(...lens)}–${Math.max(...lens)}`
   const next = () => setStep(step + 1), back = () => setStep(step - 1)
 
@@ -72,10 +75,12 @@ export default function NewApplication() {
         {name === 'Цель'
           ? <p className="text-[14px] text-muted"><span className="font-semibold text-text">Шаг 1 из {stepRange}.</span> Выберите цель, остальные шаги зависят от неё.</p>
           : <Steps items={steps} current={step} />}
-        {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}>Начать заново</button>}
+        {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setUsedPlan(false); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}>Начать заново</button>}
       </div>
       {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
-      {name === 'Цель' && <GoalStep preset={preset} onPick={(p) => { setPath(p); if (preset && p !== 'current') usePlan(preset); else { setProject(null); setNeed(EMPTY_NEED) } setStep(1) }} />}
+      {name === 'Цель' && <GoalStep plan={preset ?? (myPlan && planId ? { plan_id: planId, plan: myPlan } : null)}
+        onPick={(p) => { setUsedPlan(false); setPath(p); setProject(null); setNeed(EMPTY_NEED); setStep(1) }}
+        onPickPlan={(c) => { setUsedPlan(true); setPath('no_business'); usePlan(c); setStep(1) }} />}
       {name === 'Компания' && <CompanyStep onDone={(c) => { setCompany(c); next() }} />}
       {name === 'Проект' && <ProjectStep company={company} noBusiness={path === 'no_business'} initial={project} onBack={back} onDone={fromPlan} />}
       {name === 'Основатель' && <FounderStep onBack={back} onDone={(c) => { setCompany(c); next() }} />}
