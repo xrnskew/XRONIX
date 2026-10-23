@@ -5,7 +5,7 @@ import { DEMO_FOUNDER_INN, demoFinancials } from '../../api/mockData'
 import type { Application, ApplicationDraft, Collateral, CollateralKind, Financials } from '../../types/conveyor'
 import { rub } from '../../lib/format'
 import { Card, Chip, SectionTitle, Skeleton } from '../ui'
-import { ErrorText, Label, MoneyInput, collateralKinds, input, primaryBtn, productNames, purposes } from './parts'
+import { ErrorText, Label, MoneyInput, collateralKinds, input, miniBtn, primaryBtn, productNames, purposes } from './parts'
 
 const FIELD_TEXT: Record<string, string> = {
   'financials.revenue_12m_rub': 'выручка за 12 месяцев',
@@ -81,7 +81,7 @@ export default function ApplicationForm({ id, onSubmitted }: { id: string; onSub
           <div><dt className="text-[12px] text-muted">Сумма и срок</dt><dd className="tabular-nums">{rub(app.amount_rub)} · {app.term_months} мес.</dd></div>
           <div><dt className="text-[12px] text-muted">Цель</dt><dd>{purposes[app.purpose].title}</dd></div>
         </dl>
-        {example && <button onClick={() => { dirty.current = true; setFin(example.financials); if (example.collateral) setCol(example.collateral); setConsent(true) }} className="mt-3 text-[13px] text-muted underline underline-offset-2 hover:text-text">Демо: заполнить данными компании-сценария</button>}
+        {example && <button onClick={() => { dirty.current = true; setFin(example.financials); if (example.collateral) setCol(example.collateral); setConsent(true) }} className={`${miniBtn} mt-3`}>Демо: заполнить данными компании-сценария</button>}
       </Card>
 
       <Card span={needsCollateral ? 6 : 12}>

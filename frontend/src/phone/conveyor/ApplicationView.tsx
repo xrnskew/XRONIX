@@ -5,7 +5,7 @@ import { conveyor } from '../../api/conveyor'
 import { AUTO_STATUSES, type Application, type Offer } from '../../types/conveyor'
 import { decimal, rub } from '../../lib/format'
 import { Card, Screen, SectionTitle, Skeleton, Stat } from '../ui'
-import { ErrorText, StatusBadge, dateRu, ghostBtn, input, primaryBtn, productNames, statusTone, whoseMove } from './parts'
+import { ErrorText, StatusBadge, dateRu, ghostBtn, input, miniBtn, primaryBtn, productNames, statusTone, whoseMove } from './parts'
 
 // Блок «Ваш ход» окрашен по смыслу статуса: зелёный — одобрено, жёлтый — нужны данные или решение, красный — остальное
 const MOVE_BOX: Record<string, string> = { ok: 'bg-ok/10 ring-1 ring-ok/30', warn: 'bg-warn/10 ring-1 ring-warn/30', action: 'bg-accent/10 ring-1 ring-accent/30', bad: 'bg-accent/10 ring-1 ring-accent/30' }
@@ -99,7 +99,7 @@ export default function ApplicationView() {
             </li>
           ))}
         </ol>
-        {(app.status === 'info_requested') && <button onClick={() => act('withdraw')} disabled={busy} className="mt-4 text-[13px] text-muted underline underline-offset-2 hover:text-accent">Отозвать заявку</button>}
+        {(app.status === 'info_requested') && <button onClick={() => act('withdraw')} disabled={busy} className={`${miniBtn} mt-4 hover:text-accent`}>Отозвать заявку</button>}
       </Card>
     </Screen>
   )

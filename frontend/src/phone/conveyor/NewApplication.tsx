@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../../api'
 import { useCabinet } from '../CabinetContext'
 import type { Company } from '../../types/conveyor'
-import { Screen } from '../ui'
-import { ErrorText, Steps } from './parts'
+import { Icon, Screen } from '../ui'
+import { ErrorText, Steps, miniBtn } from './parts'
 import ApplicationForm from './ApplicationForm'
 import { PATHS, type CalculatedPlan, type Need, type Path } from './wizard/types'
 import GoalStep from './wizard/GoalStep'
@@ -75,7 +75,7 @@ export default function NewApplication() {
         {name === 'Цель'
           ? <p className="text-[14px] text-muted"><span className="font-semibold text-text">Шаг 1 из {stepRange}.</span> Выберите цель, остальные шаги зависят от неё.</p>
           : <Steps items={steps} current={step} />}
-        {step > 0 && <button type="button" className="text-[13px] text-muted underline decoration-white/20 underline-offset-2 hover:text-text" onClick={() => { clearProgress(); setUsedPlan(false); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}>Начать заново</button>}
+        {step > 0 && <button type="button" className={miniBtn} onClick={() => { clearProgress(); setUsedPlan(false); setPath('current'); setStep(0); setCompany(null); setProject(null); setAppId(null); setNeed(EMPTY_NEED) }}><Icon d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8M3 3v5h5" size={15} />Начать заново</button>}
       </div>
       {presetError && <div data-span={12}><ErrorText>{presetError}</ErrorText></div>}
       {name === 'Цель' && <GoalStep plan={preset ?? (myPlan && planId ? { plan_id: planId, plan: myPlan } : null)}
