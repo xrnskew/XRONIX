@@ -54,20 +54,20 @@ button { font: inherit; cursor: pointer; }
    Правила без @layer, поэтому перекрывают bg-surface у карточек; hover у ссылок-карточек задан ниже. */
 :root {
   --noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  --glass-sheen: linear-gradient(150deg, rgba(255,255,255,.11), rgba(255,255,255,.025) 42%, rgba(255,255,255,.055));
+  --glass-sheen: linear-gradient(150deg, rgba(255,255,255,.06), rgba(255,255,255,.015) 45%, rgba(255,255,255,.03));
 }
 .card-ring, .glass {
   background-color: rgba(20,20,25,.5);
   background-image: var(--noise), var(--glass-sheen);
   -webkit-backdrop-filter: blur(16px) saturate(1.45);
   backdrop-filter: blur(16px) saturate(1.45);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 1.5px 0 rgba(255,255,255,.2), inset 0 -26px 34px -28px rgba(0,0,0,.6), 0 22px 46px -26px rgba(0,0,0,.8);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.1), 0 18px 40px -26px rgba(0,0,0,.7);
 }
 a.card-ring:hover, button.card-ring:hover, .card-ring.group:hover { background-color: rgba(48,48,56,.52); }
 .card-ring.hero-card, .hero-card {
   background-color: rgba(34,16,18,.5);
-  background-image: var(--noise), linear-gradient(145deg, rgba(214,58,44,.42), rgba(70,26,28,.3) 52%, rgba(255,255,255,.05));
-  box-shadow: inset 0 0 0 1px rgba(255,120,104,.22), inset 0 1.5px 0 rgba(255,170,150,.34), inset 0 -26px 34px -28px rgba(0,0,0,.6), 0 24px 50px -26px rgba(0,0,0,.8);
+  background-image: var(--noise), linear-gradient(145deg, rgba(214,58,44,.26), rgba(70,26,28,.2) 55%, rgba(255,255,255,.03));
+  box-shadow: inset 0 0 0 1px rgba(255,120,104,.16), inset 0 1px 0 rgba(255,170,150,.18), 0 18px 40px -26px rgba(0,0,0,.7);
 }
 /* боковые панели */
 .glass-side {
@@ -77,14 +77,14 @@ a.card-ring:hover, button.card-ring:hover, .card-ring.group:hover { background-c
   box-shadow: inset -1px 0 0 rgba(255,255,255,.08);
 }
 /* цветные индикаторы: стеклянная пилюля цвета смысла со свечением */
+/* цветные индикаторы: спокойная тонированная пилюля */
 .badge {
   color: var(--tone-text, var(--tone));
-  background-image: linear-gradient(180deg, color-mix(in srgb, var(--tone) 34%, transparent), color-mix(in srgb, var(--tone) 12%, transparent));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 42%, transparent), inset 0 1px 0 rgba(255,255,255,.2);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  background-color: color-mix(in srgb, var(--tone) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 30%, transparent);
 }
 /* главные кнопки и заливки: глянец сверху */
-.bg-fill { background-image: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0) 55%, rgba(0,0,0,.14)); }
+
 @media (prefers-reduced-transparency: reduce) {
   .card-ring, .glass, .glass-side, .badge { -webkit-backdrop-filter: none; backdrop-filter: none; }
   .card-ring, .glass { background-color: rgba(26,26,31,.97); }
@@ -203,9 +203,9 @@ input[type="range"] { height: 4px; }
 .tone-bad { --tone: var(--color-accent); }
 .tone-muted { --tone: var(--color-muted); }
 .tint {
-  background-color: color-mix(in srgb, var(--tone) 7%, rgba(20,20,25,.5));
-  background-image: var(--noise), linear-gradient(135deg, color-mix(in srgb, var(--tone) 26%, transparent), color-mix(in srgb, var(--tone) 5%, transparent) 58%, rgba(255,255,255,.04));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 42%, transparent), inset 0 1.5px 0 color-mix(in srgb, var(--tone) 40%, rgba(255,255,255,.25)), inset 0 -26px 34px -28px rgba(0,0,0,.55), 0 22px 46px -26px rgba(0,0,0,.8);
+  background-color: color-mix(in srgb, var(--tone) 6%, rgba(20,20,25,.5));
+  background-image: var(--noise), linear-gradient(135deg, color-mix(in srgb, var(--tone) 14%, transparent), transparent 58%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone) 32%, transparent), 0 18px 40px -26px rgba(0,0,0,.7);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -219,15 +219,15 @@ input.glass:focus, input.glass:focus-visible { box-shadow: inset 0 0 0 2px var(-
 .ambient {
   position: fixed; inset: 0; z-index: -9; pointer-events: none;
   background:
-    radial-gradient(38% 42% at 18% 88%, rgba(70,104,210,.16), transparent 70%),
-    radial-gradient(30% 34% at 52% 36%, rgba(255,120,60,.05), transparent 70%),
-    radial-gradient(34% 40% at 96% 70%, rgba(214,40,60,.14), transparent 70%);
+    radial-gradient(38% 42% at 18% 88%, rgba(70,104,210,.09), transparent 70%),
+    radial-gradient(30% 34% at 52% 36%, rgba(255,120,60,.03), transparent 70%),
+    radial-gradient(34% 40% at 96% 70%, rgba(214,40,60,.09), transparent 70%);
 }
 
 /* Круги и точки на фоне кабинета */
 @keyframes orb-spin { to { transform: rotate(360deg); } }
-.orb-ring { animation: orb-spin linear infinite; }
-@keyframes orb-drift { 0%, 100% { transform: translate(0, 0); opacity: .25; } 50% { transform: translate(var(--dx), var(--dy)); opacity: 1; } }
+.orb-ring { animation: orb-spin linear infinite; opacity: .7; }
+@keyframes orb-drift { 0%, 100% { transform: translate(0, 0); opacity: .15; } 50% { transform: translate(var(--dx), var(--dy)); opacity: .6; } }
 .orb-dot { animation: orb-drift ease-in-out infinite; }
 .orbs { overflow: hidden; }
 /* плавающие виджеты: медленно покачиваются, у каждого своя фаза */

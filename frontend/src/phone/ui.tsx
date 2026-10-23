@@ -130,9 +130,9 @@ export const EmptyState = ({ icon, title, text, children, ghost, steps }: { icon
   </div>
 )
 
-// Плавающая обёртка для карточек в стиле презентации (SatCard): медленно покачивается, появляется с пружинкой; d — фаза, чтобы карточки качались не в такт
+// Плавающая обёртка для карточек в стиле презентации (SatCard): появляется по очереди (d — порядок), без покачивания
 export const Widget = ({ children, d = 0, className = '' }: { children: ReactNode; d?: number; className?: string }) => (
-  <div className={`sat-float ${className}`} style={{ animationDelay: `${-d * 1.7}s`, animationDuration: `${5.5 + d * 0.9}s` }}>
+  <div className={className}>
     <div className="sat-in" style={{ animationDelay: `${120 + d * 110}ms` }}>{children}</div>
   </div>
 )
