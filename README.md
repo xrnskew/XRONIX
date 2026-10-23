@@ -217,7 +217,7 @@ cd frontend && npm ci && VITE_USE_MOCKS=false npm run dev
 
 ## Версия на дедлайн
 
-Версия на дедлайн — тег `v1.0`, коммит кода `0e859a3`. Сайт: [xronix.ru](https://xronix.ru), API: `https://api.xronix.ru`. После этого коммита в `main` добавлены только изменения README.
+Версия на дедлайн — тег `v1.0`, коммит кода `03db44c`. Сайт: [xronix.ru](https://xronix.ru), API: `https://api.xronix.ru`. После этого коммита в `main` добавлены только изменения README.
 
 ## Команда
 
