@@ -33,7 +33,7 @@ export default function PlanScreen() {
     return (
       <Screen title="План">
         <Card>
-          <EmptyState icon="M4 19V9M10 19V5M16 19v-7M22 19H2" title="Плана пока нет" text="Опишите идею в чате, и ИИ соберёт план: шаги, деньги и кредит, который бизнес потянет.">
+          <EmptyState icon="M4 19V9M10 19V5M16 19v-7M22 19H2" ghost={['На старт', 'Прибыль в мес.', 'Окупаемость']} steps={['Опишите идею','Ответьте на вопросы','Получите план']} title="Плана пока нет" text="Опишите идею в чате, и ИИ соберёт план: шаги, деньги и кредит, который бизнес потянет.">
             <Button onClick={() => nav('/chat')}>Перейти в чат</Button>
             {USE_MOCKS && <Button variant="ghost" onClick={showDemoPlan}>Показать пример</Button>}
           </EmptyState>

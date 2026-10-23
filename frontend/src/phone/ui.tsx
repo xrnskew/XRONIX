@@ -53,7 +53,7 @@ export const Button = ({ children, onClick, variant = 'primary', disabled }: { c
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`h-[52px] w-full rounded-2xl text-[16px] font-semibold transition-all duration-150 active:scale-[.98] ${
+    className={`h-[52px] w-full rounded-2xl px-6 text-[16px] font-semibold transition-all duration-150 active:scale-[.98] ${
       variant === 'primary' ? 'bg-fill text-white shadow-[0_8px_24px_-8px_rgba(255,69,56,.7)] active:bg-brand-deep disabled:bg-surface-3 disabled:text-text/60 disabled:shadow-none' : 'bg-surface-2 text-text active:bg-surface-3 disabled:opacity-40'
     }`}
   >
@@ -101,11 +101,31 @@ export const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
 )
 
 // Пустое состояние: иконка, что здесь будет и главное действие (кнопки передаются детьми)
-export const EmptyState = ({ icon, title, text, children }: { icon: string; title: string; text: string; children?: ReactNode }) => (
+export const EmptyState = ({ icon, title, text, children, ghost, steps }: { icon: string; title: string; text: string; children?: ReactNode; ghost?: string[]; steps?: string[] }) => (
   <div className="flex flex-col items-center px-2 py-8 text-center">
     <span className="pop flex h-16 w-16 items-center justify-center rounded-full bg-accent/12 text-accent-soft ring-1 ring-accent/25" aria-hidden><Icon d={icon} size={28} /></span>
     <p className="mt-4 text-[17px] font-semibold">{title}</p>
     <p className="mt-1 max-w-[360px] text-[14px] leading-snug text-muted">{text}</p>
-    {children && <div className="mt-5 flex flex-wrap justify-center gap-3">{children}</div>}
+    {ghost && (
+      <div className="mt-6 grid w-full max-w-[520px] grid-cols-3 gap-2.5" aria-hidden>
+        {ghost.map((g) => (
+          <div key={g} className="rounded-2xl border border-dashed border-white/10 bg-white/[.03] px-3 py-3 text-left">
+            <div className="text-[12px] text-muted">{g}</div>
+            <div className="mt-1 font-display text-[22px] font-semibold leading-none text-muted/40">—</div>
+          </div>
+        ))}
+      </div>
+    )}
+    {steps && (
+      <ol className="mt-6 flex max-w-[560px] flex-wrap items-center justify-center gap-x-2 gap-y-2 text-[13px] text-muted">
+        {steps.map((t, i) => (
+          <li key={t} className="flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/10 text-[11px] font-semibold text-text tabular-nums">{i + 1}</span>{t}
+            {i < steps.length - 1 && <span aria-hidden className="mx-1 text-muted/40">→</span>}
+          </li>
+        ))}
+      </ol>
+    )}
+    {children && <div className="mt-6 flex flex-wrap justify-center gap-3">{children}</div>}
   </div>
 )

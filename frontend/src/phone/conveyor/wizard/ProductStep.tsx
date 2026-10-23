@@ -6,7 +6,7 @@ import type { Company, MatchItem } from '../../../types/conveyor'
 import { decimal, rub } from '../../../lib/format'
 import { Badge, Card, Icon } from '../../ui'
 import { useCabinet } from '../../CabinetContext'
-import { BLOCKER_TITLE, sortedReasons, summarizeBlockers, type ReasonLevel } from '../../../lib/creditReasons'
+import { BLOCKER_TITLE, classifyReason, sortedReasons, summarizeBlockers, type ReasonLevel } from '../../../lib/creditReasons'
 import OwnFundsEditor from '../OwnFundsEditor'
 import { ErrorText, ghostBtn, miniBtn, primaryBtn, purposes } from '../parts'
 import { type Need, type CalculatedPlan } from './types'
@@ -83,8 +83,14 @@ export default function ProductStep({ company, need, setNeed, planId, project, o
   }
 
   const fits = items?.filter((i) => i.eligible && i.can_apply) ?? []
-  const rest = items?.filter((i) => !(i.eligible && i.can_apply)) ?? []
+  const notFit = items?.filter((i) => !(i.eligible && i.can_apply)) ?? []
+  // продукты только для действующего бизнеса: у нового бизнеса их не исправить ни суммой, ни залогом, поэтому их не считаем причинами отказа и убираем вниз
+  const existingOnly = (m: MatchItem) => m.reasons.some((r) => classifyReason(r).kind === 'business')
+  const rest = notFit.filter((i) => !existingOnly(i))
+  const unavailable = notFit.filter(existingOnly)
   const blockers = summarizeBlockers(rest)
+  // у нового бизнеса единственный продукт — «Старт»: показываем его предел суммы, чтобы было понятно, почему не подошло
+  const startMax = unavailable.length ? rest.flatMap((m) => m.reasons).map((r) => r.match(/^Сумма должна быть .*до ([\d\s\u00a0\u202f]+)\s*₽/)?.[1]?.replace(/\s/g, '')).find(Boolean) : undefined
   const ownNeeded = blockers.find((b) => b.kind === 'own_funds')?.ownFundsNeeded ?? null
   const Group = ({ title, n }: { title: string; n: number }) => <h2 data-span={12} className="flex items-baseline gap-2 pt-2 text-[15px] font-semibold">{title}<span className="text-[13px] font-normal text-muted tabular-nums">{n}</span></h2>
 
@@ -156,14 +162,15 @@ export default function ProductStep({ company, need, setNeed, planId, project, o
             <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-accent/15 text-accent" aria-hidden><Icon d="M12 8v5M12 16.5v.5M12 3l9 16H3z" size={22} /></span>
             <div className="min-w-0 flex-1">
               <h2 role="alert" className="text-[20px] font-semibold leading-tight">Подходящего кредита пока нет</h2>
-              <p className="mt-1 text-[14px] leading-snug text-text/80">С такими параметрами ни один из {items.length} продуктов не подошёл. Ниже — что именно мешает и что можно изменить.</p>
+              <p className="mt-1 text-[14px] leading-snug text-text/80">{unavailable.length ? 'С такими параметрами не подошёл ни один продукт, доступный для нового бизнеса.' : `С такими параметрами ни один из ${items.length} продуктов не подошёл.`} Ниже — что именно мешает и что можно изменить.</p>
+              {startMax && blockers.some((b) => b.kind === 'amount') && <p className="mt-2 text-[14px] leading-snug text-text/80">Для нового бизнеса банк даёт не больше <span className="font-semibold tabular-nums">{rub(Number(startMax))}</span>: это предел продукта «Старт». Остальное нужно покрыть своими деньгами или взять кредит позже, когда бизнес заработает.</p>}
               {blockers.length > 0 && (
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {blockers.map((b) => {
                     const act = actionFor(b.kind)
                     return (
                       <li key={b.kind} className="flex items-center gap-2 rounded-xl bg-warn/10 py-1.5 pl-3 pr-1.5 text-[13px] ring-1 ring-warn/25">
-                        <span><span className="font-semibold">{BLOCKER_TITLE[b.kind]}</span> <span className="text-muted">· {b.count} из {items.length}</span></span>
+                        <span><span className="font-semibold">{BLOCKER_TITLE[b.kind]}</span> <span className="text-muted">· {b.count} из {rest.length}</span></span>
                         {act && <button type="button" onClick={act.run} className="rounded-lg bg-surface-2 px-2.5 py-1 text-[12px] font-semibold hover:bg-surface-3">{act.label}</button>}
                       </li>
                     )
@@ -202,6 +209,21 @@ export default function ProductStep({ company, need, setNeed, planId, project, o
       {fits.map((m) => card(m, true))}
       {rest.length > 0 && <Group title="Не подходят, и что мешает" n={rest.length} />}
       {rest.map((m) => card(m, false))}
+      {unavailable.length > 0 && (
+        <>
+          <Group title="Недоступны: только для действующего бизнеса" n={unavailable.length} />
+          <Card span={12} className="p-0!">
+            <ul className="divide-y divide-white/5">
+              {unavailable.map((m) => (
+                <li key={m.product_id} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-5 py-3 text-[14px]">
+                  <span className="flex items-center gap-2.5 text-muted"><span aria-hidden><Icon d={REASON_ICON.structural} size={16} /></span><span>{m.name}</span></span>
+                  <span className="text-[13px] text-muted/80">Нужны зарегистрированные ИП или компания{m.rate_from_percent != null ? ` · от ${decimal(m.rate_from_percent)}%` : ''}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </>
+      )}
       <div data-span={12}><button onClick={onBack} className={ghostBtn}>Назад</button></div>
       <p data-span={12} className="text-[12px] leading-snug text-muted">Платёж — предварительный, по минимальной ставке продукта. Точные условия банк определит после проверки заявки.</p>
     </>
