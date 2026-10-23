@@ -104,7 +104,7 @@ export default function Chat() {
       </header>
 
       {needsCity && <div className={`${wide ? 'px-8' : 'px-4'} max-h-[50%] overflow-y-auto overscroll-contain pb-3`}>
-        <div className="rounded-2xl bg-surface p-4 ring-1 ring-white/10">
+        <div className="glass rounded-2xl p-4">
           <p className="mb-3 text-[13px] text-muted">Выберите город: от него зависят аренда, спрос и расчёты плана.</p>
           <CityPicker value={cityDraft} onChange={setCityDraft} onSelect={chooseCity} disabled={citySaving} />
           <button type="button" onClick={() => chooseCity(cityDraft)} disabled={!cityDraft.trim() || citySaving}
@@ -162,7 +162,7 @@ export default function Chat() {
       <form className={`flex items-center gap-2 ${wide ? 'px-8 pb-6 pt-3' : 'px-3 pb-2 pt-2'}`} onSubmit={(e) => { e.preventDefault(); submit(text) }}>
         <label className="sr-only" htmlFor="msg">Сообщение</label>
         <input id="msg" value={text} onChange={(e) => setText(e.target.value)} placeholder="Хочу открыть кофейню с собой" maxLength={4000}
-          className={`${wide ? 'h-14 rounded-2xl text-[16px]' : 'h-12 rounded-full text-[15px]'} min-w-0 flex-1 bg-surface px-5 outline-none ring-1 ring-white/5 placeholder:text-muted focus:ring-2 focus:ring-accent`} />
+          className={`${wide ? 'h-14 rounded-2xl text-[16px]' : 'h-12 rounded-full text-[15px]'} glass min-w-0 flex-1 px-5 outline-none placeholder:text-muted focus:ring-2 focus:ring-accent`} />
         <button aria-label="Отправить" className={`flex ${wide ? 'h-14 w-14 rounded-2xl' : 'h-12 w-12 rounded-full'} shrink-0 items-center justify-center bg-fill text-white shadow-[0_8px_20px_-8px_rgba(255,69,56,.8)] transition-opacity disabled:opacity-35`} disabled={busy || !text.trim()}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 19V5M5 12l7-7 7 7" /></svg>
         </button>

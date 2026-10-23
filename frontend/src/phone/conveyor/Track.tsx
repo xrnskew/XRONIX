@@ -19,7 +19,7 @@ export function ConveyorTrack({ status, stage }: { status: Status; stage?: numbe
   const { cur, done, stopped, moving } = state(status, stage)
   return (
     <div>
-      <ol className="flex items-center sm:mb-7" aria-label="Этапы заявки">
+      <ol className="flex items-center sm:mb-12" aria-label="Этапы заявки">
         {STAGES.map((s, i) => {
           const passed = done || i < cur, here = !done && i === cur
           const align = i === 0 ? 'left-0' : i === STAGES.length - 1 ? 'right-0' : 'left-1/2 -translate-x-1/2'

@@ -48,17 +48,17 @@ export default function ApplicationView() {
     <Screen title={`Заявка ${app.number}`} sub={<span className="flex flex-wrap items-center gap-2">{app.company.registry.name} · {productNames[app.product_id]} · {rub(app.amount_rub)} на {app.term_months} мес. <StatusBadge status={app.status} title={app.status_info.title} /></span>}>
       <Card span={12} className="sm:p-6">
         <ConveyorTrack status={app.status} stage={stopStage(app)} />
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-2xl bg-surface-2/60 p-4">
+        <div className="mt-6 grid gap-4 sm:mt-2 sm:grid-cols-2">
+          <div className="rounded-2xl bg-surface-2/60 p-5">
             <div className="text-[13px] text-muted">Что сейчас происходит</div>
-            <p className="mt-1 text-[15px] leading-snug">{app.status_info.now}</p>
+            <p className="mt-1.5 text-[15px] leading-snug">{app.status_info.now}</p>
           </div>
-          <div className={`rounded-2xl p-4 transition-colors ${yourMove ? MOVE_BOX[statusTone(app.status)] ?? MOVE_BOX.action : 'bg-surface-2/60'}`}>
+          <div className={`rounded-2xl p-5 transition-colors ${yourMove ? MOVE_BOX[statusTone(app.status)] ?? MOVE_BOX.action : 'bg-surface-2/60'}`}>
             <div className={`text-[13px] ${yourMove ? MOVE_LABEL[statusTone(app.status)] ?? MOVE_LABEL.action : 'text-muted'}`}>{yourMove ? 'Ваш ход' : 'Что нужно от вас'}</div>
-            <p className="mt-1 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p>
+            <p className="mt-1.5 text-[15px] leading-snug">{app.status_info.action ?? (auto ? 'Ничего, статус обновится сам.' : 'Ничего.')}</p>
           </div>
         </div>
-        {app.plan_id && <Link to={`/plan?plan=${encodeURIComponent(app.plan_id)}`} className="mt-4 inline-block text-[14px] font-medium text-text underline underline-offset-2">Расчёт проекта, на который нужен кредит</Link>}
+        {app.plan_id && <Link to={`/plan?plan=${encodeURIComponent(app.plan_id)}`} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-full bg-surface-2 px-4 text-[14px] font-medium transition-colors hover:bg-surface-3">Расчёт проекта, на который нужен кредит <span aria-hidden className="text-muted">→</span></Link>}
         <div className="mt-4"><ErrorText>{error}</ErrorText></div>
       </Card>
 

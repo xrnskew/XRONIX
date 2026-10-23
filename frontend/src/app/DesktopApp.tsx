@@ -145,6 +145,7 @@ export default function DesktopApp() {
     <Wide.Provider value={wide}><Conveyor.Provider value>
       <div className="relative min-h-svh text-text">
         <AppShader />
+        <div className="ambient" aria-hidden />
         <HashRouter>
           <CabinetProvider>
             <ShaderSync />

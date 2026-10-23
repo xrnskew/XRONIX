@@ -75,8 +75,8 @@ export const Chip = ({ children, onClick, active }: { children: ReactNode; onCli
 // action — ход клиента, bank — ход банка (система или специалист)
 export type Tone = 'ok' | 'warn' | 'bad' | 'muted' | 'action' | 'bank'
 export const Badge = ({ tone, children, dot }: { tone: Tone; children: ReactNode; dot?: boolean }) => {
-  const t = { ok: 'bg-ok/15 text-ok', warn: 'bg-warn/15 text-warn', bad: 'bg-accent/15 text-accent', muted: 'bg-white/10 text-muted', action: 'bg-accent/15 text-accent-soft', bank: 'bg-steel/15 text-steel' }[tone]
-  return <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{dot && <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />}{children}</span>
+  const t = { ok: '[--tone:var(--color-ok)]', warn: '[--tone:var(--color-warn)]', bad: '[--tone:var(--color-accent)]', muted: '[--tone:#b8b8c2] [--tone-text:var(--color-muted)]', action: '[--tone:var(--color-accent)] [--tone-text:var(--color-accent-soft)]', bank: '[--tone:var(--color-steel)]' }[tone]
+  return <span className={`badge inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${t}`}>{dot && <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />}{children}</span>
 }
 
 export const Logo = ({ size = 40 }: { size?: number }) => (

@@ -70,7 +70,7 @@ export default function Sidebar() {
   const { action, unread, chats } = useSidebarData()
   const open = async (id: string) => { await openChat(id); nav('/chat', { state: { fresh: Date.now() } }) }
   return (
-    <aside className="hidden w-[264px] shrink-0 flex-col border-r border-white/5 bg-[#09090b]/75 p-4 md:flex">
+    <aside className="hidden w-[264px] shrink-0 flex-col border-r border-white/5 glass-side p-4 md:flex">
       <div className="mb-5 flex items-center gap-3 px-1">
         <Logo size={36} />
         <div className="leading-tight">

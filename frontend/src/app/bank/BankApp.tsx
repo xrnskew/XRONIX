@@ -19,7 +19,7 @@ export default function BankApp() {
   const { user, signOut } = useCabinet()
   return (
     <div className="flex h-svh">
-      <aside className="hidden w-[260px] shrink-0 flex-col border-r border-white/5 bg-[#09090b]/80 p-4 md:flex">
+      <aside className="hidden w-[260px] shrink-0 flex-col border-r border-white/5 glass-side p-4 md:flex">
         <div className="mb-6 flex items-center gap-3 px-1">
           <Logo size={36} />
           <div className="leading-tight">
