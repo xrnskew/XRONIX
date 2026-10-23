@@ -174,3 +174,23 @@ test('uid works without crypto.randomUUID (plain http on a LAN address is not a 
     Object.defineProperty(crypto, 'randomUUID', { value: original, configurable: true })
   }
 })
+
+test('чат без сообщений, но с планом (его создаёт сервер при пересчёте) открывается карточкой плана, а не пустым экраном', async () => {
+  const s = create({
+    getChat: async (id) => id === 'plan-only' ? { id, messages: [] } : detail(id),
+    listPlans: async () => [{ plan_id: 'p-recalc', chat_id: 'plan-only', title: 'Кофейня, Самара', created_at: '' }],
+    getPlan: async (id) => ({ plan_id: id, chat_id: 'plan-only', created_at: '', plan: { title: 'Пересчитанный' } }),
+  })
+  await s.openChat('plan-only')
+  const snap = s.getSnapshot()
+  assert.equal(snap.messages.at(-1).reply.type, 'plan')
+  assert.equal(snap.planId, 'p-recalc')
+  assert.equal(snap.plan.title, 'Пересчитанный')
+})
+
+test('пустой чат без плана остаётся пустым, сбой запроса планов его не ломает', async () => {
+  const s = create({ getChat: async (id) => ({ id, messages: [] }), listPlans: async () => { throw new Error('offline') } })
+  await s.openChat('empty')
+  assert.equal(s.getSnapshot().plan, null)
+  assert.equal(s.getSnapshot().messages.length, 1) // только приветствие
+})

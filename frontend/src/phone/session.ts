@@ -134,10 +134,18 @@ export class CabinetSession {
     // A pending request owns the optimistic messages; a GET must not overwrite them.
     if (!conversation?.busy) {
       const chat = await this.api.getChat(id)
+      // Сервер создаёт такой чат при пересчёте плана: в нём есть план, но нет сообщений. Показываем план карточкой, а не пустой экран
+      const planOnly: ChatMessage[] = []
+      if (!chat.messages.length) {
+        try {
+          const rec = (await this.api.listPlans()).find((p) => p.chat_id === id)
+          if (rec) { const r = await this.api.getPlan(latestPlanId(rec.plan_id)); planOnly.push({ id: `plan-${r.plan_id}`, role: 'assistant', reply: { type: 'plan', text: 'План готов', plan_id: r.plan_id, plan: r.plan } }) }
+        } catch { /* пустой чат остаётся пустым */ }
+      }
       if (!this.current(generation) || navigation !== this.navigation) return false
       const messages: ChatMessage[] = [this.greeting, ...chat.messages.map((m): ChatMessage => m.role === 'user' && m.reply.type === 'message'
         ? { id: m.id, role: 'user', text: m.reply.text, answers: m.answers }
-        : { id: m.id, role: m.role, reply: m.reply })]
+        : { id: m.id, role: m.role, reply: m.reply }), ...planOnly]
       if (conversation) { conversation.messages = messages; conversation.failed = null }
       else { conversation = { id, messages, busy: false, failed: null }; this.conversations.add(conversation) }
       const job = chat.generation

@@ -211,7 +211,7 @@ function seed() {
   put('7768151886', 'director', 47)
   put('777309114120', 'owner', 22, { amount_rub: 2_000_000, term_months: 24, financials: { revenue_12m_rub: 9_600_000, expenses_12m_rub: 7_800_000, loan_payments_monthly_rub: 85_000 } })
   const plan = calculatePlan({ sphere: 'bakery', city: 'Самара', own_funds_rub: 900_000, answers: {} }), planId = uid()
-  plans.set(planId, plan); registerMockPlan(planId, plan)
+  plans.set(planId, plan); registerMockPlan(planId, plan, false)
   clockShift = 0
   instant = wasInstant; seeding = false
   // Будущий ИП с планом пекарни и поручителем — заявка на «Старт»

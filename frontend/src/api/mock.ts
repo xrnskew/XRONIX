@@ -18,7 +18,12 @@ interface MockChat extends ChatSummary { messages: ChatMessageDto[]; step: numbe
 const chats = new Map<string, MockChat>()
 const plans = new Map<string, PlanRecord>()
 // Планы из расчёта проекта (mockConveyor) открываются тем же экраном плана
-export const registerMockPlan = (plan_id: string, plan: PlanRecord['plan']) => plans.set(plan_id, { plan_id, chat_id: '', created_at: now(), plan })
+// Как сервер при пересчёте (POST /plans/calculate): создаётся чат с этим планом, но без сообщений
+export const registerMockPlan = (plan_id: string, plan: PlanRecord['plan'], withChat = true) => {
+  const chat_id = withChat ? uid() : ''
+  if (withChat) chats.set(chat_id, { id: chat_id, title: plan.title, updated_at: now(), plan_id, messages: [], step: 0, state: { sphere: null, city: null, own_funds_rub: null, experience: null, experience_asked: false }, asked: null })
+  plans.set(plan_id, { plan_id, chat_id, created_at: now(), plan })
+}
 // Один реестр планов на оба мока, как одна таблица plans на бэкенде: план из чата годится для заявки
 export const findMockPlan = (plan_id: string) => plans.get(plan_id)?.plan ?? null
 let user: Profile = { id: 'u_mock', name: '', email: '', city: null, experience: null, budget_rub: null, tags: [] }

@@ -22,5 +22,8 @@ export function recordSuccessor(fromId: string, toId: string, plan?: Plan) {
   try { localStorage.setItem(KEY, JSON.stringify(map)) } catch { /* хранилище недоступно */ }
 }
 
+// Чат, который сервер создаёт при пересчёте (в нём только сам план, без сообщений): он дублирует исходный чат, в списках его прячем
+export const isRecalculated = (planId: string | null | undefined): boolean => !!planId && Object.values(read()).includes(planId)
+
 export const knownPlan = (id: string): Plan | null => known.get(id) ?? null
 export const rememberPlan = (id: string, plan: Plan) => { known.set(id, plan) }

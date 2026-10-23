@@ -118,7 +118,11 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
   await p.locator('aside').getByRole('link', { name: /Финансы/ }).click(); await p.waitForTimeout(1500)
   const fin = (await text(p)).replace(/\n/g, ' ')
   check('«Финансы и кредит» после открытия старого чата не откатываются на прежнюю сумму', /Свои средства\s+800\s000/.test(fin))
-  await p.getByRole('button', { name: 'Начать заново' }).count()
+  { const side = (await text(p, 'aside')).replace(/\n/g, ' | '); check('в «Недавних диалогах» одна запись про план, без двойников пересчитанных планов', (side.match(/Пекарня, Самара/g) ?? []).length === 1, side.slice(side.indexOf('НЕДАВНИЕ'))) }
+  await p.goto(`${U}#/chat`); await p.waitForTimeout(800)
+  await p.getByRole('button', { name: 'Новый диалог' }).click(); await p.waitForTimeout(800)
+  await p.locator('aside').getByRole('link', { name: /Финансы/ }).click(); await p.waitForTimeout(1500)
+  check('«Финансы» в новом пустом чате показывают актуальный план, а не пусто и не старую сумму', /Свои средства\s+800\s000/.test((await text(p)).replace(/\n/g, ' ')))
   await p.close()
 }
 

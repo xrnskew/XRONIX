@@ -4,7 +4,7 @@ import assert from 'node:assert/strict'
 // заглушка localStorage: в Node его нет
 const store = new Map()
 globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) }
-const { latestPlanId, recordSuccessor, knownPlan } = await import('../src/lib/planAlias.ts')
+const { latestPlanId, recordSuccessor, knownPlan, isRecalculated } = await import('../src/lib/planAlias.ts')
 
 test('latestPlanId: без пересчёта план остаётся тем же', () => {
   assert.equal(latestPlanId('a1'), 'a1')
@@ -31,4 +31,12 @@ test('latestPlanId переживает перезагрузку: связь ч�
   recordSuccessor('old-1', 'new-1')
   assert.match(store.get('xronix_plan_aliases'), /"old-1":"new-1"/)
   assert.equal(latestPlanId('old-1'), 'new-1')
+})
+
+test('isRecalculated: пересчитанный план (его чат прячется из списков) отличается от исходного', () => {
+  recordSuccessor('orig-9', 'recalc-9')
+  assert.equal(isRecalculated('recalc-9'), true)
+  assert.equal(isRecalculated('orig-9'), false)
+  assert.equal(isRecalculated(null), false)
+  assert.equal(isRecalculated(undefined), false)
 })

@@ -9,7 +9,7 @@ import CityPicker from '../components/CityPicker'
 import { submittedAnswers } from '../answers'
 import { LOSS_WARNING, isLossMaking } from '../../lib/planWarnings'
 import { detectSphere, hintFor } from '../../lib/questionHints'
-import { knownPlan, latestPlanId, rememberPlan } from '../../lib/planAlias'
+import { isRecalculated, knownPlan, latestPlanId, rememberPlan } from '../../lib/planAlias'
 import { planPath } from '../PlanRoute'
 
 // Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
@@ -193,7 +193,7 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
   const [removing, setRemoving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [opening, setOpening] = useState<string | null>(null)
-  const load = () => { setError(null); setItems(null); api.listChats().then(setItems).catch((e) => setError(e instanceof ApiError ? e.message : 'Не удалось загрузить диалоги.')) }
+  const load = () => { setError(null); setItems(null); api.listChats().then((l) => setItems(l.filter((c) => !isRecalculated(c.plan_id)))).catch((e) => setError(e instanceof ApiError ? e.message : 'Не удалось загрузить диалоги.')) }
   useEffect(load, [])
 
   const open = async (id: string) => {

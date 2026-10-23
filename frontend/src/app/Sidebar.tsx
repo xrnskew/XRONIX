@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { api } from '../api'
 import { conveyor } from '../api/conveyor'
+import { isRecalculated } from '../lib/planAlias'
 import { usePolling } from '../lib/usePolling'
 import { useCabinet } from '../phone/CabinetContext'
 import { whoseMove } from '../phone/conveyor/parts'
@@ -35,7 +36,7 @@ function useSidebarData() {
     // каждый запрос сам по себе: сбой ленты не должен прятать список диалогов
     conveyor.listApplications().then((l) => alive.current && setAction(l.filter((a) => whoseMove(a.status) === 'you').length)).catch(() => {})
     conveyor.feed().then((l) => alive.current && setUnread(l.filter((f) => !f.read).length)).catch(() => {})
-    api.listChats().then((l) => alive.current && setChats([...l].sort((a, b) => b.updated_at.localeCompare(a.updated_at)))).catch(() => {})
+    api.listChats().then((l) => alive.current && setChats([...l].filter((c) => !isRecalculated(c.plan_id)).sort((a, b) => b.updated_at.localeCompare(a.updated_at)))).catch(() => {})
   }
   // небольшая задержка: лента помечает события прочитанными уже после открытия, диалог появляется в списке после первого ответа
   useEffect(() => { const t = setTimeout(load, 900); return () => clearTimeout(t) }, [user?.id, pathname, chatId]) // eslint-disable-line react-hooks/exhaustive-deps
