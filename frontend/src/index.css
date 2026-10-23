@@ -152,7 +152,7 @@ input[type="range"] { height: 4px; }
     radial-gradient(35% 35% at 20% 100%, rgba(239,49,36,.05), rgba(239,49,36,0) 70%),
     var(--color-bg);
 }
-.thin-scroll { scrollbar-width: thin; scrollbar-color: #2c2c31 transparent; }
+
 /* Сетка карточек: по умолчанию на всю ширину, с 1100px карточки встают рядом по data-span */
 .wide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-content: start; }
 .wide-grid > * { grid-column: span 12; }
@@ -234,3 +234,7 @@ input.glass:focus, input.glass:focus-visible { box-shadow: inset 0 0 0 2px var(-
 @keyframes widget-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 .widget-float { animation: widget-float 7s ease-in-out infinite; animation-delay: var(--d, 0s); }
 @media (prefers-reduced-motion: reduce) { .orb-ring, .orb-dot, .widget-float { animation: none; } .orb-dot { opacity: .6; } }
+
+/* Полосы прокрутки спрятаны везде: прокрутка колесом, трекпадом и пальцем работает как обычно */
+* { scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; width: 0; height: 0; }
