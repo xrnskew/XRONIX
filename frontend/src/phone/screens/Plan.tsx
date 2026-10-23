@@ -1,5 +1,5 @@
 import type { BudgetItem } from '../../types/plan'
-import { LOCATION_WARNING, unconfirmedMetro } from '../../lib/planWarnings'
+import { LOCATION_WARNING, LOSS_WARNING, isLossMaking, unconfirmedMetro } from '../../lib/planWarnings'
 import { Suspense, lazy, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge, Button, Card, EmptyState, Screen, SectionTitle, Skeleton, Wide, Conveyor } from '../ui'
@@ -46,6 +46,7 @@ export default function PlanScreen() {
   return (
     <Screen title="План">
       {unconfirmedMetro(p) && <p role="alert" className="rounded-2xl bg-warn/10 p-4 text-[14px] text-warn">{LOCATION_WARNING}</p>}
+      {isLossMaking(p) && <p role="alert" className="rounded-2xl bg-accent/12 p-4 text-[14px] leading-snug text-accent-soft ring-1 ring-accent/30">{LOSS_WARNING}</p>}
       <div className={`hero-card card-ring rise rounded-[26px] ${wide ? 'grid items-end gap-8 p-8 min-[1100px]:grid-cols-[1.15fr_1fr]' : 'p-5'}`}>
         <div>
           <div className="flex flex-wrap gap-1.5"><Badge tone="muted">{p.business.sphere}</Badge><Badge tone="muted">{p.business.city}</Badge>{p.business.experience && <Badge tone="muted">{experiences[p.business.experience].title}</Badge>}</div>
@@ -53,7 +54,7 @@ export default function PlanScreen() {
           <p className={`mt-1.5 leading-snug text-text/65 ${wide ? 'max-w-[520px] text-[16px]' : 'text-[14px]'}`}>{p.summary}</p>
           {applyTo && (
             <div className="mt-5 flex flex-wrap gap-2.5">
-              <button onClick={() => nav(applyTo)} className="h-11 rounded-xl bg-fill px-5 text-[15px] font-semibold text-white hover:bg-brand-deep">Подобрать кредит по плану</button>
+              <button onClick={() => nav(applyTo)} className={`h-11 rounded-xl px-5 text-[15px] font-semibold ${isLossMaking(p) ? 'bg-white/10 text-text hover:bg-white/15' : 'bg-fill text-white hover:bg-brand-deep'}`}>Подобрать кредит по плану</button>
               <button onClick={() => nav('/finance')} className="h-11 rounded-xl bg-white/10 px-5 text-[15px] font-semibold text-text hover:bg-white/15">Финансы и платёж</button>
             </div>
           )}

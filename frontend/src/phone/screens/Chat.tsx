@@ -7,6 +7,7 @@ import { useCabinet } from '../CabinetContext'
 import { shortParts } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
 import { submittedAnswers } from '../answers'
+import { LOSS_WARNING, isLossMaking } from '../../lib/planWarnings'
 import { planPath } from '../PlanRoute'
 
 // Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
@@ -259,7 +260,7 @@ const BAR = ['bg-accent', 'bg-accent-soft', 'bg-steel', 'bg-warn', 'bg-ok']
 
 // «План готов»: главные цифры, цвет окупаемости и из чего складывается стартовый бюджет
 function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type: 'plan' }>; onOpen: () => void; onCredit?: () => void }) {
-  const f = reply.plan.finance
+  const f = reply.plan.finance, loss = isLossMaking(reply.plan)
   const items = [...(f.startup_items ?? [])].sort((a, b) => b.amount_rub - a.amount_rub)
   const total = items.reduce((n, i) => n + i.amount_rub, 0)
   const top = items.slice(0, 4), rest = items.slice(4).reduce((n, i) => n + i.amount_rub, 0)
@@ -286,8 +287,10 @@ function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type:
           </ul>
         </div>
       )}
-      <button onClick={onOpen} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${onCredit ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Открыть план</button>
-      {onCredit && <button onClick={onCredit} className="h-11 w-full rounded-xl bg-fill text-[15px] font-semibold text-white active:bg-brand-deep">Подобрать кредит</button>}
+      {loss && <p role="alert" className="rounded-xl bg-accent/12 p-3 text-[13px] leading-snug text-accent-soft ring-1 ring-accent/30">{LOSS_WARNING}</p>}
+      {/* убыточный план: главная кнопка — «Открыть план» (поменять вводные), кредит уходит на второй план */}
+      <button onClick={onOpen} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${onCredit && !loss ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Открыть план</button>
+      {onCredit && <button onClick={onCredit} className={`h-11 w-full rounded-xl text-[15px] font-semibold ${loss ? 'bg-surface-2 text-text' : 'bg-fill text-white active:bg-brand-deep'}`}>Подобрать кредит</button>}
     </div>
   )
 }
