@@ -10,6 +10,8 @@ import { submittedAnswers } from '../answers'
 import { LOSS_WARNING, isLossMaking } from '../../lib/planWarnings'
 import { detectSphere, hintFor } from '../../lib/questionHints'
 import { isRecalculated, knownPlan, latestPlanId, rememberPlan } from '../../lib/planAlias'
+import { hideChat, isHiddenChat } from '../../lib/hiddenChats'
+import { DELETE_TEXT, deleteFailure, type DeleteFailure } from '../../lib/chatErrors'
 import { planPath } from '../PlanRoute'
 
 // Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
@@ -191,9 +193,10 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
   const [items, setItems] = useState<ChatSummary[] | null>(null)
   const [confirm, setConfirm] = useState<string | null>(null)
   const [removing, setRemoving] = useState(false)
+  const [failed, setFailed] = useState<DeleteFailure | null>(null) // почему сервер не дал удалить выбранный диалог
   const [error, setError] = useState<string | null>(null)
   const [opening, setOpening] = useState<string | null>(null)
-  const load = () => { setError(null); setItems(null); api.listChats().then((l) => setItems(l.filter((c) => !isRecalculated(c.plan_id)))).catch((e) => setError(e instanceof ApiError ? e.message : 'Не удалось загрузить диалоги.')) }
+  const load = () => { setError(null); setItems(null); api.listChats().then((l) => setItems(l.filter((c) => !isRecalculated(c.plan_id) && !isHiddenChat(c.id)))).catch((e) => setError(e instanceof ApiError ? e.message : 'Не удалось загрузить диалоги.')) }
   useEffect(load, [])
 
   const open = async (id: string) => {
@@ -201,9 +204,9 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
     try { await onOpen(id) } catch (e) { setError(e instanceof ApiError ? e.message : 'Не удалось открыть диалог.'); setOpening(null) }
   }
   const remove = async (id: string) => {
-    setRemoving(true); setError(null)
+    setRemoving(true); setError(null); setFailed(null)
     try { await deleteChat(id); setItems((l) => l?.filter((c) => c.id !== id) ?? null); setConfirm(null) }
-    catch (e) { setError(e instanceof ApiError && e.code !== 'NETWORK' ? e.message : 'Не удалось удалить диалог. Попробуйте позже.') }
+    catch (e) { setFailed(deleteFailure(e)) } // объяснение показываем в самой карточке диалога, а не сверху списка
     finally { setRemoving(false) }
   }
   const date = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
@@ -226,9 +229,14 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
         {items?.map((c) => confirm === c.id ? (
           <div key={c.id} className="card-ring rounded-2xl bg-surface-2 p-3.5" role="group" aria-label={`Удалить диалог «${c.title}»`}>
             <p className="text-[14px] leading-snug">Удалить «{c.title}»{c.plan_id ? ' вместе с планом' : ''}?</p>
-            <div className="mt-2.5 flex gap-2">
-              <button onClick={() => remove(c.id)} disabled={removing} className="h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-50">{removing ? 'Удаляем…' : 'Удалить'}</button>
-              <button onClick={() => setConfirm(null)} disabled={removing} className="h-9 rounded-full px-4 text-[14px] text-muted">Отмена</button>
+            {failed && <p role="alert" className="mt-2 rounded-xl bg-warn/10 px-3 py-2.5 text-[13px] leading-snug text-warn ring-1 ring-warn/25">{DELETE_TEXT[failed]}</p>}
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {failed === 'protected' ? (
+                <button onClick={() => { hideChat(c.id); setItems((l) => l?.filter((x) => x.id !== c.id) ?? null); setConfirm(null); setFailed(null) }} className="h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white">Убрать из списка</button>
+              ) : (
+                <button onClick={() => remove(c.id)} disabled={removing} className="h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-50">{removing ? 'Удаляем…' : failed ? 'Повторить' : 'Удалить'}</button>
+              )}
+              <button onClick={() => { setConfirm(null); setFailed(null) }} disabled={removing} className="h-9 rounded-full px-4 text-[14px] text-muted">{failed ? 'Закрыть' : 'Отмена'}</button>
             </div>
           </div>
         ) : (
@@ -240,7 +248,7 @@ function ChatList({ onClose, onOpen, onNew }: { onClose: () => void; onOpen: (id
               </div>
               {c.plan_id && <span className="shrink-0 rounded-full bg-ok/15 px-2.5 py-0.5 text-[12px] font-medium text-ok">План готов</span>}
             </button>
-            <button type="button" onClick={() => { setConfirm(c.id); setError(null) }} aria-label={`Удалить диалог «${c.title}»`}
+            <button type="button" onClick={() => { setConfirm(c.id); setError(null); setFailed(null) }} aria-label={`Удалить диалог «${c.title}»`}
               className="mr-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted active:bg-surface-2 active:text-accent">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12" /></svg>
             </button>

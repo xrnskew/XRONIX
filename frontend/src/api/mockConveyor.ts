@@ -12,7 +12,7 @@ import { parseNeedText } from '../lib/parseText'
 import { CalcError, calculatePlan, templates } from '../lib/projectCalc'
 import type { Plan } from '../types/plan'
 import { ApiError } from './client'
-import { findMockPlan, mockUser, mockUserName, registerMockPlan } from './mock'
+import { findMockPlan, markMockPlanInUse, mockUser, mockUserName, registerMockPlan } from './mock'
 
 // Мок конвейера в памяти: те же вызовы и ответы, что в /contracts/conveyor.md. Заявка проходит этапы сама по таймеру,
 // ручное рассмотрение ждёт решения аналитика в /bank. При запуске очередь засеяна заявками во всех статусах (раздел 12 CONVEYOR.md).
@@ -262,6 +262,7 @@ export const mockConveyor: ConveyorApi = {
     await delay(300)
     if (!b.company_id || !companies.has(b.company_id) || !b.product_id) throw bad('Выберите компанию и продукт.')
     const r = newRec(b as ApplicationDraft & { company_id: string; product_id: Rec['product_id'] })
+    if (b.plan_id) markMockPlanInUse(b.plan_id)
     apps.set(r.id, r)
     return view(r)
   },

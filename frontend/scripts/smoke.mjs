@@ -126,6 +126,29 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
   await p.close()
 }
 
+// --- удаление диалога: если по плану оформлена заявка, сервер не даёт удалить, и человеку это объясняют
+{
+  const p = await page(); await loginClient(p)
+  await p.goto(`${U}#/chat`); await p.waitForTimeout(800)
+  await p.getByPlaceholder('Хочу открыть кофейню с собой').fill('Хочу пекарню в Самаре, своих 900 000'); await p.keyboard.press('Enter'); await p.waitForTimeout(3500)
+  await p.locator('input[placeholder^="Например"]:enabled').first().fill('900000'); await p.getByRole('button', { name: 'Ответить' }).click(); await p.waitForTimeout(3500)
+  await p.getByRole('button', { name: 'Нет опыта' }).click(); await p.getByRole('button', { name: 'Ответить' }).click(); await p.waitForTimeout(5000)
+  // заявку по плану создаёт тот же мок, что и мастер: отмечаем план чата «занятым»
+  await p.locator('aside').getByRole('link', { name: /^План/ }).click(); await p.waitForTimeout(1500)
+  const planId = new URLSearchParams(await p.evaluate(() => location.hash.split('?')[1] ?? '')).get('plan')
+  check('у чата есть план, по которому оформляют заявку', !!planId)
+  await p.evaluate(async (id) => { (await import('/src/api/mock.ts')).markMockPlanInUse(id) }, planId)
+  await p.goto(`${U}#/chat`); await p.waitForTimeout(900)
+  await p.getByRole('button', { name: 'Все диалоги', exact: true }).click(); await p.waitForTimeout(1000)
+  await p.getByRole('button', { name: /Удалить диалог/ }).first().click(); await p.waitForTimeout(300)
+  await p.getByRole('button', { name: 'Удалить', exact: true }).click(); await p.waitForTimeout(900)
+  const del = await text(p)
+  check('удаление диалога с заявкой: понятное объяснение и «Убрать из списка» (без «для этой роли»)', /нельзя удалить: по его плану оформлена заявка/.test(del) && /Убрать из списка/.test(del) && !/для этой роли/.test(del))
+  await p.getByRole('button', { name: 'Убрать из списка' }).click(); await p.waitForTimeout(700)
+  check('диалог убран из списка и из «Недавних диалогов»', !/Хочу пекарню/.test(await text(p)) && !/Хочу пекарню/.test(await text(p, 'aside')))
+  await p.close()
+}
+
 // --- аналитик: очередь, карточка, сводка
 {
   const p = await page(); await p.goto(U); await p.waitForTimeout(700)

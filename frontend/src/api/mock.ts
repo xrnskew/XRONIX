@@ -24,6 +24,9 @@ export const registerMockPlan = (plan_id: string, plan: PlanRecord['plan'], with
   if (withChat) chats.set(chat_id, { id: chat_id, title: plan.title, updated_at: now(), plan_id, messages: [], step: 0, state: { sphere: null, city: null, own_funds_rub: null, experience: null, experience_asked: false }, asked: null })
   plans.set(plan_id, { plan_id, chat_id, created_at: now(), plan })
 }
+// Планы, по которым оформлена заявка: сервер не даёт удалить их чат (409 INVALID_TRANSITION)
+const plansInUse = new Set<string>()
+export const markMockPlanInUse = (plan_id: string) => { plansInUse.add(plan_id) }
 // Один реестр планов на оба мока, как одна таблица plans на бэкенде: план из чата годится для заявки
 export const findMockPlan = (plan_id: string) => plans.get(plan_id)?.plan ?? null
 let user: Profile = { id: 'u_mock', name: '', email: '', city: null, experience: null, budget_rub: null, tags: [] }
@@ -74,6 +77,7 @@ export const mockApi: Api = {
   },
   async deleteChat(id) {
     await delay(250)
+    if (![...plans.values()].every((p) => p.chat_id !== id || !plansInUse.has(p.plan_id))) throw new ApiError('INVALID_TRANSITION', 'Действие недоступно в текущем статусе или для этой роли.', 409)
     if (!chats.delete(id)) throw new ApiError('NOT_FOUND', 'Диалог не найден.', 404)
     for (const [pid, p] of plans) if (p.chat_id === id) plans.delete(pid)
   },
