@@ -8,6 +8,7 @@ import { shortParts } from '../../lib/format'
 import CityPicker from '../components/CityPicker'
 import { submittedAnswers } from '../answers'
 import { LOSS_WARNING, isLossMaking } from '../../lib/planWarnings'
+import { detectSphere, hintFor } from '../../lib/questionHints'
 import { planPath } from '../PlanRoute'
 
 // Короткие подписи для тегов ответов; для незнакомого вопроса берём его первое предложение
@@ -76,6 +77,7 @@ export default function Chat() {
     setAnswers({})
   }
   const last = messages[messages.length - 1]
+  const sphere = detectSphere(messages.filter((m) => m.role === 'user').map((m) => m.text ?? ''))
   // Бэкенд не сообщает, работает ли ИИ, поэтому «на связи» не обещаем: показываем только то, что видели сами
   const aiStatus = busy ? { dot: 'animate-pulse bg-accent', text: 'думает над ответом' }
     : last?.error ? { dot: 'bg-accent', text: 'нет связи с ИИ, ответ не получен' }
@@ -129,7 +131,7 @@ export default function Chat() {
               m.role === 'user' ? 'rounded-[22px] rounded-br-md bg-fill text-white'
               : m.error ? 'rounded-[22px] rounded-bl-md bg-accent/12 text-accent ring-1 ring-accent/30'
               : 'card-ring rounded-[22px] rounded-bl-md bg-surface'}`}>
-              {m.text !== undefined ? <MessageText text={m.text} tags={answerTags(messages, index)} /> : <Reply reply={m.reply!} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} onCredit={conveyorOn && m.reply?.type === 'plan' ? () => nav(`/new?plan=${encodeURIComponent((m.reply as { plan_id: string }).plan_id)}`) : undefined} />}
+              {m.text !== undefined ? <MessageText text={m.text} tags={answerTags(messages, index)} /> : <Reply reply={m.reply!} sphere={sphere} active={m === last && !busy} answers={m === last ? demoAnswers ?? answers : submittedAnswers(messages, index)} setAnswers={setAnswers} onSubmit={submitAnswers} onOpen={() => { if (m.reply?.type === 'plan') { void openPlan(m.reply.plan_id, m.reply.plan); nav(planPath('/plan', m.reply.plan_id)) } }} onCredit={conveyorOn && m.reply?.type === 'plan' ? () => nav(`/new?plan=${encodeURIComponent((m.reply as { plan_id: string }).plan_id)}`) : undefined} />}
               {m.error && canRetry && m === last && (
                 <button onClick={retry} disabled={busy} className="mt-2 block h-9 rounded-full bg-fill px-4 text-[14px] font-semibold text-white disabled:opacity-40">Повторить</button>
               )}
@@ -295,8 +297,9 @@ function PlanCard({ reply, onOpen, onCredit }: { reply: Extract<AiReply, { type:
   )
 }
 
-function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit }: {
+function Reply({ reply, sphere, active, answers, setAnswers, onSubmit, onOpen, onCredit }: {
   reply: AiReply
+  sphere: string | null // для подсказок к вопросам анкеты
   active: boolean
   answers: Record<string, string>
   setAnswers: (a: Record<string, string>) => void
@@ -323,8 +326,11 @@ function Reply({ reply, active, answers, setAnswers, onSubmit, onOpen, onCredit 
           ) : city ? (
             <CityPicker label={q.text} value={answers[q.id] ?? ''} onChange={(value) => setAnswers({ ...answers, [q.id]: value })} />
           ) : (
-            <input aria-label={q.text} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
-              className="h-11 w-full rounded-xl bg-surface-2 px-3 text-[15px] outline-none focus:ring-2 focus:ring-accent" placeholder="Ваш ответ" />
+            <>
+              <input aria-label={q.text} aria-describedby={`hint-${q.id}`} value={answers[q.id] ?? ''} onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
+                className="h-11 w-full rounded-xl bg-surface-2 px-3 text-[15px] outline-none focus:ring-2 focus:ring-accent" placeholder={hintFor(q, sphere).placeholder} />
+              {hintFor(q, sphere).hint && <p id={`hint-${q.id}`} className="text-[12px] leading-snug text-muted">{hintFor(q, sphere).hint}</p>}
+            </>
           )}
         </div>
       })}
