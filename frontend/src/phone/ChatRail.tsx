@@ -26,13 +26,14 @@ export default function ChatRail() {
   const exp = plan?.business.experience ? EXP[plan.business.experience] : given('experience') ?? null
   const missing = [!sphere && 'бизнес', !city && 'город', own == null && 'свои деньги', !exp && 'опыт'].filter(Boolean) as string[]
 
-  // не больше трёх карточек: что понято, чего не хватает или цифры плана, и действие
+  // четыре разные карточки по плану (старт, прибыль, выручка, окупаемость) или до трёх, пока план собирается
   const items: (Item | { kind: 'action' })[] = []
   if (plan) {
     const f = plan.finance, start = shortParts(f.startup_cost_rub), profit = shortParts(Math.abs(f.monthly_profit_rub))
     items.push({ slot, kind: 'stat', value: `${start.value} ${start.unit}`, label: 'нужно на старт' })
     items.push({ slot, kind: 'stat', value: `${f.monthly_profit_rub < 0 ? '−' : '+'}${profit.value} ${profit.unit}`, label: 'прибыль в месяц', ok: f.monthly_profit_rub >= 0 })
-    if (planId) items.push({ kind: 'action' })
+    if (f.revenue_forecast?.length) items.push({ slot, kind: 'bars', data: f.revenue_forecast })
+    if (f.payback_months != null) items.push({ slot, kind: 'chip', text: `Окупится за ${f.payback_months} мес.` })
   } else {
     if (sphere || city) items.push({ slot, kind: 'chip', text: [sphere, city].filter(Boolean).join(' · ') })
     if (busy) items.push({ slot, kind: 'typing' })
@@ -41,7 +42,7 @@ export default function ChatRail() {
   }
 
   return (
-    <div role="complementary" aria-label="Сводка по диалогу" className="hidden w-[230px] shrink-0 flex-col items-start gap-4 pt-24 xl:flex">
+    <div role="complementary" aria-label="Сводка по диалогу" className="hidden w-[230px] shrink-0 flex-col items-start justify-around pb-28 pt-24 xl:flex">
       {items.map((it, i) => (
         <Widget key={`${i}-${'text' in it ? it.text : it.kind}`} d={i} className={i % 2 ? 'ml-6' : ''}>
           {it.kind === 'action'

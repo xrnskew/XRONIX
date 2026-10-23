@@ -14,7 +14,6 @@ import BankApp from './bank/BankApp'
 import { Conveyor, Icon, Logo, Wide } from '../phone/ui'
 import { useMediaQuery } from '../lib/useMediaQuery'
 import Orbs from './Orbs'
-import NextStepFloat from '../phone/NextStepFloat'
 import ChatRail from '../phone/ChatRail'
 import AppShader, { pulseShader, setShaderEnergy } from './AppShader'
 import Sidebar from './Sidebar'
@@ -128,7 +127,6 @@ function Shell() {
           </Routes>
           </div>
         </main>
-        <NextStepFloat />
         {/* узкий экран: боковой панели нет, разделы внизу, как в телефоне */}
         <nav className="mx-3 mb-4 grid grid-cols-5 rounded-[26px] bg-surface-2/90 p-1.5 ring-1 ring-white/5 md:hidden" aria-label="Разделы кабинета">
           {tabs.map((t) => (
